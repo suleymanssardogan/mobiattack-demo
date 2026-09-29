@@ -1357,6 +1357,11 @@ HTML_PAGE = """<!DOCTYPE html>
   </div><!-- end container -->
 
   <script>
+    // The public presentation page uses the backend on this Mac for device access.
+    const BACKEND_ORIGIN = window.location.hostname === "mobiattack-demo.vercel.app"
+      ? "http://127.0.0.1:8082" : "";
+    function backendUrl(path) { return BACKEND_ORIGIN + path; }
+
     function fillPreset(url) {
       const input = document.getElementById("apkUrl");
       input.value = url;
@@ -1870,9 +1875,9 @@ HTML_PAGE = """<!DOCTYPE html>
         viewer.textContent = "// Run an analysis to inspect baseline_report.json";
         return;
       }
-      if (dwnBtn) dwnBtn.href = `/reports/${runId}/baseline_report.json`;
+      if (dwnBtn) dwnBtn.href = backendUrl(`/reports/${runId}/baseline_report.json`);
       viewer.textContent = "// Loading baseline_report.json...";
-      fetch(`/reports/${runId}/baseline_report.json`)
+      fetch(backendUrl(`/reports/${runId}/baseline_report.json`))
         .then(res => {
           if (!res.ok) throw new Error("baseline_report.json returned HTTP " + res.status);
           return res.json();
@@ -3047,8 +3052,8 @@ HTML_PAGE = """<!DOCTYPE html>
       document.getElementById("analysisNotesList").innerHTML = notes.map(n => `<li>${escapeHtml(n)}</li>`).join('');
 
       // 9. Report Tab
-      const htmlReportUrl = "/reports/" + runId + "/report.html";
-      const jsonReportUrl = "/reports/" + runId + "/report.json";
+      const htmlReportUrl = backendUrl("/reports/" + runId + "/report.html");
+      const jsonReportUrl = backendUrl("/reports/" + runId + "/report.json");
       if (isIos) {
         document.getElementById("reportSummaryRows").innerHTML = `
           <div class="kv-row"><span class="kv-key">Report Status:</span><span class="kv-val" style="color:#10b981;">Generated & Ready</span></div>
@@ -3070,9 +3075,9 @@ HTML_PAGE = """<!DOCTYPE html>
       document.getElementById("btnViewHtmlReport").href = htmlReportUrl;
       document.getElementById("btnDownloadJsonReport").href = jsonReportUrl;
       const btnBaseline = document.getElementById("btnDownloadBaselineReport");
-      if (btnBaseline) btnBaseline.href = "/reports/" + runId + "/baseline_report.json";
+      if (btnBaseline) btnBaseline.href = backendUrl("/reports/" + runId + "/baseline_report.json");
       const btnRawDwn = document.getElementById("btnDownloadRawJson");
-      if (btnRawDwn) btnRawDwn.href = "/reports/" + runId + "/baseline_report.json";
+      if (btnRawDwn) btnRawDwn.href = backendUrl("/reports/" + runId + "/baseline_report.json");
       document.getElementById("btnOpenNewTab").href = htmlReportUrl;
 
       // Prefetch baseline_report.json for Raw JSON tab
@@ -3131,7 +3136,7 @@ HTML_PAGE = """<!DOCTYPE html>
       clearTimeout(classifyTimer);
       classifyTimer = setTimeout(async () => {
         try {
-          const resp = await fetch("/api/classify", {
+          const resp = await fetch(backendUrl("/api/classify"), {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ url, platform })
@@ -3166,7 +3171,7 @@ HTML_PAGE = """<!DOCTYPE html>
       btn.textContent = "Probing...";
 
       try {
-        const resp = await fetch("/api/probe", {
+        const resp = await fetch(backendUrl("/api/probe"), {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ adb_serial: adbSerial })
@@ -3192,7 +3197,7 @@ HTML_PAGE = """<!DOCTYPE html>
       if (!currentRunId || isPolling) return;
       isPolling = true;
       try {
-        const resp = await fetch("/api/status/" + encodeURIComponent(currentRunId));
+        const resp = await fetch(backendUrl("/api/status/" + encodeURIComponent(currentRunId)));
         if (!resp.ok) {
           if (resp.status === 404) {
             if (pollTimer) clearInterval(pollTimer);
@@ -3283,7 +3288,7 @@ HTML_PAGE = """<!DOCTYPE html>
         pollTimer = null;
       }
       try {
-        const resp = await fetch("/api/stop", {
+        const resp = await fetch(backendUrl("/api/stop"), {
           method: "POST",
           headers: { "Content-Type": "application/json" }
         });
@@ -3341,7 +3346,7 @@ HTML_PAGE = """<!DOCTYPE html>
       const installMode = installModeEl ? installModeEl.value : "manual";
 
       try {
-        const resp = await fetch("/api/run", {
+        const resp = await fetch(backendUrl("/api/run"), {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -3383,7 +3388,7 @@ HTML_PAGE = """<!DOCTYPE html>
       let runIdToLoad = params.get("run_id");
       if (!runIdToLoad) {
         try {
-          const rResp = await fetch("/api/runs/recent");
+          const rResp = await fetch(backendUrl("/api/runs/recent"));
           if (rResp.ok) {
             const rData = await rResp.json();
             if (rData.latest_run_id) runIdToLoad = rData.latest_run_id;
@@ -3392,7 +3397,7 @@ HTML_PAGE = """<!DOCTYPE html>
       }
       if (runIdToLoad) {
         try {
-          const resp = await fetch("/api/status/" + encodeURIComponent(runIdToLoad));
+          const resp = await fetch(backendUrl("/api/status/" + encodeURIComponent(runIdToLoad)));
           if (resp.ok) {
             const status = await resp.json();
             if (status && status.result) {
@@ -3419,10 +3424,10 @@ HTML_PAGE = """<!DOCTYPE html>
     async function openPlayStoreOnDevice() {
       if (!currentRunId) return;
       try {
-        const resp = await fetch("/api/open-play-store", {
+        const resp = await fetch(backendUrl("/api/open_store"), {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ run_id: currentRunId })
+          body: JSON.stringify({ url: document.getElementById("apkUrl").value.trim() })
         });
         const data = await resp.json();
         if (resp.ok && data.success) {
@@ -3445,6 +3450,20 @@ class _DemoRequestHandler(BaseHTTPRequestHandler):
 
     def log_message(self, format: str, *args) -> None:
         pass
+
+    def end_headers(self) -> None:
+        if self.headers.get("Origin") == "https://mobiattack-demo.vercel.app":
+            self.send_header("Access-Control-Allow-Origin", "https://mobiattack-demo.vercel.app")
+            self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+            self.send_header("Access-Control-Allow-Headers", "Content-Type")
+            self.send_header("Access-Control-Allow-Private-Network", "true")
+            self.send_header("Vary", "Origin")
+        super().end_headers()
+
+    def do_OPTIONS(self) -> None:
+        self.send_response(204)
+        self.send_header("Content-Length", "0")
+        self.end_headers()
 
     def _send_json(self, status_code: int, data: dict) -> None:
         try:
