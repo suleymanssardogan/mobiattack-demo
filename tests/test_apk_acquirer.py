@@ -152,6 +152,22 @@ class MockHttpHandler(BaseHTTPRequestHandler):
             # Stream 256KB without Content-Length
             self.wfile.write(b"A" * (256 * 1024))
 
+        elif path == "/incorrect_content_type_valid_apk":
+            apk_bytes = make_test_apk_bytes()
+            self.send_response(200)
+            self.send_header("Content-Type", "text/plain")
+            self.send_header("Content-Length", str(len(apk_bytes)))
+            self.end_headers()
+            self.wfile.write(apk_bytes)
+
+        elif path == "/apk_content_type_invalid_body":
+            bad_bytes = b"NOT_A_REAL_APK_CORRUPT_BYTES_XYZ"
+            self.send_response(200)
+            self.send_header("Content-Type", "application/vnd.android.package-archive")
+            self.send_header("Content-Length", str(len(bad_bytes)))
+            self.end_headers()
+            self.wfile.write(bad_bytes)
+
         else:
             self.send_response(404)
             self.end_headers()
@@ -431,6 +447,52 @@ class TestApkAcquisitionUnit(unittest.TestCase):
         self.assertIn("exceeded maximum limit", str(ctx.exception))
         self.assertEqual(len(list(self.output_dir.glob(".tmp_acq_*"))), 0)
         self.assertEqual(len(list(self.output_dir.glob("*.apk"))), 0)
+
+    def test_29_redirect_flag_and_requested_url_recorded(self):
+        url = f"{self.base_url}/redirect_302"
+        meta = acquire_apk(url, self.output_dir)
+        self.assertTrue(meta["redirected"])
+        self.assertEqual(meta["requested_url"], url)
+        self.assertEqual(meta["final_url"], f"{self.base_url}/valid.apk")
+
+    def test_30_content_disposition_recorded_in_metadata(self):
+        url = f"{self.base_url}/custom_name_in_header"
+        meta = acquire_apk(url, self.output_dir)
+        self.assertIn("attachment", str(meta.get("content_disposition") or ""))
+        self.assertEqual(meta["http"]["content_disposition"], 'attachment; filename="from_header.apk"')
+        self.assertEqual(meta["http"]["status_code"], 200)
+
+    def test_31_incorrect_content_type_with_valid_apk_body_succeeds(self):
+        # Server sends text/plain, but body is structurally a valid APK (ZIP + AndroidManifest + classes.dex)
+        url = f"{self.base_url}/incorrect_content_type_valid_apk"
+        meta = acquire_apk(url, self.output_dir)
+        self.assertEqual(meta["content_type"], "text/plain")
+        self.assertTrue(meta["validation"]["is_valid_apk"])
+        self.assertTrue(Path(meta["saved_path"]).exists())
+
+    def test_32_apk_content_type_with_invalid_body_fails_structural_validation(self):
+        # Server claims application/vnd.android.package-archive, but body is corrupt non-APK bytes
+        url = f"{self.base_url}/apk_content_type_invalid_body"
+        with self.assertRaises(ApkAcquisitionError) as ctx:
+            acquire_apk(url, self.output_dir)
+        self.assertIn("not a valid Android APK", str(ctx.exception))
+        self.assertEqual(len(list(self.output_dir.glob(".tmp_acq_*"))), 0)
+
+    def test_33_sha256_matches_downloaded_bytes_exactly(self):
+        import hashlib
+        url = f"{self.base_url}/valid.apk"
+        meta = acquire_apk(url, self.output_dir)
+        saved_file = Path(meta["saved_path"])
+        file_bytes = saved_file.read_bytes()
+        calculated_sha = hashlib.sha256(file_bytes).hexdigest()
+        self.assertEqual(meta["sha256"], calculated_sha)
+
+    def test_34_saved_artifact_strictly_within_output_dir(self):
+        url = f"{self.base_url}/traversal_header"
+        meta = acquire_apk(url, self.output_dir)
+        saved_path = Path(meta["saved_path"]).resolve()
+        self.assertTrue(saved_path.is_relative_to(self.output_dir.resolve()))
+        self.assertEqual(saved_path.parent, self.output_dir.resolve())
 
 
 class TestRealOwaspApkAcquisitionIntegration(unittest.TestCase):

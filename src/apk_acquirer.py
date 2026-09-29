@@ -346,11 +346,20 @@ def acquire_apk(
             except ValueError:
                 saved_path = final_path.as_posix()
 
+            redirected = bool(cleaned_url != final_url)
             return {
                 "input_url": cleaned_url,
+                "requested_url": cleaned_url,
                 "final_url": final_url,
+                "redirected": redirected,
                 "status_code": status_code,
                 "content_type": content_type,
+                "content_disposition": cd_hdr,
+                "http": {
+                    "status_code": status_code,
+                    "content_type": content_type,
+                    "content_disposition": cd_hdr,
+                },
                 "filename": safe_name,
                 "saved_path": saved_path,
                 "size_bytes": size_bytes,
