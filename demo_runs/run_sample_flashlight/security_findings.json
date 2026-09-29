@@ -1,0 +1,71 @@
+{
+  "risk_score": "CRITICAL",
+  "summary": {
+    "critical": 1,
+    "high": 1,
+    "medium": 0,
+    "low": 2,
+    "total": 4
+  },
+  "findings": [
+    {
+      "id": "SEC-CODE-01",
+      "title": "Application Is Marked Debuggable",
+      "severity": "CRITICAL",
+      "owasp_category": "M7: Client Code Quality",
+      "masvs_id": "MASVS-CODE-2",
+      "cwe_id": "CWE-215: Insertion of Sensitive Information Into Debugging Code",
+      "description": "The application has android:debuggable=\"true\" enabled. Attackers can connect JDWP debuggers via ADB, dump memory, inspect encryption keys, bypass security controls, and execute arbitrary code in app context.",
+      "evidence": "android:debuggable=\"true\" is declared in AndroidManifest.xml under <application>.",
+      "remediation": "Ensure android:debuggable=\"false\" is set in production release builds. In build.gradle, verify that buildTypes { release { debuggable false } } is enforced.",
+      "affected_items": [
+        "AndroidManifest.xml: android:debuggable=\"true\""
+      ]
+    },
+    {
+      "id": "SEC-NET-01",
+      "title": "Cleartext HTTP Traffic Permitted",
+      "severity": "HIGH",
+      "owasp_category": "M3: Insecure Communication",
+      "masvs_id": "MASVS-NETWORK-1",
+      "cwe_id": "CWE-319: Cleartext Transmission of Sensitive Information",
+      "description": "The application allows unencrypted HTTP network communication. Traffic sent over plaintext HTTP can be intercepted, read, or modified by adversaries via Man-in-the-Middle (MitM) attacks.",
+      "evidence": "2 unencrypted HTTP URLs discovered in code (e.g., http://127.0.0.1, http://127.0.0.1/signup)",
+      "remediation": "Enforce HTTPS for all network endpoints. Configure Android Network Security Configuration (res/xml/network_security_config.xml) with cleartextTrafficPermitted=\"false\" and ensure TLS 1.2+ is required.",
+      "affected_items": [
+        "http://127.0.0.1",
+        "http://127.0.0.1/signup"
+      ]
+    },
+    {
+      "id": "SEC-PLAT-02",
+      "title": "Insecure file:// Local URL Schemes Detected",
+      "severity": "LOW",
+      "owasp_category": "M1: Improper Platform Usage",
+      "masvs_id": "MASVS-PLATFORM-2",
+      "cwe_id": "CWE-749: Exposed Dangerous Method or Function",
+      "description": "The application references local 'file://' URI schemes (2 occurrences). If passed to WebViews with allowFileAccess enabled, this can lead to arbitrary local file disclosure and Cross-App Scripting.",
+      "evidence": "Detected file:// scheme references in code: file:///android_asset/unsafe_content.html, file:///android_asset/unsafe_content.html",
+      "remediation": "Avoid using file:// schemes. Use content:// URIs with FileProvider or modern WebViewAssetLoader to restrict file system access securely.",
+      "affected_items": [
+        "file:///android_asset/unsafe_content.html",
+        "file:///android_asset/unsafe_content.html"
+      ]
+    },
+    {
+      "id": "SEC-RESI-01",
+      "title": "Client-Side Root Detection Binary Checks Detected",
+      "severity": "LOW",
+      "owasp_category": "M8: Code Tampering",
+      "masvs_id": "MASVS-RESILIENCE-1",
+      "cwe_id": "CWE-693: Protection Mechanism Failure",
+      "description": "The application inspects standard root binary paths (/sbin/su, /su/bin/su) to detect rooted devices. Standard file-existence checks are easily bypassed via Frida hooking or root-hiding modules.",
+      "evidence": "Root execution paths inspected: /sbin/su, /su/bin/su",
+      "remediation": "Supplement client-side file checks with hardware-backed Play Integrity API verification and anti-tampering controls.",
+      "affected_items": [
+        "/sbin/su",
+        "/su/bin/su"
+      ]
+    }
+  ]
+}

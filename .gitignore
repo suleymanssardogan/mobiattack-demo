@@ -1,0 +1,35 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Pytest & tests
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Local run artifacts & scratch workspaces
+demo_runs/*
+!demo_runs/run_sample_flashlight/
+demo_runs/run_sample_flashlight/workspaces/
+demo_runs/run_sample_flashlight/downloads/
+workspaces/
+apk_lab/
+*.apk
+*.ipa
+*.aab
+*.apks
+
+# OS & IDE
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Environment
+.env
+.venv
+env/
+venv/
+ENV/

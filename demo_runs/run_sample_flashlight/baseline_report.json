@@ -1,0 +1,1300 @@
+{
+  "schema_version": "1.0.0",
+  "scan": {
+    "run_id": "run_1790699486_de126b",
+    "status": "completed",
+    "timestamp": "2026-09-29T16:31:42.049880+00:00",
+    "errors": [],
+    "warnings": []
+  },
+  "artifact": {
+    "source": "direct_apk",
+    "filename": "MSTG-Android-Kotlin.apk",
+    "sha256": "86c059775aa09e4794defd40f81e69751a81019b1b1f285b30b8f7c5bb5e8b68",
+    "package_name": "sg.vantagepoint.mstgkotlin",
+    "size_bytes": 2914676,
+    "platform": "android"
+  },
+  "analysis": {
+    "files_discovered": 0,
+    "files_analyzed": 0,
+    "files_skipped": 0,
+    "files_failed": 0,
+    "failed_files": []
+  },
+  "inventory": {
+    "candidate_count": 28,
+    "candidates": [
+      {
+        "id": "cand-35bca5bf46db",
+        "type": "api_path",
+        "value": "/sbin/su",
+        "components": {
+          "path": "/sbin/su"
+        },
+        "occurrence_count": 2,
+        "occurrences": [
+          {
+            "source_file": "smali/sg/vantagepoint/mstgkotlin/MainActivity.smali",
+            "extraction_method": "api_path_pattern",
+            "raw_value": "/sbin/su",
+            "evidence": "/sbin/su",
+            "line_number": 148
+          },
+          {
+            "source_file": "smali/sg/vantagepoint/mstgkotlin/MenuActivity.smali",
+            "extraction_method": "api_path_pattern",
+            "raw_value": "/sbin/su",
+            "evidence": "/sbin/su",
+            "line_number": 148
+          }
+        ]
+      },
+      {
+        "id": "cand-a9031e4f2df9",
+        "type": "api_path",
+        "value": "/signup",
+        "components": {
+          "path": "/signup"
+        },
+        "occurrence_count": 1,
+        "occurrences": [
+          {
+            "source_file": "smali/sg/vantagepoint/mstgkotlin/RegisterActivity$onCreate$2.smali",
+            "extraction_method": "api_path_pattern",
+            "raw_value": "/signup",
+            "evidence": "/signup",
+            "line_number": 102
+          }
+        ]
+      },
+      {
+        "id": "cand-dabc3b80c143",
+        "type": "api_path",
+        "value": "/su/bin/su",
+        "components": {
+          "path": "/su/bin/su"
+        },
+        "occurrence_count": 2,
+        "occurrences": [
+          {
+            "source_file": "smali/sg/vantagepoint/mstgkotlin/MainActivity.smali",
+            "extraction_method": "api_path_pattern",
+            "raw_value": "/su/bin/su",
+            "evidence": "/su/bin/su",
+            "line_number": 164
+          },
+          {
+            "source_file": "smali/sg/vantagepoint/mstgkotlin/MenuActivity.smali",
+            "extraction_method": "api_path_pattern",
+            "raw_value": "/su/bin/su",
+            "evidence": "/su/bin/su",
+            "line_number": 164
+          }
+        ]
+      },
+      {
+        "id": "cand-28fa166a04b1",
+        "type": "domain",
+        "value": "com.github.kittinunf.fuel.android",
+        "components": {
+          "host": "com.github.kittinunf.fuel.android"
+        },
+        "occurrence_count": 1,
+        "occurrences": [
+          {
+            "source_file": "smali/com/github/kittinunf/fuel/android/BuildConfig.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "com.github.kittinunf.fuel.android",
+            "evidence": "com.github.kittinunf.fuel.android",
+            "line_number": 7
+          }
+        ]
+      },
+      {
+        "id": "cand-807817b9a0b6",
+        "type": "domain",
+        "value": "com.koushikdutta.superuser.daemon",
+        "components": {
+          "host": "com.koushikdutta.superuser.daemon"
+        },
+        "occurrence_count": 2,
+        "occurrences": [
+          {
+            "source_file": "smali/sg/vantagepoint/mstgkotlin/MainActivity.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "com.koushikdutta.superuser.daemon",
+            "evidence": "com.koushikdutta.superuser.daemon",
+            "line_number": 144
+          },
+          {
+            "source_file": "smali/sg/vantagepoint/mstgkotlin/MenuActivity.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "com.koushikdutta.superuser.daemon",
+            "evidence": "com.koushikdutta.superuser.daemon",
+            "line_number": 144
+          }
+        ]
+      },
+      {
+        "id": "cand-12bdb92c2df0",
+        "type": "domain",
+        "value": "context.task",
+        "components": {
+          "host": "context.task"
+        },
+        "occurrence_count": 2,
+        "occurrences": [
+          {
+            "source_file": "smali/org/jetbrains/anko/custom/DeprecatedKt.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "context.task",
+            "evidence": "context.task",
+            "line_number": 128
+          },
+          {
+            "source_file": "smali/org/jetbrains/anko/custom/DeprecatedKt.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "context.task",
+            "evidence": "context.task",
+            "line_number": 268
+          }
+        ]
+      },
+      {
+        "id": "cand-e3fff1af9a8b",
+        "type": "domain",
+        "value": "ctx.assets",
+        "components": {
+          "host": "ctx.assets"
+        },
+        "occurrence_count": 1,
+        "occurrences": [
+          {
+            "source_file": "smali/org/jetbrains/anko/ContextUtilsKt.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "ctx.assets",
+            "evidence": "ctx.assets",
+            "line_number": 1110
+          }
+        ]
+      },
+      {
+        "id": "cand-0c8bbbc8d67c",
+        "type": "domain",
+        "value": "ctx.resources",
+        "components": {
+          "host": "ctx.resources"
+        },
+        "occurrence_count": 2,
+        "occurrences": [
+          {
+            "source_file": "smali/org/jetbrains/anko/AlertDialogBuilder.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "ctx.resources",
+            "evidence": "ctx.resources",
+            "line_number": 888
+          },
+          {
+            "source_file": "smali/org/jetbrains/anko/ContextUtilsKt.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "ctx.resources",
+            "evidence": "ctx.resources",
+            "line_number": 1629
+          }
+        ]
+      },
+      {
+        "id": "cand-d6278da965c0",
+        "type": "domain",
+        "value": "entries.iterator",
+        "components": {
+          "host": "entries.iterator"
+        },
+        "occurrence_count": 1,
+        "occurrences": [
+          {
+            "source_file": "smali/kotlin/collections/MapsKt__MapsKt.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "entries.iterator",
+            "evidence": "entries.iterator",
+            "line_number": 4600
+          }
+        ]
+      },
+      {
+        "id": "cand-ea8c6f69e183",
+        "type": "domain",
+        "value": "executor.submit",
+        "components": {
+          "host": "executor.submit"
+        },
+        "occurrence_count": 1,
+        "occurrences": [
+          {
+            "source_file": "smali/org/jetbrains/anko/BackgroundExecutor.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "executor.submit",
+            "evidence": "executor.submit",
+            "line_number": 179
+          }
+        ]
+      },
+      {
+        "id": "cand-6b08b0274656",
+        "type": "domain",
+        "value": "executorservice.submit",
+        "components": {
+          "host": "executorservice.submit"
+        },
+        "occurrence_count": 4,
+        "occurrences": [
+          {
+            "source_file": "smali/org/jetbrains/anko/AsyncKt.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "executorService.submit",
+            "evidence": "executorService.submit",
+            "line_number": 501
+          },
+          {
+            "source_file": "smali/org/jetbrains/anko/AsyncKt.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "executorService.submit",
+            "evidence": "executorService.submit",
+            "line_number": 683
+          },
+          {
+            "source_file": "smali/org/jetbrains/anko/custom/DeprecatedKt.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "executorService.submit",
+            "evidence": "executorService.submit",
+            "line_number": 128
+          },
+          {
+            "source_file": "smali/org/jetbrains/anko/custom/DeprecatedKt.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "executorService.submit",
+            "evidence": "executorService.submit",
+            "line_number": 268
+          }
+        ]
+      },
+      {
+        "id": "cand-22749f497055",
+        "type": "domain",
+        "value": "file.name",
+        "components": {
+          "host": "file.name"
+        },
+        "occurrence_count": 1,
+        "occurrences": [
+          {
+            "source_file": "smali/com/github/kittinunf/fuel/core/Request$dataParts$3.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "file.name",
+            "evidence": "file.name",
+            "line_number": 209
+          }
+        ]
+      },
+      {
+        "id": "cand-7448d1ec360f",
+        "type": "domain",
+        "value": "io.reactivex",
+        "components": {
+          "host": "io.reactivex"
+        },
+        "occurrence_count": 81,
+        "occurrences": [
+          {
+            "source_file": "smali/io/reactivex/Completable.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 1217
+          },
+          {
+            "source_file": "smali/io/reactivex/Completable.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 1941
+          },
+          {
+            "source_file": "smali/io/reactivex/Completable.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 3306
+          },
+          {
+            "source_file": "smali/io/reactivex/Completable.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 3338
+          },
+          {
+            "source_file": "smali/io/reactivex/Flowable.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 3728
+          },
+          {
+            "source_file": "smali/io/reactivex/Flowable.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 3843
+          },
+          {
+            "source_file": "smali/io/reactivex/Flowable.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 3934
+          },
+          {
+            "source_file": "smali/io/reactivex/Flowable.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 6882
+          },
+          {
+            "source_file": "smali/io/reactivex/Flowable.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 9562
+          },
+          {
+            "source_file": "smali/io/reactivex/Flowable.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 9749
+          },
+          {
+            "source_file": "smali/io/reactivex/Flowable.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 9797
+          },
+          {
+            "source_file": "smali/io/reactivex/Flowable.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 11373
+          },
+          {
+            "source_file": "smali/io/reactivex/Flowable.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 11557
+          },
+          {
+            "source_file": "smali/io/reactivex/Flowable.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 11717
+          },
+          {
+            "source_file": "smali/io/reactivex/Flowable.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 11855
+          },
+          {
+            "source_file": "smali/io/reactivex/Flowable.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 17149
+          },
+          {
+            "source_file": "smali/io/reactivex/Flowable.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 17358
+          },
+          {
+            "source_file": "smali/io/reactivex/Flowable.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 17598
+          },
+          {
+            "source_file": "smali/io/reactivex/Flowable.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 17754
+          },
+          {
+            "source_file": "smali/io/reactivex/Flowable.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 18251
+          },
+          {
+            "source_file": "smali/io/reactivex/Flowable.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 18415
+          },
+          {
+            "source_file": "smali/io/reactivex/Flowable.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 20611
+          },
+          {
+            "source_file": "smali/io/reactivex/Flowable.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 20999
+          },
+          {
+            "source_file": "smali/io/reactivex/Flowable.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 21203
+          },
+          {
+            "source_file": "smali/io/reactivex/Flowable.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 21496
+          },
+          {
+            "source_file": "smali/io/reactivex/Flowable.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 21594
+          },
+          {
+            "source_file": "smali/io/reactivex/Flowable.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 21664
+          },
+          {
+            "source_file": "smali/io/reactivex/Flowable.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 21895
+          },
+          {
+            "source_file": "smali/io/reactivex/Flowable.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 22041
+          },
+          {
+            "source_file": "smali/io/reactivex/Flowable.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 23468
+          },
+          {
+            "source_file": "smali/io/reactivex/Flowable.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 23671
+          },
+          {
+            "source_file": "smali/io/reactivex/Flowable.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 23721
+          },
+          {
+            "source_file": "smali/io/reactivex/Flowable.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 23772
+          },
+          {
+            "source_file": "smali/io/reactivex/Maybe.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 2373
+          },
+          {
+            "source_file": "smali/io/reactivex/Maybe.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 4170
+          },
+          {
+            "source_file": "smali/io/reactivex/Maybe.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 4310
+          },
+          {
+            "source_file": "smali/io/reactivex/Maybe.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 6949
+          },
+          {
+            "source_file": "smali/io/reactivex/Maybe.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 6984
+          },
+          {
+            "source_file": "smali/io/reactivex/Observable.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 3488
+          },
+          {
+            "source_file": "smali/io/reactivex/Observable.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 3595
+          },
+          {
+            "source_file": "smali/io/reactivex/Observable.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 3678
+          },
+          {
+            "source_file": "smali/io/reactivex/Observable.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 6558
+          },
+          {
+            "source_file": "smali/io/reactivex/Observable.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 9145
+          },
+          {
+            "source_file": "smali/io/reactivex/Observable.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 9320
+          },
+          {
+            "source_file": "smali/io/reactivex/Observable.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 9364
+          },
+          {
+            "source_file": "smali/io/reactivex/Observable.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 10897
+          },
+          {
+            "source_file": "smali/io/reactivex/Observable.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 11065
+          },
+          {
+            "source_file": "smali/io/reactivex/Observable.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 11209
+          },
+          {
+            "source_file": "smali/io/reactivex/Observable.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 11335
+          },
+          {
+            "source_file": "smali/io/reactivex/Observable.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 15289
+          },
+          {
+            "source_file": "smali/io/reactivex/Observable.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 15486
+          },
+          {
+            "source_file": "smali/io/reactivex/Observable.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 15706
+          },
+          {
+            "source_file": "smali/io/reactivex/Observable.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 15845
+          },
+          {
+            "source_file": "smali/io/reactivex/Observable.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 16294
+          },
+          {
+            "source_file": "smali/io/reactivex/Observable.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 16446
+          },
+          {
+            "source_file": "smali/io/reactivex/Observable.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 16902
+          },
+          {
+            "source_file": "smali/io/reactivex/Observable.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 17039
+          },
+          {
+            "source_file": "smali/io/reactivex/Observable.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 17256
+          },
+          {
+            "source_file": "smali/io/reactivex/Observable.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 18633
+          },
+          {
+            "source_file": "smali/io/reactivex/Observable.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 18838
+          },
+          {
+            "source_file": "smali/io/reactivex/Observable.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 19026
+          },
+          {
+            "source_file": "smali/io/reactivex/Observable.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 19258
+          },
+          {
+            "source_file": "smali/io/reactivex/Observable.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 19348
+          },
+          {
+            "source_file": "smali/io/reactivex/Observable.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 19410
+          },
+          {
+            "source_file": "smali/io/reactivex/Observable.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 19617
+          },
+          {
+            "source_file": "smali/io/reactivex/Observable.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 19660
+          },
+          {
+            "source_file": "smali/io/reactivex/Observable.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 21117
+          },
+          {
+            "source_file": "smali/io/reactivex/Observable.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 21308
+          },
+          {
+            "source_file": "smali/io/reactivex/Observable.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 21354
+          },
+          {
+            "source_file": "smali/io/reactivex/Observable.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 21401
+          },
+          {
+            "source_file": "smali/io/reactivex/Single.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 1596
+          },
+          {
+            "source_file": "smali/io/reactivex/Single.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 3310
+          },
+          {
+            "source_file": "smali/io/reactivex/Single.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 3460
+          },
+          {
+            "source_file": "smali/io/reactivex/Single.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 3502
+          },
+          {
+            "source_file": "smali/io/reactivex/Single.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 5612
+          },
+          {
+            "source_file": "smali/io/reactivex/Single.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 5736
+          },
+          {
+            "source_file": "smali/io/reactivex/annotations/SchedulerSupport.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 26
+          },
+          {
+            "source_file": "smali/io/reactivex/annotations/SchedulerSupport.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 30
+          },
+          {
+            "source_file": "smali/io/reactivex/annotations/SchedulerSupport.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 32
+          },
+          {
+            "source_file": "smali/io/reactivex/annotations/SchedulerSupport.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 36
+          },
+          {
+            "source_file": "smali/io/reactivex/annotations/SchedulerSupport.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex",
+            "evidence": "io.reactivex",
+            "line_number": 41
+          }
+        ]
+      },
+      {
+        "id": "cand-a4fc4045c71a",
+        "type": "domain",
+        "value": "io.reactivex.android",
+        "components": {
+          "host": "io.reactivex.android"
+        },
+        "occurrence_count": 1,
+        "occurrences": [
+          {
+            "source_file": "smali/io/reactivex/android/BuildConfig.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "io.reactivex.android",
+            "evidence": "io.reactivex.android",
+            "line_number": 7
+          }
+        ]
+      },
+      {
+        "id": "cand-3e351300607f",
+        "type": "domain",
+        "value": "it.name",
+        "components": {
+          "host": "it.name"
+        },
+        "occurrence_count": 1,
+        "occurrences": [
+          {
+            "source_file": "smali/com/github/kittinunf/fuel/core/Request$sources$1.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "it.name",
+            "evidence": "it.name",
+            "line_number": 201
+          }
+        ]
+      },
+      {
+        "id": "cand-d4769b91e175",
+        "type": "domain",
+        "value": "jctools.spsc.max.lookahead.step",
+        "components": {
+          "host": "jctools.spsc.max.lookahead.step"
+        },
+        "occurrence_count": 2,
+        "occurrences": [
+          {
+            "source_file": "smali/io/reactivex/internal/queue/SpscArrayQueue.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "jctools.spsc.max.lookahead.step",
+            "evidence": "jctools.spsc.max.lookahead.step",
+            "line_number": 46
+          },
+          {
+            "source_file": "smali/io/reactivex/internal/queue/SpscLinkedArrayQueue.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "jctools.spsc.max.lookahead.step",
+            "evidence": "jctools.spsc.max.lookahead.step",
+            "line_number": 67
+          }
+        ]
+      },
+      {
+        "id": "cand-4663c9e2d952",
+        "type": "domain",
+        "value": "kotlin-reflect.jar",
+        "components": {
+          "host": "kotlin-reflect.jar"
+        },
+        "occurrence_count": 1,
+        "occurrences": [
+          {
+            "source_file": "smali/kotlin/jvm/KotlinReflectionNotSupportedError.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "kotlin-reflect.jar",
+            "evidence": "kotlin-reflect.jar",
+            "line_number": 11
+          }
+        ]
+      },
+      {
+        "id": "cand-e86955c20f1b",
+        "type": "domain",
+        "value": "matchresult.group",
+        "components": {
+          "host": "matchresult.group"
+        },
+        "occurrence_count": 2,
+        "occurrences": [
+          {
+            "source_file": "smali/kotlin/text/MatcherMatchResult$groups$1.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "matchResult.group",
+            "evidence": "matchResult.group",
+            "line_number": 177
+          },
+          {
+            "source_file": "smali/kotlin/text/MatcherMatchResult.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "matchResult.group",
+            "evidence": "matchResult.group",
+            "line_number": 237
+          }
+        ]
+      },
+      {
+        "id": "cand-0c120ce29edc",
+        "type": "domain",
+        "value": "rx2.buffer",
+        "components": {
+          "host": "rx2.buffer"
+        },
+        "occurrence_count": 1,
+        "occurrences": [
+          {
+            "source_file": "smali/io/reactivex/Flowable.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "rx2.buffer",
+            "evidence": "rx2.buffer",
+            "line_number": 31
+          }
+        ]
+      },
+      {
+        "id": "cand-e2910ef73c8f",
+        "type": "domain",
+        "value": "rx2.computation",
+        "components": {
+          "host": "rx2.computation"
+        },
+        "occurrence_count": 4,
+        "occurrences": [
+          {
+            "source_file": "smali/io/reactivex/internal/schedulers/ComputationScheduler.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "rx2.computation",
+            "evidence": "rx2.computation",
+            "line_number": 20
+          },
+          {
+            "source_file": "smali/io/reactivex/internal/schedulers/ComputationScheduler.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "rx2.computation",
+            "evidence": "rx2.computation",
+            "line_number": 22
+          },
+          {
+            "source_file": "smali/io/reactivex/internal/schedulers/ComputationScheduler.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "rx2.computation",
+            "evidence": "rx2.computation",
+            "line_number": 62
+          },
+          {
+            "source_file": "smali/io/reactivex/internal/schedulers/ComputationScheduler.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "rx2.computation",
+            "evidence": "rx2.computation",
+            "line_number": 99
+          }
+        ]
+      },
+      {
+        "id": "cand-fd885813f28f",
+        "type": "domain",
+        "value": "rx2.io",
+        "components": {
+          "host": "rx2.io"
+        },
+        "occurrence_count": 2,
+        "occurrences": [
+          {
+            "source_file": "smali/io/reactivex/internal/schedulers/IoScheduler.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "rx2.io",
+            "evidence": "rx2.io",
+            "line_number": 25
+          },
+          {
+            "source_file": "smali/io/reactivex/internal/schedulers/IoScheduler.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "rx2.io",
+            "evidence": "rx2.io",
+            "line_number": 78
+          }
+        ]
+      },
+      {
+        "id": "cand-6fbf4f0831dd",
+        "type": "domain",
+        "value": "rx2.newthread",
+        "components": {
+          "host": "rx2.newthread"
+        },
+        "occurrence_count": 2,
+        "occurrences": [
+          {
+            "source_file": "smali/io/reactivex/internal/schedulers/NewThreadScheduler.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "rx2.newthread",
+            "evidence": "rx2.newthread",
+            "line_number": 7
+          },
+          {
+            "source_file": "smali/io/reactivex/internal/schedulers/NewThreadScheduler.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "rx2.newthread",
+            "evidence": "rx2.newthread",
+            "line_number": 23
+          }
+        ]
+      },
+      {
+        "id": "cand-c6188655588b",
+        "type": "domain",
+        "value": "rx2.purge",
+        "components": {
+          "host": "rx2.purge"
+        },
+        "occurrence_count": 6,
+        "occurrences": [
+          {
+            "source_file": "smali/io/reactivex/internal/schedulers/SchedulerPoolFactory.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "rx2.purge",
+            "evidence": "rx2.purge",
+            "line_number": 28
+          },
+          {
+            "source_file": "smali/io/reactivex/internal/schedulers/SchedulerPoolFactory.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "rx2.purge",
+            "evidence": "rx2.purge",
+            "line_number": 32
+          },
+          {
+            "source_file": "smali/io/reactivex/internal/schedulers/SchedulerPoolFactory.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "rx2.purge",
+            "evidence": "rx2.purge",
+            "line_number": 78
+          },
+          {
+            "source_file": "smali/io/reactivex/internal/schedulers/SchedulerPoolFactory.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "rx2.purge",
+            "evidence": "rx2.purge",
+            "line_number": 87
+          },
+          {
+            "source_file": "smali/io/reactivex/internal/schedulers/SchedulerPoolFactory.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "rx2.purge",
+            "evidence": "rx2.purge",
+            "line_number": 97
+          },
+          {
+            "source_file": "smali/io/reactivex/internal/schedulers/SchedulerPoolFactory.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "rx2.purge",
+            "evidence": "rx2.purge",
+            "line_number": 106
+          }
+        ]
+      },
+      {
+        "id": "cand-c87dc9f849ea",
+        "type": "domain",
+        "value": "rx2.scheduler.drift",
+        "components": {
+          "host": "rx2.scheduler.drift"
+        },
+        "occurrence_count": 1,
+        "occurrences": [
+          {
+            "source_file": "smali/io/reactivex/Scheduler.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "rx2.scheduler.drift",
+            "evidence": "rx2.scheduler.drift",
+            "line_number": 27
+          }
+        ]
+      },
+      {
+        "id": "cand-0a19d6cbc7f2",
+        "type": "domain",
+        "value": "rx2.single",
+        "components": {
+          "host": "rx2.single"
+        },
+        "occurrence_count": 2,
+        "occurrences": [
+          {
+            "source_file": "smali/io/reactivex/internal/schedulers/SingleScheduler.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "rx2.single",
+            "evidence": "rx2.single",
+            "line_number": 15
+          },
+          {
+            "source_file": "smali/io/reactivex/internal/schedulers/SingleScheduler.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "rx2.single",
+            "evidence": "rx2.single",
+            "line_number": 57
+          }
+        ]
+      },
+      {
+        "id": "cand-493d28b6bde8",
+        "type": "domain",
+        "value": "sg.vantagepoint.mstgkotlin",
+        "components": {
+          "host": "sg.vantagepoint.mstgkotlin"
+        },
+        "occurrence_count": 2,
+        "occurrences": [
+          {
+            "source_file": "AndroidManifest.xml",
+            "extraction_method": "domain_pattern",
+            "raw_value": "sg.vantagepoint.mstgkotlin",
+            "evidence": "sg.vantagepoint.mstgkotlin",
+            "line_number": 2
+          },
+          {
+            "source_file": "smali/sg/vantagepoint/mstgkotlin/BuildConfig.smali",
+            "extraction_method": "domain_pattern",
+            "raw_value": "sg.vantagepoint.mstgkotlin",
+            "evidence": "sg.vantagepoint.mstgkotlin",
+            "line_number": 7
+          }
+        ]
+      },
+      {
+        "id": "cand-cec33f2b6f5d",
+        "type": "url",
+        "value": "http://127.0.0.1/",
+        "components": {
+          "scheme": "http",
+          "host": "127.0.0.1",
+          "port": null,
+          "path": "/"
+        },
+        "occurrence_count": 1,
+        "occurrences": [
+          {
+            "source_file": "smali/sg/vantagepoint/mstgkotlin/RegisterActivity$onCreate$2.smali",
+            "extraction_method": "network_url_pattern",
+            "raw_value": "http://127.0.0.1",
+            "evidence": "http://127.0.0.1",
+            "line_number": 97
+          }
+        ]
+      },
+      {
+        "id": "cand-5b09f0f09e6d",
+        "type": "url",
+        "value": "http://127.0.0.1/signup",
+        "components": {
+          "scheme": "http",
+          "host": "127.0.0.1",
+          "port": null,
+          "path": "/signup"
+        },
+        "occurrence_count": 1,
+        "occurrences": [
+          {
+            "source_file": "smali/sg/vantagepoint/mstgkotlin/RegisterActivity$onCreate$2.smali",
+            "extraction_method": "fuel_smali_call_context",
+            "raw_value": "http://127.0.0.1/signup",
+            "evidence": "Fuel.POST(http://127.0.0.1/signup)",
+            "line_number": 214
+          }
+        ]
+      }
+    ]
+  },
+  "static_findings": [
+    {
+      "id": "SEC-CODE-01",
+      "rule_id": "SEC-CODE-01",
+      "title": "Application Is Marked Debuggable",
+      "severity": "CRITICAL",
+      "category": "general",
+      "source_file": "AndroidManifest.xml",
+      "evidence": "android:debuggable=\"true\" is declared in AndroidManifest.xml under <application>.",
+      "description": "The application has android:debuggable=\"true\" enabled. Attackers can connect JDWP debuggers via ADB, dump memory, inspect encryption keys, bypass security controls, and execute arbitrary code in app context.",
+      "recommendation": ""
+    },
+    {
+      "id": "SEC-NET-01",
+      "rule_id": "SEC-NET-01",
+      "title": "Cleartext HTTP Traffic Permitted",
+      "severity": "HIGH",
+      "category": "general",
+      "source_file": "AndroidManifest.xml",
+      "evidence": "2 unencrypted HTTP URLs discovered in code (e.g., http://127.0.0.1, http://127.0.0.1/signup)",
+      "description": "The application allows unencrypted HTTP network communication. Traffic sent over plaintext HTTP can be intercepted, read, or modified by adversaries via Man-in-the-Middle (MitM) attacks.",
+      "recommendation": ""
+    },
+    {
+      "id": "SEC-PLAT-02",
+      "rule_id": "SEC-PLAT-02",
+      "title": "Insecure file:// Local URL Schemes Detected",
+      "severity": "LOW",
+      "category": "general",
+      "source_file": "AndroidManifest.xml",
+      "evidence": "Detected file:// scheme references in code: file:///android_asset/unsafe_content.html, file:///android_asset/unsafe_content.html",
+      "description": "The application references local 'file://' URI schemes (2 occurrences). If passed to WebViews with allowFileAccess enabled, this can lead to arbitrary local file disclosure and Cross-App Scripting.",
+      "recommendation": ""
+    },
+    {
+      "id": "SEC-RESI-01",
+      "rule_id": "SEC-RESI-01",
+      "title": "Client-Side Root Detection Binary Checks Detected",
+      "severity": "LOW",
+      "category": "general",
+      "source_file": "AndroidManifest.xml",
+      "evidence": "Root execution paths inspected: /sbin/su, /su/bin/su",
+      "description": "The application inspects standard root binary paths (/sbin/su, /su/bin/su) to detect rooted devices. Standard file-existence checks are easily bypassed via Frida hooking or root-hiding modules.",
+      "recommendation": ""
+    }
+  ]
+}
