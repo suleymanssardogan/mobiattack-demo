@@ -28,6 +28,8 @@ from src.url_classifier import classify_input_url
 from src.play_store_acquirer import open_play_store_on_device
 from src.vulnerability_evaluator import evaluate_vulnerabilities
 
+PRESENTATION_ADB_SERIAL = "emulator-5554"
+
 HTML_PAGE = """<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -730,11 +732,15 @@ HTML_PAGE = """<!DOCTYPE html>
     .stage-card.stage-skipped { background:#f8fafc; border-left-color:#94a3b8; }
     .stage-card.stage-failed { background:#fef2f2; border-left-color:#dc2626; }
     .stage-card.stage-warning { background:#fffbeb; border-left-color:#d97706; }
-    .preset-chips-grid { display:flex; flex-wrap:wrap; gap:5px; margin-top:6px; }
-    .preset-chip { background:#f8fafc; border:1px solid #cbd5e1; color:#334155; padding:3px 8px; border-radius:4px; font-size:11px; font-family:var(--font); font-weight:500; cursor:pointer; transition:all 0.1s; text-decoration:none; }
-    .preset-chip:hover { background:#f1f5f9; border-color:#94a3b8; color:#0f172a; text-decoration:none; }
-    .preset-chip-warn { border-color:#fed7aa; color:#c2410c; background:#fff7ed; }
-    .preset-chip-warn:hover { background:#ffedd5; border-color:#f97316; }
+    .quick-targets-panel { margin-top:14px; padding:12px; border:1px solid #93c5fd; border-radius:10px; background:#eff6ff; }
+    .quick-targets-heading { color:#1d4ed8; font-size:12px; font-weight:800; letter-spacing:.02em; }
+    .quick-targets-hint { color:#475569; font-size:11px; margin-top:3px; line-height:1.4; }
+    .preset-chips-grid { display:grid; grid-template-columns:1fr; gap:8px; margin-top:10px; }
+    .preset-chip { display:flex; flex-direction:column; align-items:flex-start; gap:3px; width:100%; padding:10px 12px; background:#fff; border:1px solid #bfdbfe; border-radius:8px; color:#0f172a; font-family:var(--font); text-align:left; cursor:pointer; box-shadow:0 1px 3px rgba(37,99,235,.08); transition:border-color .15s,box-shadow .15s,transform .15s; }
+    .preset-chip strong { font-size:12px; font-weight:700; }
+    .preset-chip span { color:#64748b; font-size:10.5px; line-height:1.35; }
+    .preset-chip:hover { border-color:#2563eb; box-shadow:0 3px 9px rgba(37,99,235,.16); transform:translateY(-1px); }
+    .preset-chip:focus-visible { outline:2px solid #2563eb; outline-offset:2px; }
     .candidate-val { font-family:var(--mono); font-size:12px; overflow-wrap:anywhere; word-break:normal; line-height:1.45; }
     .analysis-header,.tabs-nav,th { background:#f8fafc; border-color:#dfe3e8; }
     td,.kv-row,.scroll-list-item,.analysis-notes-list li { border-color:#eaecf0; }
@@ -931,16 +937,15 @@ HTML_PAGE = """<!DOCTYPE html>
           <label for="apkUrl" class="sidebar-label">Target URL (Direct APK or Google Play Store)</label>
           <input type="text" id="apkUrl" placeholder="Paste APK, IPA, or Play Store URL..." oninput="handleUrlInput()" />
           <div id="urlClassificationBadge" style="display:none; margin-top:6px; font-family:var(--mono); font-size:11px;"></div>
-          <div style="margin-top:10px;">
-            <div style="font-size:10px; font-weight:700; color:var(--text-3); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:5px;">Quick Targets</div>
-            <div class="preset-chips-grid">
-              <button type="button" class="preset-chip preset-link" onclick="fillPreset('https://play.google.com/store/apps/details?id=apps.r.flashlight')">Flashlight</button>
-              <button type="button" class="preset-chip preset-link" onclick="fillPreset('https://github.com/OWASP/MASTG-Hacking-Playground/releases/download/1.0/MSTG-Android-Kotlin.apk')">MSTG Kotlin</button>
-              <button type="button" class="preset-chip preset-link" onclick="fillPreset('https://github.com/OWASP/MASTG-Hacking-Playground/releases/download/1.1/MSTG-Android-Java.apk')">MSTG Java</button>
-              <button type="button" class="preset-chip preset-link" onclick="fillPreset('https://play.google.com/store/apps/details?id=com.automattic.simplenote')">Simplenote</button>
-              <button type="button" class="preset-chip preset-link" onclick="fillPreset('https://play.google.com/store/apps/details?id=com.socialnmobile.dictapps.notepad.color.note')">ColorNote</button>
-              <button type="button" class="preset-chip preset-link" onclick="fillPreset('https://play.google.com/store/apps/details?id=org.owasp.mastestapp')">OWASP MAS</button>
-              <button type="button" class="preset-chip preset-link preset-chip-warn" title="Split APK (Play Store acquisition)" onclick="fillPreset('https://play.google.com/store/apps/details?id=com.sec.android.app.popupcalculator&hl=en')">Samsung Calc ⚠️</button>
+          <div class="quick-targets-panel">
+            <div class="quick-targets-heading">Quick Demos</div>
+            <div class="quick-targets-hint">Choose a sample to fill the target field.</div>
+            <div class="preset-chips-grid" id="quickTargetsAndroid">
+              <button type="button" class="preset-chip" onclick="fillPreset('https://github.com/OWASP/MASTG-Hacking-Playground/releases/download/1.0/MSTG-Android-Kotlin.apk')"><strong>OWASP Kotlin APK</strong><span>2.9 MB · Verified Android demo</span></button>
+              <button type="button" class="preset-chip" onclick="fillPreset('https://play.google.com/store/apps/details?id=com.google.android.calculator')"><strong>Google Calculator · Play Store</strong><span>Requires Play Store sign-in on the emulator</span></button>
+            </div>
+            <div class="preset-chips-grid" id="quickTargetsIos" style="display:none;">
+              <button type="button" class="preset-chip" onclick="fillPreset('https://github.com/OWASP/MASTG-Hacking-Playground/releases/download/1.0/MSTG-JWT.ipa')"><strong>OWASP iOS Swift IPA</strong><span>5.9 MB · Static analysis only</span></button>
             </div>
           </div>
         </div>
@@ -959,9 +964,9 @@ HTML_PAGE = """<!DOCTYPE html>
 
         <div class="sidebar-section" id="adbTargetSection">
           <div class="sidebar-group-title">Device / Runtime</div>
-          <div class="sidebar-label">ADB Target (Optional)</div>
-          <input type="text" id="adbSerial" value="127.0.0.1:5555" />
-          <div style="font-size:11px; color:var(--text-4); margin-top:4px;">Not required for deterministic static scan.</div>
+          <div class="sidebar-label">ADB Target</div>
+          <input type="text" id="adbSerial" value="emulator-5554" readonly aria-readonly="true" />
+          <div style="font-size:11px; color:var(--text-4); margin-top:4px;">Fixed Android Studio emulator on this Mac backend.</div>
         </div>
 
         <div class="sidebar-section" id="installModeSection">
@@ -1538,7 +1543,7 @@ HTML_PAGE = """<!DOCTYPE html>
       const rt = data.runtime || {};
 
       if (devDot) devDot.className = "device-dot device-dot-connected";
-      if (devText) devText.textContent = "ADB " + escapeHtml(adb.serial || '127.0.0.1:5555');
+      if (devText) devText.textContent = "ADB " + escapeHtml(adb.serial || 'emulator-5554');
 
       el.innerHTML = `
         <div class="kv-row"><span class="kv-key">Device:</span><span class="kv-val">${escapeHtml(adb.serial || '-')}</span></div>
@@ -3087,6 +3092,9 @@ HTML_PAGE = """<!DOCTYPE html>
       const badge = document.getElementById("urlClassificationBadge");
       const urlInput = document.getElementById("apkUrl");
       const urlLabel = document.querySelector('label[for="apkUrl"]');
+      document.getElementById("quickTargetsAndroid").style.display = isIos ? "none" : "grid";
+      document.getElementById("quickTargetsIos").style.display = isIos ? "grid" : "none";
+      if (urlInput) urlInput.value = "";
 
       startBtn.disabled = false;
 
@@ -3190,7 +3198,7 @@ HTML_PAGE = """<!DOCTYPE html>
             if (pollTimer) clearInterval(pollTimer);
             pollTimer = null;
             currentRunId = null;
-            document.getElementById("startBtn").disabled = getSelectedPlatform() === "ios";
+            document.getElementById("startBtn").disabled = false;
           }
           return;
         }
@@ -3707,7 +3715,7 @@ class _DemoRequestHandler(BaseHTTPRequestHandler):
             except Exception:
                 payload = {}
 
-            adb_serial = payload.get("adb_serial", "127.0.0.1:5555")
+            adb_serial = PRESENTATION_ADB_SERIAL
             url = payload.get("url")
             package_name = payload.get("package_name")
             try:
@@ -3742,9 +3750,7 @@ class _DemoRequestHandler(BaseHTTPRequestHandler):
                 })
                 return
 
-            adb_serial = payload.get("adb_serial")
-            if isinstance(adb_serial, str):
-                adb_serial = adb_serial.strip() or None
+            adb_serial = PRESENTATION_ADB_SERIAL
             reinstall = bool(payload.get("reinstall", True))
             grant_permissions = bool(payload.get("grant_permissions", False))
             install_mode = str(payload.get("install_mode", "manual")).strip().lower()
@@ -3773,7 +3779,7 @@ class _DemoRequestHandler(BaseHTTPRequestHandler):
             except Exception:
                 payload = {}
 
-            adb_serial = payload.get("adb_serial", "127.0.0.1:5555")
+            adb_serial = PRESENTATION_ADB_SERIAL
             probe_res = server.execute_connectivity_probe(adb_serial=adb_serial)
             self._send_json(200 if probe_res.get("hit") else 500, probe_res)
             return
@@ -4116,7 +4122,7 @@ class DemoWebServer:
                 }
             return status_copy
 
-    def execute_connectivity_probe(self, adb_serial: str = "127.0.0.1:5555", timeout: float = 12.0) -> dict:
+    def execute_connectivity_probe(self, adb_serial: str = PRESENTATION_ADB_SERIAL, timeout: float = 12.0) -> dict:
         """Executes a standalone Task 10 emulator connectivity check."""
         probe_server = ProbeServer(host="127.0.0.1", port=0)
         reverse_configured = False

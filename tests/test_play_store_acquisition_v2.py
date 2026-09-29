@@ -239,6 +239,15 @@ class TestPlayStoreAcquisitionV2(unittest.TestCase):
         self.assertTrue(res.is_blocked)
         self.assertEqual(res.block_reason, "download_failed")
 
+    def test_sign_in_button_on_fresh_emulator(self):
+        xml = '''<hierarchy>
+            <node package="com.android.vending" text="Sign in to find the latest Android apps, games, movies, music, &amp; more" />
+            <node package="com.android.vending" text="Sign in" clickable="true" />
+        </hierarchy>'''
+        result = inspect_play_store_hierarchy(ET.fromstring(xml), package_name="com.example.app")
+        self.assertTrue(result.is_blocked)
+        self.assertEqual(result.block_reason, "sign_in_required")
+
     def test_14_device_incompatible_detection(self):
         xml = '''<hierarchy>
             <node package="com.android.vending" text="Your device isn't compatible with this version." bounds="[100,100][500,200]" />

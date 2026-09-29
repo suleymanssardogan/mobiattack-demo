@@ -222,6 +222,11 @@ def inspect_play_store_hierarchy(
             return inspection
 
     # 3. Check for Sign-In Blocker
+    if any(text.casefold() in {"sign in", "giriş yap"} for text in all_texts):
+        inspection.is_blocked = True
+        inspection.block_reason = "sign_in_required"
+        inspection.diagnostics.append("Google Play Store is waiting for account sign-in.")
+        return inspection
     for pat in SIGN_IN_BLOCKER_PATTERNS:
         if pat.search(full_screen_text):
             inspection.is_blocked = True

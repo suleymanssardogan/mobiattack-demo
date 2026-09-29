@@ -106,6 +106,12 @@ class TestDemoWebServer(unittest.TestCase):
         self.assertIn("Connectivity Probe", html)
         self.assertIn("Emulator connectivity only — not application navigation.", html)
         self.assertIn("Grant permissions", html)
+        self.assertIn('id="quickTargetsAndroid"', html)
+        self.assertIn('id="quickTargetsIos"', html)
+        self.assertIn("com.google.android.calculator", html)
+        self.assertIn("MSTG-JWT.ipa", html)
+        self.assertNotIn("com.sec.android.app.popupcalculator", html)
+        self.assertIn('value="emulator-5554" readonly', html)
 
         # Analysis Results & Tabs
         self.assertIn("Analysis Results", html)
@@ -162,7 +168,7 @@ class TestDemoWebServer(unittest.TestCase):
 
         status, body = self._post("/api/run", {
             "url": "https://example.com/test.apk",
-            "adb_serial": "127.0.0.1:5555",
+            "adb_serial": "some-other-device",
             "reinstall": True,
             "grant_permissions": True,
         })
@@ -173,6 +179,7 @@ class TestDemoWebServer(unittest.TestCase):
 
         # Allow background thread to finish
         time.sleep(0.4)
+        self.assertEqual(mock_run_demo.call_args.kwargs["adb_serial"], "emulator-5554")
 
         status, s_body = self._get_json(f"/api/status/{run_id}")
         self.assertEqual(status, 200)
@@ -255,9 +262,10 @@ class TestDemoWebServer(unittest.TestCase):
         mock_instance.get_status.return_value = {"hit": True, "hit_count": 1}
         mock_probe_cls.return_value = mock_instance
 
-        status, body = self._post("/api/probe", {"adb_serial": "127.0.0.1:5555"})
+        status, body = self._post("/api/probe", {"adb_serial": "some-other-device"})
         self.assertEqual(status, 200)
         self.assertTrue(body.get("hit"))
+        self.assertEqual(mock_reverse.call_args.kwargs["adb_serial"], "emulator-5554")
         self.assertEqual(body.get("hit_count"), 1)
         self.assertEqual(body.get("connectivity_probe"), "verified")
         self.assertIn("Emulator connectivity only", body.get("disclaimer", ""))
@@ -375,13 +383,15 @@ class TestDemoWebServer(unittest.TestCase):
 
     @patch("src.demo_web_server.open_play_store_on_device")
     def test_api_open_store(self, mock_open):
-        mock_open.return_value = {"success": True, "serial": "127.0.0.1:5555"}
+        mock_open.return_value = {"success": True, "serial": "emulator-5554"}
         status, body = self._post("/api/open_store", {
             "package_name": "owasp.sat.agoat",
+            "adb_serial": "some-other-device",
         })
         self.assertEqual(status, 200)
         self.assertTrue(body["success"])
         mock_open.assert_called_once()
+        self.assertEqual(mock_open.call_args.kwargs["serial"], "emulator-5554")
 
     def test_api_classify_direct_ipa(self):
         status, body = self._post("/api/classify", {

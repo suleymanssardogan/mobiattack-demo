@@ -30,6 +30,7 @@ from src.play_store_acquirer import PlayStoreAcquisitionError, acquire_play_stor
 from src.split_preprocessor import preprocess_package_set
 from src.split_static_context_builder import build_split_static_context
 import hashlib
+import ssl
 import urllib.parse
 import urllib.request
 from src.platform_detector import detect_platform
@@ -89,7 +90,16 @@ def _run_ios_pipeline(
                 filename = f"{filename}.ipa"
             dest_file = downloads_dir / filename
             req = urllib.request.Request(clean_url, headers={"User-Agent": "MobiAttack/2.0"})
-            with urllib.request.urlopen(req, timeout=min(timeout_seconds, 60.0)) as resp, open(dest_file, "wb") as out_fp:
+            # Framework Python on macOS may lack a bundled CA file; use the system
+            # trust bundle when present, while retaining normal TLS verification.
+            default_ca = ssl.get_default_verify_paths().openssl_cafile
+            mac_ca = Path("/etc/ssl/cert.pem")
+            tls_context = (
+                ssl.create_default_context(cafile=str(mac_ca))
+                if default_ca and not Path(default_ca).is_file() and mac_ca.is_file()
+                else ssl.create_default_context()
+            )
+            with urllib.request.urlopen(req, timeout=min(timeout_seconds, 60.0), context=tls_context) as resp, open(dest_file, "wb") as out_fp:
                 while chunk := resp.read(65536):
                     out_fp.write(chunk)
             target_file = dest_file
