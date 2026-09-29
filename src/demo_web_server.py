@@ -936,7 +936,7 @@ HTML_PAGE = """<!DOCTYPE html>
             <div class="preset-chips-grid">
               <button type="button" class="preset-chip preset-link" onclick="fillPreset('https://play.google.com/store/apps/details?id=apps.r.flashlight')">Flashlight</button>
               <button type="button" class="preset-chip preset-link" onclick="fillPreset('https://github.com/OWASP/MASTG-Hacking-Playground/releases/download/1.0/MSTG-Android-Kotlin.apk')">MSTG Kotlin</button>
-              <button type="button" class="preset-chip preset-link" onclick="fillPreset('https://github.com/OWASP/GoatDroid-FourGoats/raw/master/dist/FourGoats.apk')">GoatDroid</button>
+              <button type="button" class="preset-chip preset-link" onclick="fillPreset('https://github.com/OWASP/MASTG-Hacking-Playground/releases/download/1.1/MSTG-Android-Java.apk')">MSTG Java</button>
               <button type="button" class="preset-chip preset-link" onclick="fillPreset('https://play.google.com/store/apps/details?id=com.automattic.simplenote')">Simplenote</button>
               <button type="button" class="preset-chip preset-link" onclick="fillPreset('https://play.google.com/store/apps/details?id=com.socialnmobile.dictapps.notepad.color.note')">ColorNote</button>
               <button type="button" class="preset-chip preset-link" onclick="fillPreset('https://play.google.com/store/apps/details?id=org.owasp.mastestapp')">OWASP MAS</button>
