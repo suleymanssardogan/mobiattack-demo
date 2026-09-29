@@ -15,13 +15,7 @@ from src.demo_web_server import DemoWebServer, _DemoRequestHandler
 _server_instance = DemoWebServer(host="0.0.0.0", port=8080, runs_root=os.environ["DEMO_RUNS_DIR"])
 _DemoRequestHandler._global_web_server = _server_instance
 
+
 class handler(_DemoRequestHandler):
     """Vercel Serverless Function entry point."""
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-    @property
-    def server(self):
-        class _ServerWrapper:
-            web_server = _server_instance
-        return _ServerWrapper()
+    pass

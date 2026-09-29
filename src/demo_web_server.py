@@ -3517,7 +3517,13 @@ class _DemoRequestHandler(BaseHTTPRequestHandler):
                 latest_id = list(server._runs.keys())[-1]
             else:
                 try:
-                    run_dirs = sorted([d for d in server.runs_root.iterdir() if d.is_dir() and d.name.startswith("run_") and (d / "report.json").exists()], key=lambda p: p.stat().st_mtime, reverse=True)
+                    candidates = []
+                    if server.runs_root.exists():
+                        candidates.extend([d for d in server.runs_root.iterdir() if d.is_dir() and d.name.startswith("run_") and (d / "report.json").exists()])
+                    repo_runs = (Path(__file__).resolve().parent.parent / "demo_runs").resolve()
+                    if repo_runs.exists() and repo_runs != server.runs_root.resolve():
+                        candidates.extend([d for d in repo_runs.iterdir() if d.is_dir() and d.name.startswith("run_") and (d / "report.json").exists()])
+                    run_dirs = sorted(candidates, key=lambda p: p.stat().st_mtime, reverse=True)
                     if run_dirs:
                         latest_id = run_dirs[0].name
                 except Exception:
@@ -3577,9 +3583,9 @@ class _DemoRequestHandler(BaseHTTPRequestHandler):
         report_api_match = re.match(r"^/api/report/([a-zA-Z0-9_\-]+)$", path)
         if report_api_match:
             run_id = report_api_match.group(1)
-            target_dir = (server.runs_root / run_id).resolve()
-            if not target_dir.is_relative_to(server.runs_root.resolve()):
-                self._send_json(400, {"status": "error", "message": "Invalid run ID."})
+            target_dir = server.get_run_dir(run_id)
+            if not target_dir:
+                self._send_json(404, {"status": "error", "message": f"Report for run '{run_id}' not found."})
                 return
             report_file = target_dir / "report.json"
             if not report_file.exists():
@@ -3597,9 +3603,9 @@ class _DemoRequestHandler(BaseHTTPRequestHandler):
         report_html_match = re.match(r"^/reports/([a-zA-Z0-9_\-]+)/report\.html$", path)
         if report_html_match:
             run_id = report_html_match.group(1)
-            target_dir = (server.runs_root / run_id).resolve()
-            if not target_dir.is_relative_to(server.runs_root.resolve()):
-                self._send_json(400, {"status": "error", "message": "Invalid run ID."})
+            target_dir = server.get_run_dir(run_id)
+            if not target_dir:
+                self._send_json(404, {"status": "error", "message": f"HTML report for run '{run_id}' not found."})
                 return
             report_file = target_dir / "report.html"
             if not report_file.exists():
@@ -3620,9 +3626,9 @@ class _DemoRequestHandler(BaseHTTPRequestHandler):
         report_json_match = re.match(r"^/reports/([a-zA-Z0-9_\-]+)/report\.json$", path)
         if report_json_match:
             run_id = report_json_match.group(1)
-            target_dir = (server.runs_root / run_id).resolve()
-            if not target_dir.is_relative_to(server.runs_root.resolve()):
-                self._send_json(400, {"status": "error", "message": "Invalid run ID."})
+            target_dir = server.get_run_dir(run_id)
+            if not target_dir:
+                self._send_json(404, {"status": "error", "message": f"JSON report for run '{run_id}' not found."})
                 return
             report_file = target_dir / "report.json"
             if not report_file.exists():
@@ -3645,9 +3651,9 @@ class _DemoRequestHandler(BaseHTTPRequestHandler):
         baseline_json_match = re.match(r"^/reports/([a-zA-Z0-9_\-]+)/baseline_report\.json$", path)
         if baseline_json_match:
             run_id = baseline_json_match.group(1)
-            target_dir = (server.runs_root / run_id).resolve()
-            if not target_dir.is_relative_to(server.runs_root.resolve()):
-                self._send_json(400, {"status": "error", "message": "Invalid run ID."})
+            target_dir = server.get_run_dir(run_id)
+            if not target_dir:
+                self._send_json(404, {"status": "error", "message": f"Baseline report for run '{run_id}' not found."})
                 return
             baseline_file = target_dir / "baseline_report.json"
             if not baseline_file.exists():
@@ -4009,53 +4015,67 @@ class DemoWebServer:
             self._active_run_id = None
             return {"status": "ok", "message": "Demo run stopped.", "stopped_run_id": active_id}
 
+    def get_run_dir(self, run_id: str) -> Path | None:
+        """Finds run directory, checking runs_root first and falling back to repository bundled runs."""
+        if not run_id or not re.match(r"^[a-zA-Z0-9_\-]+$", run_id):
+            return None
+        candidate = (self.runs_root / run_id).resolve()
+        if candidate.is_relative_to(self.runs_root.resolve()) and candidate.is_dir():
+            return candidate
+        bundled = (Path(__file__).resolve().parent.parent / "demo_runs" / run_id).resolve()
+        repo_runs_root = (Path(__file__).resolve().parent.parent / "demo_runs").resolve()
+        if bundled.is_relative_to(repo_runs_root) and bundled.is_dir():
+            return bundled
+        return None
+
     def get_run_status(self, run_id: str) -> dict | None:
         with self._lock:
             run = self._runs.get(run_id)
             if not run:
                 # Disk fallback
-                run_dir = (self.runs_root / run_id).resolve()
-                report_file = run_dir / "report.json"
-                if report_file.exists():
-                    try:
-                        with open(report_file, "r", encoding="utf-8") as f:
-                            rep_data = json.load(f)
-                        vuln_file = run_dir / "security_findings.json"
-                        vulns = None
-                        if vuln_file.exists():
-                            with open(vuln_file, "r", encoding="utf-8") as vf:
-                                vulns = json.load(vf)
-                        if not vulns:
-                            vulns = evaluate_vulnerabilities(rep_data)
-                        rep_data["vulnerabilities"] = vulns
-                        runtime_data = rep_data.get("runtime")
-                        is_ios = str(rep_data.get("platform") or rep_data.get("input", {}).get("platform") or "").lower() == "ios"
-                        runtime_not_implemented = isinstance(runtime_data, dict) and runtime_data.get("status") == "not_implemented"
-                        runtime_state = "skipped" if is_ios or runtime_not_implemented else "success"
-                        runtime_message = (
-                            "iOS runtime analysis is not implemented."
-                            if runtime_state == "skipped"
-                            else "Runtime completed."
-                        )
-                        return {
-                            "run_id": run_id,
-                            "overall_status": "completed",
-                            "current_stage": "completed",
-                            "result": rep_data,
-                            "report": {
-                                "json_url": f"/reports/{run_id}/report.json",
-                                "html_url": f"/reports/{run_id}/report.html",
-                                "api_url": f"/api/report/{run_id}",
-                            },
-                            "stages": {
-                                "acquisition": {"state": "success", "message": "Acquisition completed.", "data": rep_data.get("acquisition")},
-                                "preprocessing": {"state": "success", "message": "Preprocessing completed.", "data": rep_data.get("preprocessing")},
-                                "static_analysis": {"state": "success", "message": "Static analysis completed.", "data": rep_data.get("static_analysis")},
-                                "runtime": {"state": runtime_state, "message": runtime_message, "data": runtime_data},
+                run_dir = self.get_run_dir(run_id)
+                if run_dir:
+                    report_file = run_dir / "report.json"
+                    if report_file.exists():
+                        try:
+                            with open(report_file, "r", encoding="utf-8") as f:
+                                rep_data = json.load(f)
+                            vuln_file = run_dir / "security_findings.json"
+                            vulns = None
+                            if vuln_file.exists():
+                                with open(vuln_file, "r", encoding="utf-8") as vf:
+                                    vulns = json.load(vf)
+                            if not vulns:
+                                vulns = evaluate_vulnerabilities(rep_data)
+                            rep_data["vulnerabilities"] = vulns
+                            runtime_data = rep_data.get("runtime")
+                            is_ios = str(rep_data.get("platform") or rep_data.get("input", {}).get("platform") or "").lower() == "ios"
+                            runtime_not_implemented = isinstance(runtime_data, dict) and runtime_data.get("status") == "not_implemented"
+                            runtime_state = "skipped" if is_ios or runtime_not_implemented else "success"
+                            runtime_message = (
+                                "iOS runtime analysis is not implemented."
+                                if runtime_state == "skipped"
+                                else "Runtime completed."
+                            )
+                            return {
+                                "run_id": run_id,
+                                "overall_status": "completed",
+                                "current_stage": "completed",
+                                "result": rep_data,
+                                "report": {
+                                    "json_url": f"/reports/{run_id}/report.json",
+                                    "html_url": f"/reports/{run_id}/report.html",
+                                    "api_url": f"/api/report/{run_id}",
+                                },
+                                "stages": {
+                                    "acquisition": {"state": "success", "message": "Acquisition completed.", "data": rep_data.get("acquisition")},
+                                    "preprocessing": {"state": "success", "message": "Preprocessing completed.", "data": rep_data.get("preprocessing")},
+                                    "static_analysis": {"state": "success", "message": "Static analysis completed.", "data": rep_data.get("static_analysis")},
+                                    "runtime": {"state": runtime_state, "message": runtime_message, "data": runtime_data},
+                                }
                             }
-                        }
-                    except Exception:
-                        pass
+                        except Exception:
+                            pass
                 return None
             status_copy = {
                 "run_id": run.get("run_id"),
