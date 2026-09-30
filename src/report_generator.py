@@ -228,14 +228,8 @@ def build_report_dict(
 
     if str(platform).lower() == "ios":
         report["configuration"] = static.get("configuration") or {}
-        report["vulnerabilities"] = {
-            "status": "not_evaluated",
-            "reason": "not_implemented",
-            "risk_score": "NOT_EVALUATED",
-            "summary": {"critical": 0, "high": 0, "medium": 0, "low": 0, "total": 0},
-            "findings": [],
-            "message": "iOS vulnerability evaluation is not implemented in Phase 1.",
-        }
+        from src.constants import make_ios_vuln_not_evaluated
+        report["vulnerabilities"] = make_ios_vuln_not_evaluated()
     elif "vulnerabilities" in res:
         report["vulnerabilities"] = res["vulnerabilities"]
 

@@ -16,6 +16,7 @@ import time
 import urllib.parse
 import uuid
 
+from src.constants import PRESENTATION_ADB_SERIAL, make_ios_vuln_not_evaluated
 from src.demo_orchestrator import DemoOrchestrationError, run_demo
 from src.html_probe_server import (
     ProbeServer,
@@ -27,3492 +28,35 @@ from src.report_generator import build_report_dict, generate_reports
 from src.url_classifier import classify_input_url
 from src.play_store_acquirer import open_play_store_on_device
 from src.vulnerability_evaluator import evaluate_vulnerabilities
-
-PRESENTATION_ADB_SERIAL = "emulator-5554"
-
-HTML_PAGE = """<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>MobiAttack | Static Analysis Platform</title>
-  <style>
-    :root {
-      --bg: #f5f6f8;
-      --surface: #ffffff;
-      --surface-alt: #f9fafb;
-      --border: #e5e7eb;
-      --border-focus: #2563eb;
-      --text: #111827;
-      --text-2: #374151;
-      --text-3: #6b7280;
-      --text-4: #9ca3af;
-      --accent: #2563eb;
-      --accent-hover: #1d4ed8;
-      --accent-bg: #eff6ff;
-      --success: #059669;
-      --success-bg: #ecfdf5;
-      --warning: #d97706;
-      --warning-bg: #fffbeb;
-      --error: #dc2626;
-      --error-bg: #fef2f2;
-      --info: #0284c7;
-      --font: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
-      --mono: "JetBrains Mono", "SF Mono", Consolas, monospace;
-      --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.04);
-      --shadow-lg: 0 4px 16px rgba(0,0,0,0.1);
-      --r: 8px;
-      --r-sm: 6px;
-    }
-
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: var(--font);
-      font-size: 14px;
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
-      min-height: 100vh;
-    }
-
-    /* ── TOPBAR ──────────────────────────────────────── */
-    header {
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
-      padding: 0 32px;
-      height: 52px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      gap: 12px;
-      flex-wrap: nowrap;
-    }
-
-    .brand-title {
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--text);
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      letter-spacing: -0.02em;
-      white-space: nowrap;
-    }
-
-    .brand-tag {
-      font-size: 9px;
-      font-family: var(--mono);
-      font-weight: 600;
-      padding: 2px 6px;
-      border-radius: 4px;
-      background: var(--accent-bg);
-      color: var(--accent);
-      border: 1px solid #bfdbfe;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-    }
-
-    .brand-subtext, .brand-desc { display: none; }
-
-    .header-device {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 11px;
-      font-family: var(--mono);
-      color: var(--text-3);
-      background: var(--surface-alt);
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      padding: 4px 10px;
-      white-space: nowrap;
-    }
-
-    .device-dot {
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      background: var(--success);
-    }
-
-    /* ── LAYOUT ──────────────────────────────────────── */
-    .container {
-      max-width: 100%;
-      margin: 0;
-      padding: 0;
-    }
-
-    .page-body {
-      display: grid;
-      grid-template-columns: 320px 1fr;
-      min-height: calc(100vh - 52px);
-    }
-
-    @media (max-width: 900px) {
-      .page-body { grid-template-columns: 1fr; }
-      .sidebar { border-right: none !important; border-bottom: 1px solid var(--border); }
-    }
-
-    /* ── SIDEBAR ─────────────────────────────────────── */
-    .sidebar {
-      background: var(--surface);
-      border-right: 1px solid var(--border);
-      padding: 24px 20px;
-      overflow-y: auto;
-      max-height: calc(100vh - 52px);
-      position: sticky;
-      top: 52px;
-    }
-
-    .sidebar-section {
-      margin-bottom: 20px;
-    }
-
-    .sidebar-section:last-child { margin-bottom: 0; }
-
-    .sidebar-label {
-      font-size: 10px;
-      font-weight: 600;
-      color: var(--text-4);
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      margin-bottom: 8px;
-      display: block;
-    }
-
-    /* ── MAIN CONTENT ────────────────────────────────── */
-    .main-content {
-      padding: 28px 32px;
-      overflow-y: auto;
-    }
-
-    /* ── CARD ─────────────────────────────────────────── */
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--r);
-      padding: 0;
-      margin-bottom: 0;
-      box-shadow: none;
-    }
-
-    /* ── FORM ─────────────────────────────────────────── */
-    .form-group { margin-bottom: 16px; }
-    .form-group:last-child { margin-bottom: 0; }
-
-    label {
-      display: block;
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--text-3);
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      margin-bottom: 6px;
-    }
-
-    input[type="text"] {
-      width: 100%;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--r-sm);
-      padding: 8px 12px;
-      color: var(--text);
-      font-family: var(--mono);
-      font-size: 12.5px;
-      outline: none;
-      transition: border-color 0.15s, box-shadow 0.15s;
-    }
-
-    input[type="text"]:focus {
-      border-color: var(--border-focus);
-      box-shadow: 0 0 0 3px rgba(37,99,235,0.08);
-    }
-
-    input[type="text"]::placeholder { color: var(--text-4); }
-
-    .form-grid-2 {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 16px;
-    }
-
-    /* ── RADIOS / CHECKBOXES ─────────────────────────── */
-    .segmented-group { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
-
-    .radio-option {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 12.5px;
-      color: var(--text-2);
-      cursor: pointer;
-      padding: 5px 12px;
-      border-radius: var(--r-sm);
-      background: var(--surface-alt);
-      border: 1px solid var(--border);
-      user-select: none;
-      transition: all 0.1s;
-    }
-
-    .radio-option:hover { background: #eef2f7; border-color: #d1d5db; }
-    .radio-option input[type="radio"] { accent-color: var(--accent); }
-    .radio-option-secondary { opacity: 0.7; font-size: 12px; }
-
-    .checkbox-row {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 12px;
-      color: var(--text-2);
-      cursor: pointer;
-      user-select: none;
-    }
-
-    .checkbox-row input[type="checkbox"] { accent-color: var(--accent); }
-
-    .presets-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 4px 10px;
-      margin-top: 8px;
-      font-size: 11px;
-      align-items: baseline;
-    }
-
-    .presets-label { color: var(--text-4); font-weight: 500; }
-
-    .preset-link { color: var(--accent); cursor: pointer; text-decoration: none; }
-    .preset-link:hover { text-decoration: underline; }
-    .preset-link-warn { color: var(--warning); }
-
-    /* ── BUTTONS ──────────────────────────────────────── */
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-family: var(--font);
-      font-weight: 600;
-      font-size: 13px;
-      padding: 8px 18px;
-      border-radius: var(--r-sm);
-      border: 1px solid transparent;
-      cursor: pointer;
-      transition: all 0.1s;
-    }
-
-    .btn-primary {
-      background: var(--accent);
-      color: #fff;
-      border-color: var(--accent-hover);
-      width: 100%;
-      margin-top: 0;
-    }
-
-    .btn-primary:hover:not(:disabled) { background: var(--accent-hover); }
-
-    .btn-primary:disabled {
-      background: #e5e7eb;
-      color: #9ca3af;
-      border-color: #d1d5db;
-      cursor: not-allowed;
-    }
-
-    .btn-secondary {
-      background: var(--surface);
-      color: var(--text-2);
-      border-color: var(--border);
-      font-size: 12px;
-      padding: 6px 12px;
-      font-weight: 500;
-    }
-
-    .btn-secondary:hover:not(:disabled) { background: var(--surface-alt); }
-
-    .btn-stop {
-      background: var(--error-bg);
-      color: var(--error);
-      border: 1px solid #fecaca;
-      font-weight: 500;
-      padding: 8px 18px;
-    }
-
-    .btn-stop:hover { background: #fee2e2; }
-
-    /* ── BANNERS ──────────────────────────────────────── */
-    .banner {
-      display: none;
-      align-items: center;
-      gap: 10px;
-      padding: 10px 16px;
-      border-radius: var(--r-sm);
-      margin-bottom: 20px;
-      font-size: 13px;
-    }
-
-    .banner-success { background: var(--success-bg); border: 1px solid #a7f3d0; color: var(--success); }
-    .banner-error { background: var(--error-bg); border: 1px solid #fecaca; color: var(--error); }
-
-    .notice-box {
-      background: var(--accent-bg);
-      border: 1px solid #bfdbfe;
-      border-radius: var(--r-sm);
-      padding: 10px 14px;
-      font-size: 12px;
-      color: var(--text-2);
-    }
-
-    .notice-info { font-size: 12px; color: var(--text-3); padding: 4px 0; line-height: 1.5; }
-
-    /* ── PIPELINE STAGES ─────────────────────────────── */
-    .stages-grid {
-      display: flex;
-      gap: 0;
-      margin-bottom: 24px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--r);
-      overflow: hidden;
-    }
-
-    .stage-card {
-      flex: 1 1 0;
-      min-width: 0;
-      background: transparent;
-      border: none;
-      border-right: 1px solid var(--border);
-      border-radius: 0;
-      padding: 16px 18px;
-      display: flex;
-      flex-direction: column;
-      min-height: 100px;
-      box-shadow: none;
-      transition: background 0.1s;
-    }
-
-    .stage-card:last-child { border-right: none; }
-    .stage-card:hover { background: var(--surface-alt); }
-
-    @media (max-width: 900px) {
-      .stages-grid { flex-direction: column; }
-      .stage-card { border-right: none; border-bottom: 1px solid var(--border); }
-      .stage-card:last-child { border-bottom: none; }
-    }
-
-    .stage-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 6px;
-    }
-
-    .stage-title { font-size: 12px; font-weight: 600; color: var(--text); }
-    .stage-message { font-size: 11.5px; color: var(--text-3); margin-bottom: 4px; flex: 1; }
-
-    .stage-header { gap: 8px; flex-wrap: wrap; }
-    .stage-details .kv-row { display: block; }
-    .stage-details .kv-key,
-    .stage-details .kv-val { display: block; text-align: left; white-space: normal; word-break: normal; overflow-wrap: anywhere; }
-    .stage-details .kv-val { margin-top: 3px; }
-
-    .stage-details {
-      font-size: 11px;
-      border-top: 1px solid var(--border);
-      padding-top: 6px;
-      margin-top: 4px;
-      color: var(--text-2);
-      font-family: var(--mono);
-    }
-
-    /* ── BADGES ───────────────────────────────────────── */
-    .badge {
-      display: inline-block;
-      font-size: 10px;
-      font-weight: 600;
-      font-family: var(--mono);
-      text-transform: uppercase;
-      padding: 2px 8px;
-      border-radius: 999px;
-      letter-spacing: 0.03em;
-    }
-
-    .badge-pending  { background: #f3f4f6; color: #9ca3af; border: 1px solid #e5e7eb; }
-    .badge-running  { background: var(--accent-bg); color: var(--accent); border: 1px solid #bfdbfe; }
-    .badge-success  { background: var(--success-bg); color: var(--success); border: 1px solid #a7f3d0; }
-    .badge-warning  { background: var(--warning-bg); color: var(--warning); border: 1px solid #fde68a; }
-    .badge-failed   { background: var(--error-bg); color: var(--error); border: 1px solid #fecaca; }
-    .badge-skipped  { background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; }
-    .badge-waiting, .badge-waiting_for_installation { background: #f0f9ff; color: var(--info); border: 1px solid #bae6fd; }
-
-    .tag {
-      display: inline-block;
-      font-size: 11px;
-      font-family: var(--mono);
-      padding: 2px 8px;
-      border-radius: 4px;
-      background: var(--surface-alt);
-      border: 1px solid var(--border);
-      color: var(--text-3);
-    }
-
-    /* ── KEY-VALUE ────────────────────────────────────── */
-    .kv-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      padding: 7px 0;
-      border-bottom: 1px solid #f3f4f6;
-      gap: 16px;
-    }
-
-    .kv-row:last-child { border-bottom: none; }
-    .kv-key { color: var(--text-3); font-size: 13px; font-weight: 500; white-space: nowrap; }
-    .kv-val { color: var(--text); font-family: var(--mono); font-size: 12.5px; text-align: right; word-break: break-all; }
-
-    /* ── PROBE ────────────────────────────────────────── */
-    .probe-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--r);
-      padding: 18px 22px;
-      margin-bottom: 20px;
-    }
-
-    .probe-header { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
-    .probe-disclaimer { font-size: 11px; color: var(--text-4); margin-top: 8px; }
-
-    /* ── ANALYSIS SECTION ────────────────────────────── */
-    .analysis-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--r);
-      padding: 0;
-      margin-bottom: 24px;
-      overflow: hidden;
-    }
-
-    .analysis-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 18px 24px;
-      border-bottom: 1px solid var(--border);
-      background: var(--surface-alt);
-      margin-bottom: 0;
-    }
-
-    /* ── TABS ─────────────────────────────────────────── */
-    .tabs-nav {
-      display: flex;
-      gap: 0;
-      border-bottom: 1px solid var(--border);
-      background: var(--surface);
-      padding: 0 24px;
-      overflow-x: auto;
-      flex-wrap: nowrap;
-      margin-bottom: 0;
-    }
-
-    .tab-btn {
-      background: transparent;
-      border: none;
-      border-bottom: 2px solid transparent;
-      color: var(--text-3);
-      font-family: var(--font);
-      font-size: 13px;
-      font-weight: 500;
-      padding: 12px 16px;
-      margin-bottom: -1px;
-      cursor: pointer;
-      transition: color 0.1s;
-      border-radius: 0;
-      white-space: nowrap;
-    }
-
-    .tab-btn:hover { color: var(--text-2); }
-
-    .tab-btn.active {
-      color: var(--accent);
-      border-bottom-color: var(--accent);
-      font-weight: 600;
-    }
-
-    .tab-pane { display: none; padding: 20px 24px; }
-    .tab-pane.active { display: block; }
-
-    .section-subtitle {
-      font-weight: 600;
-      font-size: 11px;
-      color: var(--text-3);
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      margin-bottom: 10px;
-    }
-
-    /* ── SCROLL CONTAINERS ────────────────────────────── */
-    .scroll-container {
-      max-height: 220px;
-      overflow-y: auto;
-      background: var(--surface-alt);
-      border: 1px solid var(--border);
-      border-radius: var(--r-sm);
-      padding: 2px 0;
-    }
-
-    .scroll-list-item {
-      padding: 5px 14px;
-      font-size: 12px;
-      font-family: var(--mono);
-      color: var(--text-2);
-      border-bottom: 1px solid #f3f4f6;
-    }
-
-    .scroll-list-item:hover { background: #f1f5f9; }
-    .scroll-list-item:last-child { border-bottom: none; }
-
-    /* ── TABLES ───────────────────────────────────────── */
-    table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 8px 0; }
-
-    th {
-      background: var(--surface-alt);
-      color: var(--text-3);
-      text-align: left;
-      font-weight: 600;
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      padding: 9px 14px;
-      border-bottom: 1px solid var(--border);
-      position: sticky; top: 0; z-index: 2;
-    }
-
-    td { padding: 8px 14px; border-bottom: 1px solid #f3f4f6; color: var(--text); }
-    tr:last-child td { border-bottom: none; }
-    tr:hover td { background: #f9fafb; }
-
-    /* ── FILTERS ──────────────────────────────────────── */
-    .filter-bar { display: flex; gap: 8px; margin: 10px 0; align-items: center; flex-wrap: wrap; }
-
-    .filter-input {
-      flex: 1; min-width: 200px;
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: var(--r-sm); padding: 7px 12px;
-      font-size: 12px; color: var(--text); font-family: var(--mono); outline: none;
-    }
-
-    .filter-input:focus { border-color: var(--accent); }
-
-    .filter-select {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: var(--r-sm); padding: 7px 10px;
-      font-size: 12px; color: var(--text); outline: none;
-    }
-
-    .category-tabs { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 10px; }
-
-    .cat-btn {
-      background: var(--surface); border: 1px solid var(--border);
-      color: var(--text-3); font-size: 12px; padding: 4px 12px;
-      border-radius: 999px; cursor: pointer; font-family: var(--font);
-    }
-
-    .cat-btn.active { background: var(--accent-bg); border-color: #bfdbfe; color: var(--accent); font-weight: 600; }
-
-    .pagination-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; font-size: 12px; color: var(--text-3); }
-
-    .pagination-btn {
-      background: var(--surface); border: 1px solid var(--border);
-      color: var(--text-2); padding: 4px 12px; border-radius: var(--r-sm);
-      cursor: pointer; font-size: 12px; font-family: var(--font);
-    }
-
-    .pagination-btn:disabled { opacity: 0.35; cursor: not-allowed; }
-
-    /* ── NOTES LIST ───────────────────────────────────── */
-    .analysis-notes-list { list-style: none; padding: 0; margin: 0; }
-
-    .analysis-notes-list li {
-      padding: 7px 0;
-      border-bottom: 1px solid #f3f4f6;
-      font-size: 13px;
-      color: var(--text-2);
-      display: flex;
-      align-items: baseline;
-      gap: 10px;
-    }
-
-    .analysis-notes-list li:last-child { border-bottom: none; }
-
-    .analysis-notes-list li::before {
-      content: ""; display: inline-block;
-      width: 4px; height: 4px; border-radius: 50%;
-      background: var(--text-4); flex-shrink: 0; margin-top: 7px;
-    }
-
-    /* ── REPORT ACTIONS ──────────────────────────────── */
-    .report-actions { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
-
-    .btn-action {
-      display: inline-flex; align-items: center; gap: 6px;
-      background: var(--surface); border: 1px solid var(--border);
-      color: var(--text-2); padding: 8px 14px; border-radius: var(--r-sm);
-      font-size: 12px; text-decoration: none; font-family: var(--font);
-      transition: all 0.1s;
-    }
-
-    .btn-action:hover { background: var(--surface-alt); border-color: #d1d5db; text-decoration: none; }
-
-    .comp-card {
-      background: var(--surface-alt);
-      border: 1px solid var(--border);
-      border-radius: var(--r-sm);
-      padding: 12px 16px;
-      margin-bottom: 10px;
-    }
-
-    /* ── SCROLLBAR ────────────────────────────────────── */
-    ::-webkit-scrollbar { width: 5px; height: 5px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 999px; }
-    ::selection { background: rgba(37,99,235,0.12); }
-
-    /* ── MINIMAL PRODUCT SHELL ───────────────────────── */
-    :root { --bg:#070707; --surface:#0d0d0d; --surface-alt:#121212; --border:#272727; --border-focus:#747474; --text:#f4f4f4; --text-2:#d0d0d0; --text-3:#a3a3a3; --text-4:#6d6d6d; --accent:#f4f4f4; --accent-hover:#fff; --accent-bg:#191919; --success:#b8e5c2; --success-bg:#112015; --warning:#f0cf7d; --warning-bg:#251e0f; --error:#f0a3ad; --error-bg:#281317; --info:#b6ccea; --font:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; --mono:"SFMono-Regular",Consolas,"Liberation Mono",monospace; --r:12px; --r-sm:8px; --shadow:none; }
-    body { background:var(--bg); }
-    header { height:56px; padding:0 32px; background:rgba(7,7,7,.92); backdrop-filter:blur(14px); border-color:var(--border); }
-    .page-body { min-height:calc(100vh - 56px); grid-template-columns:304px 1fr; }
-    .sidebar { top:56px; max-height:calc(100vh - 56px); background:#090909; padding:24px 20px; }
-    .main-content { padding:42px 42px 64px; max-width:1420px; width:100%; }
-    .brand-title { font-size:16px; letter-spacing:-.025em; } .brand-title svg { color:#bcbcbc; }
-    .brand-tag { background:#151515; border-color:#2b2b2b; color:#aaa; }
-    .header-device { border-color:#2b2b2b; background:#101010; color:#aaa; border-radius:999px; }
-    .device-dot { background:#b8e5c2; }
-    .sidebar-label { color:#858585; }
-    .radio-option,input[type="text"],.filter-input,.filter-select { background:#101010; border-color:#2b2b2b; color:var(--text); }
-    .radio-option:hover,.btn-secondary:hover:not(:disabled),.btn-action:hover { background:#181818; border-color:#424242; }
-    .btn-primary { color:#101010; background:#f1f1f1; border-color:#f1f1f1; box-shadow:none; }
-    .btn-primary:hover:not(:disabled) { color:#080808; background:#fff; }
-    .card,.analysis-card,.probe-card,.stages-grid { background:#0d0d0d; border-color:#292929; box-shadow:none; }
-    .stage-card { padding:16px; } .stage-card:hover { background:#121212; }
-    .analysis-header,.tabs-nav,th { background:#101010; border-color:#292929; }
-    td,.kv-row,.scroll-list-item,.analysis-notes-list li { border-color:#222; }
-    tr:hover td,.scroll-list-item:hover { background:#151515; }
-    .scroll-container,.comp-card { background:#0a0a0a; border-color:#252525; }
-    .hero { display:block; padding:0 0 20px; margin-bottom:20px; background:none; border:none; border-bottom:1px solid #dfe3e8; }
-    .hero-eyebrow { display:flex; justify-content:space-between; align-items:center; color:#64748b; font:600 11px var(--mono); letter-spacing:.08em; text-transform:uppercase; margin-bottom:8px; }
-    .hero h1 { font-size:26px; font-weight:700; line-height:1.2; letter-spacing:-.03em; margin:0 0 6px; color:#0f172a; }
-    .hero p { max-width:760px; color:#475467; font-size:14px; line-height:1.55; }
-    .evidence-legend { display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-start; margin-top:14px; }
-    .evidence-pill { padding:4px 10px; border:1px solid #d0d5dd; border-radius:4px; background:#f8fafc; color:#475467; font:500 11px var(--mono); letter-spacing:.02em; }
-    .evidence-pill strong { color:#0f172a; font-weight:600; margin-right:4px; }
-    @media (max-width:900px) { .page-body { grid-template-columns:1fr; } .sidebar { position:relative; top:0; max-height:none; border-right:none; border-bottom:1px solid var(--border); } .hero { grid-template-columns:1fr; } .evidence-legend { justify-content:flex-start; } .main-content { padding:28px 20px 44px; } }
-
-    /* ── READABLE WORKSPACE ──────────────────────────── */
-    :root { --bg:#f5f6f8; --surface:#fff; --surface-alt:#f8fafc; --border:#dfe3e8; --border-focus:#2563eb; --text:#172033; --text-2:#344054; --text-3:#667085; --text-4:#98a2b3; --accent:#2563eb; --accent-hover:#1d4ed8; --accent-bg:#eff6ff; --success:#067647; --success-bg:#ecfdf3; --warning:#b54708; --warning-bg:#fffaeb; --error:#b42318; --error-bg:#fef3f2; --info:#175cd3; --r:10px; --r-sm:7px; }
-    body { background:var(--bg); color:var(--text); }
-    header { height:58px; background:#fff; border-color:var(--border); box-shadow:0 1px 2px rgba(16,24,40,.04); }
-    .page-body { min-height:calc(100vh - 58px); grid-template-columns:300px 1fr; }
-    .sidebar { top:58px; max-height:calc(100vh - 58px); background:#fff; padding:24px 20px; }
-    .main-content { padding:30px 34px 52px; max-width:1440px; }
-    .brand-title { font-size:16px; color:#101828; } .brand-title svg { color:#2563eb; }
-    .brand-tag { background:#eff6ff; border-color:#bfdbfe; color:#1d4ed8; }
-    .header-device { color:#475467; background:#f8fafc; border:1px solid #d0d5dd; border-radius:999px; padding:4px 12px; font-size:11px; font-family:var(--mono); display:inline-flex; align-items:center; gap:6px; }
-    .device-dot { width:6px; height:6px; border-radius:50%; }
-    .device-dot-neutral { background:#94a3b8; }
-    .device-dot-connected { background:#12b76a; }
-    .sidebar-group-title { font-size:10px; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:8px; padding-bottom:4px; border-bottom:1px solid #f1f5f9; }
-    .sidebar-label { color:#667085; }
-    .radio-option,input[type="text"],.filter-input,.filter-select { background:#fff; border-color:#d0d5dd; color:var(--text); }
-    .radio-option:hover,.btn-secondary:hover:not(:disabled),.btn-action:hover { background:#f9fafb; border-color:#98a2b3; }
-    .btn-primary { color:#fff; background:#2563eb; border-color:#2563eb; }
-    .btn-primary:hover:not(:disabled) { color:#fff; background:#1d4ed8; }
-    .btn-stop { border:1px solid #fecaca; background:#fff5f4; color:#b42318; font-weight:500; font-size:12px; padding:6px 14px; border-radius:var(--r-sm); cursor:pointer; }
-    .btn-stop:hover { background:#fee2e2; }
-    .card,.analysis-card,.probe-card,.stages-grid { background:#fff; border-color:#dfe3e8; box-shadow:0 1px 2px rgba(16,24,40,.04); }
-    .stage-card { padding:18px; transition:all 0.15s; border-left:3px solid transparent; }
-    .stage-card:hover { background:#f8fafc; }
-    .stage-card.stage-running { background:#f0f7ff; border-left-color:#2563eb; }
-    .stage-card.stage-completed, .stage-card.stage-success { background:#f0fdf4; border-left-color:#16a34a; }
-    .stage-card.stage-skipped { background:#f8fafc; border-left-color:#94a3b8; }
-    .stage-card.stage-failed { background:#fef2f2; border-left-color:#dc2626; }
-    .stage-card.stage-warning { background:#fffbeb; border-left-color:#d97706; }
-    .quick-targets-panel { margin-top:14px; padding:12px; border:1px solid #93c5fd; border-radius:10px; background:#eff6ff; }
-    .quick-targets-heading { color:#1d4ed8; font-size:12px; font-weight:800; letter-spacing:.02em; }
-    .quick-targets-hint { color:#475569; font-size:11px; margin-top:3px; line-height:1.4; }
-    .preset-chips-grid { display:grid; grid-template-columns:1fr; gap:8px; margin-top:10px; }
-    .preset-chip { display:flex; flex-direction:column; align-items:flex-start; gap:3px; width:100%; padding:10px 12px; background:#fff; border:1px solid #bfdbfe; border-radius:8px; color:#0f172a; font-family:var(--font); text-align:left; cursor:pointer; box-shadow:0 1px 3px rgba(37,99,235,.08); transition:border-color .15s,box-shadow .15s,transform .15s; }
-    .preset-chip strong { font-size:12px; font-weight:700; }
-    .preset-chip span { color:#64748b; font-size:10.5px; line-height:1.35; }
-    .preset-chip:hover { border-color:#2563eb; box-shadow:0 3px 9px rgba(37,99,235,.16); transform:translateY(-1px); }
-    .preset-chip:focus-visible { outline:2px solid #2563eb; outline-offset:2px; }
-    .candidate-val { font-family:var(--mono); font-size:12px; overflow-wrap:anywhere; word-break:normal; line-height:1.45; }
-    .analysis-header,.tabs-nav,th { background:#f8fafc; border-color:#dfe3e8; }
-    td,.kv-row,.scroll-list-item,.analysis-notes-list li { border-color:#eaecf0; }
-    tr:hover td,.scroll-list-item:hover { background:#f9fafb; }
-    .scroll-container,.comp-card { background:#f8fafc; border-color:#eaecf0; }
-    /* ── DEMO 3 TECHNICAL PRESENTATION STYLES ──────── */
-    .scan-summary-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-      gap: 12px;
-      margin-bottom: 22px;
-      padding: 14px 16px;
-      background: #f8fafc;
-      border: 1px solid #dfe3e8;
-      border-radius: var(--r-sm);
-    }
-    .summary-cell { display: flex; flex-direction: column; gap: 4px; }
-    .summary-label { font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; }
-    .summary-value { font-size: 13.5px; font-weight: 600; color: #0f172a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .inventory-split-container {
-      display: grid;
-      grid-template-columns: 1fr 430px;
-      gap: 16px;
-      align-items: start;
-    }
-    @media (max-width: 1200px) {
-      .inventory-split-container { grid-template-columns: 1fr; }
-    }
-    .inventory-table-container {
-      border: 1px solid #dfe3e8;
-      border-radius: var(--r-sm);
-      background: #fff;
-      overflow: hidden;
-    }
-    .inventory-filter-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px 14px;
-      background: #f8fafc;
-      border-bottom: 1px solid #dfe3e8;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-    .filter-chips { display: flex; gap: 6px; flex-wrap: wrap; }
-    .filter-chip {
-      background: #fff;
-      border: 1px solid #cbd5e1;
-      border-radius: 4px;
-      padding: 4px 10px;
-      font-size: 11.5px;
-      font-weight: 600;
-      color: #334155;
-      cursor: pointer;
-      transition: all 0.15s;
-    }
-    .filter-chip:hover { border-color: #64748b; }
-    .filter-chip.active { background: #0284c7; color: #fff; border-color: #0284c7; }
-    .candidate-row { cursor: pointer; transition: background 0.1s; }
-    .candidate-row:hover td { background: #f1f5f9; }
-    .candidate-row.selected td { background: #e0f2fe; color: #0369a1; font-weight: 600; }
-    .candidate-detail-card {
-      border: 1px solid #dfe3e8;
-      border-radius: var(--r-sm);
-      background: #fff;
-      padding: 18px;
-      position: sticky;
-      top: 72px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-    }
-    .detail-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      padding-bottom: 12px;
-      margin-bottom: 14px;
-      border-bottom: 1px solid #e2e8f0;
-    }
-    .detail-section { margin-bottom: 14px; }
-    .detail-section:last-child { margin-bottom: 0; }
-    .detail-label {
-      font-size: 11px;
-      font-weight: 700;
-      color: #64748b;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 6px;
-    }
-    .detail-value-box {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      background: #f8fafc;
-      border: 1px solid #cbd5e1;
-      border-radius: 4px;
-      padding: 8px 10px;
-    }
-    .selectable-mono { font-family: var(--mono); font-size: 12px; color: #0f172a; word-break: break-all; }
-    .btn-copy-small {
-      background: #fff;
-      border: 1px solid #cbd5e1;
-      border-radius: 4px;
-      padding: 3px 8px;
-      font-size: 11px;
-      font-weight: 600;
-      color: #334155;
-      cursor: pointer;
-      white-space: nowrap;
-      transition: all 0.1s;
-    }
-    .btn-copy-small:hover { background: #f1f5f9; border-color: #94a3b8; }
-    .occurrences-list { display: flex; flex-direction: column; gap: 6px; max-height: 200px; overflow-y: auto; }
-    .occurrence-item {
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
-      border-radius: 4px;
-      padding: 6px 10px;
-      font-size: 11.5px;
-    }
-    .occurrence-source { font-family: var(--mono); font-weight: 600; color: #0f172a; display: flex; align-items: center; gap: 4px; }
-    .occurrence-rule { font-size: 10px; color: #64748b; margin-top: 2px; }
-    .evidence-code-block {
-      background: #0f172a;
-      color: #38bdf8;
-      font-family: var(--mono);
-      font-size: 11.5px;
-      padding: 10px 12px;
-      border-radius: 4px;
-      overflow-x: auto;
-      white-space: pre-wrap;
-      word-break: break-all;
-      line-height: 1.5;
-      max-height: 180px;
-    }
-    .components-kv-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; font-size: 11.5px; }
-    .component-tag { background: #f8fafc; border: 1px solid #e2e8f0; padding: 4px 8px; border-radius: 4px; font-family: var(--mono); color: #334155; }
-    .raw-json-viewer {
-      background: #0f172a;
-      color: #e2e8f0;
-      font-family: var(--mono);
-      font-size: 12px;
-      line-height: 1.55;
-      padding: 16px;
-      border-radius: var(--r-sm);
-      max-height: 600px;
-      overflow: auto;
-      border: 1px solid #1e293b;
-    }
-    @media (max-width: 900px) {
-      .page-body { grid-template-columns: minmax(0, 1fr); }
-      .sidebar { position: relative; top: 0; max-height: none; }
-      .main-content { width: 100%; min-width: 0; padding: 24px 16px 40px; }
-      .stages-grid { flex-direction: column; }
-      .stage-card { border-right: none; border-bottom: 1px solid var(--border); }
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <div>
-      <div class="brand-title">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        <span>MobiAttack</span>
-        <span class="brand-tag">Demo 3 / Static Analysis</span>
-      </div>
-      <div class="brand-subtext">Static Analysis Platform</div>
-    </div>
-    <div class="header-device" id="headerDeviceStatus">
-      <span class="device-dot device-dot-neutral" id="headerDeviceDot"></span>
-      <span id="headerDeviceText">ADB — Standby (Optional)</span>
-    </div>
-  </header>
-
-  <div class="container">
-    <div class="page-body">
-
-      <!-- ─── LEFT SIDEBAR: CONFIG ──────────────────── -->
-      <div class="sidebar">
-
-        <div class="sidebar-section">
-          <div class="sidebar-group-title">Target</div>
-          <div class="sidebar-label">Platform</div>
-          <div class="segmented-group">
-            <label class="radio-option">
-              <input type="radio" id="platform-android" name="platformRadio" value="android" checked onchange="handlePlatformChange()" />
-              Android
-            </label>
-            <label class="radio-option">
-              <input type="radio" id="platform-ios" name="platformRadio" value="ios" onchange="handlePlatformChange()" />
-              iOS
-            </label>
-          </div>
-        </div>
-
-        <div id="iosNotice" class="notice-box" style="display:none; margin-bottom:12px;">
-          ℹ️ iOS static analysis accepts direct or local IPA artifacts. Runtime remains unavailable.
-        </div>
-        <div id="presentationNotice" class="notice-box" style="display:none; margin-bottom:12px;">
-          Live analysis opens on this Mac. Keep the local MobiAttack backend running at <code>127.0.0.1:8082</code>.
-        </div>
-
-        <div class="sidebar-section">
-          <label for="apkUrl" class="sidebar-label">Target URL (Direct APK or Google Play Store)</label>
-          <input type="text" id="apkUrl" placeholder="Paste APK, IPA, or Play Store URL..." oninput="handleUrlInput()" />
-          <div id="urlClassificationBadge" style="display:none; margin-top:6px; font-family:var(--mono); font-size:11px;"></div>
-          <div class="quick-targets-panel">
-            <div class="quick-targets-heading">Quick Demos</div>
-            <div class="quick-targets-hint">Choose a sample to fill the target field.</div>
-            <div class="preset-chips-grid" id="quickTargetsAndroid">
-              <button type="button" class="preset-chip" onclick="fillPreset('https://github.com/OWASP/MASTG-Hacking-Playground/releases/download/1.0/MSTG-Android-Kotlin.apk')"><strong>OWASP Kotlin APK</strong><span>2.9 MB · Verified Android demo</span></button>
-              <button type="button" class="preset-chip" onclick="fillPreset('https://play.google.com/store/apps/details?id=com.google.android.calculator')"><strong>Google Calculator · Play Store</strong><span>Requires Play Store sign-in on the emulator</span></button>
-            </div>
-            <div class="preset-chips-grid" id="quickTargetsIos" style="display:none;">
-              <button type="button" class="preset-chip" onclick="fillPreset('https://github.com/OWASP/MASTG-Hacking-Playground/releases/download/1.0/MSTG-JWT.ipa')"><strong>OWASP iOS Swift IPA</strong><span>5.9 MB · Static analysis only</span></button>
-            </div>
-          </div>
-        </div>
-
-        <div class="sidebar-section" id="androidAnalysisOptions">
-          <div class="sidebar-group-title">Analysis Options</div>
-          <div style="display:flex; flex-direction:column; gap:6px;">
-            <label class="checkbox-row">
-              <input type="checkbox" id="reinstall" checked /> Reinstall existing
-            </label>
-            <label class="checkbox-row">
-              <input type="checkbox" id="grantPermissions" /> Grant permissions
-            </label>
-          </div>
-        </div>
-
-        <div class="sidebar-section" id="adbTargetSection">
-          <div class="sidebar-group-title">Device / Runtime</div>
-          <div class="sidebar-label">ADB Target</div>
-          <input type="text" id="adbSerial" value="emulator-5554" readonly aria-readonly="true" />
-          <div style="font-size:11px; color:var(--text-4); margin-top:4px;">Fixed Android Studio emulator on this Mac backend.</div>
-        </div>
-
-        <div class="sidebar-section" id="installModeSection">
-          <div class="sidebar-label">Install Mode</div>
-          <div class="segmented-group">
-            <label class="radio-option">
-              <input type="radio" name="installMode" value="manual" checked />
-              Manual
-            </label>
-            <label class="radio-option radio-option-secondary">
-              <input type="radio" name="installMode" value="ui_automation" />
-              Auto
-            </label>
-          </div>
-        </div>
-
-        <div class="sidebar-section">
-          <div class="sidebar-group-title">Action</div>
-          <button class="btn btn-primary" id="startBtn" onclick="startDemo()" data-action="START DEMO" title="START DEMO">▶ Start Analysis</button>
-          <button class="btn btn-stop" id="stopBtn" onclick="stopDemo()" style="display:none; margin-top:8px; width:100%;">Stop Analysis</button>
-        </div>
-      </div>
-
-      <!-- ─── MAIN CONTENT ──────────────────────────── -->
-      <div class="main-content">
-
-        <section class="hero" aria-label="Analysis workspace introduction">
-          <div class="hero-eyebrow">
-            <span>MobiAttack</span>
-            <span>DEMO 3 / STATIC ANALYSIS</span>
-          </div>
-          <h1>Mobile Application Security Analysis</h1>
-          <p>Deterministic APK analysis with canonical normalization, provenance tracking, and structured security output.</p>
-          <div class="evidence-legend" aria-label="Supported analysis modes">
-            <span class="evidence-pill"><strong>Android</strong> Monolithic &amp; Split APK</span>
-            <span class="evidence-pill"><strong>iOS</strong> IPA Static Analysis</span>
-          </div>
-        </section>
-
-        <div id="completedBanner" class="banner banner-success">
-          <div><strong>COMPLETED</strong> — Pipeline execution completed. Review skipped stages and analysis notes.</div>
-        </div>
-
-        <div id="errorBanner" class="banner banner-error">
-          <div id="errorBannerText">An error occurred.</div>
-        </div>
-
-        <!-- Pipeline Stages: Horizontal connected strip -->
-        <div class="stages-grid">
-          <div class="stage-card" id="card-acquisition">
-            <div class="stage-header">
-              <div class="stage-title">1. Acquisition</div>
-              <span class="badge badge-pending" id="badge-acquisition">pending</span>
-            </div>
-            <div class="stage-message" id="msg-acquisition">Waiting...</div>
-            <div class="stage-details" id="details-acquisition"></div>
-          </div>
-
-          <div class="stage-card" id="card-preprocessing">
-            <div class="stage-header">
-              <div class="stage-title">2. Preprocessing</div>
-              <span class="badge badge-pending" id="badge-preprocessing">pending</span>
-            </div>
-            <div class="stage-message" id="msg-preprocessing">Waiting...</div>
-            <div class="stage-details" id="details-preprocessing"></div>
-          </div>
-
-          <div class="stage-card" id="card-static_analysis">
-            <div class="stage-header">
-              <div class="stage-title">3. Static Analysis</div>
-              <span class="badge badge-pending" id="badge-static_analysis">pending</span>
-            </div>
-            <div class="stage-message" id="msg-static_analysis">Waiting...</div>
-            <div class="stage-details" id="details-static_analysis"></div>
-          </div>
-
-          <div class="stage-card" id="card-runtime">
-            <div class="stage-header">
-              <div class="stage-title">4. Runtime Launch Verification</div>
-              <span class="badge badge-pending" id="badge-runtime">pending</span>
-            </div>
-            <div class="stage-message" id="msg-runtime">Waiting...</div>
-            <div class="stage-details" id="details-runtime"></div>
-          </div>
-        </div>
-
-        <!-- Connectivity Probe (Collapsible Secondary Utility) -->
-        <details class="probe-card" id="probeCard" style="margin-bottom:20px; cursor:default;">
-          <summary style="display:flex; justify-content:space-between; align-items:center; cursor:pointer; list-style:none; user-select:none;">
-            <div style="display:flex; align-items:center; gap:8px;">
-              <span style="font-size:12.5px; font-weight:600; color:var(--text-2);">Device / Emulator Utilities</span>
-              <span class="tag" style="font-size:9.5px; padding:1px 6px;">Optional</span>
-            </div>
-            <span style="font-size:11.5px; color:var(--text-3); font-weight:500;">Reachability Probe ▾</span>
-          </summary>
-          <div style="margin-top:14px; padding-top:12px; border-top:1px solid var(--border);">
-            <div class="probe-header">
-              <div>
-                <div style="font-size:12.5px; font-weight:600; color:var(--text);">Connectivity Probe</div>
-                <div style="font-size:11.5px; color:var(--text-3);">Verify emulator reverse socket reachability (optional pre-flight)</div>
-              </div>
-              <button class="btn btn-secondary" id="probeBtn" onclick="runProbe()" style="padding:4px 10px; font-size:11px;">Test Connectivity</button>
-            </div>
-            <div id="probeDetails" style="font-size:12px; display:none; margin-top:10px;">
-              <div class="kv-row"><span class="kv-key">Probe URL:</span><span class="kv-val" id="probeUrl">-</span></div>
-              <div class="kv-row"><span class="kv-key">Hit:</span><span class="kv-val" id="probeHit">-</span></div>
-              <div class="kv-row"><span class="kv-key">Hit Count:</span><span class="kv-val" id="probeHitCount">-</span></div>
-              <div class="kv-row"><span class="kv-key">Status:</span><span class="kv-val" id="probeStatus" style="color:var(--success);">-</span></div>
-            </div>
-            <div class="probe-disclaimer" style="font-size:11px; color:var(--text-4); margin-top:6px;">⚠️ Emulator connectivity only — not application navigation. Deterministic static analysis runs independently of ADB.</div>
-          </div>
-        </details>
-
-        <!-- ANALYSIS RESULTS -->
-        <div class="analysis-card" id="analysisSection" style="display:none;">
-          <div class="analysis-header">
-            <div>
-              <h2 style="font-size:15px; font-weight:700; color:var(--text);">Analysis Results</h2>
-              <div style="font-size:12px; color:var(--text-3); margin-top:1px;">Deterministic evidence from pipeline execution</div>
-            </div>
-            <span class="tag" id="analysisRunIdBadge">RUN ID: -</span>
-          </div>
-
-          <div class="tabs-nav">
-            <button class="tab-btn active" id="tab-btn-overview" onclick="switchTab('overview')">Overview</button>
-            <button class="tab-btn" id="tab-btn-api_candidates" onclick="switchTab('api_candidates')">Structured Inventory <span class="tag" id="inventoryCountTag" style="margin-left:4px; font-size:10px; background:#eff6ff; color:#1d4ed8; font-weight:700;">0</span></button>
-            <button class="tab-btn" id="tab-btn-findings" onclick="switchTab('findings')">Static Findings <span class="tag" id="findingsCountTag" style="margin-left:4px; font-size:10px; background:var(--error-bg); color:var(--error); border-color:#fecaca;">0</span></button>
-            <button class="tab-btn" id="tab-btn-analysis_details" onclick="switchTab('analysis_details')">Analysis Details<span id="tab-btn-notes" style="display:none;"></span></button>
-            <button class="tab-btn" id="tab-btn-raw_json" onclick="switchTab('raw_json')">Raw JSON</button>
-            <button class="tab-btn" id="tab-btn-runtime" onclick="switchTab('runtime')">Launch Check</button>
-            <button class="tab-btn" id="tab-btn-components" onclick="switchTab('components')" style="display:none;">Components</button>
-            <button class="tab-btn" id="tab-btn-application" onclick="switchTab('application')">Application</button>
-            <button class="tab-btn" id="tab-btn-structure" onclick="switchTab('structure')">Structure</button>
-            <button class="tab-btn" id="tab-btn-network" onclick="switchTab('network')">Raw Indicators</button>
-            <button class="tab-btn" id="tab-btn-report" onclick="switchTab('report')">Report</button>
-          </div>
-
-          <!-- Tab: Overview -->
-          <div class="tab-pane active" id="tab-pane-overview">
-            <div class="scan-summary-grid" id="scanSummaryBar">
-              <div class="summary-cell">
-                <div class="summary-label">Scan Status</div>
-                <div class="summary-value" id="sumScanStatus"><span class="badge badge-success">COMPLETED</span></div>
-              </div>
-              <div class="summary-cell">
-                <div class="summary-label">Target Package</div>
-                <div class="summary-value font-mono" id="sumPackage">-</div>
-              </div>
-              <div class="summary-cell">
-                <div class="summary-label">SHA-256</div>
-                <div class="summary-value font-mono" id="sumShaContainer" style="display:flex; align-items:center; gap:6px;">
-                  <span id="sumShaText">-</span>
-                  <button class="btn-copy-small" id="btnCopySha" onclick="copyShaText(this)" title="Copy SHA-256">Copy</button>
-                </div>
-              </div>
-              <div class="summary-cell">
-                <div class="summary-label">Files Analyzed</div>
-                <div class="summary-value" id="sumFiles">-</div>
-              </div>
-              <div class="summary-cell">
-                <div class="summary-label">Candidates</div>
-                <div class="summary-value" id="sumCandidates" style="color:var(--accent); font-weight:700;">-</div>
-              </div>
-              <div class="summary-cell">
-                <div class="summary-label">Static Findings</div>
-                <div class="summary-value" id="sumFindings" style="color:var(--error); font-weight:700;">-</div>
-              </div>
-              <div class="summary-cell">
-                <div class="summary-label">Warnings</div>
-                <div class="summary-value" id="sumWarnings" style="color:var(--text-3); font-weight:700;">0</div>
-              </div>
-            </div>
-
-            <div class="section-subtitle">Application Identity</div>
-            <div id="overviewAppRows"></div>
-            <div class="section-subtitle" style="margin-top:16px;">Execution Facts</div>
-            <div id="overviewExecRows"></div>
-          </div>
-
-          <!-- Tab: Security Findings -->
-          <div class="tab-pane" id="tab-pane-findings">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:10px;">
-              <div>
-                <div class="section-subtitle" style="margin-bottom:2px;">Security Findings</div>
-                <div id="findingsSubtitle" style="font-size:12px; color:var(--text-3);">Automated static evaluation mapped to OWASP MASVS</div>
-              </div>
-              <div id="riskScoreBadgeContainer"></div>
-            </div>
-
-            <div id="findingsSeverityGrid" style="display:grid; grid-template-columns:repeat(4, 1fr); gap:10px; margin-bottom:16px;">
-              <div style="background:var(--error-bg); border:1px solid #fecaca; border-radius:8px; padding:12px; text-align:center;">
-                <div style="font-size:10px; font-weight:600; color:var(--error); text-transform:uppercase; letter-spacing:0.5px;">Critical</div>
-                <div id="countCritical" style="font-size:22px; font-weight:700; color:var(--error); margin-top:2px;">0</div>
-              </div>
-              <div style="background:#fff7ed; border:1px solid #fed7aa; border-radius:8px; padding:12px; text-align:center;">
-                <div style="font-size:10px; font-weight:600; color:#ea580c; text-transform:uppercase; letter-spacing:0.5px;">High</div>
-                <div id="countHigh" style="font-size:22px; font-weight:700; color:#ea580c; margin-top:2px;">0</div>
-              </div>
-              <div style="background:var(--warning-bg); border:1px solid #fde68a; border-radius:8px; padding:12px; text-align:center;">
-                <div style="font-size:10px; font-weight:600; color:var(--warning); text-transform:uppercase; letter-spacing:0.5px;">Medium</div>
-                <div id="countMedium" style="font-size:22px; font-weight:700; color:var(--warning); margin-top:2px;">0</div>
-              </div>
-              <div style="background:var(--accent-bg); border:1px solid #bfdbfe; border-radius:8px; padding:12px; text-align:center;">
-                <div style="font-size:10px; font-weight:600; color:var(--accent); text-transform:uppercase; letter-spacing:0.5px;">Low</div>
-                <div id="countLow" style="font-size:22px; font-weight:700; color:var(--accent); margin-top:2px;">0</div>
-              </div>
-            </div>
-
-            <div id="findingsFilterBar" style="display:flex; align-items:center; gap:8px; margin-bottom:14px; flex-wrap:wrap;">
-              <span style="font-size:12px; color:var(--text-3); font-weight:500;">Filter:</span>
-              <button class="btn btn-secondary filter-btn active" onclick="filterFindings('ALL', this)" style="padding:3px 10px; font-size:11px;">All (<span id="filterCountAll">0</span>)</button>
-              <button class="btn btn-secondary filter-btn" onclick="filterFindings('CRITICAL', this)" style="padding:3px 10px; font-size:11px; color:var(--error);">Critical (<span id="filterCountCrit">0</span>)</button>
-              <button class="btn btn-secondary filter-btn" onclick="filterFindings('HIGH', this)" style="padding:3px 10px; font-size:11px; color:#ea580c;">High (<span id="filterCountHigh">0</span>)</button>
-              <button class="btn btn-secondary filter-btn" onclick="filterFindings('MEDIUM', this)" style="padding:3px 10px; font-size:11px; color:var(--warning);">Medium (<span id="filterCountMed">0</span>)</button>
-              <button class="btn btn-secondary filter-btn" onclick="filterFindings('LOW', this)" style="padding:3px 10px; font-size:11px; color:var(--accent);">Low (<span id="filterCountLow">0</span>)</button>
-            </div>
-
-            <div id="findingsListContainer"></div>
-          </div>
-
-          <!-- Tab: APK Components -->
-          <div class="tab-pane" id="tab-pane-components">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-              <div class="section-subtitle">Split APK Components</div>
-              <span class="tag" id="componentsCountTag">0 components</span>
-            </div>
-            <div id="componentsTableContent"></div>
-          </div>
-
-          <!-- Tab: Application -->
-          <div class="tab-pane" id="tab-pane-application">
-            <div class="section-subtitle">Application Identity</div>
-            <div id="appDetailsRows"></div>
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:16px; margin-bottom:6px;">
-              <div class="section-subtitle" style="margin-bottom:0;" id="appPermsHeader">Declared Permissions</div>
-              <span class="tag" id="appPermsCount">0 declared</span>
-            </div>
-            <div class="scroll-container" id="appPermsList"></div>
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:16px; margin-bottom:6px;">
-              <div class="section-subtitle" style="margin-bottom:0;" id="appActsHeader">Declared Activities</div>
-              <span class="tag" id="appActsCount">0 declared</span>
-            </div>
-            <div class="scroll-container" id="appActsList"></div>
-          </div>
-
-          <!-- Tab: Structure -->
-          <div class="tab-pane" id="tab-pane-structure">
-            <div class="section-subtitle">Archive & Split Structure</div>
-            <div id="structureRows"></div>
-          </div>
-
-          <!-- Tab: Network -->
-          <div class="tab-pane" id="tab-pane-network">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-              <div class="section-subtitle" style="margin-bottom:0;">Static Network Indicators</div>
-              <span class="tag" id="networkTotalCountTag">0 indicators</span>
-            </div>
-            <div class="notice-info" style="margin-bottom:8px;">
-              ℹ️ Static indicators extracted from application content — not runtime evidence.
-            </div>
-            <div id="networkIndicatorsContainer">
-              <div id="networkIndicatorsContent"></div>
-            </div>
-          </div>
-
-          <!-- Tab: API Candidates & Structured Inventory -->
-          <div class="tab-pane" id="tab-pane-api_candidates">
-            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
-              <div>
-                <div class="section-subtitle" style="margin-bottom:2px;">Structured Inventory</div>
-              <div style="font-size:12px; color:var(--text-3);">URLs, domains, route candidates and IPs found in app files, with source locations. These strings are not confirmed API calls.</div>
-              </div>
-            </div>
-            <div id="apiCandidatesContainer">
-              <div id="apiCandidatesContent"></div>
-            </div>
-          </div>
-
-          <!-- Tab: Raw JSON (Baseline Report) -->
-          <div class="tab-pane" id="tab-pane-raw_json">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:8px;">
-              <div>
-                <div class="section-subtitle" style="margin-bottom:2px;">Baseline Report (baseline_report.json)</div>
-                <div style="font-size:12px; color:var(--text-3);">Machine-readable structured contract validated against <code>schemas/baseline_report.schema.json</code></div>
-              </div>
-              <div style="display:flex; gap:8px;">
-                <button class="btn btn-secondary" id="btnCopyRawJson" onclick="copyRawJsonText(this)" style="font-size:12px; padding:6px 12px;">Copy JSON</button>
-                <a class="btn btn-secondary" id="btnDownloadRawJson" href="#" download style="font-size:12px; padding:6px 12px; text-decoration:none;">Download File</a>
-              </div>
-            </div>
-
-            <div style="display:flex; align-items:center; gap:16px; margin-bottom:12px; background:#f8fafc; border:1px solid #dfe3e8; border-radius:6px; padding:8px 14px; font-size:12px; flex-wrap:wrap;">
-              <div><span style="color:#64748b; font-weight:600;">Format:</span> <code style="font-size:11.5px; color:#0f172a;">Draft-07 JSON Schema</code></div>
-              <div><span style="color:#64748b; font-weight:600;">schema_version:</span> <code id="rawJsonSchemaVersion" style="font-size:11.5px; color:#0284c7; font-weight:700;">"1.0.0"</code></div>
-              <div style="display:flex; align-items:center; gap:6px;">
-                <span style="color:#64748b; font-weight:600;">Schema Validation:</span>
-                <span id="rawJsonValidationBadge" class="badge badge-success">Passed</span>
-              </div>
-              <div style="margin-left:auto; color:#64748b; font-size:11.5px;">Deterministic Output</div>
-            </div>
-
-            <pre class="raw-json-viewer" id="rawJsonContent">// Run an analysis to inspect baseline_report.json</pre>
-          </div>
-
-          <!-- Tab: Runtime Launch Verification -->
-          <div class="tab-pane" id="tab-pane-runtime">
-            <div class="section-subtitle">Application Launch Check (ADB)</div>
-            <div class="notice-info" style="margin-bottom:12px;">
-              ℹ️ Verifies basic APK installation, process startup, and foreground activity on an emulator. This is <strong>not</strong> dynamic security testing or traffic interception.
-            </div>
-            <div id="runtimeRows"></div>
-          </div>
-
-          <!-- Tab: Analysis Details & Scan Health -->
-          <div class="tab-pane" id="tab-pane-analysis_details">
-            <div class="section-subtitle">Analysis Health & Traversal Statistics</div>
-            <div class="scan-summary-grid" style="margin-bottom:16px;">
-              <div class="summary-cell">
-                <div class="summary-label">Files Discovered</div>
-                <div class="summary-value font-mono" id="healthDiscovered">-</div>
-              </div>
-              <div class="summary-cell">
-                <div class="summary-label">Files Analyzed</div>
-                <div class="summary-value font-mono" id="healthAnalyzed" style="color:#067647;">-</div>
-              </div>
-              <div class="summary-cell">
-                <div class="summary-label">Files Skipped</div>
-                <div class="summary-value font-mono" id="healthSkipped">0</div>
-              </div>
-              <div class="summary-cell">
-                <div class="summary-label">Files Failed</div>
-                <div class="summary-value font-mono" id="healthFailed">0</div>
-              </div>
-              <div class="summary-cell">
-                <div class="summary-label">Warnings</div>
-                <div class="summary-value font-mono" id="healthWarnings">0</div>
-              </div>
-              <div class="summary-cell">
-                <div class="summary-label">Errors</div>
-                <div class="summary-value font-mono" id="healthErrors">0</div>
-              </div>
-              <div class="summary-cell">
-                <div class="summary-label">Health Verdict</div>
-                <div class="summary-value" id="healthVerdict"><span class="badge badge-success">HEALTHY</span></div>
-              </div>
-            </div>
-
-            <div class="notice-info" style="margin-bottom:16px;">
-              ℹ️ <strong>Scan Integrity Guarantee:</strong> <code>COMPLETED + 0 candidates</code> indicates deterministic rule execution ran across all discovered files without matching patterns. <code>PARTIAL + 0 candidates</code> indicates incomplete decompression or unreadable targets.
-            </div>
-
-            <div class="section-subtitle">Analysis Notes & Method Constraints</div>
-            <ul class="analysis-notes-list" id="analysisNotesList"></ul>
-
-            <div id="healthIssuesContainer" style="display:none; margin-top:16px;">
-              <div class="section-subtitle">Recorded Warnings & Diagnostic Events</div>
-              <div id="healthIssuesList"></div>
-            </div>
-          </div>
-
-          <!-- Tab: Report -->
-          <div class="tab-pane" id="tab-pane-report">
-            <div class="section-subtitle">Report Dossier</div>
-            <div id="reportSummaryRows"></div>
-            <div class="report-actions">
-              <a class="btn-action" id="btnViewHtmlReport" href="#" target="_blank">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-                View HTML Report
-              </a>
-              <a class="btn-action" id="btnDownloadJsonReport" href="#" download>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                Download JSON
-              </a>
-              <a class="btn-action" id="btnDownloadBaselineReport" href="#" download style="border-color:#38bdf8; color:#38bdf8;">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                Baseline Report (Demo 3)
-              </a>
-              <a class="btn-action" id="btnOpenNewTab" href="#" target="_blank">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
-                Open in New Tab
-              </a>
-            </div>
-          </div>
-        </div>
-
-      </div><!-- end main-content -->
-    </div><!-- end page-body -->
-  </div><!-- end container -->
-
-  <script>
-    function backendUrl(path) { return path; }
-
-    function fillPreset(url) {
-      const input = document.getElementById("apkUrl");
-      input.value = url;
-      handleUrlInput();
-      input.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-
-    let pollTimer = null;
-    let currentRunId = null;
-    let isPolling = false;
-
-    function setBadge(stage, state) {
-      const badge = document.getElementById("badge-" + stage);
-      if (badge) {
-        badge.className = "badge badge-" + state;
-        badge.textContent = state;
-      }
-      const card = document.getElementById("card-" + stage);
-      if (card) {
-        card.className = "stage-card stage-" + (state || "pending");
-      }
-    }
-
-    function setMessage(stage, msg) {
-      const el = document.getElementById("msg-" + stage);
-      if (el) el.textContent = msg || "";
-    }
-
-    function escapeHtml(str) {
-      if (str === null || str === undefined) return '';
-      return String(str)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;');
-    }
-
-    function renderAcquisition(data) {
-      if (!data) return;
-      const el = document.getElementById("details-acquisition");
-      if (data.platform === 'ios') {
-        el.innerHTML = `
-          <div class="kv-row"><span class="kv-key">File:</span><span class="kv-val">${escapeHtml(data.filename || '-')}</span></div>
-          <div class="kv-row"><span class="kv-key">Size:</span><span class="kv-val">${data.size_bytes ? (data.size_bytes / (1024*1024)).toFixed(2) + ' MB' : '-'}</span></div>
-          <div class="kv-row"><span class="kv-key">Platform:</span><span class="kv-val"><span class="tag">iOS</span></span></div>
-        `;
-        return;
-      }
-      if (data.package_layout === 'split' || data.layout === 'split' || data.split_count) {
-        const comps = data.components || [];
-        const splitCnt = data.split_count || comps.length || 1;
-        el.innerHTML = `
-          <div class="kv-row"><span class="kv-key">Source Type:</span><span class="kv-val">${escapeHtml(data.source_type || 'split_package')}</span></div>
-          <div class="kv-row"><span class="kv-key">Package:</span><span class="kv-val">${escapeHtml(data.package_name || '-')}</span></div>
-          <div class="kv-row"><span class="kv-key">Layout:</span><span class="kv-val"><span class="tag">Split APK</span></span></div>
-          <div class="kv-row"><span class="kv-key">Splits:</span><span class="kv-val">${splitCnt} components</span></div>
-        `;
-        return;
-      }
-      el.innerHTML = `
-        <div class="kv-row"><span class="kv-key">File:</span><span class="kv-val">${escapeHtml(data.filename || '-')}</span></div>
-        <div class="kv-row"><span class="kv-key">Size:</span><span class="kv-val">${data.size_bytes ? (data.size_bytes / (1024*1024)).toFixed(2) + ' MB' : '-'}</span></div>
-        <div class="kv-row"><span class="kv-key">Package:</span><span class="kv-val">${escapeHtml(data.package_name || '-')}</span></div>
-      `;
-    }
-
-    function renderPreprocessing(data) {
-      if (!data) return;
-      const el = document.getElementById("details-preprocessing");
-      if (data.platform === 'ios') {
-        const count = (data.extracted_files !== undefined && data.extracted_files !== null)
-          ? data.extracted_files
-          : ((data.total_files !== undefined && data.total_files !== null) ? data.total_files : null);
-        const countDisplay = (count !== null) ? `${count} files` : 'Not reported';
-        el.innerHTML = `
-          <div class="kv-row"><span class="kv-key">Bundle:</span><span class="kv-val">${escapeHtml(data.app_bundle || '-')}</span></div>
-          <div class="kv-row"><span class="kv-key">Files Extracted:</span><span class="kv-val">${countDisplay}</span></div>
-          <div class="kv-row"><span class="kv-key">Status:</span><span class="kv-val" style="color:#10b981;">${escapeHtml(data.status || 'success')}</span></div>
-        `;
-        return;
-      }
-      if (data.components || data.layout === 'split') {
-        const comps = data.components || [];
-        const st = data.status || 'success';
-        const stColor = st === 'success' ? '#10b981' : (st === 'success_with_warnings' ? '#f59e0b' : '#f87171');
-        el.innerHTML = `
-          <div class="kv-row"><span class="kv-key">Splits Processed:</span><span class="kv-val">${comps.length} components</span></div>
-          <div class="kv-row"><span class="kv-key">Status:</span><span class="kv-val" style="color:${stColor};">${escapeHtml(st)}</span></div>
-        `;
-        return;
-      }
-      const raw = data.raw_apk || {};
-      const apktool = data.apktool || {};
-      const jadx = data.jadx || {};
-      const jadxWarn = jadx.status === "success_with_warnings";
-      
-      el.innerHTML = `
-        <div class="kv-row"><span class="kv-key">Raw Extract:</span><span class="kv-val">${raw.file_count || 0} files</span></div>
-        <div class="kv-row"><span class="kv-key">Apktool:</span><span class="kv-val">${escapeHtml(apktool.status || '-')}</span></div>
-        <div class="kv-row"><span class="kv-key">JADX:</span>
-          <span class="kv-val" style="color:${jadxWarn ? '#f59e0b' : '#10b981'};">
-            ${escapeHtml(jadx.status || '-')}
-          </span>
-        </div>
-      `;
-    }
-
-    function renderStatic(data) {
-      if (!data) return;
-      const el = document.getElementById("details-static_analysis");
-      if (data.platform === 'ios') {
-        const app = data.application || data.app || {};
-        const struct = data.structure || {};
-        const net = data.network_indicators || [];
-        const netCount = Array.isArray(net) ? net.length : (Object.values(net).reduce((s, a) => s + (Array.isArray(a) ? a.length : 0), 0));
-        el.innerHTML = `
-          <div class="kv-row"><span class="kv-key">Bundle ID:</span><span class="kv-val">${escapeHtml(app.bundle_identifier || '-')}</span></div>
-          <div class="kv-row"><span class="kv-key">Executable:</span><span class="kv-val">${escapeHtml((struct.executable && struct.executable.name) || '-')}</span></div>
-          <div class="kv-row"><span class="kv-key">Frameworks:</span><span class="kv-val">${(struct.frameworks || []).length}</span></div>
-          <div class="kv-row"><span class="kv-key">Network:</span><span class="kv-val">${netCount} indicators</span></div>
-          <div class="kv-row"><span class="kv-key">API Candidates:</span><span class="kv-val" style="color:#60a5fa;">0 (None inferred)</span></div>
-        `;
-        return;
-      }
-      const app = data.app || {};
-      const struct = data.structure || {};
-      const net = data.network_indicators || {};
-      const candidates = data.api_candidates || [];
-      const candidatesCount = data.api_candidates_count !== undefined ? data.api_candidates_count : (candidates.length || 0);
-      const isSplit = data.package_layout === 'split' || !!data.split_count;
-
-      if (isSplit) {
-        const splitCnt = data.split_count || 1;
-        const dexCnt = struct.dex_count || struct.total_dex_count || 0;
-        const pathCnt = net.path_candidates_count !== undefined ? net.path_candidates_count : (net.path_candidates || []).length;
-        const totalNet = ((net.network_urls || []).length + (net.domains || []).length + (net.ip_addresses || []).length + pathCnt + (net.local_file_urls || []).length);
-        el.innerHTML = `
-          <div class="kv-row"><span class="kv-key">Package Layout:</span><span class="kv-val"><span class="tag">Split APK</span></span></div>
-          <div class="kv-row"><span class="kv-key">Components:</span><span class="kv-val">${splitCnt}</span></div>
-          <div class="kv-row"><span class="kv-key">Package:</span><span class="kv-val">${escapeHtml(app.package_name || '-')}</span></div>
-          <div class="kv-row"><span class="kv-key">Total DEX:</span><span class="kv-val">${dexCnt}</span></div>
-          <div class="kv-row"><span class="kv-key">Network:</span><span class="kv-val">${totalNet} indicators</span></div>
-          <div class="kv-row"><span class="kv-key">API Candidates:</span><span class="kv-val" style="color:#60a5fa;">${candidatesCount}</span></div>
-        `;
-        return;
-      }
-
-      el.innerHTML = `
-        <div class="kv-row"><span class="kv-key">Package:</span><span class="kv-val">${escapeHtml(app.package_name || '-')}</span></div>
-        <div class="kv-row"><span class="kv-key">DEX Files:</span><span class="kv-val">${struct.dex_count || 0}</span></div>
-        <div class="kv-row"><span class="kv-key">Permissions:</span><span class="kv-val">${(data.permissions || []).length} declared</span></div>
-        <div class="kv-row"><span class="kv-key">Activities:</span><span class="kv-val">${(data.activities || []).length} declared</span></div>
-        <div class="kv-row"><span class="kv-key">Network URLs:</span><span class="kv-val">${(net.network_urls || []).length} found</span></div>
-      `;
-    }
-
-    function renderRuntime(data) {
-      if (!data) return;
-      const el = document.getElementById("details-runtime");
-      const devDot = document.getElementById("headerDeviceDot");
-      const devText = document.getElementById("headerDeviceText");
-
-      if (data.status === 'skipped') {
-        if (devDot) devDot.className = "device-dot device-dot-neutral";
-        if (devText) devText.textContent = "ADB — Not Connected";
-        el.innerHTML = `
-          <div class="kv-row"><span class="kv-key">Launch Check:</span><span class="kv-val"><span class="badge badge-skipped">SKIPPED</span></span></div>
-          <div class="kv-row"><span class="kv-key">Reason:</span><span class="kv-val font-mono" style="font-size:11px;">${escapeHtml(data.reason || 'no_adb_device')}</span></div>
-          <div class="kv-row"><span class="kv-key">Analysis Mode:</span><span class="kv-val" style="color:var(--success);">Static Analysis Only</span></div>
-        `;
-        return;
-      }
-      if (data.platform === 'ios' || data.status === 'not_implemented') {
-        if (devDot) devDot.className = "device-dot device-dot-neutral";
-        if (devText) devText.textContent = "ADB — Not Applicable (iOS)";
-        el.innerHTML = `
-          <div class="kv-row"><span class="kv-key">Runtime:</span><span class="kv-val" style="color:var(--text-3);"><span class="badge badge-skipped">SKIPPED</span></span></div>
-          <div class="kv-row"><span class="kv-key">Analysis Mode:</span><span class="kv-val">Static-only</span></div>
-        `;
-        return;
-      }
-      const adb = data.adb || {};
-      const inst = data.install || {};
-      const rt = data.runtime || {};
-
-      if (devDot) devDot.className = "device-dot device-dot-connected";
-      if (devText) devText.textContent = "ADB " + escapeHtml(adb.serial || 'emulator-5554');
-
-      el.innerHTML = `
-        <div class="kv-row"><span class="kv-key">Device:</span><span class="kv-val">${escapeHtml(adb.serial || '-')}</span></div>
-        <div class="kv-row"><span class="kv-key">Installed:</span><span class="kv-val">${inst.success === true ? 'Success' : (inst.skipped ? 'Skipped (pre-installed)' : 'No')}</span></div>
-        <div class="kv-row"><span class="kv-key">PID:</span><span class="kv-val">${escapeHtml(rt.pid || '-')}</span></div>
-        <div class="kv-row"><span class="kv-key">Foreground:</span><span class="kv-val" style="color:#10b981;">${rt.foreground_verified === true}</span></div>
-        <div class="kv-row"><span class="kv-key">Status:</span><span class="kv-val" style="color:#60a5fa;">${escapeHtml(data.status || '-')}</span></div>
-      `;
-    }
-
-    // Demo 3 State Management
-    window.demo3State = {
-      candidates: [],
-      filteredCandidates: [],
-      selectedIndex: 0,
-      filterType: "ALL",
-      searchQuery: "",
-      selectedCandidate: null,
-      currentSha: "",
-      currentRunId: null,
-      rawJsonData: null,
-      rawJsonLoaded: false,
-      loadedRunId: null
-    };
-
-    function copyText(text, btnElement) {
-      if (!text) return;
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).then(() => {
-          if (btnElement) {
-            const orig = btnElement.textContent;
-            btnElement.textContent = "Copied!";
-            setTimeout(() => { btnElement.textContent = orig; }, 1500);
-          }
-        }).catch(() => fallbackCopy(text, btnElement));
-      } else {
-        fallbackCopy(text, btnElement);
-      }
-    }
-
-    function fallbackCopy(text, btnElement) {
-      const ta = document.createElement("textarea");
-      ta.value = text;
-      ta.style.position = "fixed";
-      ta.style.opacity = "0";
-      document.body.appendChild(ta);
-      ta.select();
-      try {
-        document.execCommand("copy");
-        if (btnElement) {
-          const orig = btnElement.textContent;
-          btnElement.textContent = "Copied!";
-          setTimeout(() => { btnElement.textContent = orig; }, 1500);
-        }
-      } catch (e) {}
-      document.body.removeChild(ta);
-    }
-
-    function copyShaText(btn) {
-      const sha = (window.demo3State && window.demo3State.currentSha) ||
-                  document.getElementById("sumShaText").getAttribute("data-full-sha") || "";
-      copyText(sha, btn);
-    }
-
-    function copyRawJsonText(btn) {
-      const code = document.getElementById("rawJsonContent").textContent;
-      copyText(code, btn);
-    }
-
-    function copyCandidateValue(btn) {
-      const val = (window.demo3State && window.demo3State.selectedCandidate) ? window.demo3State.selectedCandidate.value : "";
-      copyText(val, btn);
-    }
-
-    function setDemo3Filter(type, el) {
-      window.demo3State.filterType = type;
-      window.demo3State.selectedIndex = 0;
-      document.querySelectorAll(".inventory-filter-bar .filter-chip").forEach(c => c.classList.remove("active"));
-      if (el) el.classList.add("active");
-      renderDemo3Inventory();
-    }
-
-    function handleDemo3Search(q) {
-      window.demo3State.searchQuery = q || "";
-      window.demo3State.selectedIndex = 0;
-      renderDemo3Inventory();
-    }
-
-    function selectDemo3Candidate(idx) {
-      window.demo3State.selectedIndex = idx;
-      const cands = window.demo3State.filteredCandidates || [];
-      const cand = cands[idx] || null;
-      renderDemo3Detail(cand);
-
-      document.querySelectorAll(".candidate-table tbody tr").forEach((row, i) => {
-        if (i === idx) row.classList.add("selected");
-        else row.classList.remove("selected");
-      });
-    }
-
-    function renderDemo3Inventory() {
-      const container = document.getElementById("apiCandidatesContent");
-      if (!container) return;
-
-      const state = window.demo3State;
-      const allCands = state.candidates || [];
-
-      if (allCands.length === 0) {
-        container.innerHTML = `
-          <div class="notice-box">
-            <div style="font-weight:600; color:var(--text); margin-bottom:2px;">No network or route candidates found.</div>
-            <div style="font-size:12px; color:var(--text-3);">
-              Static extraction found no candidate strings in the files scanned. This does not establish whether the app makes network calls.
-            </div>
-          </div>
-        `;
-        return;
-      }
-
-      // Counts for filter chips
-      const counts = { ALL: allCands.length, URL: 0, DOMAIN: 0, API_PATH: 0, IP_ADDRESS: 0, WEBSOCKET: 0 };
-      allCands.forEach(c => {
-        const t = (c.type || "").toUpperCase();
-        if (counts[t] !== undefined) counts[t]++;
-      });
-
-      // Filter by type
-      let filtered = allCands;
-      if (state.filterType !== "ALL") {
-        filtered = filtered.filter(c => (c.type || "").toUpperCase() === state.filterType);
-      }
-
-      // Filter by query
-      const q = (state.searchQuery || "").trim().toLowerCase();
-      if (q) {
-        filtered = filtered.filter(c => {
-          if ((c.value || "").toLowerCase().includes(q)) return true;
-          if ((c.type || "").toLowerCase().includes(q)) return true;
-          const occs = c.occurrences || [];
-          return occs.some(o => (o.source_file || "").toLowerCase().includes(q));
-        });
-      }
-      state.filteredCandidates = filtered;
-
-      // Ensure valid selected index
-      if (state.selectedIndex >= filtered.length) {
-        state.selectedIndex = 0;
-      }
-      const selectedCand = filtered[state.selectedIndex] || null;
-
-      const tableRows = filtered.map((c, idx) => {
-        const isSel = idx === state.selectedIndex;
-        const occs = c.occurrences || [];
-        const occCount = occs.length || c.occurrence_count || 1;
-        const firstOcc = occs[0] || {};
-        const fullSource = firstOcc.source_file || '-';
-        const shortSource = fullSource.split('/').pop() + (firstOcc.line_number ? ':' + firstOcc.line_number : '');
-        const allSources = occs.map(o => o.source_file + (o.line_number ? ':' + o.line_number : '')).join('\\n');
-        const sourceHtml = occs.length > 1
-          ? `<code>Multiple</code> <span class="tag" style="font-size:9.5px; padding:1px 5px; background:#f1f5f9; color:#475569;">${occs.length} sources</span>`
-          : `<code>${escapeHtml(shortSource)}</code>`;
-
-        return `
-          <tr class="candidate-row ${isSel ? 'selected' : ''}" onclick="selectDemo3Candidate(${idx})">
-            <td><span class="tag" style="text-transform:uppercase; font-size:10px; font-weight:700;">${escapeHtml(c.type || 'item')}</span></td>
-            <td><code class="candidate-val">${escapeHtml(c.value)}</code></td>
-            <td style="text-align:center;"><span class="tag" style="background:#eff6ff; color:#1d4ed8; font-weight:700;">${occCount}</span></td>
-            <td><span title="${escapeHtml(allSources)}">${sourceHtml}</span></td>
-          </tr>
-        `;
-      }).join('');
-
-      container.innerHTML = `
-        <div class="inventory-split-container">
-          <div class="inventory-table-container">
-            <div class="inventory-filter-bar">
-              <div class="filter-chips">
-                <button class="filter-chip ${state.filterType === 'ALL' ? 'active' : ''}" onclick="setDemo3Filter('ALL', this)">All (${counts.ALL})</button>
-                ${counts.URL > 0 ? `<button class="filter-chip ${state.filterType === 'URL' ? 'active' : ''}" onclick="setDemo3Filter('URL', this)">URLs (${counts.URL})</button>` : ''}
-                ${counts.DOMAIN > 0 ? `<button class="filter-chip ${state.filterType === 'DOMAIN' ? 'active' : ''}" onclick="setDemo3Filter('DOMAIN', this)">Domains (${counts.DOMAIN})</button>` : ''}
-                ${counts.API_PATH > 0 ? `<button class="filter-chip ${state.filterType === 'API_PATH' ? 'active' : ''}" onclick="setDemo3Filter('API_PATH', this)">Route candidates (${counts.API_PATH})</button>` : ''}
-                ${counts.IP_ADDRESS > 0 ? `<button class="filter-chip ${state.filterType === 'IP_ADDRESS' ? 'active' : ''}" onclick="setDemo3Filter('IP_ADDRESS', this)">IPs (${counts.IP_ADDRESS})</button>` : ''}
-                ${counts.WEBSOCKET > 0 ? `<button class="filter-chip ${state.filterType === 'WEBSOCKET' ? 'active' : ''}" onclick="setDemo3Filter('WEBSOCKET', this)">WebSockets (${counts.WEBSOCKET})</button>` : ''}
-              </div>
-              <div>
-                <input type="text" placeholder="Filter value or source..." value="${escapeHtml(state.searchQuery)}" oninput="handleDemo3Search(this.value)" style="padding:4px 8px; font-size:12px; border:1px solid #cbd5e1; border-radius:4px; width:190px;">
-              </div>
-            </div>
-            <div style="max-height: 540px; overflow-y: auto;">
-              <table class="candidate-table" style="margin:0; border:none;">
-                <thead style="position:sticky; top:0; background:#f8fafc; z-index:2;">
-                  <tr>
-                    <th style="width:85px;">Type</th>
-                    <th>Value</th>
-                    <th style="width:95px; text-align:center;">Occurrences</th>
-                    <th style="width:230px;">Source</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  ${filtered.length > 0 ? tableRows : `<tr><td colspan="4" style="text-align:center; color:var(--text-3); padding:24px;">No candidates match filter "${escapeHtml(state.searchQuery || state.filterType)}".</td></tr>`}
-                </tbody>
-              </table>
-            </div>
-            <div style="padding:8px 12px; background:#f8fafc; border-top:1px solid #e2e8f0; font-size:11.5px; color:var(--text-3); display:flex; justify-content:space-between;">
-              <span>Showing ${filtered.length} of ${allCands.length} canonical candidates</span>
-              <span>Click any row to inspect occurrences & evidence</span>
-            </div>
-          </div>
-
-          <div class="candidate-detail-card" id="candidateDetailCard">
-            <!-- populated by renderDemo3Detail -->
-          </div>
-        </div>
-      `;
-
-      renderDemo3Detail(selectedCand);
-    }
-
-    function renderDemo3Detail(cand) {
-      const container = document.getElementById("candidateDetailCard");
-      if (!container) return;
-      if (!cand) {
-        container.innerHTML = `
-          <div style="color:var(--text-3); font-size:12.5px; text-align:center; padding:36px 12px;">
-            Select a static string to inspect its normalized value, source location, and extraction evidence.
-          </div>
-        `;
-        return;
-      }
-      window.demo3State.selectedCandidate = cand;
-      const occs = cand.occurrences || [];
-      const primaryEvidence = (occs[0] && (occs[0].evidence || occs[0].raw_value)) || cand.evidence || cand.value || '-';
-      const comps = cand.components || null;
-      const primaryMethod = (occs[0] && occs[0].extraction_method) || cand.extraction_method || 'deterministic_pattern';
-
-      let compsHtml = '';
-      if (comps && typeof comps === 'object' && Object.keys(comps).length > 0) {
-        compsHtml = `
-          <div class="detail-section">
-            <div class="detail-label">Components</div>
-            <div class="components-kv-grid">
-              ${Object.entries(comps).map(([k, v]) => `
-                <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:4px; padding:4px 8px; display:flex; justify-content:space-between; align-items:baseline;">
-                  <span style="color:#64748b; font-size:10px; font-weight:700; text-transform:uppercase;">${escapeHtml(k)}</span>
-                  <code style="font-size:11px; color:#0f172a; overflow-wrap:anywhere;">${escapeHtml(String(v))}</code>
-                </div>
-              `).join('')}
-            </div>
-          </div>
-        `;
-      }
-
-      container.innerHTML = `
-        <div class="detail-header" style="display:flex; justify-content:space-between; align-items:flex-start; padding-bottom:10px; margin-bottom:12px; border-bottom:1px solid #e2e8f0;">
-          <div>
-            <div style="font-size:13px; font-weight:700; color:var(--text); letter-spacing:-0.01em;">Candidate Detail</div>
-            <div style="font-size:11px; font-family:var(--mono); color:var(--text-3); margin-top:2px;">${escapeHtml(cand.id || 'candidate')}</div>
-          </div>
-          <div style="display:flex; align-items:center; gap:6px;">
-            <span class="badge badge-success" style="font-size:10px;">Deduplicated</span>
-            <span class="tag" style="background:#eff6ff; color:#1d4ed8; font-weight:700;">
-              ${occs.length} ${occs.length === 1 ? 'occurrence' : 'occurrences'}
-            </span>
-          </div>
-        </div>
-
-        <div class="detail-section">
-          <div class="detail-label">Type</div>
-          <div><span class="tag" style="text-transform:uppercase; font-size:11px; font-weight:700; background:#f1f5f9; color:#0f172a;">${escapeHtml(cand.type || 'candidate')}</span></div>
-        </div>
-
-        <div class="detail-section">
-          <div class="detail-label">Canonical Value</div>
-          <div class="detail-value-box">
-            <span class="selectable-mono" style="overflow-wrap:anywhere; word-break:normal; line-height:1.45;">${escapeHtml(cand.value)}</span>
-            <button class="btn-copy-small" onclick="copyCandidateValue(this)" title="Copy normalized value">Copy</button>
-          </div>
-        </div>
-
-        ${compsHtml}
-
-        <div class="detail-section">
-          <div class="detail-label">Occurrences</div>
-          <div style="font-size:13px; font-family:var(--mono); font-weight:600; color:var(--text);">${occs.length}</div>
-        </div>
-
-        <div class="detail-section">
-          <div class="detail-label">Provenance (${occs.length} location${occs.length === 1 ? '' : 's'})</div>
-          <div class="occurrences-list">
-            ${occs.map((occ, oIdx) => `
-              <div class="occurrence-item">
-                <div class="occurrence-source">
-                  <span style="color:var(--text-3); font-size:10.5px;">#${oIdx+1}</span>
-                  <code style="overflow-wrap:anywhere; word-break:break-all;">${escapeHtml(occ.source_file)}${occ.line_number ? ':' + occ.line_number : ''}</code>
-                </div>
-                ${occ.raw_value && occ.raw_value !== cand.value ? `<div style="margin-top:2px; color:#64748b; font-family:var(--mono); font-size:10.5px;">Raw: <code>${escapeHtml(occ.raw_value)}</code></div>` : ''}
-              </div>
-            `).join('')}
-          </div>
-        </div>
-
-        <div class="detail-section">
-          <div class="detail-label">Evidence</div>
-          <div class="evidence-code-block">${escapeHtml(primaryEvidence)}</div>
-          <div style="font-size:10.5px; color:#64748b; margin-top:4px;">
-            Deterministic code line evidence preserving source semantics and extraction context.
-          </div>
-        </div>
-
-        <div class="detail-section">
-          <div class="detail-label">Extraction Method</div>
-          <div><code class="tag font-mono" style="font-size:11px; color:#334155; background:#f8fafc;">${escapeHtml(primaryMethod)}</code></div>
-        </div>
-      `;
-    }
-
-    function loadRawJson(runId) {
-      const viewer = document.getElementById("rawJsonContent");
-      const dwnBtn = document.getElementById("btnDownloadRawJson");
-      const vVer = document.getElementById("rawJsonSchemaVersion");
-      const vBadge = document.getElementById("rawJsonValidationBadge");
-      if (!viewer) return;
-      if (!runId) {
-        viewer.textContent = "// Run an analysis to inspect baseline_report.json";
-        return;
-      }
-      if (dwnBtn) dwnBtn.href = backendUrl(`/reports/${runId}/baseline_report.json`);
-      viewer.textContent = "// Loading baseline_report.json...";
-      fetch(backendUrl(`/reports/${runId}/baseline_report.json`))
-        .then(res => {
-          if (!res.ok) throw new Error("baseline_report.json returned HTTP " + res.status);
-          return res.json();
-        })
-        .then(data => {
-          if (window.demo3State) {
-            window.demo3State.rawJsonData = data;
-            window.demo3State.rawJsonLoaded = true;
-            window.demo3State.loadedRunId = runId;
-            // The validated baseline report is the canonical structured
-            // inventory shown in this tab and in downloaded JSON.
-            if (data.inventory && Array.isArray(data.inventory.candidates)) {
-              window.demo3State.candidates = data.inventory.candidates;
-              window.demo3State.selectedIndex = 0;
-              window.demo3State.filterType = "ALL";
-              window.demo3State.searchQuery = "";
-              const count = document.getElementById("inventoryCountTag");
-              if (count) count.textContent = data.inventory.candidates.length;
-              renderDemo3Inventory();
-            }
-          }
-          if (vVer) vVer.textContent = `"${data.schema_version || '1.0.0'}"`;
-          if (vBadge) {
-            if (data.schema_version === "1.0.0" && (data.statistics || data.scan_statistics || data.inventory)) {
-              vBadge.className = "badge badge-success";
-              vBadge.textContent = "Passed";
-            } else {
-              vBadge.className = "badge badge-warning";
-              vBadge.textContent = "Unverified";
-            }
-          }
-          viewer.textContent = JSON.stringify(data, null, 2);
-        })
-        .catch(err => {
-          if (vBadge) {
-            vBadge.className = "badge badge-error";
-            vBadge.textContent = "Unavailable";
-          }
-          viewer.textContent = "// Notice: " + err.message + "\\n// The baseline_report.json file will be available once static analysis completes.";
-        });
-    }
-
-    window.netViewerState = {
-      categories: {
-        domains: [],
-        network_urls: [],
-        ip_addresses: [],
-        path_candidates: [],
-        local_file_urls: [],
-      },
-      currentCategory: "domains",
-      currentPage: 1,
-      pageSize: 50,
-      searchQuery: "",
-      sourceApkFilter: "",
-      availableApks: [],
-    };
-
-    function renderNetworkViewer() {
-      const state = window.netViewerState;
-      const container = document.getElementById("networkIndicatorsContent");
-      if (!container) return;
-
-      const catLabels = {
-        domains: "Domains",
-        network_urls: "Network URLs",
-        ip_addresses: "IP Addresses",
-        path_candidates: "Path Candidates",
-        local_file_urls: "Local File URLs",
-      };
-
-      const currentItems = state.categories[state.currentCategory] || [];
-      const query = (state.searchQuery || "").trim().toLowerCase();
-      const apkFilter = state.sourceApkFilter || "";
-
-      let filtered = currentItems.filter(item => {
-        let valStr = "";
-        let srcApk = "";
-        let srcFile = "";
-        if (typeof item === 'string') {
-          valStr = item;
-        } else if (item && typeof item === 'object') {
-          valStr = item.value || item.url || item.domain || item.ip || item.path || "";
-          srcApk = item.source_apk || "";
-          srcFile = item.source_file || "";
-        }
-        if (apkFilter && srcApk !== apkFilter) return false;
-        if (query) {
-          const matchVal = valStr.toLowerCase().includes(query);
-          const matchApk = srcApk.toLowerCase().includes(query);
-          const matchFile = srcFile.toLowerCase().includes(query);
-          if (!matchVal && !matchApk && !matchFile) return false;
-        }
-        return true;
-      });
-
-      const totalItems = filtered.length;
-      const totalPages = Math.max(1, Math.ceil(totalItems / state.pageSize));
-      if (state.currentPage > totalPages) state.currentPage = totalPages;
-      const startIdx = (state.currentPage - 1) * state.pageSize;
-      const pageItems = filtered.slice(startIdx, startIdx + state.pageSize);
-
-      const catButtonsHtml = Object.keys(state.categories).filter(catKey => (state.categories[catKey] || []).length > 0).map(catKey => {
-        const count = (state.categories[catKey] || []).length;
-        const activeClass = (catKey === state.currentCategory) ? 'active' : '';
-        return `<button class="cat-btn ${activeClass}" onclick="setNetCategory('${catKey}')">${catLabels[catKey]} (${count})</button>`;
-      }).join('');
-
-      const isIos = window.netViewerState.isIos === true;
-      const sourceColLabel = isIos ? "Source Artifact" : "Source APK";
-      const sourceFilterLabel = isIos ? "All Source Artifacts" : "All Source APKs";
-
-      let apkOptionsHtml = `<option value="">${sourceFilterLabel}</option>`;
-      (state.availableApks || []).forEach(apk => {
-        const sel = (apk === state.sourceApkFilter) ? 'selected' : '';
-        apkOptionsHtml += `<option value="${escapeHtml(apk)}" ${sel}>${escapeHtml(apk)}</option>`;
-      });
-
-      let rowsHtml = '';
-      if (pageItems.length === 0) {
-        rowsHtml = `<tr><td colspan="5" style="text-align:center; color:var(--text-dim); padding:16px;">No indicators match current filter.</td></tr>`;
-      } else {
-        rowsHtml = pageItems.map(item => {
-          let val = "";
-          let srcApk = "-";
-          let srcFile = "-";
-          let line = "-";
-          if (typeof item === 'string') {
-            val = item;
-          } else if (item && typeof item === 'object') {
-            val = item.value || item.url || item.domain || item.ip || item.path || "-";
-            srcApk = item.source_apk || "-";
-            srcFile = item.source_file || "-";
-            line = (item.line !== undefined && item.line !== null) ? item.line : "-";
-          }
-          return `
-            <tr>
-              <td style="font-family:var(--font-mono); word-break:break-all;">${escapeHtml(val)}</td>
-              <td style="color:var(--text-dim); font-size:11px;">${escapeHtml(state.currentCategory)}</td>
-              <td><code>${escapeHtml(srcApk)}</code></td>
-              <td style="color:var(--text-muted); font-size:11px;">${escapeHtml(srcFile)}</td>
-              <td style="color:var(--text-dim); font-family:var(--font-mono);">${escapeHtml(String(line))}</td>
-            </tr>
-          `;
-        }).join('');
-      }
-
-      container.innerHTML = `
-        <div class="category-tabs">${catButtonsHtml}</div>
-        <div class="filter-bar">
-          <input type="text" class="filter-input" id="netSearchInput" placeholder="Filter indicators by value or source file..." value="${escapeHtml(state.searchQuery)}" oninput="handleNetSearch(this.value)" />
-          <select class="filter-select" id="netSourceApkSelect" onchange="handleNetApkFilter(this.value)">
-            ${apkOptionsHtml}
-          </select>
-        </div>
-        <div class="pagination-bar">
-          <div>Showing ${totalItems > 0 ? (startIdx + 1) : 0}–${Math.min(startIdx + state.pageSize, totalItems)} of ${totalItems}</div>
-          <div style="display:flex; gap:6px; align-items:center;">
-            <button class="pagination-btn" onclick="changeNetPage(-1)" ${state.currentPage <= 1 ? 'disabled' : ''}>Prev</button>
-            <span>Page ${state.currentPage} of ${totalPages}</span>
-            <button class="pagination-btn" onclick="changeNetPage(1)" ${state.currentPage >= totalPages ? 'disabled' : ''}>Next</button>
-          </div>
-        </div>
-        <div style="overflow-x:auto;">
-          <table>
-            <thead>
-              <tr>
-                <th>Value</th>
-                <th>Type</th>
-                <th>${sourceColLabel}</th>
-                <th>Source File</th>
-                <th>Line</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${rowsHtml}
-            </tbody>
-          </table>
-        </div>
-      `;
-    }
-
-    function setNetCategory(cat) {
-      window.netViewerState.currentCategory = cat;
-      window.netViewerState.currentPage = 1;
-      renderNetworkViewer();
-    }
-
-    function handleNetSearch(q) {
-      window.netViewerState.searchQuery = q;
-      window.netViewerState.currentPage = 1;
-      renderNetworkViewer();
-    }
-
-    function handleNetApkFilter(apk) {
-      window.netViewerState.sourceApkFilter = apk;
-      window.netViewerState.currentPage = 1;
-      renderNetworkViewer();
-    }
-
-    function changeNetPage(delta) {
-      window.netViewerState.currentPage += delta;
-      renderNetworkViewer();
-    }
-
-    
-    let currentFindings = [];
-    let currentVulnData = null;
-    let activeFindingFilter = "ALL";
-
-    function filterFindings(sev, btn) {
-      activeFindingFilter = sev;
-      document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
-      if (btn) btn.classList.add("active");
-      renderFindingsList();
-    }
-
-    
-    function evaluateClientVulnerabilities(result) {
-      if (result && (result.platform === "ios" || (result.static_analysis && result.static_analysis.platform === "ios"))) {
-        return {
-          status: "not_evaluated",
-          reason: "not_implemented",
-          risk_score: "NOT_EVALUATED",
-          summary: { critical: 0, high: 0, medium: 0, low: 0, total: 0 },
-          findings: [],
-          message: "iOS vulnerability evaluation is not implemented in Phase 1."
-        };
-      }
-      const stat = result.static_analysis || result || {};
-      const net = stat.network_indicators || {};
-      const app = stat.app || result.application || {};
-      const perms = stat.permissions || [];
-      const acts = stat.activities || [];
-      const cands = stat.api_candidates || [];
-
-      const findings = [];
-
-      // 1. Debuggable
-      const manifest = stat.manifest || result.manifest_evidence || {};
-      const rawApp = manifest.application || app;
-      const isDebuggable = rawApp.debuggable === true || String(rawApp.debuggable).toLowerCase() === 'true';
-      if (isDebuggable) {
-        findings.push({
-          id: 'SEC-CODE-01',
-          title: 'Application Is Marked Debuggable',
-          severity: 'CRITICAL',
-          owasp_category: 'M7: Client Code Quality',
-          masvs_id: 'MASVS-CODE-2',
-          cwe_id: 'CWE-215: Insertion of Sensitive Information Into Debugging Code',
-          description: 'The application has android:debuggable="true" enabled. Attackers can connect JDWP debuggers via ADB, dump memory, inspect encryption keys, bypass security controls, and execute arbitrary code in app context.',
-          evidence: 'android:debuggable="true" is declared in AndroidManifest.xml under <application>.',
-          remediation: 'Ensure android:debuggable="false" is set in production release builds.',
-          affected_items: ['AndroidManifest.xml: android:debuggable="true"']
-        });
-      }
-
-      // 2. Cleartext HTTP
-      const rawUrls = net.network_urls || [];
-      const httpUrls = [];
-      rawUrls.forEach(u => {
-        const s = typeof u === 'string' ? u : (u.url || u.value || '');
-        if (s.startsWith('http://')) httpUrls.push(s);
-      });
-      cands.forEach(c => {
-        const u = c.full_url || c.base_url || c.value || '';
-        if (typeof u === 'string' && u.startsWith('http://') && !httpUrls.includes(u)) {
-          httpUrls.push(u);
-        }
-      });
-
-      const cleartextFlag = String(rawApp.uses_cleartext_traffic || rawApp.usesCleartextTraffic || '').toLowerCase() === 'true';
-      if (cleartextFlag || httpUrls.length > 0) {
-        const ev = [];
-        if (cleartextFlag) ev.push('android:usesCleartextTraffic="true" enabled');
-        if (httpUrls.length > 0) ev.push(httpUrls.length + ' unencrypted HTTP URLs in code (e.g. ' + httpUrls.slice(0, 5).join(', ') + ')');
-        findings.push({
-          id: 'SEC-NET-01',
-          title: 'Cleartext HTTP Traffic Permitted',
-          severity: 'HIGH',
-          owasp_category: 'M3: Insecure Communication',
-          masvs_id: 'MASVS-NETWORK-1',
-          cwe_id: 'CWE-319: Cleartext Transmission of Sensitive Information',
-          description: 'The application allows unencrypted HTTP network communication. Traffic sent over plaintext HTTP can be intercepted, read, or modified by adversaries via Man-in-the-Middle (MitM) attacks.',
-          evidence: ev.join(' • '),
-          remediation: 'Enforce HTTPS for all network endpoints. Configure Android Network Security Configuration (res/xml/network_security_config.xml) with cleartextTrafficPermitted="false".',
-          affected_items: httpUrls.slice(0, 20)
-        });
-      }
-
-      // 3. Insecure Local File URLs
-      const rawFiles = net.local_file_urls || [];
-      const fileUrls = [];
-      rawFiles.forEach(f => {
-        const s = typeof f === 'string' ? f : (f.url || f.value || '');
-        if (s) fileUrls.push(s);
-      });
-      if (fileUrls.length > 0) {
-        findings.push({
-          id: 'SEC-PLAT-02',
-          title: 'Insecure file:// Local URL Schemes Detected',
-          severity: 'LOW',
-          owasp_category: 'M1: Improper Platform Usage',
-          masvs_id: 'MASVS-PLATFORM-2',
-          cwe_id: 'CWE-749: Exposed Dangerous Method or Function',
-          description: 'The application references local file:// URI schemes. If passed to WebViews with allowFileAccess enabled, this can lead to arbitrary local file disclosure and Cross-App Scripting.',
-          evidence: 'Detected file:// scheme references in code: ' + fileUrls.slice(0, 5).join(', '),
-          remediation: 'Avoid using file:// schemes. Use content:// URIs with FileProvider or modern WebViewAssetLoader to restrict file system access securely.',
-          affected_items: fileUrls.slice(0, 15)
-        });
-      }
-
-      // 4. Root Detection / SU Paths
-      const rawPaths = net.path_candidates || [];
-      const suPaths = [];
-      rawPaths.forEach(p => {
-        const s = typeof p === 'string' ? p : (p.value || p.path || '');
-        if (s && (s.includes('/su') || s.endsWith('/su'))) suPaths.push(s);
-      });
-      if (suPaths.length > 0) {
-        findings.push({
-          id: 'SEC-RESI-01',
-          title: 'Client-Side Root Detection Binary Checks Detected',
-          severity: 'LOW',
-          owasp_category: 'M8: Code Tampering',
-          masvs_id: 'MASVS-RESILIENCE-1',
-          cwe_id: 'CWE-693: Protection Mechanism Failure',
-          description: 'The application inspects standard root binary paths (/sbin/su, /su/bin/su) to detect rooted devices. Standard file-existence checks are easily bypassed via Frida hooking or root-hiding modules.',
-          evidence: 'Root execution paths inspected: ' + suPaths.slice(0, 5).join(', '),
-          remediation: 'Supplement client-side file checks with hardware-backed Play Integrity API verification and anti-tampering controls.',
-          affected_items: suPaths.slice(0, 10)
-        });
-      }
-
-      // 5. Dangerous Permissions
-      const dangerousPerms = ['android.permission.RECORD_AUDIO', 'android.permission.CAMERA', 'android.permission.READ_EXTERNAL_STORAGE', 'android.permission.WRITE_EXTERNAL_STORAGE', 'android.permission.SYSTEM_ALERT_WINDOW', 'android.permission.ACCESS_FINE_LOCATION'];
-      const detectedDangerous = [];
-      perms.forEach(p => {
-        const s = typeof p === 'string' ? p : (p.name || '');
-        if (dangerousPerms.includes(s) && !detectedDangerous.includes(s)) detectedDangerous.push(s);
-      });
-      if (detectedDangerous.length > 0) {
-        findings.push({
-          id: 'SEC-PERM-01',
-          title: 'High-Risk Sensitive Permissions Requested',
-          severity: 'MEDIUM',
-          owasp_category: 'M1: Improper Platform Usage',
-          masvs_id: 'MASVS-PLATFORM-1',
-          cwe_id: 'CWE-250: Execution with Unnecessary Privileges',
-          description: 'The application requests ' + detectedDangerous.length + ' sensitive high-risk permission(s). Overprivileged applications increase the attack surface.',
-          evidence: 'Dangerous permissions requested: ' + detectedDangerous.join(', '),
-          remediation: 'Apply the Principle of Least Privilege. Audit permission usage and remove unnecessary declarations.',
-          affected_items: detectedDangerous
-        });
-      }
-
-      // 6. Hardcoded Secret Key Candidates
-      const secretRegex = /(?:api[_-]?key|secret|access[_-]?token|bearer\\s+[a-zA-Z0-9_\\-\\.]+?|auth[_-]?token)/i;
-      const secretCandidates = [];
-      cands.forEach(c => {
-        const val = typeof c === 'string' ? c : (c.value || c.matched_string || c.api_call || '');
-        if (val && secretRegex.test(val) && val.length > 12) secretCandidates.push(val);
-      });
-      rawUrls.forEach(u => {
-        const s = typeof u === 'string' ? u : (u.url || u.value || '');
-        if (s && (s.toLowerCase().includes('api_key=') || s.toLowerCase().includes('token='))) secretCandidates.push(s);
-      });
-      if (secretCandidates.length > 0) {
-        findings.push({
-          id: 'SEC-CRYPTO-01',
-          title: 'Hardcoded API Key or Authentication Token Detected',
-          severity: 'HIGH',
-          owasp_category: 'M9: Insecure Reverse Engineering',
-          masvs_id: 'MASVS-CRYPTO-1',
-          cwe_id: 'CWE-798: Use of Hard-coded Credentials',
-          description: 'Potential API keys, access tokens, or authorization parameters were detected hardcoded in compiled assets or source smali files.',
-          evidence: 'Detected credential patterns: ' + secretCandidates.slice(0, 3).join(', '),
-          remediation: 'Never embed static secret keys or backend tokens inside client APK binaries. Use temporary scoped tokens via OAuth2 PKCE.',
-          affected_items: secretCandidates.slice(0, 10)
-        });
-      }
-
-      const severityOrder = { CRITICAL: 4, HIGH: 3, MEDIUM: 2, LOW: 1 };
-      findings.sort((a, b) => (severityOrder[b.severity] || 0) - (severityOrder[a.severity] || 0));
-
-      const counts = { critical: 0, high: 0, medium: 0, low: 0, total: findings.length };
-      findings.forEach(f => {
-        const s = (f.severity || 'LOW').toLowerCase();
-        if (counts[s] !== undefined) counts[s]++;
-      });
-
-      let riskScore = 'CLEAN';
-      if (counts.critical > 0) riskScore = 'CRITICAL';
-      else if (counts.high > 0) riskScore = 'HIGH';
-      else if (counts.medium > 0) riskScore = 'MEDIUM';
-      else if (counts.low > 0) riskScore = 'LOW';
-
-      return {
-        risk_score: riskScore,
-        summary: counts,
-        findings: findings
-      };
-    }
-
-    function renderFindings(findingsData) {
-      if (!findingsData) {
-        findingsData = { risk_score: "CLEAN", summary: { critical: 0, high: 0, medium: 0, low: 0, total: 0 }, findings: [] };
-      }
-      currentVulnData = findingsData;
-      currentFindings = findingsData.findings || [];
-      const sum = findingsData.summary || { critical: 0, high: 0, medium: 0, low: 0, total: currentFindings.length };
-      const isNotEvaluated = findingsData.status === "not_evaluated" || findingsData.risk_score === "NOT_EVALUATED";
-      const risk = (findingsData.risk_score || (isNotEvaluated ? "NOT_EVALUATED" : "CLEAN")).toUpperCase();
-
-      document.getElementById("findingsSeverityGrid").style.display = isNotEvaluated ? "none" : "grid";
-      document.getElementById("findingsFilterBar").style.display = isNotEvaluated ? "none" : "flex";
-      document.getElementById("findingsSubtitle").textContent = isNotEvaluated
-        ? "iOS package facts are available; vulnerability rules have not been run."
-        : "Automated static evaluation mapped to OWASP MASVS";
-
-      // Counts
-      document.getElementById("findingsCountTag").textContent = isNotEvaluated ? "N/A" : (sum.total || 0);
-      document.getElementById("countCritical").textContent = sum.critical || 0;
-      document.getElementById("countHigh").textContent = sum.high || 0;
-      document.getElementById("countMedium").textContent = sum.medium || 0;
-      document.getElementById("countLow").textContent = sum.low || 0;
-
-      document.getElementById("filterCountAll").textContent = isNotEvaluated ? 0 : (sum.total || 0);
-      document.getElementById("filterCountCrit").textContent = sum.critical || 0;
-      document.getElementById("filterCountHigh").textContent = sum.high || 0;
-      document.getElementById("filterCountMed").textContent = sum.medium || 0;
-      document.getElementById("filterCountLow").textContent = sum.low || 0;
-
-      // Risk score badge
-      let riskColor = "#34d399";
-      let riskBg = "rgba(16,185,129,0.12)";
-      let riskBorder = "rgba(16,185,129,0.3)";
-      if (isNotEvaluated) {
-        riskColor = "#a78bfa";
-        riskBg = "rgba(167,139,250,0.15)";
-        riskBorder = "rgba(167,139,250,0.35)";
-      } else if (risk === "CRITICAL") {
-        riskColor = "#f87171";
-        riskBg = "rgba(239,68,68,0.15)";
-        riskBorder = "rgba(239,68,68,0.35)";
-      } else if (risk === "HIGH") {
-        riskColor = "#fb923c";
-        riskBg = "rgba(249,115,22,0.15)";
-        riskBorder = "rgba(249,115,22,0.35)";
-      } else if (risk === "MEDIUM") {
-        riskColor = "#facc15";
-        riskBg = "rgba(234,179,8,0.15)";
-        riskBorder = "rgba(234,179,8,0.35)";
-      } else if (risk === "LOW") {
-        riskColor = "#60a5fa";
-        riskBg = "rgba(59,130,246,0.15)";
-        riskBorder = "rgba(59,130,246,0.35)";
-      }
-
-      const riskBadgeEl = document.getElementById("riskScoreBadgeContainer");
-      if (riskBadgeEl) {
-        const badgeLabel = isNotEvaluated ? "NOT EVALUATED" : risk;
-        riskBadgeEl.innerHTML = `
-          <div style="display:flex; align-items:center; gap:8px;">
-            <span style="font-size:12px; color:var(--text-dim);">Assessed Risk:</span>
-            <span style="font-size:12px; font-weight:700; text-transform:uppercase; padding:3px 10px; border-radius:4px; background:${riskBg}; color:${riskColor}; border:1px solid ${riskBorder};">
-              ${badgeLabel}
-            </span>
-          </div>
-        `;
-      }
-
-      const ovRiskEl = document.getElementById("overviewRiskVal");
-      if (ovRiskEl) {
-        if (isNotEvaluated) {
-          ovRiskEl.innerHTML = `<span style="font-weight:700; color:${riskColor}; cursor:pointer;" onclick="switchTab('findings')">Not evaluated (iOS Phase 1) &rarr;</span>`;
-        } else {
-          ovRiskEl.innerHTML = `<span style="font-weight:700; color:${riskColor}; cursor:pointer;" onclick="switchTab('findings')">${risk} (${sum.total} findings) &rarr;</span>`;
-        }
-      }
-
-      renderFindingsList();
-    }
-
-    function renderFindingsList() {
-      const container = document.getElementById("findingsListContainer");
-      if (!container) return;
-
-      if (currentVulnData && (currentVulnData.status === "not_evaluated" || currentVulnData.risk_score === "NOT_EVALUATED")) {
-        container.innerHTML = `
-          <div style="background:rgba(167,139,250,0.06); border:1px solid rgba(167,139,250,0.25); border-radius:6px; padding:24px; text-align:center;">
-            <div style="font-weight:700; font-size:15px; margin-bottom:6px; color:#172033;">Vulnerability analysis not evaluated</div>
-            <div style="font-size:12.5px; color:#344054; margin-bottom:6px;">iOS risk rules are not implemented in this version. The IPA's static facts remain available in the other tabs and reports.</div>
-            <div style="font-size:11.5px; color:#667085; line-height:1.5; max-width:620px; margin:0 auto;">
-              No security conclusion can be drawn from the absence of iOS findings.
-            </div>
-          </div>
-        `;
-        return;
-      }
-
-      const filtered = activeFindingFilter === "ALL" 
-        ? currentFindings 
-        : currentFindings.filter(f => (f.severity || "").toUpperCase() === activeFindingFilter);
-
-      if (filtered.length === 0) {
-        container.innerHTML = `
-          <div style="background:rgba(16,185,129,0.06); border:1px solid rgba(16,185,129,0.2); border-radius:6px; padding:18px; text-align:center; color:#34d399;">
-            <div style="font-weight:600; font-size:14px; margin-bottom:4px;">No Vulnerabilities in this category</div>
-            <div style="font-size:12px; color:var(--text-dim);">No matching security findings were identified.</div>
-          </div>
-        `;
-        return;
-      }
-
-      container.innerHTML = filtered.map(f => {
-        const sev = (f.severity || "LOW").toUpperCase();
-        let sevColor = "#60a5fa";
-        let sevBg = "rgba(59,130,246,0.12)";
-        let sevBorder = "rgba(59,130,246,0.3)";
-        if (sev === "CRITICAL") {
-          sevColor = "#f87171";
-          sevBg = "rgba(239,68,68,0.12)";
-          sevBorder = "rgba(239,68,68,0.35)";
-        } else if (sev === "HIGH") {
-          sevColor = "#fb923c";
-          sevBg = "rgba(249,115,22,0.12)";
-          sevBorder = "rgba(249,115,22,0.35)";
-        } else if (sev === "MEDIUM") {
-          sevColor = "#facc15";
-          sevBg = "rgba(234,179,8,0.12)";
-          sevBorder = "rgba(234,179,8,0.35)";
-        }
-
-        const affectedHtml = (f.affected_items && f.affected_items.length > 0) ? `
-          <div style="margin-top:10px; padding:8px 12px; background:#f8fafc; border-radius:4px; border:1px solid #e2e8f0;">
-            <div style="font-size:11px; font-weight:700; color:#64748b; text-transform:uppercase; margin-bottom:4px;">Affected Items / Code Locations:</div>
-            <ul style="margin:0; padding-left:16px; font-size:11.5px; font-family:var(--mono); color:#334155; word-break:break-all;">
-              ${f.affected_items.map(item => `<li>${escapeHtml(item)}</li>`).join('')}
-            </ul>
-          </div>
-        ` : '';
-
-        return `
-          <div style="background:#fff; border:1px solid #dfe3e8; border-left:4px solid ${sevColor}; border-radius:var(--r-sm); padding:16px; margin-bottom:12px; box-shadow:0 1px 3px rgba(0,0,0,0.03);">
-            <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:8px; margin-bottom:8px;">
-              <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
-                <span style="display:inline-block; font-size:10.5px; font-weight:700; text-transform:uppercase; padding:2px 8px; border-radius:4px; background:${sevBg}; color:${sevColor}; border:1px solid ${sevBorder};">${sev}</span>
-                <span style="font-size:14.5px; font-weight:700; color:#0f172a;">${escapeHtml(f.title || '-')}</span>
-              </div>
-              <div style="display:flex; gap:6px; flex-wrap:wrap;">
-                ${f.masvs_id ? `<span class="tag" style="font-size:10px; color:#0284c7; background:#f0f9ff; font-weight:600;">${escapeHtml(f.masvs_id)}</span>` : ''}
-                ${f.owasp_category ? `<span class="tag" style="font-size:10px; color:#475569; background:#f8fafc;">${escapeHtml(f.owasp_category)}</span>` : ''}
-                ${f.cwe_id ? `<span class="tag" style="font-size:10px; color:#7c3aed; background:#f5f3ff;">${escapeHtml(f.cwe_id.split(':')[0])}</span>` : ''}
-              </div>
-            </div>
-
-            <div style="font-size:13px; color:#334155; line-height:1.55; margin-bottom:10px;">
-              ${escapeHtml(f.description || '')}
-            </div>
-
-            ${f.evidence ? `
-              <div style="margin-bottom:10px; font-size:12px; color:#0f172a; background:#f8fafc; padding:8px 12px; border-radius:4px; border:1px dashed #cbd5e1; font-family:var(--mono); word-break:break-all;">
-                <span style="color:#64748b; font-size:10.5px; font-weight:700; text-transform:uppercase; font-family:var(--font);">Evidence: </span>${escapeHtml(f.evidence)}
-              </div>
-            ` : ''}
-
-            <div style="font-size:12.5px; color:#166534; background:var(--success-bg); border:1px solid #bbf7d0; padding:9px 12px; border-radius:4px; line-height:1.45;">
-              <strong style="color:#15803d; font-size:11px; text-transform:uppercase;">Remediation:</strong> ${escapeHtml(f.remediation || '')}
-            </div>
-
-            ${affectedHtml}
-          </div>
-        `;
-      }).join('');
-    }
-
-    function switchTab(tabId) {
-      if (tabId === 'notes') tabId = 'analysis_details';
-      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-      document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
-      const btn = document.getElementById('tab-btn-' + tabId);
-      const pane = document.getElementById('tab-pane-' + tabId);
-      if (btn) btn.classList.add('active');
-      if (pane) pane.classList.add('active');
-
-      if (tabId === 'raw_json') {
-        const rId = (window.demo3State && window.demo3State.currentRunId) || currentRunId;
-        if (rId && (!window.demo3State.rawJsonLoaded || window.demo3State.loadedRunId !== rId)) {
-          loadRawJson(rId);
-        }
-      }
-    }
-
-    function renderAnalysisResults(result, runId) {
-      const sec = document.getElementById("analysisSection");
-      if (!sec) return;
-      sec.style.display = "block";
-      document.getElementById("analysisRunIdBadge").textContent = "RUN: " + (runId || "-");
-
-      const acq = result.acquisition || {};
-      const prep = result.preprocessing || {};
-      const stat = result.static_analysis || result;
-      const app = stat.app || stat.application || {};
-      const struct = stat.structure || {};
-      const net = stat.network_indicators || {};
-      const candidates = stat.api_candidates || [];
-      const rt = result.runtime || {};
-      const perms = stat.permissions || [];
-      const acts = stat.activities || [];
-      const demo3Scan = stat.demo3_scan || result.demo3_scan || {};
-      const demo3Cands = demo3Scan.candidates || [];
-
-      const isIos = (result.platform === "ios" || stat.platform === "ios");
-      const iosApp = isIos ? (stat.application || stat.app || result.application || {}) : {};
-      const iosConfig = isIos ? (stat.configuration || result.configuration || {}) : {};
-
-      const packageLayout = stat.package_layout || acq.package_layout || ((acq.split_count || acq.components) ? "split" : "monolithic");
-      const splitCount = stat.split_count || acq.split_count || (acq.components ? acq.components.length : 1);
-      const acqComps = acq.components || [];
-      const prepComps = prep.components || [];
-      const compMap = {};
-      acqComps.forEach(c => { compMap[c.filename] = Object.assign({}, c); });
-      prepComps.forEach(c => {
-        compMap[c.filename] = Object.assign({}, compMap[c.filename] || {}, c);
-      });
-      const apkComponents = Object.keys(compMap).length > 0 ? Object.values(compMap) : (stat.components || []);
-      const splitStructure = struct.components || stat.structure?.components || [];
-
-      // Render Security Findings early to get counts for summary bar
-      const vulnData = (result.vulnerabilities && ((result.vulnerabilities.findings && result.vulnerabilities.findings.length > 0) || result.vulnerabilities.status === "not_evaluated"))
-        ? result.vulnerabilities
-        : evaluateClientVulnerabilities(result);
-      renderFindings(vulnData);
-
-      // Populate Compact Scan Summary Bar
-      const isNotEvaluated = vulnData.status === "not_evaluated" || vulnData.risk_score === "NOT_EVALUATED";
-      const totalFindings = isNotEvaluated ? 0 : ((vulnData.summary && vulnData.summary.total !== undefined) ? vulnData.summary.total : (vulnData.findings || []).length);
-
-      const statusEl = document.getElementById("sumScanStatus");
-      if (statusEl) {
-        if (result.status === "failed" || result.demo_status === "failed") {
-          statusEl.innerHTML = `<span class="badge badge-error">FAILED</span>`;
-        } else if (prep.status === "success_with_warnings" || stat.status === "partial" || result.demo_status === "partial") {
-          statusEl.innerHTML = `<span class="badge badge-warning">PARTIAL</span>`;
-        } else {
-          statusEl.innerHTML = `<span class="badge badge-success">COMPLETED</span>`;
-        }
-      }
-
-      const pkgName = app.package_name || acq.package_name || iosApp.bundle_identifier || '-';
-      const sumPkg = document.getElementById("sumPackage");
-      if (sumPkg) {
-        sumPkg.textContent = pkgName;
-        sumPkg.title = pkgName;
-      }
-
-      const rawSha = acq.sha256 || acq.sha_256 || stat.sha256 || (apkComponents[0] && apkComponents[0].sha256) || '';
-      const sumShaText = document.getElementById("sumShaText");
-      const btnCopySha = document.getElementById("btnCopySha");
-      if (sumShaText) {
-        if (rawSha) {
-          sumShaText.textContent = rawSha.length > 16 ? (rawSha.slice(0, 8) + '...' + rawSha.slice(-6)) : rawSha;
-          sumShaText.setAttribute("data-full-sha", rawSha);
-          sumShaText.title = rawSha;
-          if (btnCopySha) btnCopySha.style.display = "inline-block";
-        } else {
-          sumShaText.textContent = "-";
-          if (btnCopySha) btnCopySha.style.display = "none";
-        }
-      }
-      if (window.demo3State) {
-        window.demo3State.currentSha = rawSha;
-        window.demo3State.currentRunId = runId;
-      }
-
-      const filesCount = (demo3Scan.statistics && demo3Scan.statistics.files_analyzed !== undefined)
-        ? demo3Scan.statistics.files_analyzed
-        : (prep.decompiled_files || prep.total_files || struct.total_files || (apkComponents.reduce((acc, c) => acc + (c.dex_count || 1), 0)) || '-');
-      const sumFiles = document.getElementById("sumFiles");
-      if (sumFiles) {
-        sumFiles.textContent = typeof filesCount === 'number' ? filesCount.toLocaleString() : filesCount;
-      }
-
-      const totalCands = demo3Cands.length || candidates.length || 0;
-      const sumCands = document.getElementById("sumCandidates");
-      if (sumCands) {
-        sumCands.textContent = totalCands.toLocaleString();
-        sumCands.style.cursor = "pointer";
-        sumCands.title = "View Structured Inventory";
-        sumCands.onclick = () => switchTab('api_candidates');
-      }
-
-      const sumFindings = document.getElementById("sumFindings");
-      if (sumFindings) {
-        sumFindings.textContent = isNotEvaluated ? "N/A" : totalFindings.toLocaleString();
-        sumFindings.style.cursor = "pointer";
-        sumFindings.title = "View Static Findings";
-        sumFindings.onclick = () => switchTab('findings');
-      }
-
-      const stats = demo3Scan.statistics || {};
-      const warnCount = (stats.warnings ? stats.warnings.length : 0) + (prep.warnings ? prep.warnings.length : 0);
-      const sumWarn = document.getElementById("sumWarnings");
-      if (sumWarn) {
-        sumWarn.textContent = warnCount;
-        sumWarn.style.cursor = "pointer";
-        sumWarn.title = "View Analysis Details";
-        sumWarn.onclick = () => switchTab('analysis_details');
-      }
-
-      // Populate Analysis Details & Scan Health
-      const healthDisc = document.getElementById("healthDiscovered");
-      if (healthDisc) healthDisc.textContent = (stats.files_discovered !== undefined ? stats.files_discovered : (typeof filesCount === 'number' ? filesCount : '-')).toLocaleString();
-      const healthAna = document.getElementById("healthAnalyzed");
-      if (healthAna) healthAna.textContent = (stats.files_analyzed !== undefined ? stats.files_analyzed : (typeof filesCount === 'number' ? filesCount : '-')).toLocaleString();
-      const healthSkip = document.getElementById("healthSkipped");
-      if (healthSkip) healthSkip.textContent = (stats.files_skipped || 0).toLocaleString();
-      const healthFail = document.getElementById("healthFailed");
-      if (healthFail) healthFail.textContent = (stats.files_failed || 0).toLocaleString();
-      const healthWarn = document.getElementById("healthWarnings");
-      if (healthWarn) healthWarn.textContent = warnCount.toLocaleString();
-      const healthErr = document.getElementById("healthErrors");
-      if (healthErr) healthErr.textContent = (stats.errors ? stats.errors.length : 0).toLocaleString();
-
-      const healthVerd = document.getElementById("healthVerdict");
-      if (healthVerd) {
-        if ((stats.files_failed && stats.files_failed > 0) || result.status === 'failed') {
-          healthVerd.innerHTML = `<span class="badge badge-error">FAILED</span>`;
-        } else if (warnCount > 0 || stats.status === 'partial') {
-          healthVerd.innerHTML = `<span class="badge badge-warning">PARTIAL</span>`;
-        } else {
-          healthVerd.innerHTML = `<span class="badge badge-success">HEALTHY</span>`;
-        }
-      }
-
-      // 1. Overview Tab
-      let overviewRows = '';
-      if (isIos) {
-        const netCnt = Array.isArray(net) ? net.length : (Object.values(net).reduce((s, a) => s + (Array.isArray(a) ? a.length : 0), 0));
-        overviewRows = `
-          <div class="kv-row"><span class="kv-key">Platform:</span><span class="kv-val"><span class="tag">iOS</span></span></div>
-          <div class="kv-row"><span class="kv-key">Bundle Identifier:</span><span class="kv-val">${escapeHtml(iosApp.bundle_identifier || '-')}</span></div>
-          <div class="kv-row"><span class="kv-key">Display Name:</span><span class="kv-val">${escapeHtml(iosApp.display_name || '-')}</span></div>
-          <div class="kv-row"><span class="kv-key">Version:</span><span class="kv-val">${escapeHtml(iosApp.version || '-')} (${escapeHtml(iosApp.build || '-')})</span></div>
-          <div class="kv-row"><span class="kv-key">Minimum OS:</span><span class="kv-val">${escapeHtml(iosApp.minimum_os_version || '-')}</span></div>
-          <div class="kv-row"><span class="kv-key">Main Executable:</span><span class="kv-val">${escapeHtml((struct.executable && struct.executable.name) || iosApp.executable || '-')}</span></div>
-          <div class="kv-row"><span class="kv-key">Architectures:</span><span class="kv-val">${escapeHtml(((struct.executable && struct.executable.architectures) || []).join(', ') || '-')}</span></div>
-          <div class="kv-row"><span class="kv-key">Frameworks:</span><span class="kv-val">${(struct.frameworks || []).length}</span></div>
-          <div class="kv-row"><span class="kv-key">Usage Descriptions:</span><span class="kv-val">${(iosConfig.usage_descriptions || []).length}</span></div>
-          <div class="kv-row"><span class="kv-key">Network Indicators:</span><span class="kv-val">${netCnt.toLocaleString()}</span></div>
-          <div class="kv-row"><span class="kv-key">API Candidates:</span><span class="kv-val" style="color:#60a5fa;">0 (None inferred)</span></div>
-          <div class="kv-row"><span class="kv-key">Security Risk:</span><span class="kv-val" id="overviewRiskVal">Not evaluated</span></div>
-          <div class="kv-row"><span class="kv-key">Runtime Status:</span><span class="kv-val" style="color:var(--text-muted);">Not implemented</span></div>
-        `;
-      } else if (packageLayout === "split") {
-        overviewRows += `
-          <div class="kv-row"><span class="kv-key">Package:</span><span class="kv-val">${escapeHtml(app.package_name || acq.package_name || '-')}</span></div>
-          <div class="kv-row"><span class="kv-key">Source Type:</span><span class="kv-val">${escapeHtml(acq.source_type || 'Google Play Store')}</span></div>
-          <div class="kv-row"><span class="kv-key">Package Layout:</span><span class="kv-val"><span class="tag">Split APK</span></span></div>
-          <div class="kv-row"><span class="kv-key">Split Components:</span><span class="kv-val">${splitCount}</span></div>
-          <div class="kv-row"><span class="kv-key">Launcher Activity:</span><span class="kv-val">${escapeHtml(app.launcher_activity || '-')}</span></div>
-          <div class="kv-row"><span class="kv-key">DEX Count:</span><span class="kv-val">${struct.dex_count || struct.total_dex_count || 0}</span></div>
-        `;
-      } else {
-        overviewRows += `
-          <div class="kv-row"><span class="kv-key">Package:</span><span class="kv-val">${escapeHtml(app.package_name || '-')}</span></div>
-          <div class="kv-row"><span class="kv-key">Source Type:</span><span class="kv-val">Direct APK</span></div>
-          <div class="kv-row"><span class="kv-key">Package Layout:</span><span class="kv-val"><span class="tag">Single APK</span></span></div>
-          <div class="kv-row"><span class="kv-key">APK Filename:</span><span class="kv-val">${escapeHtml(acq.filename || '-')}</span></div>
-          <div class="kv-row"><span class="kv-key">Launcher Activity:</span><span class="kv-val">${escapeHtml(app.launcher_activity || '-')}</span></div>
-          <div class="kv-row"><span class="kv-key">DEX Count:</span><span class="kv-val">${struct.dex_count || 0}</span></div>
-        `;
-      }
-
-      if (!isIos) {
-        const netUrlsCount = (net.network_urls || []).length;
-        const domainsCount = (net.domains || []).length;
-        const ipsCount = (net.ip_addresses || []).length;
-        const pathsCount = (net.path_candidates || []).length;
-        const localFilesCount = (net.local_file_urls || []).length;
-        const totalNetCount = netUrlsCount + domainsCount + ipsCount + pathsCount + localFilesCount;
-
-        overviewRows += `
-          <div class="kv-row"><span class="kv-key">Permissions:</span><span class="kv-val">${perms.length}</span></div>
-          <div class="kv-row"><span class="kv-key">Activities:</span><span class="kv-val">${acts.length}</span></div>
-          <div class="kv-row"><span class="kv-key">Network Indicators:</span><span class="kv-val">${totalNetCount.toLocaleString()}</span></div>
-          <div class="kv-row"><span class="kv-key">API Candidates:</span><span class="kv-val" style="color:#60a5fa;">${candidates.length}</span></div>
-          <div class="kv-row"><span class="kv-key">Security Risk:</span><span class="kv-val" id="overviewRiskVal">-</span></div>
-          <div class="kv-row"><span class="kv-key">Runtime Status:</span><span class="kv-val" style="color:#10b981;">${escapeHtml(rt.status || '-')}</span></div>
-        `;
-      }
-      document.getElementById("overviewAppRows").innerHTML = overviewRows;
-
-      const apktool = prep.apktool || {};
-      const jadx = prep.jadx || {};
-      const jadxWarn = jadx.status === "success_with_warnings";
-      let execHtml = '';
-      if (isIos) {
-        execHtml = `
-          <div class="kv-row"><span class="kv-key">IPA Extraction:</span><span class="kv-val" style="color:#10b981;">Success</span></div>
-          <div class="kv-row"><span class="kv-key">Info.plist Analysis:</span><span class="kv-val" style="color:#10b981;">Success</span></div>
-          <div class="kv-row"><span class="kv-key">Mach-O Analysis:</span><span class="kv-val" style="color:#10b981;">${escapeHtml((struct.executable && struct.executable.status) || 'Success')}</span></div>
-          <div class="kv-row"><span class="kv-key">Runtime Analysis:</span><span class="kv-val" style="color:var(--text-muted);">Not implemented</span></div>
-        `;
-      } else if (packageLayout === "split") {
-        const prepStatus = prep.status || "success";
-        const prepColor = prepStatus === "success_with_warnings" ? "#f59e0b" : "#10b981";
-        execHtml += `<div class="kv-row"><span class="kv-key">Preprocessing:</span><span class="kv-val" style="color:${prepColor};">${escapeHtml(prepStatus)} (${apkComponents.length || splitCount} components)</span></div>`;
-      } else {
-        execHtml += `<div class="kv-row"><span class="kv-key">Apktool:</span><span class="kv-val">${escapeHtml(apktool.status || '-')}</span></div>`;
-        execHtml += `<div class="kv-row"><span class="kv-key">JADX:</span>
-          <span class="kv-val" style="color:${jadxWarn ? '#f59e0b' : '#10b981'};">
-            ${escapeHtml(jadx.status || '-')}
-          </span>
-        </div>`;
-      }
-      if (!isIos) {
-        execHtml += `<div class="kv-row"><span class="kv-key">Runtime Status:</span><span class="kv-val" style="color:#60a5fa;">${escapeHtml(rt.status || '-')}</span></div>`;
-      }
-      document.getElementById("overviewExecRows").innerHTML = execHtml;
-
-      // 2. APK Components Tab
-      if (!isIos && packageLayout === "split" && apkComponents.length > 0) {
-        document.getElementById("tab-btn-components").style.display = "inline-block";
-        document.getElementById("componentsCountTag").textContent = apkComponents.length + " components";
-        document.getElementById("componentsTableContent").innerHTML = `
-          <table>
-            <thead>
-              <tr>
-                <th>Filename</th>
-                <th>Role</th>
-                <th>Size</th>
-                <th>SHA-256</th>
-                <th>DEX Count</th>
-                <th>Raw Extract</th>
-                <th>Apktool</th>
-                <th>JADX</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${apkComponents.map(c => {
-                const cPrep = c.preprocessing || {};
-                const rawSt = c.raw_extract_status || cPrep.raw_extract_status || '-';
-                const apkSt = c.apktool_status || cPrep.apktool_status || '-';
-                const jadxSt = c.jadx_status || cPrep.jadx_status || '-';
-
-                function formatBadge(st) {
-                  if (st === 'success') return `<span class="badge badge-success">success</span>`;
-                  if (st === 'success_with_warnings') return `<span class="badge badge-warning">success_with_warnings</span>`;
-                  if (st === 'skipped_no_dex') return `<span class="badge badge-pending">skipped_no_dex</span>`;
-                  return `<span class="badge">${escapeHtml(st)}</span>`;
-                }
-
-                let szStr = '-';
-                if (typeof c.size_bytes === 'number') {
-                  if (c.size_bytes >= 1024 * 1024) szStr = (c.size_bytes / (1024 * 1024)).toFixed(2) + ' MB';
-                  else if (c.size_bytes >= 1024) szStr = (c.size_bytes / 1024).toFixed(1) + ' KB';
-                  else szStr = c.size_bytes + ' B';
-                }
-
-                const shaShort = (c.sha256 || '').slice(0, 12) + '...';
-
-                return `
-                  <tr>
-                    <td><code>${escapeHtml(c.filename)}</code></td>
-                    <td><span class="tag">${escapeHtml(c.role || '-')}</span></td>
-                    <td style="color:var(--text-muted); font-size:11.5px;">${szStr}</td>
-                    <td title="${escapeHtml(c.sha256 || '')}"><code>${escapeHtml(shaShort)}</code></td>
-                    <td style="font-family:var(--font-mono);">${c.dex_count !== undefined ? c.dex_count : '-'}</td>
-                    <td>${formatBadge(rawSt)}</td>
-                    <td>${formatBadge(apkSt)}</td>
-                    <td>${formatBadge(jadxSt)}</td>
-                  </tr>
-                `;
-              }).join('')}
-            </tbody>
-          </table>
-        `;
-      } else {
-        document.getElementById("tab-btn-components").style.display = "none";
-      }
-
-      // Hide Android connectivity probe when platform is iOS
-      const probeCard = document.getElementById("probeCard");
-      if (probeCard) probeCard.style.display = isIos ? "none" : "block";
-      const adbTargetSection = document.getElementById("adbTargetSection");
-      const installModeSection = document.getElementById("installModeSection");
-      if (adbTargetSection) adbTargetSection.style.display = isIos ? "none" : "block";
-      if (installModeSection) installModeSection.style.display = isIos ? "none" : "block";
-
-      // 3. Application Tab
-      const permHead = document.getElementById("appPermsHeader");
-      const actHead = document.getElementById("appActsHeader");
-
-      if (isIos) {
-        if (permHead) permHead.textContent = "Declared Usage Descriptions";
-        if (actHead) actHead.textContent = "Declared URL Schemes";
-
-        document.getElementById("appDetailsRows").innerHTML = `
-          <div class="kv-row"><span class="kv-key">Bundle Identifier:</span><span class="kv-val">${escapeHtml(iosApp.bundle_identifier || '-')}</span></div>
-          <div class="kv-row"><span class="kv-key">Bundle Name:</span><span class="kv-val">${escapeHtml(iosApp.bundle_name || '-')}</span></div>
-          <div class="kv-row"><span class="kv-key">Display Name:</span><span class="kv-val">${escapeHtml(iosApp.display_name || '-')}</span></div>
-          <div class="kv-row"><span class="kv-key">Version (Short):</span><span class="kv-val">${escapeHtml(iosApp.version || '-')}</span></div>
-          <div class="kv-row"><span class="kv-key">Build Version:</span><span class="kv-val">${escapeHtml(iosApp.build || '-')}</span></div>
-          <div class="kv-row"><span class="kv-key">Minimum OS Version:</span><span class="kv-val">${escapeHtml(iosApp.minimum_os_version || '-')}</span></div>
-          <div class="kv-row"><span class="kv-key">Main Executable:</span><span class="kv-val">${escapeHtml((struct.executable && struct.executable.name) || iosApp.executable || '-')}</span></div>
-          <div class="kv-row"><span class="kv-key">Device Families:</span><span class="kv-val">${escapeHtml((iosApp.device_family || []).join(', ') || '-')}</span></div>
-        `;
-
-        const usageDescs = iosConfig.usage_descriptions || [];
-        document.getElementById("appPermsCount").textContent = usageDescs.length + " declared";
-        document.getElementById("appPermsList").innerHTML = usageDescs.length > 0
-          ? usageDescs.map(u => `<div class="scroll-list-item"><strong>${escapeHtml(u.key)}:</strong> ${escapeHtml(u.value)}</div>`).join('')
-          : `<div style="color:var(--text-dim); padding:8px;">No usage descriptions declared in Info.plist.</div>`;
-
-        const rawSchemes = iosConfig.url_schemes || [];
-        const validSchemes = [];
-        rawSchemes.forEach(s => {
-          let str = "";
-          if (typeof s === 'object' && s !== null) {
-            if (s.scheme && typeof s.scheme === 'string') str = s.scheme.trim();
-          } else if (typeof s === 'string') {
-            str = s.trim();
-          }
-          if (str) validSchemes.push(str);
-        });
-
-        document.getElementById("appActsCount").textContent = validSchemes.length + " schemes";
-        document.getElementById("appActsList").innerHTML = validSchemes.length > 0
-          ? validSchemes.map(schemeStr => `<div class="scroll-list-item"><code>${escapeHtml(schemeStr)}://</code></div>`).join('')
-          : `<div style="color:var(--text-dim); padding:8px;">No custom URL schemes declared.</div>`;
-      } else {
-        if (permHead) permHead.textContent = "Declared Permissions";
-        if (actHead) actHead.textContent = "Declared Activities";
-
-        document.getElementById("appDetailsRows").innerHTML = `
-          <div class="kv-row"><span class="kv-key">Package Name:</span><span class="kv-val">${escapeHtml(app.package_name || '-')}</span></div>
-          <div class="kv-row"><span class="kv-key">Version Name:</span><span class="kv-val">${escapeHtml(app.version_name || '-')}</span></div>
-          <div class="kv-row"><span class="kv-key">Version Code:</span><span class="kv-val">${escapeHtml(app.version_code || '-')}</span></div>
-          <div class="kv-row"><span class="kv-key">Target SDK:</span><span class="kv-val">${escapeHtml(app.target_sdk_version || '-')}</span></div>
-          <div class="kv-row"><span class="kv-key">Min SDK:</span><span class="kv-val">${escapeHtml(app.min_sdk_version || '-')}</span></div>
-          <div class="kv-row"><span class="kv-key">Launcher Activity:</span><span class="kv-val">${escapeHtml(app.launcher_activity || '-')}</span></div>
-        `;
-
-        document.getElementById("appPermsCount").textContent = perms.length + " declared";
-        document.getElementById("appPermsList").innerHTML = perms.length > 0
-          ? perms.map(p => `<div class="scroll-list-item">${escapeHtml(p)}</div>`).join('')
-          : `<div style="color:var(--text-dim); padding:8px;">No permissions declared.</div>`;
-        
-        document.getElementById("appActsCount").textContent = acts.length + " declared";
-        document.getElementById("appActsList").innerHTML = acts.length > 0
-          ? acts.map(a => `<div class="scroll-list-item">${escapeHtml(a)}</div>`).join('')
-          : `<div style="color:var(--text-dim); padding:8px;">No activities declared.</div>`;
-      }
-
-      // 4. Structure Tab
-      if (isIos) {
-        const exe = struct.executable || {};
-        const fws = struct.frameworks || [];
-        const exts = struct.extensions || [];
-        const res = struct.resources || {};
-        const ents = (iosConfig.entitlements && iosConfig.entitlements.entitlements) || iosConfig.entitlements || {};
-        const entEntries = typeof ents === 'object' ? Object.entries(ents) : [];
-
-        document.getElementById("structureRows").innerHTML = `
-          <div class="comp-card" style="margin-bottom:12px;">
-            <div style="font-weight:600; color:#fff; margin-bottom:8px; border-bottom:1px solid #1c2130; padding-bottom:4px;">Main Executable (Mach-O)</div>
-            <div class="kv-row"><span class="kv-key">Binary Name:</span><span class="kv-val"><code>${escapeHtml(exe.name || '-')}</code></span></div>
-            <div class="kv-row"><span class="kv-key">Mach-O Type:</span><span class="kv-val">${escapeHtml(exe.macho_type || '-')}</span></div>
-            <div class="kv-row"><span class="kv-key">Architectures:</span><span class="kv-val">${escapeHtml((exe.architectures || []).join(', ') || '-')}</span></div>
-            <div class="kv-row"><span class="kv-key">Encrypted (cryptid):</span><span class="kv-val">${exe.cryptid === 1 ? 'Yes (App Store encrypted)' : (exe.cryptid === 0 ? 'No (Unencrypted)' : 'Unknown / Not extracted')}</span></div>
-            <div class="kv-row"><span class="kv-key">Analysis Status:</span><span class="kv-val">${escapeHtml(exe.status || 'success')}</span></div>
-          </div>
-
-          <div class="comp-card" style="margin-bottom:12px;">
-            <div style="font-weight:600; color:#fff; margin-bottom:8px; border-bottom:1px solid #1c2130; padding-bottom:4px;">Embedded Frameworks & Libraries (${fws.length})</div>
-            ${fws.length > 0 
-              ? fws.map(f => `<div class="kv-row"><span class="kv-key">${escapeHtml(f.type || 'framework')}:</span><span class="kv-val"><code>${escapeHtml(f.name || f.relative_path)}</code></span></div>`).join('')
-              : '<div style="color:var(--text-dim); padding:4px 0;">No embedded frameworks in Frameworks/</div>'}
-          </div>
-
-          <div class="comp-card" style="margin-bottom:12px;">
-            <div style="font-weight:600; color:#fff; margin-bottom:8px; border-bottom:1px solid #1c2130; padding-bottom:4px;">App Extensions & PlugIns (${exts.length})</div>
-            ${exts.length > 0
-              ? exts.map(e => `<div class="kv-row"><span class="kv-key">Extension:</span><span class="kv-val"><code>${escapeHtml(e.name || e.relative_path)}</code></span></div>`).join('')
-              : '<div style="color:var(--text-dim); padding:4px 0;">No app extensions (.appex) found.</div>'}
-          </div>
-
-          <div class="comp-card" style="margin-bottom:12px;">
-            <div style="font-weight:600; color:#fff; margin-bottom:8px; border-bottom:1px solid #1c2130; padding-bottom:4px;">Resource Statistics</div>
-            <div class="kv-row"><span class="kv-key">Total Files:</span><span class="kv-val">${struct.total_files || 0}</span></div>
-            <div class="kv-row"><span class="kv-key">Plist Files:</span><span class="kv-val">${res.plist_count || 0}</span></div>
-            <div class="kv-row"><span class="kv-key">JSON / Config Files:</span><span class="kv-val">${res.json_count || 0}</span></div>
-            <div class="kv-row"><span class="kv-key">Localization (.lproj):</span><span class="kv-val">${res.lproj_count || 0}</span></div>
-          </div>
-
-          <div class="comp-card">
-            <div style="font-weight:600; color:#fff; margin-bottom:8px; border-bottom:1px solid #1c2130; padding-bottom:4px;">Provisioning Entitlements (${entEntries.length})</div>
-            ${entEntries.length > 0
-              ? entEntries.map(([k, v]) => `<div class="kv-row"><span class="kv-key"><code>${escapeHtml(k)}</code>:</span><span class="kv-val">${escapeHtml(typeof v === 'object' ? JSON.stringify(v) : String(v))}</span></div>`).join('')
-              : '<div style="color:var(--text-dim); padding:4px 0;">No entitlements extracted or embedded.mobileprovision absent.</div>'}
-          </div>
-        `;
-      } else if (packageLayout === "split" && splitStructure.length > 0) {
-        document.getElementById("structureRows").innerHTML = `
-          <div>
-            ${splitStructure.map(sc => {
-              const sDex = sc.dex_files || [];
-              const sLibs = sc.native_libraries || [];
-              const sAssets = sc.assets || [];
-              const sSmali = sc.smali_roots || [];
-              return `
-                <div class="comp-card">
-                  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; border-bottom:1px solid #1c2130; padding-bottom:4px;">
-                    <strong style="color:#ffffff; font-size:12.5px;">Source APK: <code>${escapeHtml(sc.source_apk || '-')}</code></strong>
-                    <span class="tag">Role: ${escapeHtml(sc.role || '-')}</span>
-                  </div>
-                  <div class="kv-row"><span class="kv-key">DEX Files:</span><span class="kv-val">${escapeHtml(sDex.join(', ') || '-')} (${sDex.length})</span></div>
-                  <div class="kv-row"><span class="kv-key">Multidex:</span><span class="kv-val">${sc.is_multidex === true}</span></div>
-                  <div class="kv-row"><span class="kv-key">Smali Roots:</span><span class="kv-val">${escapeHtml(sSmali.join(', ') || '-')}</span></div>
-                  <div class="kv-row"><span class="kv-key">Native Libraries:</span><span class="kv-val">${sLibs.length} files ${sLibs.length > 0 ? '(' + escapeHtml(sLibs.slice(0, 3).join(', ')) + (sLibs.length > 3 ? '...' : '') + ')' : ''}</span></div>
-                  <div class="kv-row"><span class="kv-key">Assets:</span><span class="kv-val">${sAssets.length} files</span></div>
-                  <div class="kv-row"><span class="kv-key">Kotlin Metadata:</span><span class="kv-val">${sc.has_kotlin_metadata ? 'Present' : 'Not detected'}</span></div>
-                </div>
-              `;
-            }).join('')}
-          </div>
-        `;
-      } else {
-        const dexFiles = struct.dex_files || [];
-        const nativeLibs = struct.native_libraries || [];
-        const assets = struct.assets || [];
-        const smaliRoots = struct.smali_roots || [];
-        document.getElementById("structureRows").innerHTML = `
-          <div class="kv-row"><span class="kv-key">DEX Files:</span><span class="kv-val">${escapeHtml(dexFiles.join(', ') || '-')}</span></div>
-          <div class="kv-row"><span class="kv-key">DEX Count:</span><span class="kv-val">${struct.dex_count || 0}</span></div>
-          <div class="kv-row"><span class="kv-key">Multidex:</span><span class="kv-val">${struct.is_multidex === true}</span></div>
-          <div class="kv-row"><span class="kv-key">Native Libraries:</span><span class="kv-val">${nativeLibs.length} files</span></div>
-          <div class="kv-row"><span class="kv-key">Native Code Present:</span><span class="kv-val">${struct.has_native_code === true}</span></div>
-          <div class="kv-row"><span class="kv-key">Assets:</span><span class="kv-val">${assets.length} files</span></div>
-          <div class="kv-row"><span class="kv-key">Smali Roots:</span><span class="kv-val">${escapeHtml(smaliRoots.join(', ') || '-')}</span></div>
-          <div class="kv-row"><span class="kv-key">Kotlin Metadata:</span><span class="kv-val">${struct.has_kotlin_metadata ? 'Present in APK' : 'Not detected'}</span></div>
-        `;
-      }
-
-      // 5. Network Tab
-      const netCategories = {
-        domains: Array.isArray(net) ? net.filter(i => i.category === 'domain') : (net.domains || []),
-        network_urls: Array.isArray(net) ? net.filter(i => i.category === 'network_url') : (net.network_urls || []),
-        ip_addresses: Array.isArray(net) ? net.filter(i => i.category === 'ip_address') : (net.ip_addresses || []),
-        path_candidates: Array.isArray(net) ? net.filter(i => i.category === 'path_candidate') : (net.path_candidates || []),
-        local_file_urls: Array.isArray(net) ? net.filter(i => i.category === 'local_file_url') : (net.local_file_urls || []),
-      };
-      window.netViewerState.categories = netCategories;
-      window.netViewerState.isIos = isIos;
-
-      const apkSet = new Set();
-      Object.values(netCategories).forEach(arr => {
-        arr.forEach(item => {
-          if (item && typeof item === 'object') {
-            const src = item.source_apk || item.source_file;
-            if (src) apkSet.add(src);
-          }
-        });
-      });
-      window.netViewerState.availableApks = Array.from(apkSet).sort();
-      window.netViewerState.currentPage = 1;
-      window.netViewerState.searchQuery = "";
-      window.netViewerState.sourceApkFilter = "";
-      const catOrder = ["domains", "network_urls", "ip_addresses", "path_candidates", "local_file_urls"];
-      window.netViewerState.currentCategory = catOrder.find(c => (netCategories[c] || []).length > 0) || "domains";
-
-      const totalAllNet = Object.values(netCategories).reduce((sum, a) => sum + a.length, 0);
-      document.getElementById("networkTotalCountTag").textContent = totalAllNet.toLocaleString() + " indicators";
-      renderNetworkViewer();
-
-      // 6. API Candidates & Demo 3 Structured Inventory Tab
-      let candItems = demo3Cands;
-      if (candItems.length === 0 && candidates.length > 0) {
-        candItems = candidates.map((c, i) => ({
-          id: "cand_" + (i + 1),
-          type: "URL",
-          value: c.full_url || c.path || c.value || "unknown",
-          occurrences: [{
-            source_file: c.source_file || c.source_apk || "smali",
-            line_number: c.request_line || 0,
-            extraction_method: c.framework || "pattern_regex",
-            evidence: c.full_url || c.path
-          }]
-        }));
-      }
-      window.demo3State.candidates = candItems;
-      window.demo3State.selectedIndex = 0;
-      window.demo3State.filterType = "ALL";
-      window.demo3State.searchQuery = "";
-      const invCountTag = document.getElementById("inventoryCountTag");
-      if (invCountTag) invCountTag.textContent = candItems.length;
-      renderDemo3Inventory();
-
-      // 7. Runtime Tab
-      if (isIos) {
-        document.getElementById("runtimeRows").innerHTML = `
-          <div class="notice-box" style="margin-bottom:12px;">
-            <div style="font-weight:600; color:#cbd5e1; margin-bottom:2px;">
-              iOS Runtime Analysis: Not implemented
-            </div>
-            <div style="font-size:12px; color:var(--text-dim);">
-              Phase 1 provides deterministic static-only analysis. Dynamic instrumentation, runtime launching, and live traffic interception are not implemented for iOS.
-            </div>
-          </div>
-          <div class="kv-row"><span class="kv-key">Platform:</span><span class="kv-val">iOS</span></div>
-          <div class="kv-row"><span class="kv-key">Runtime Execution:</span><span class="kv-val" style="color:var(--text-muted);">Not implemented</span></div>
-          <div class="kv-row"><span class="kv-key">Device Interception:</span><span class="kv-val" style="color:var(--text-muted);">Not implemented</span></div>
-        `;
-      } else if (rt.status === "skipped" || (rt.runtime && rt.runtime.pid === null && rt.status !== "runtime_launch_verified")) {
-        document.getElementById("runtimeRows").innerHTML = `
-          <div class="notice-box" style="margin-bottom:14px; background:#f8fafc; border-color:#cbd5e1;">
-            <div style="font-weight:600; color:#334155; margin-bottom:4px;">
-              Runtime Launch Verification: <span class="badge badge-skipped">SKIPPED</span>
-            </div>
-            <div style="font-size:12.5px; color:#475569; line-height:1.5;">
-              ${escapeHtml(rt.message || "No connected Android device or emulator was detected. Deterministic static analysis completed normally.")}
-            </div>
-          </div>
-          <div class="kv-row"><span class="kv-key">Target Device:</span><span class="kv-val">None / Offline</span></div>
-          <div class="kv-row"><span class="kv-key">Verification Status:</span><span class="kv-val"><span class="badge badge-skipped">SKIPPED</span></span></div>
-          <div class="kv-row"><span class="kv-key">Reason:</span><span class="kv-val font-mono">${escapeHtml(rt.reason || "no_adb_device")}</span></div>
-          <div class="kv-row"><span class="kv-key">Analysis Mode:</span><span class="kv-val" style="color:var(--success); font-weight:600;">Static Analysis Only</span></div>
-        `;
-      } else {
-        const adb = rt.adb || {};
-        const inst = rt.install || {};
-        const lnc = rt.launch || {};
-        const rtProc = rt.runtime || {};
-
-        document.getElementById("runtimeRows").innerHTML = `
-          <div class="kv-row"><span class="kv-key">Device Serial:</span><span class="kv-val">${escapeHtml(adb.serial || '-')}</span></div>
-          <div class="kv-row"><span class="kv-key">Install Result:</span><span class="kv-val">${inst.success === true ? 'Success' : (inst.skipped ? 'Skipped (pre-installed)' : 'Failed / Not Run')}</span></div>
-          <div class="kv-row"><span class="kv-key">Reinstall:</span><span class="kv-val">${inst.reinstall === true}</span></div>
-          <div class="kv-row"><span class="kv-key">Grant Permissions (-g):</span><span class="kv-val">${inst.grant_permissions === true}</span></div>
-          <div class="kv-row"><span class="kv-key">Launched Component:</span><span class="kv-val">${escapeHtml(lnc.component || '-')}</span></div>
-          <div class="kv-row"><span class="kv-key">Observed PID:</span><span class="kv-val">${escapeHtml(rtProc.pid || '-')}</span></div>
-          <div class="kv-row"><span class="kv-key">Observed Package:</span><span class="kv-val">${escapeHtml(rtProc.observed_package || '-')}</span></div>
-          <div class="kv-row"><span class="kv-key">Observed Activity:</span><span class="kv-val">${escapeHtml(rtProc.observed_activity || '-')}</span></div>
-          <div class="kv-row"><span class="kv-key">Foreground Verified:</span><span class="kv-val" style="color:#10b981;">${rtProc.foreground_verified === true}</span></div>
-          <div class="kv-row"><span class="kv-key">Runtime Status:</span><span class="kv-val" style="color:#10b981; font-weight:600;">${escapeHtml(rt.status || '-')}</span></div>
-        `;
-      }
-
-      // 8. Analysis Notes Tab
-      const notes = [];
-      if (isIos) {
-        notes.push("Static-only analysis for iOS; runtime instrumentation and execution are not implemented in Phase 1.");
-        notes.push("Absence of evidence is not evidence of absence.");
-        notes.push("Unsupported analysis must never be represented as a negative finding.");
-        notes.push("Static network indicators do not imply API endpoints.");
-        notes.push("Zero API candidates reported (no call-context inference performed).");
-        notes.push("Usage description keys are factual declarations and do not prove runtime permission access.");
-        notes.push("No vulnerability exploitation or dynamic instrumentation was performed.");
-        notes.push("No security verdict was produced.");
-      } else {
-        if (jadx.status === "success_with_warnings") {
-          notes.push("JADX completed with warnings (exit code 3). Decompiled source may contain partial warnings.");
-        }
-        if (packageLayout === "split") {
-          notes.push("Split package analysis: only installed splits returned by pm path on the device were analyzed.");
-          if (apkComponents) {
-            apkComponents.forEach(comp => {
-              const cPrep = comp.preprocessing || {};
-              (cPrep.warnings || []).forEach(w => {
-                notes.push(`[${comp.filename}] ${w}`);
-              });
-            });
-          }
-        }
-        notes.push("Static network indicators do not prove runtime network use.");
-        notes.push("API candidates are static call-context candidates only.");
-        notes.push("The current extractor supports limited framework-specific patterns.");
-        if (candidates.length === 0) {
-          notes.push("Zero API candidates does not mean no APIs exist.");
-        }
-        notes.push("Emulator connectivity does not prove target-app navigation.");
-        notes.push("No vulnerability exploitation was performed.");
-        notes.push("No security verdict was produced.");
-      }
-
-      document.getElementById("analysisNotesList").innerHTML = notes.map(n => `<li>${escapeHtml(n)}</li>`).join('');
-
-      // 9. Report Tab
-      const htmlReportUrl = backendUrl("/reports/" + runId + "/report.html");
-      const jsonReportUrl = backendUrl("/reports/" + runId + "/report.json");
-      if (isIos) {
-        document.getElementById("reportSummaryRows").innerHTML = `
-          <div class="kv-row"><span class="kv-key">Report Status:</span><span class="kv-val" style="color:#10b981;">Generated & Ready</span></div>
-          <div class="kv-row"><span class="kv-key">Run ID:</span><span class="kv-val">${escapeHtml(runId)}</span></div>
-          <div class="kv-row"><span class="kv-key">Platform:</span><span class="kv-val"><span class="tag">iOS</span></span></div>
-          <div class="kv-row"><span class="kv-key">IPA Filename:</span><span class="kv-val">${escapeHtml(acq.filename || iosApp.filename || '-')}</span></div>
-          <div class="kv-row"><span class="kv-key">Bundle Identifier:</span><span class="kv-val">${escapeHtml(iosApp.bundle_identifier || '-')}</span></div>
-          <div class="kv-row"><span class="kv-key">Demo Status:</span><span class="kv-val" style="color:#60a5fa;">${escapeHtml(result.demo_status || 'completed')}</span></div>
-        `;
-      } else {
-        document.getElementById("reportSummaryRows").innerHTML = `
-          <div class="kv-row"><span class="kv-key">Report Status:</span><span class="kv-val" style="color:#10b981;">Generated & Ready</span></div>
-          <div class="kv-row"><span class="kv-key">Run ID:</span><span class="kv-val">${escapeHtml(runId)}</span></div>
-          <div class="kv-row"><span class="kv-key">APK Filename:</span><span class="kv-val">${escapeHtml(acq.filename || '-')}</span></div>
-          <div class="kv-row"><span class="kv-key">Package:</span><span class="kv-val">${escapeHtml(app.package_name || '-')}</span></div>
-          <div class="kv-row"><span class="kv-key">Demo Status:</span><span class="kv-val" style="color:#60a5fa;">${escapeHtml(result.demo_status || 'completed')}</span></div>
-        `;
-      }
-      document.getElementById("btnViewHtmlReport").href = htmlReportUrl;
-      document.getElementById("btnDownloadJsonReport").href = jsonReportUrl;
-      const btnBaseline = document.getElementById("btnDownloadBaselineReport");
-      if (btnBaseline) btnBaseline.href = backendUrl("/reports/" + runId + "/baseline_report.json");
-      const btnRawDwn = document.getElementById("btnDownloadRawJson");
-      if (btnRawDwn) btnRawDwn.href = backendUrl("/reports/" + runId + "/baseline_report.json");
-      document.getElementById("btnOpenNewTab").href = htmlReportUrl;
-
-      // Prefetch baseline_report.json for Raw JSON tab
-      loadRawJson(runId);
-    }
-
-    function getSelectedPlatform() {
-      const rad = document.querySelector('input[name="platformRadio"]:checked');
-      return rad ? rad.value : "android";
-    }
-
-    function handlePlatformChange() {
-      const platform = getSelectedPlatform();
-      const isIos = platform === "ios";
-      const startBtn = document.getElementById("startBtn");
-      const iosNotice = document.getElementById("iosNotice");
-      const badge = document.getElementById("urlClassificationBadge");
-      const urlInput = document.getElementById("apkUrl");
-      const urlLabel = document.querySelector('label[for="apkUrl"]');
-      document.getElementById("quickTargetsAndroid").style.display = isIos ? "none" : "grid";
-      document.getElementById("quickTargetsIos").style.display = isIos ? "grid" : "none";
-      document.getElementById("androidAnalysisOptions").style.display = isIos ? "none" : "block";
-      document.getElementById("adbTargetSection").style.display = isIos ? "none" : "block";
-      document.getElementById("installModeSection").style.display = isIos ? "none" : "block";
-      if (urlInput) urlInput.value = "";
-
-      startBtn.disabled = false;
-
-      const probeCard = document.getElementById("probeCard");
-      if (probeCard) probeCard.style.display = isIos ? "none" : "block";
-
-      if (isIos) {
-        iosNotice.style.display = "block";
-        iosNotice.innerHTML = "ℹ️ <strong>iOS Static Analysis Mode:</strong> Enter a direct <code>.ipa</code> URL or local file path. Runtime verification is not implemented for iOS in Phase 1.";
-        badge.style.display = "none";
-        if (urlLabel) urlLabel.textContent = "Target IPA (Direct URL or Local File Path)";
-        if (urlInput) urlInput.placeholder = "https://.../app.ipa or /path/to/app.ipa";
-      } else {
-        iosNotice.style.display = "none";
-        if (urlLabel) urlLabel.textContent = "Target URL (Direct APK or Google Play Store)";
-        if (urlInput) urlInput.placeholder = "https://play.google.com/store/apps/details?id=... or direct .apk URL";
-        handleUrlInput();
-      }
-    }
-
-    let classifyTimer = null;
-    function handleUrlInput() {
-      const platform = getSelectedPlatform();
-      const badge = document.getElementById("urlClassificationBadge");
-      if (platform === "ios") {
-        badge.style.display = "none";
-        return;
-      }
-      const url = document.getElementById("apkUrl").value.trim();
-      if (!url) {
-        badge.style.display = "none";
-        return;
-      }
-      clearTimeout(classifyTimer);
-      classifyTimer = setTimeout(async () => {
-        try {
-          const resp = await fetch(backendUrl("/api/classify"), {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ url, platform })
-          });
-          const data = await resp.json();
-          if (data && data.classification) {
-            badge.style.display = "inline-block";
-            if (data.classification === "google_play_url") {
-              badge.className = "tag";
-              badge.textContent = "Google Play URL (pkg: " + (data.package_name || "-") + ")";
-            } else if (data.classification === "direct_apk_url") {
-              badge.className = "tag";
-              badge.textContent = "Direct APK URL";
-            } else {
-              badge.className = "tag";
-              badge.textContent = "Unclassified URL";
-            }
-          } else {
-            badge.style.display = "none";
-          }
-        } catch (e) {
-          badge.style.display = "none";
-        }
-      }, 250);
-    }
-
-    async function runProbe() {
-      const btn = document.getElementById("probeBtn");
-      const details = document.getElementById("probeDetails");
-      const adbSerial = document.getElementById("adbSerial").value.trim();
-      btn.disabled = true;
-      btn.textContent = "Probing...";
-
-      try {
-        const resp = await fetch(backendUrl("/api/probe"), {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ adb_serial: adbSerial })
-        });
-        const data = await resp.json();
-        details.style.display = "block";
-        document.getElementById("probeUrl").textContent = data.probe_url || "-";
-        document.getElementById("probeHit").textContent = data.hit ? "Yes" : "No";
-        document.getElementById("probeHitCount").textContent = data.hit_count !== undefined ? data.hit_count : "-";
-        const stEl = document.getElementById("probeStatus");
-        stEl.textContent = data.status || "-";
-        stEl.style.color = data.status === "verified" ? "var(--success)" : "var(--warning)";
-      } catch (err) {
-        details.style.display = "block";
-        document.getElementById("probeStatus").textContent = "Error: " + err.message;
-      } finally {
-        btn.disabled = false;
-        btn.textContent = "Test Emulator Connectivity";
-      }
-    }
-
-    async function pollStatus() {
-      if (!currentRunId || isPolling) return;
-      isPolling = true;
-      try {
-        const resp = await fetch(backendUrl("/api/status/" + encodeURIComponent(currentRunId)));
-        if (!resp.ok) {
-          if (resp.status === 404) {
-            if (pollTimer) clearInterval(pollTimer);
-            pollTimer = null;
-            currentRunId = null;
-            document.getElementById("startBtn").disabled = false;
-          }
-          return;
-        }
-        const status = await resp.json();
-
-        const stages = status.stages || {};
-        for (const [stage, info] of Object.entries(stages)) {
-          setBadge(stage, info.state);
-          setMessage(stage, info.message);
-          if (stage === 'acquisition') {
-            if (info.state === 'waiting_for_installation') {
-              const pkgName = (info.data && info.data.package_name) || "";
-              const remSec = (info.data && info.data.remaining_seconds !== undefined) ? ` (${info.data.remaining_seconds}s timeout)` : '';
-              document.getElementById("details-acquisition").innerHTML = `
-                <div class="notice-box" style="margin-top:8px;">
-                  <div style="font-weight:600; color:#38bdf8; margin-bottom:2px;">
-                    Waiting for installation${remSec}
-                  </div>
-                  <div style="font-size:12px; margin-bottom:4px;"><b>Package:</b> <code>${escapeHtml(pkgName)}</code></div>
-                  <div style="font-size:11.5px; color:var(--text-dim);">
-                    Install this application in the emulator's Google Play Store. MobiAttack will continue automatically when installation is detected.
-                  </div>
-                </div>
-              `;
-            } else if (info.data) {
-              renderAcquisition(info.data);
-            }
-          }
-          if (stage === 'preprocessing' && info.data) renderPreprocessing(info.data);
-          if (stage === 'static_analysis' && info.data) renderStatic(info.data);
-          if (stage === 'runtime' && info.data) renderRuntime(info.data);
-        }
-
-        if (status.overall_status === "completed") {
-          clearInterval(pollTimer);
-          pollTimer = null;
-          document.getElementById("startBtn").disabled = false;
-          const stopBtn = document.getElementById("stopBtn");
-          if (stopBtn) stopBtn.style.display = "none";
-          
-          document.getElementById("completedBanner").style.display = "flex";
-          if (status.result) {
-            renderAnalysisResults(status.result, status.run_id);
-          }
-        } else if (status.overall_status === "failed") {
-          clearInterval(pollTimer);
-          pollTimer = null;
-          document.getElementById("startBtn").disabled = false;
-          const stopBtn = document.getElementById("stopBtn");
-          if (stopBtn) stopBtn.style.display = "none";
-          
-          const errMsg = status.error || "Stage execution failed.";
-          let openStoreBtnHtml = "";
-          if (errMsg.includes("not installed on the connected Android device")) {
-            openStoreBtnHtml = `
-              <div style="margin-top:8px;">
-                <button class="btn btn-secondary" onclick="openPlayStoreOnDevice()">Open in Play Store</button>
-              </div>
-            `;
-          }
-          document.getElementById("errorBannerText").innerHTML = `<div>${escapeHtml(errMsg)}</div>${openStoreBtnHtml}`;
-          document.getElementById("errorBanner").style.display = "flex";
-          if (status.result) {
-            renderAnalysisResults(status.result, status.run_id);
-          }
-        }
-      } catch (err) {
-        console.error("Poll error:", err);
-      } finally {
-        isPolling = false;
-      }
-    }
-
-    async function stopDemo() {
-      const stopBtn = document.getElementById("stopBtn");
-      if (stopBtn) {
-        stopBtn.disabled = true;
-        stopBtn.textContent = "Stopping...";
-      }
-      if (pollTimer) {
-        clearInterval(pollTimer);
-        pollTimer = null;
-      }
-      try {
-        const resp = await fetch(backendUrl("/api/stop"), {
-          method: "POST",
-          headers: { "Content-Type": "application/json" }
-        });
-        let data = {};
-        try {
-          data = await resp.json();
-        } catch (_) {}
-        document.getElementById("startBtn").disabled = false;
-        ["acquisition", "preprocessing", "static_analysis", "runtime"].forEach(stage => {
-          const b = document.getElementById("badge-" + stage);
-          if (b && (b.textContent === "running" || b.textContent === "waiting" || b.textContent === "waiting_for_installation")) {
-            setBadge(stage, "failed");
-            setMessage(stage, "Stopped by user.");
-          }
-        });
-        document.getElementById("errorBannerText").innerHTML = "<div>Analysis stopped by user. Lock cleared.</div>";
-        document.getElementById("errorBanner").style.display = "flex";
-      } catch (err) {
-        alert("Error stopping run: " + err.message);
-      } finally {
-        if (stopBtn) {
-          stopBtn.disabled = false;
-          stopBtn.textContent = "Stop / Reset";
-        }
-      }
-    }
-
-    async function startDemo() {
-      const platform = getSelectedPlatform();
-      const url = document.getElementById("apkUrl").value.trim();
-      const adbSerial = document.getElementById("adbSerial").value.trim();
-      const reinstall = document.getElementById("reinstall").checked;
-      const grantPermissions = document.getElementById("grantPermissions").checked;
-
-      if (!url) {
-        alert("Please enter a valid target URL.");
-        return;
-      }
-
-      if (window.location.hostname === "mobiattack-demo.vercel.app") {
-        const localPage = new URL("http://127.0.0.1:8082/");
-        localPage.searchParams.set("target", url);
-        localPage.searchParams.set("platform", platform);
-        const selectedMode = document.querySelector('input[name="installMode"]:checked');
-        localPage.searchParams.set("install_mode", selectedMode ? selectedMode.value : "manual");
-        window.location.assign(localPage.toString());
-        return;
-      }
-
-      // Reset UI
-      document.getElementById("completedBanner").style.display = "none";
-      document.getElementById("errorBanner").style.display = "none";
-      document.getElementById("analysisSection").style.display = "none";
-      ["acquisition", "preprocessing", "static_analysis", "runtime"].forEach(stage => {
-        setBadge(stage, "pending");
-        setMessage(stage, "Waiting to start...");
-        document.getElementById("details-" + stage).innerHTML = "";
-      });
-
-      document.getElementById("startBtn").disabled = true;
-      const stopBtn = document.getElementById("stopBtn");
-      if (stopBtn) stopBtn.style.display = "inline-flex";
-
-      const installModeEl = document.querySelector('input[name="installMode"]:checked');
-      const installMode = installModeEl ? installModeEl.value : "manual";
-
-      try {
-        const resp = await fetch(backendUrl("/api/run"), {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            url,
-            platform,
-            adb_serial: adbSerial,
-            reinstall,
-            grant_permissions: grantPermissions,
-            install_mode: installMode,
-          })
-        });
-        const data = await resp.json();
-        if (!resp.ok) {
-          if (resp.status === 409 || (data.message && data.message.includes("already running"))) {
-            const stopIt = confirm("A demo run is already active in background. Would you like to stop it and clear the lock?");
-            if (stopIt) {
-              await stopDemo();
-            }
-          } else {
-            alert(data.message || "Failed to start demo");
-          }
-          document.getElementById("startBtn").disabled = false;
-          
-          return;
-        }
-
-        currentRunId = data.run_id;
-        if (pollTimer) clearInterval(pollTimer);
-        pollTimer = setInterval(pollStatus, 600);
-        pollStatus();
-      } catch (err) {
-        alert("Error starting demo: " + err.message);
-        document.getElementById("startBtn").disabled = false;
-      }
-    }
-
-    window.addEventListener("DOMContentLoaded", async () => {
-      const params = new URLSearchParams(window.location.search);
-      if (window.location.hostname === "mobiattack-demo.vercel.app") {
-        document.getElementById("presentationNotice").style.display = "block";
-        return;
-      }
-      const transferredTarget = params.get("target");
-      if (transferredTarget) {
-        const transferredPlatform = params.get("platform") === "ios" ? "ios" : "android";
-        document.getElementById("platform-" + transferredPlatform).checked = true;
-        handlePlatformChange();
-        document.getElementById("apkUrl").value = transferredTarget;
-        const transferredMode = params.get("install_mode") === "ui_automation" ? "ui_automation" : "manual";
-        const modeRadio = document.querySelector(`input[name="installMode"][value="${transferredMode}"]`);
-        if (modeRadio) modeRadio.checked = true;
-        handleUrlInput();
-        window.history.replaceState({}, "", "/");
-        return;
-      }
-      let runIdToLoad = params.get("run_id");
-      if (!runIdToLoad) {
-        try {
-          const rResp = await fetch(backendUrl("/api/runs/recent"));
-          if (rResp.ok) {
-            const rData = await rResp.json();
-            if (rData.latest_run_id) runIdToLoad = rData.latest_run_id;
-          }
-        } catch (e) {}
-      }
-      if (runIdToLoad) {
-        try {
-          const resp = await fetch(backendUrl("/api/status/" + encodeURIComponent(runIdToLoad)));
-          if (resp.ok) {
-            const status = await resp.json();
-            if (status && status.result) {
-              const restoredPlatform = status.platform || status.result.platform || "android";
-              const restoredRadio = document.getElementById("platform-" + restoredPlatform);
-              if (restoredRadio) {
-                restoredRadio.checked = true;
-                handlePlatformChange();
-              }
-              const restoredTarget = status.url || (status.result.acquisition && status.result.acquisition.input_url) || "";
-              document.getElementById("apkUrl").value = restoredTarget;
-              handleUrlInput();
-              currentRunId = runIdToLoad;
-              const stages = status.stages || {};
-              for (const [stage, info] of Object.entries(stages)) {
-                setBadge(stage, info.state || "success");
-                setMessage(stage, info.message || "Completed.");
-                if (stage === 'acquisition' && info.data) renderAcquisition(info.data);
-                if (stage === 'preprocessing' && info.data) renderPreprocessing(info.data);
-                if (stage === 'static_analysis' && info.data) renderStatic(info.data);
-                if (stage === 'runtime' && info.data) renderRuntime(info.data);
-              }
-              document.getElementById("completedBanner").style.display = "flex";
-              renderAnalysisResults(status.result, runIdToLoad);
-            }
-          }
-        } catch (e) {
-          console.error("Auto-load run failed:", e);
-        }
-      }
-    });
-
-    async function openPlayStoreOnDevice() {
-      if (!currentRunId) return;
-      try {
-        const resp = await fetch(backendUrl("/api/open_store"), {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ url: document.getElementById("apkUrl").value.trim() })
-        });
-        const data = await resp.json();
-        if (resp.ok && data.success) {
-          alert("Play Store opened on device for package: " + (data.package_name || ""));
-        } else {
-          alert("Failed to open Play Store: " + (data.error || "unknown error"));
-        }
-      } catch (err) {
-        alert("Error invoking Play Store intent: " + err.message);
-      }
-    }
-  </script>
-</body>
-</html>
-"""
-
+from src.web.template_loader import load_dashboard_html
+from src.web.request_helpers import (
+    ensure_vulnerabilities,
+    parse_json_body,
+    send_json,
+    send_file,
+    serve_run_file,
+)
+
+
+# Backward-compatible alias — legacy code may import HTML_PAGE directly.
+# The actual template now lives in src/templates/dashboard.html.
+class _LazyHTML:
+    """Descriptor that defers template loading until first access."""
+    def __repr__(self) -> str:
+        return load_dashboard_html()
+    def __contains__(self, item: str) -> bool:
+        return item in load_dashboard_html()
+    def __str__(self) -> str:
+        return load_dashboard_html()
+    def encode(self, encoding: str = "utf-8") -> bytes:
+        return load_dashboard_html().encode(encoding)
+
+HTML_PAGE = _LazyHTML()
+
+
+# ---------------------------------------------------------------------------
+# Request Handler
+# ---------------------------------------------------------------------------
 
 class _DemoRequestHandler(BaseHTTPRequestHandler):
     """HTTP request handler for the Demo Web Server."""
@@ -3521,16 +65,7 @@ class _DemoRequestHandler(BaseHTTPRequestHandler):
         pass
 
     def _send_json(self, status_code: int, data: dict) -> None:
-        try:
-            body = json.dumps(data, indent=2).encode("utf-8")
-            self.send_response(status_code)
-            self.send_header("Content-Type", "application/json; charset=utf-8")
-            self.send_header("Content-Length", str(len(body)))
-            self.send_header("Connection", "close")
-            self.end_headers()
-            self.wfile.write(body)
-        except (BrokenPipeError, ConnectionResetError, OSError):
-            pass
+        send_json(self, status_code, data)
 
     @property
     def web_server(self) -> DemoWebServer:
@@ -3539,9 +74,12 @@ class _DemoRequestHandler(BaseHTTPRequestHandler):
             return server_obj.web_server
         if hasattr(_DemoRequestHandler, "_global_web_server"):
             return _DemoRequestHandler._global_web_server
+        import os
         global_srv = DemoWebServer(runs_root=os.environ.get("DEMO_RUNS_DIR", "demo_runs"))
         _DemoRequestHandler._global_web_server = global_srv
         return global_srv
+
+    # ── GET Routes ─────────────────────────────────────────────────
 
     def do_GET(self) -> None:
         # Path traversal guard
@@ -3554,74 +92,22 @@ class _DemoRequestHandler(BaseHTTPRequestHandler):
         server: DemoWebServer = self.web_server
 
         if path == "" or path == "/index.html":
-            try:
-                body = HTML_PAGE.encode("utf-8")
-                self.send_response(200)
-                self.send_header("Content-Type", "text/html; charset=utf-8")
-                self.send_header("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0")
-                self.send_header("Pragma", "no-cache")
-                self.send_header("Expires", "0")
-                self.send_header("Content-Length", str(len(body)))
-                self.send_header("Connection", "close")
-                self.end_headers()
-                self.wfile.write(body)
-            except (BrokenPipeError, ConnectionResetError, OSError):
-                pass
+            self._serve_dashboard()
             return
 
         # GET /samples/<filename>
         sample_match = re.match(r"^/samples/([a-zA-Z0-9_\-\.]+\.apk)$", path)
         if sample_match:
-            apk_filename = sample_match.group(1)
-            apk_path = Path(__file__).resolve().parent.parent / apk_filename
-            if not apk_path.is_file():
-                apk_path = Path(apk_filename).resolve()
-            if apk_path.is_file():
-                try:
-                    data = apk_path.read_bytes()
-                    self.send_response(200)
-                    self.send_header("Content-Type", "application/vnd.android.package-archive")
-                    self.send_header("Content-Length", str(len(data)))
-                    self.send_header("Connection", "close")
-                    self.end_headers()
-                    self.wfile.write(data)
-                    return
-                except Exception as e:
-                    self._send_json(500, {"status": "error", "message": str(e)})
-                    return
-            self._send_json(404, {"status": "error", "message": f"Sample APK '{apk_filename}' not found."})
+            self._serve_sample_apk(sample_match.group(1))
             return
 
         # GET /api/runs/recent
         if path == "/api/runs/recent":
-            latest_id = None
-            if server._runs:
-                latest_id = list(server._runs.keys())[-1]
-            else:
-                try:
-                    candidates = []
-                    if server.runs_root.exists():
-                        candidates.extend([d for d in server.runs_root.iterdir() if d.is_dir() and d.name.startswith("run_") and (d / "report.json").exists()])
-                    repo_runs = (Path(__file__).resolve().parent.parent / "demo_runs").resolve()
-                    if repo_runs.exists() and repo_runs != server.runs_root.resolve():
-                        candidates.extend([d for d in repo_runs.iterdir() if d.is_dir() and d.name.startswith("run_") and (d / "report.json").exists()])
-                    run_dirs = sorted(candidates, key=lambda p: p.stat().st_mtime, reverse=True)
-                    if run_dirs:
-                        latest_id = run_dirs[0].name
-                except Exception:
-                    pass
-            self._send_json(200, {"status": "ok", "latest_run_id": latest_id})
+            self._handle_recent_runs(server)
             return
 
-        # GET /api/status/<run_id> or /api/status?run_id=<run_id>
-        status_match = re.match(r"^/api/status/([a-zA-Z0-9_\-]+)$", path)
-        status_run_id = None
-        if status_match:
-            status_run_id = status_match.group(1)
-        elif path.startswith("/api/status"):
-            query_parts = urllib.parse.parse_qs(urllib.parse.urlparse(self.path).query)
-            status_run_id = (query_parts.get("run_id") or [None])[0]
-
+        # GET /api/status/<run_id>
+        status_run_id = self._extract_status_run_id(path)
         if status_run_id:
             status_data = server.get_run_status(status_run_id)
             if status_data is None:
@@ -3633,128 +119,52 @@ class _DemoRequestHandler(BaseHTTPRequestHandler):
         # GET /api/vulnerabilities/<run_id>
         vuln_api_match = re.match(r"^/api/vulnerabilities/([a-zA-Z0-9_\-]+)$", path)
         if vuln_api_match:
-            run_id = vuln_api_match.group(1)
-            status_data = server.get_run_status(run_id)
-            if not status_data:
-                target_dir = (server.runs_root / run_id).resolve()
-                findings_file = target_dir / "security_findings.json"
-                if findings_file.exists():
-                    try:
-                        with open(findings_file, "r", encoding="utf-8") as f:
-                            self._send_json(200, json.load(f))
-                        return
-                    except Exception:
-                        pass
-                report_file = target_dir / "report.json"
-                if report_file.exists():
-                    try:
-                        with open(report_file, "r", encoding="utf-8") as f:
-                            rep = json.load(f)
-                        self._send_json(200, evaluate_vulnerabilities(rep))
-                        return
-                    except Exception:
-                        pass
-                self._send_json(404, {"status": "error", "message": f"Run '{run_id}' not found."})
-                return
-            res = status_data.get("result") or {}
-            vulns = res.get("vulnerabilities") or evaluate_vulnerabilities(res)
-            self._send_json(200, vulns)
+            self._handle_vulnerabilities(vuln_api_match.group(1), server)
             return
 
         # GET /api/report/<run_id>
         report_api_match = re.match(r"^/api/report/([a-zA-Z0-9_\-]+)$", path)
         if report_api_match:
-            run_id = report_api_match.group(1)
-            target_dir = server.get_run_dir(run_id)
-            if not target_dir:
-                self._send_json(404, {"status": "error", "message": f"Report for run '{run_id}' not found."})
-                return
-            report_file = target_dir / "report.json"
-            if not report_file.exists():
-                self._send_json(404, {"status": "error", "message": f"Report for run '{run_id}' not found."})
-                return
-            try:
-                with open(report_file, "r", encoding="utf-8") as f:
-                    report_data = json.load(f)
-                self._send_json(200, report_data)
-            except Exception as e:
-                self._send_json(500, {"status": "error", "message": str(e)})
+            self._handle_report_api(report_api_match.group(1), server)
             return
 
         # GET /reports/<run_id>/report.html
         report_html_match = re.match(r"^/reports/([a-zA-Z0-9_\-]+)/report\.html$", path)
         if report_html_match:
-            run_id = report_html_match.group(1)
-            target_dir = server.get_run_dir(run_id)
-            if not target_dir:
-                self._send_json(404, {"status": "error", "message": f"HTML report for run '{run_id}' not found."})
-                return
-            report_file = target_dir / "report.html"
-            if not report_file.exists():
-                self._send_json(404, {"status": "error", "message": f"HTML report for run '{run_id}' not found."})
-                return
-            try:
-                content = report_file.read_bytes()
-                self.send_response(200)
-                self.send_header("Content-Type", "text/html; charset=utf-8")
-                self.send_header("Content-Length", str(len(content)))
-                self.end_headers()
-                self.wfile.write(content)
-            except Exception as e:
-                self._send_json(500, {"status": "error", "message": str(e)})
+            serve_run_file(
+                self, report_html_match.group(1), "report.html",
+                "text/html; charset=utf-8", server.get_run_dir,
+                label="HTML report",
+            )
             return
 
         # GET /reports/<run_id>/report.json
         report_json_match = re.match(r"^/reports/([a-zA-Z0-9_\-]+)/report\.json$", path)
         if report_json_match:
-            run_id = report_json_match.group(1)
-            target_dir = server.get_run_dir(run_id)
-            if not target_dir:
-                self._send_json(404, {"status": "error", "message": f"JSON report for run '{run_id}' not found."})
-                return
-            report_file = target_dir / "report.json"
-            if not report_file.exists():
-                self._send_json(404, {"status": "error", "message": f"JSON report for run '{run_id}' not found."})
-                return
-            try:
-                content = report_file.read_bytes()
-                self.send_response(200)
-                self.send_header("Content-Type", "application/json; charset=utf-8")
-                self.send_header("Content-Disposition", f'attachment; filename="report_{run_id}.json"')
-                self.send_header("Content-Length", str(len(content)))
-                self.send_header("Connection", "close")
-                self.end_headers()
-                self.wfile.write(content)
-            except Exception as e:
-                self._send_json(500, {"status": "error", "message": str(e)})
+            rid = report_json_match.group(1)
+            serve_run_file(
+                self, rid, "report.json",
+                "application/json; charset=utf-8", server.get_run_dir,
+                disposition_filename=f"report_{rid}.json",
+                label="JSON report",
+            )
             return
 
         # GET /reports/<run_id>/baseline_report.json
         baseline_json_match = re.match(r"^/reports/([a-zA-Z0-9_\-]+)/baseline_report\.json$", path)
         if baseline_json_match:
-            run_id = baseline_json_match.group(1)
-            target_dir = server.get_run_dir(run_id)
-            if not target_dir:
-                self._send_json(404, {"status": "error", "message": f"Baseline report for run '{run_id}' not found."})
-                return
-            baseline_file = target_dir / "baseline_report.json"
-            if not baseline_file.exists():
-                self._send_json(404, {"status": "error", "message": f"Baseline report for run '{run_id}' not found."})
-                return
-            try:
-                content = baseline_file.read_bytes()
-                self.send_response(200)
-                self.send_header("Content-Type", "application/json; charset=utf-8")
-                self.send_header("Content-Disposition", f'attachment; filename="baseline_report_{run_id}.json"')
-                self.send_header("Content-Length", str(len(content)))
-                self.send_header("Connection", "close")
-                self.end_headers()
-                self.wfile.write(content)
-            except Exception as e:
-                self._send_json(500, {"status": "error", "message": str(e)})
+            rid = baseline_json_match.group(1)
+            serve_run_file(
+                self, rid, "baseline_report.json",
+                "application/json; charset=utf-8", server.get_run_dir,
+                disposition_filename=f"baseline_report_{rid}.json",
+                label="Baseline report",
+            )
             return
 
         self._send_json(404, {"status": "error", "message": "Not Found"})
+
+    # ── POST Routes ────────────────────────────────────────────────
 
     def do_POST(self) -> None:
         parsed = urllib.parse.urlparse(self.path)
@@ -3762,18 +172,7 @@ class _DemoRequestHandler(BaseHTTPRequestHandler):
         server: DemoWebServer = self.web_server
 
         if path == "/api/classify":
-            length = int(self.headers.get("Content-Length", 0))
-            raw_body = self.rfile.read(length) if length > 0 else b"{}"
-            try:
-                payload = json.loads(raw_body.decode("utf-8")) if raw_body else {}
-            except Exception:
-                self._send_json(400, {"status": "error", "message": "Invalid JSON payload."})
-                return
-
-            url = payload.get("url", "")
-            platform = payload.get("platform", "android")
-            classification = classify_input_url(url=url, platform=platform)
-            self._send_json(200, classification)
+            self._handle_classify()
             return
 
         if path in ("/api/stop", "/api/cancel"):
@@ -3782,84 +181,211 @@ class _DemoRequestHandler(BaseHTTPRequestHandler):
             return
 
         if path == "/api/open_store":
-            length = int(self.headers.get("Content-Length", 0))
-            raw_body = self.rfile.read(length) if length > 0 else b"{}"
-            try:
-                payload = json.loads(raw_body.decode("utf-8")) if raw_body else {}
-            except Exception:
-                payload = {}
-
-            adb_serial = PRESENTATION_ADB_SERIAL
-            url = payload.get("url")
-            package_name = payload.get("package_name")
-            try:
-                res = open_play_store_on_device(serial=adb_serial, package_name=package_name, play_store_url=url)
-                self._send_json(200, res)
-            except Exception as err:
-                self._send_json(500, {"status": "error", "message": str(err)})
+            self._handle_open_store()
             return
 
         if path == "/api/run":
-            length = int(self.headers.get("Content-Length", 0))
-            raw_body = self.rfile.read(length) if length > 0 else b"{}"
-            try:
-                payload = json.loads(raw_body.decode("utf-8")) if raw_body else {}
-            except Exception:
-                self._send_json(400, {"status": "error", "message": "Invalid JSON payload."})
-                return
-
-            url = payload.get("url", "")
-            if not isinstance(url, str) or not (url.strip().startswith(("http://", "https://", "file://")) or (url.strip().startswith("/") and url.strip().endswith(".ipa"))):
-                self._send_json(400, {"status": "error", "message": "A valid http:// or https:// URL is required."})
-                return
-
-            platform = payload.get("platform", "android")
-            classification = classify_input_url(url=url.strip(), platform=platform)
-            if classification.get("type") in ("not_implemented", "unsupported"):
-                reason = classification.get("message") or classification.get("reason") or "Unsupported URL or platform."
-                self._send_json(400, {
-                    "status": "error",
-                    "error": reason,
-                    "message": reason,
-                })
-                return
-
-            adb_serial = PRESENTATION_ADB_SERIAL
-            reinstall = bool(payload.get("reinstall", True))
-            grant_permissions = bool(payload.get("grant_permissions", False))
-            install_mode = str(payload.get("install_mode", "manual")).strip().lower()
-            if install_mode not in ("manual", "ui_automation"):
-                install_mode = "manual"
-
-            try:
-                run_id = server.start_run(
-                    url=url.strip(),
-                    platform=platform,
-                    adb_serial=adb_serial,
-                    reinstall=reinstall,
-                    grant_permissions=grant_permissions,
-                    install_mode=install_mode,
-                )
-                self._send_json(200, {"status": "ok", "run_id": run_id})
-            except ValueError as err:
-                self._send_json(409, {"status": "error", "message": str(err)})
+            self._handle_run(server)
             return
 
         if path == "/api/probe":
-            length = int(self.headers.get("Content-Length", 0))
-            raw_body = self.rfile.read(length) if length > 0 else b"{}"
-            try:
-                payload = json.loads(raw_body.decode("utf-8")) if raw_body else {}
-            except Exception:
-                payload = {}
-
-            adb_serial = PRESENTATION_ADB_SERIAL
-            probe_res = server.execute_connectivity_probe(adb_serial=adb_serial)
-            self._send_json(200 if probe_res.get("hit") else 500, probe_res)
+            self._handle_probe(server)
             return
 
         self._send_json(404, {"status": "error", "message": "Not Found"})
 
+    # ── Route Implementations ──────────────────────────────────────
+
+    def _serve_dashboard(self) -> None:
+        """Serves the main dashboard HTML page."""
+        try:
+            body = load_dashboard_html().encode("utf-8")
+            self.send_response(200)
+            self.send_header("Content-Type", "text/html; charset=utf-8")
+            self.send_header("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0")
+            self.send_header("Pragma", "no-cache")
+            self.send_header("Expires", "0")
+            self.send_header("Content-Length", str(len(body)))
+            self.send_header("Connection", "close")
+            self.end_headers()
+            self.wfile.write(body)
+        except (BrokenPipeError, ConnectionResetError, OSError):
+            pass
+
+    def _serve_sample_apk(self, apk_filename: str) -> None:
+        """Serves a sample APK file from the project root."""
+        apk_path = Path(__file__).resolve().parent.parent / apk_filename
+        if not apk_path.is_file():
+            apk_path = Path(apk_filename).resolve()
+        if apk_path.is_file():
+            try:
+                send_file(self, apk_path, "application/vnd.android.package-archive")
+                return
+            except Exception as e:
+                self._send_json(500, {"status": "error", "message": str(e)})
+                return
+        self._send_json(404, {"status": "error", "message": f"Sample APK '{apk_filename}' not found."})
+
+    def _extract_status_run_id(self, path: str) -> str | None:
+        """Extracts run_id from status endpoint path or query params."""
+        status_match = re.match(r"^/api/status/([a-zA-Z0-9_\-]+)$", path)
+        if status_match:
+            return status_match.group(1)
+        if path.startswith("/api/status"):
+            query_parts = urllib.parse.parse_qs(urllib.parse.urlparse(self.path).query)
+            return (query_parts.get("run_id") or [None])[0]
+        return None
+
+    def _handle_recent_runs(self, server: DemoWebServer) -> None:
+        """Handles GET /api/runs/recent — returns the latest run ID."""
+        latest_id = None
+        if server._runs:
+            latest_id = list(server._runs.keys())[-1]
+        else:
+            try:
+                candidates = []
+                if server.runs_root.exists():
+                    candidates.extend([d for d in server.runs_root.iterdir() if d.is_dir() and d.name.startswith("run_") and (d / "report.json").exists()])
+                repo_runs = (Path(__file__).resolve().parent.parent / "demo_runs").resolve()
+                if repo_runs.exists() and repo_runs != server.runs_root.resolve():
+                    candidates.extend([d for d in repo_runs.iterdir() if d.is_dir() and d.name.startswith("run_") and (d / "report.json").exists()])
+                run_dirs = sorted(candidates, key=lambda p: p.stat().st_mtime, reverse=True)
+                if run_dirs:
+                    latest_id = run_dirs[0].name
+            except Exception:
+                pass
+        self._send_json(200, {"status": "ok", "latest_run_id": latest_id})
+
+    def _handle_vulnerabilities(self, run_id: str, server: DemoWebServer) -> None:
+        """Handles GET /api/vulnerabilities/<run_id>."""
+        status_data = server.get_run_status(run_id)
+        if not status_data:
+            target_dir = (server.runs_root / run_id).resolve()
+            # Try cached findings first, then regenerate from report
+            for filename, loader in [
+                ("security_findings.json", lambda f: json.load(f)),
+                ("report.json", lambda f: evaluate_vulnerabilities(json.load(f))),
+            ]:
+                fpath = target_dir / filename
+                if fpath.exists():
+                    try:
+                        with open(fpath, "r", encoding="utf-8") as fp:
+                            self._send_json(200, loader(fp))
+                        return
+                    except Exception:
+                        pass
+            self._send_json(404, {"status": "error", "message": f"Run '{run_id}' not found."})
+            return
+
+        res = status_data.get("result") or {}
+        vulns = res.get("vulnerabilities") or evaluate_vulnerabilities(res)
+        self._send_json(200, vulns)
+
+    def _handle_report_api(self, run_id: str, server: DemoWebServer) -> None:
+        """Handles GET /api/report/<run_id> — returns report.json as JSON API."""
+        target_dir = server.get_run_dir(run_id)
+        if not target_dir:
+            self._send_json(404, {"status": "error", "message": f"Report for run '{run_id}' not found."})
+            return
+        report_file = target_dir / "report.json"
+        if not report_file.exists():
+            self._send_json(404, {"status": "error", "message": f"Report for run '{run_id}' not found."})
+            return
+        try:
+            with open(report_file, "r", encoding="utf-8") as f:
+                report_data = json.load(f)
+            self._send_json(200, report_data)
+        except Exception as e:
+            self._send_json(500, {"status": "error", "message": str(e)})
+
+    def _handle_classify(self) -> None:
+        """Handles POST /api/classify — URL classification."""
+        try:
+            payload = parse_json_body(self)
+        except ValueError:
+            self._send_json(400, {"status": "error", "message": "Invalid JSON payload."})
+            return
+
+        url = payload.get("url", "")
+        platform = payload.get("platform", "android")
+        classification = classify_input_url(url=url, platform=platform)
+        self._send_json(200, classification)
+
+    def _handle_open_store(self) -> None:
+        """Handles POST /api/open_store — opens Play Store on device."""
+        try:
+            payload = parse_json_body(self)
+        except ValueError:
+            payload = {}
+
+        adb_serial = PRESENTATION_ADB_SERIAL
+        url = payload.get("url")
+        package_name = payload.get("package_name")
+        try:
+            res = open_play_store_on_device(serial=adb_serial, package_name=package_name, play_store_url=url)
+            self._send_json(200, res)
+        except Exception as err:
+            self._send_json(500, {"status": "error", "message": str(err)})
+
+    def _handle_run(self, server: DemoWebServer) -> None:
+        """Handles POST /api/run — starts a new analysis run."""
+        try:
+            payload = parse_json_body(self)
+        except ValueError:
+            self._send_json(400, {"status": "error", "message": "Invalid JSON payload."})
+            return
+
+        url = payload.get("url", "")
+        if not isinstance(url, str) or not (url.strip().startswith(("http://", "https://", "file://")) or (url.strip().startswith("/") and url.strip().endswith(".ipa"))):
+            self._send_json(400, {"status": "error", "message": "A valid http:// or https:// URL is required."})
+            return
+
+        platform = payload.get("platform", "android")
+        classification = classify_input_url(url=url.strip(), platform=platform)
+        if classification.get("type") in ("not_implemented", "unsupported"):
+            reason = classification.get("message") or classification.get("reason") or "Unsupported URL or platform."
+            self._send_json(400, {
+                "status": "error",
+                "error": reason,
+                "message": reason,
+            })
+            return
+
+        adb_serial = PRESENTATION_ADB_SERIAL
+        reinstall = bool(payload.get("reinstall", True))
+        grant_permissions = bool(payload.get("grant_permissions", False))
+        install_mode = str(payload.get("install_mode", "manual")).strip().lower()
+        if install_mode not in ("manual", "ui_automation"):
+            install_mode = "manual"
+
+        try:
+            run_id = server.start_run(
+                url=url.strip(),
+                platform=platform,
+                adb_serial=adb_serial,
+                reinstall=reinstall,
+                grant_permissions=grant_permissions,
+                install_mode=install_mode,
+            )
+            self._send_json(200, {"status": "ok", "run_id": run_id})
+        except ValueError as err:
+            self._send_json(409, {"status": "error", "message": str(err)})
+
+    def _handle_probe(self, server: DemoWebServer) -> None:
+        """Handles POST /api/probe — connectivity probe."""
+        try:
+            parse_json_body(self)
+        except ValueError:
+            pass
+
+        adb_serial = PRESENTATION_ADB_SERIAL
+        probe_res = server.execute_connectivity_probe(adb_serial=adb_serial)
+        self._send_json(200 if probe_res.get("hit") else 500, probe_res)
+
+
+# ---------------------------------------------------------------------------
+# Web Server
+# ---------------------------------------------------------------------------
 
 class DemoWebServer:
     """Local Web Server managing live dashboard UI, reporting, and background orchestrations."""
@@ -3921,6 +447,7 @@ class DemoWebServer:
                 raise ValueError("Demo already running. Please wait for the current run to complete.")
 
             run_id = f"run_{int(time.time())}_{uuid.uuid4().hex[:6]}"
+            is_ios = str(platform).lower() == "ios"
             self._active_run_id = run_id
             self._runs[run_id] = {
                 "run_id": run_id,
@@ -3928,10 +455,10 @@ class DemoWebServer:
                 "overall_status": "running",
                 "current_stage": "acquisition",
                 "stages": {
-                    "acquisition": {"state": "running", "message": "Starting IPA acquisition..." if str(platform).lower() == "ios" else "Starting APK acquisition...", "data": None},
+                    "acquisition": {"state": "running", "message": "Starting IPA acquisition..." if is_ios else "Starting APK acquisition...", "data": None},
                     "preprocessing": {"state": "pending", "message": "Waiting...", "data": None},
                     "static_analysis": {"state": "pending", "message": "Waiting...", "data": None},
-                    "runtime": {"state": "skipped" if str(platform).lower() == "ios" else "pending", "message": "iOS runtime analysis is not implemented." if str(platform).lower() == "ios" else "Waiting...", "data": None},
+                    "runtime": {"state": "skipped" if is_ios else "pending", "message": "iOS runtime analysis is not implemented." if is_ios else "Waiting...", "data": None},
                 },
                 "error": None,
                 "result": None,
@@ -3968,14 +495,7 @@ class DemoWebServer:
                     run["overall_status"] = "completed"
                     if data and "vulnerabilities" not in data:
                         if data.get("platform") == "ios" or str(platform).lower() == "ios":
-                            data["vulnerabilities"] = {
-                                "status": "not_evaluated",
-                                "reason": "not_implemented",
-                                "risk_score": "NOT_EVALUATED",
-                                "summary": {"critical": 0, "high": 0, "medium": 0, "low": 0, "total": 0},
-                                "findings": [],
-                                "message": "iOS vulnerability evaluation is not implemented in Phase 1.",
-                            }
+                            data["vulnerabilities"] = make_ios_vuln_not_evaluated()
                         else:
                             data["vulnerabilities"] = evaluate_vulnerabilities(data)
                     run["result"] = data
@@ -4008,11 +528,10 @@ class DemoWebServer:
                 install_mode=install_mode,
             )
             # Evaluate vulnerabilities
-            vulns = evaluate_vulnerabilities(res)
-            res["vulnerabilities"] = vulns
+            ensure_vulnerabilities(res)
             try:
                 with open(run_dir / "security_findings.json", "w", encoding="utf-8") as vf:
-                    json.dump(vulns, vf, indent=2)
+                    json.dump(res["vulnerabilities"], vf, indent=2)
             except Exception:
                 pass
 
@@ -4037,48 +556,62 @@ class DemoWebServer:
                         "api_url": f"/api/report/{run_id}",
                     }
         except Exception as exc:
-            with self._lock:
-                run = self._runs.get(run_id)
-                if run and run["overall_status"] != "completed":
-                    run["overall_status"] = "failed"
-                    run["error"] = str(exc)
-                    stage = getattr(exc, "stage", run.get("current_stage", "unknown"))
-                    if stage in run["stages"]:
-                        run["stages"][stage]["state"] = "failed"
-                        run["stages"][stage]["message"] = str(exc)
-                    self._active_run_id = None
+            self._handle_run_failure(run_id, url, platform, adb_serial, reinstall, grant_permissions, run_dir, exc)
 
-                    # Generate partial report on failure
-                    partial_result = {
-                        "input": {
-                            "url": url,
-                            "platform": platform,
-                            "adb_serial": adb_serial,
-                            "reinstall": reinstall,
-                            "grant_permissions": grant_permissions,
-                        },
-                        "acquisition": run["stages"].get("acquisition", {}).get("data"),
-                        "preprocessing": run["stages"].get("preprocessing", {}).get("data"),
-                        "static_analysis": run["stages"].get("static_analysis", {}).get("data"),
-                        "runtime": run["stages"].get("runtime", {}).get("data"),
-                        "demo_status": "failed",
+    def _handle_run_failure(
+        self,
+        run_id: str,
+        url: str,
+        platform: str,
+        adb_serial: str | None,
+        reinstall: bool,
+        grant_permissions: bool,
+        run_dir: Path,
+        exc: Exception,
+    ) -> None:
+        """Handles pipeline execution failure — updates state and generates partial report."""
+        with self._lock:
+            run = self._runs.get(run_id)
+            if run and run["overall_status"] != "completed":
+                run["overall_status"] = "failed"
+                run["error"] = str(exc)
+                stage = getattr(exc, "stage", run.get("current_stage", "unknown"))
+                if stage in run["stages"]:
+                    run["stages"][stage]["state"] = "failed"
+                    run["stages"][stage]["message"] = str(exc)
+                self._active_run_id = None
+
+                # Generate partial report on failure
+                partial_result = {
+                    "input": {
+                        "url": url,
+                        "platform": platform,
+                        "adb_serial": adb_serial,
+                        "reinstall": reinstall,
+                        "grant_permissions": grant_permissions,
+                    },
+                    "acquisition": run["stages"].get("acquisition", {}).get("data"),
+                    "preprocessing": run["stages"].get("preprocessing", {}).get("data"),
+                    "static_analysis": run["stages"].get("static_analysis", {}).get("data"),
+                    "runtime": run["stages"].get("runtime", {}).get("data"),
+                    "demo_status": "failed",
+                }
+                ensure_vulnerabilities(partial_result)
+                try:
+                    generate_reports(
+                        run_dir=run_dir,
+                        run_id=run_id,
+                        pipeline_result=partial_result,
+                        error=str(exc),
+                        current_stage=stage,
+                    )
+                    run["report"] = {
+                        "json_url": f"/reports/{run_id}/report.json",
+                        "html_url": f"/reports/{run_id}/report.html",
+                        "api_url": f"/api/report/{run_id}",
                     }
-                    partial_result["vulnerabilities"] = evaluate_vulnerabilities(partial_result)
-                    try:
-                        generate_reports(
-                            run_dir=run_dir,
-                            run_id=run_id,
-                            pipeline_result=partial_result,
-                            error=str(exc),
-                            current_stage=stage,
-                        )
-                        run["report"] = {
-                            "json_url": f"/reports/{run_id}/report.json",
-                            "html_url": f"/reports/{run_id}/report.html",
-                            "api_url": f"/api/report/{run_id}",
-                        }
-                    except Exception:
-                        pass
+                except Exception:
+                    pass
 
     def stop_active_run(self) -> dict:
         """Stops the current active demo run and clears the lock."""
@@ -4112,91 +645,107 @@ class DemoWebServer:
         with self._lock:
             run = self._runs.get(run_id)
             if not run:
-                # Disk fallback
-                run_dir = self.get_run_dir(run_id)
-                if run_dir:
-                    report_file = run_dir / "report.json"
-                    if report_file.exists():
-                        try:
-                            with open(report_file, "r", encoding="utf-8") as f:
-                                rep_data = json.load(f)
-                            vuln_file = run_dir / "security_findings.json"
-                            vulns = None
-                            if vuln_file.exists():
-                                with open(vuln_file, "r", encoding="utf-8") as vf:
-                                    vulns = json.load(vf)
-                            if not vulns:
-                                vulns = evaluate_vulnerabilities(rep_data)
-                            rep_data["vulnerabilities"] = vulns
-                            runtime_data = rep_data.get("runtime")
-                            is_ios = str(rep_data.get("platform") or rep_data.get("input", {}).get("platform") or "").lower() == "ios"
-                            runtime_not_implemented = isinstance(runtime_data, dict) and runtime_data.get("status") == "not_implemented"
-                            runtime_state = "skipped" if is_ios or runtime_not_implemented else "success"
-                            runtime_message = (
-                                "iOS runtime analysis is not implemented."
-                                if runtime_state == "skipped"
-                                else "Runtime completed."
-                            )
-                            return {
-                                "run_id": run_id,
-                                "url": rep_data.get("acquisition", {}).get("input_url"),
-                                "platform": rep_data.get("platform"),
-                                "overall_status": "completed",
-                                "current_stage": "completed",
-                                "result": rep_data,
-                                "report": {
-                                    "json_url": f"/reports/{run_id}/report.json",
-                                    "html_url": f"/reports/{run_id}/report.html",
-                                    "api_url": f"/api/report/{run_id}",
-                                },
-                                "stages": {
-                                    "acquisition": {"state": "success", "message": "Acquisition completed.", "data": rep_data.get("acquisition")},
-                                    "preprocessing": {"state": "success", "message": "Preprocessing completed.", "data": rep_data.get("preprocessing")},
-                                    "static_analysis": {"state": "success", "message": "Static analysis completed.", "data": rep_data.get("static_analysis") or rep_data},
-                                    "runtime": {"state": runtime_state, "message": runtime_message, "data": runtime_data},
-                                }
-                            }
-                        except Exception:
-                            pass
-                return None
-            status_copy = {
-                "run_id": run.get("run_id"),
-                "url": run.get("url"),
-                "platform": run.get("platform"),
-                "overall_status": run.get("overall_status"),
-                "current_stage": run.get("current_stage"),
-                "error": run.get("error"),
-                "report": run.get("report"),
-                "stages": {},
+                return self._load_status_from_disk(run_id)
+            return self._build_status_response(run)
+
+    def _load_status_from_disk(self, run_id: str) -> dict | None:
+        """Loads run status from persisted report.json on disk."""
+        run_dir = self.get_run_dir(run_id)
+        if not run_dir:
+            return None
+
+        report_file = run_dir / "report.json"
+        if not report_file.exists():
+            return None
+
+        try:
+            with open(report_file, "r", encoding="utf-8") as f:
+                rep_data = json.load(f)
+
+            # Load or compute vulnerabilities
+            vuln_file = run_dir / "security_findings.json"
+            if vuln_file.exists():
+                with open(vuln_file, "r", encoding="utf-8") as vf:
+                    rep_data["vulnerabilities"] = json.load(vf)
+            else:
+                ensure_vulnerabilities(rep_data)
+
+            runtime_data = rep_data.get("runtime")
+            is_ios = str(rep_data.get("platform") or rep_data.get("input", {}).get("platform") or "").lower() == "ios"
+            runtime_not_implemented = isinstance(runtime_data, dict) and runtime_data.get("status") == "not_implemented"
+            runtime_state = "skipped" if is_ios or runtime_not_implemented else "success"
+            runtime_message = (
+                "iOS runtime analysis is not implemented."
+                if runtime_state == "skipped"
+                else "Runtime completed."
+            )
+            return {
+                "run_id": run_id,
+                "overall_status": "completed",
+                "current_stage": "completed",
+                "result": rep_data,
+                "report": {
+                    "json_url": f"/reports/{run_id}/report.json",
+                    "html_url": f"/reports/{run_id}/report.html",
+                    "api_url": f"/api/report/{run_id}",
+                },
+                "stages": {
+                    "acquisition": {"state": "success", "message": "Acquisition completed.", "data": rep_data.get("acquisition")},
+                    "preprocessing": {"state": "success", "message": "Preprocessing completed.", "data": rep_data.get("preprocessing")},
+                    "static_analysis": {"state": "success", "message": "Static analysis completed.", "data": rep_data.get("static_analysis")},
+                    "runtime": {"state": runtime_state, "message": runtime_message, "data": runtime_data},
+                },
             }
-            if run.get("result"):
-                res_dict = dict(run["result"])
-                if "vulnerabilities" not in res_dict:
-                    res_dict["vulnerabilities"] = evaluate_vulnerabilities(res_dict)
-                status_copy["result"] = res_dict
+        except Exception:
+            return None
 
-            for st_name, st_info in run.get("stages", {}).items():
-                st_data = st_info.get("data")
-                light_data = st_data
-                if st_name == "static_analysis" and isinstance(st_data, dict):
-                    light_data = dict(st_data)
-                    api_cands = st_data.get("api_candidates", [])
-                    light_data["api_candidates_count"] = len(api_cands) if isinstance(api_cands, (list, tuple)) else 0
-                    light_data["api_candidates"] = []
-                    net = st_data.get("network_indicators")
-                    if isinstance(net, dict):
-                        light_net = dict(net)
-                        path_cands = net.get("path_candidates", [])
-                        light_net["path_candidates_count"] = len(path_cands) if isinstance(path_cands, (list, tuple)) else 0
-                        light_net["path_candidates"] = []
-                        light_data["network_indicators"] = light_net
+    def _build_status_response(self, run: dict) -> dict:
+        """Builds a status response dict from an in-memory run record."""
+        status_copy = {
+            "run_id": run.get("run_id"),
+            "url": run.get("url"),
+            "platform": run.get("platform"),
+            "overall_status": run.get("overall_status"),
+            "current_stage": run.get("current_stage"),
+            "error": run.get("error"),
+            "report": run.get("report"),
+            "stages": {},
+        }
+        if run.get("result"):
+            res_dict = dict(run["result"])
+            ensure_vulnerabilities(res_dict)
+            status_copy["result"] = res_dict
 
-                status_copy["stages"][st_name] = {
-                    "state": st_info.get("state"),
-                    "message": st_info.get("message"),
-                    "data": light_data,
-                }
-            return status_copy
+        for st_name, st_info in run.get("stages", {}).items():
+            st_data = st_info.get("data")
+            light_data = self._lighten_stage_data(st_name, st_data)
+            status_copy["stages"][st_name] = {
+                "state": st_info.get("state"),
+                "message": st_info.get("message"),
+                "data": light_data,
+            }
+        return status_copy
+
+    @staticmethod
+    def _lighten_stage_data(stage_name: str, data: dict | None) -> dict | None:
+        """Strips heavy payload fields from stage data for status responses."""
+        if stage_name != "static_analysis" or not isinstance(data, dict):
+            return data
+
+        light_data = dict(data)
+        api_cands = data.get("api_candidates", [])
+        light_data["api_candidates_count"] = len(api_cands) if isinstance(api_cands, (list, tuple)) else 0
+        light_data["api_candidates"] = []
+
+        net = data.get("network_indicators")
+        if isinstance(net, dict):
+            light_net = dict(net)
+            path_cands = net.get("path_candidates", [])
+            light_net["path_candidates_count"] = len(path_cands) if isinstance(path_cands, (list, tuple)) else 0
+            light_net["path_candidates"] = []
+            light_data["network_indicators"] = light_net
+
+        return light_data
 
     def execute_connectivity_probe(self, adb_serial: str = PRESENTATION_ADB_SERIAL, timeout: float = 12.0) -> dict:
         """Executes a standalone Task 10 emulator connectivity check."""

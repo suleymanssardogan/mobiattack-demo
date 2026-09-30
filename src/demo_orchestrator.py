@@ -35,6 +35,7 @@ import urllib.parse
 import urllib.request
 from src.platform_detector import detect_platform
 from src.ios.ipa_extractor import IpaExtractionError, extract_ipa
+from src.constants import make_ios_vuln_not_evaluated, IOS_RUNTIME_NOT_IMPLEMENTED
 from src.ios.ios_static_context_builder import build_ios_static_context
 
 
@@ -187,11 +188,8 @@ def _run_ios_pipeline(
     # STAGE 4: RUNTIME VERIFICATION (Explicit factual state)
     # -------------------------------------------------------------
     _emit_progress(progress_callback, "runtime", "skipped", "iOS runtime launch verification is not implemented in Phase 1.")
-    runtime_meta = {
-        "status": "not_implemented",
-        "platform": "ios",
-        "message": "Runtime launch verification is not implemented for iOS in Phase 1.",
-    }
+    import copy
+    runtime_meta = copy.deepcopy(IOS_RUNTIME_NOT_IMPLEMENTED)
 
     # -------------------------------------------------------------
     # STAGE 5: RESULT ASSEMBLY
@@ -223,14 +221,7 @@ def _run_ios_pipeline(
         "preprocessing": prep_meta,
         "static_analysis": static_context,
         "runtime": runtime_meta,
-        "vulnerabilities": {
-            "status": "not_evaluated",
-            "reason": "not_implemented",
-            "risk_score": "NOT_EVALUATED",
-            "summary": {"critical": 0, "high": 0, "medium": 0, "low": 0, "total": 0},
-            "findings": [],
-            "message": "iOS vulnerability evaluation is not implemented in Phase 1.",
-        },
+        "vulnerabilities": make_ios_vuln_not_evaluated(),
         "demo3_scan": demo3_scan,
         "demo_status": "completed",
     }
