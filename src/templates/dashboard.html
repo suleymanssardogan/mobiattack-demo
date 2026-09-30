@@ -964,6 +964,7 @@
         <div class="sidebar-section">
           <div class="sidebar-group-title">Action</div>
           <button class="btn btn-primary" id="startBtn" onclick="startDemo()" data-action="START DEMO" title="START DEMO">▶ Start Analysis</button>
+          <button class="btn btn-secondary" id="resetBtn" onclick="resetDashboardToInitial()" style="margin-top:8px; width:100%; font-size:12px;">↺ Reset View</button>
           <button class="btn btn-stop" id="stopBtn" onclick="stopDemo()" style="display:none; margin-top:8px; width:100%;">Stop Analysis</button>
         </div>
       </div>
@@ -3551,67 +3552,65 @@
       }
     }
 
+    function resetDashboardToInitial() {
+      currentRunId = null;
+      if (pollTimer) {
+        clearInterval(pollTimer);
+        pollTimer = null;
+      }
+
+      // Clear input and classification
+      const apkUrlEl = document.getElementById("apkUrl");
+      if (apkUrlEl) apkUrlEl.value = "";
+      const classBadge = document.getElementById("urlClassificationBadge");
+      if (classBadge) {
+        classBadge.style.display = "none";
+        classBadge.textContent = "";
+      }
+
+      // Reset options
+      const reinstallEl = document.getElementById("reinstall");
+      if (reinstallEl) reinstallEl.checked = true;
+      const permEl = document.getElementById("grantPermissions");
+      if (permEl) permEl.checked = false;
+
+      // Hide banners and analysis section
+      const compBanner = document.getElementById("completedBanner");
+      if (compBanner) compBanner.style.display = "none";
+      const errBanner = document.getElementById("errorBanner");
+      if (errBanner) errBanner.style.display = "none";
+      const anaSection = document.getElementById("analysisSection");
+      if (anaSection) anaSection.style.display = "none";
+
+      // Reset all 4 stages to clean initial pending state
+      ["acquisition", "preprocessing", "static_analysis", "runtime"].forEach(stage => {
+        setBadge(stage, "pending");
+        setMessage(stage, "Waiting...");
+        const detailsEl = document.getElementById("details-" + stage);
+        if (detailsEl) detailsEl.innerHTML = "";
+      });
+
+      // Enable start button and hide stop button
+      const startBtn = document.getElementById("startBtn");
+      if (startBtn) startBtn.disabled = false;
+      const stopBtn = document.getElementById("stopBtn");
+      if (stopBtn) stopBtn.style.display = "none";
+    }
+
     window.addEventListener("DOMContentLoaded", async () => {
-      const params = new URLSearchParams(window.location.search);
+      // Clean query parameters on refresh so page always loads with a fresh slate
+      if (window.location.search) {
+        window.history.replaceState({}, "", window.location.pathname);
+      }
+
+      // Reset all views, inputs, and stage cards
+      resetDashboardToInitial();
+
+      // Legacy presentation notice check preserved for backward compatibility
       if (window.location.hostname === "mobiattack-demo.vercel.app" && window.location.search.includes("local=1")) {
-        document.getElementById("presentationNotice").style.display = "block";
+        const pNotice = document.getElementById("presentationNotice");
+        if (pNotice) pNotice.style.display = "block";
         return;
-      }
-      const transferredTarget = params.get("target");
-      if (transferredTarget) {
-        const transferredPlatform = params.get("platform") === "ios" ? "ios" : "android";
-        document.getElementById("platform-" + transferredPlatform).checked = true;
-        handlePlatformChange();
-        document.getElementById("apkUrl").value = transferredTarget;
-        const transferredMode = params.get("install_mode") === "ui_automation" ? "ui_automation" : "manual";
-        const modeRadio = document.querySelector(`input[name="installMode"][value="${transferredMode}"]`);
-        if (modeRadio) modeRadio.checked = true;
-        handleUrlInput();
-        window.history.replaceState({}, "", "/");
-        return;
-      }
-      let runIdToLoad = params.get("run_id");
-      if (!runIdToLoad) {
-        try {
-          const rResp = await fetch(backendUrl("/api/runs/recent"));
-          if (rResp.ok) {
-            const rData = await rResp.json();
-            if (rData.latest_run_id) runIdToLoad = rData.latest_run_id;
-          }
-        } catch (e) {}
-      }
-      if (runIdToLoad) {
-        try {
-          const resp = await fetch(backendUrl("/api/status/" + encodeURIComponent(runIdToLoad)));
-          if (resp.ok) {
-            const status = await resp.json();
-            if (status && status.result) {
-              const restoredPlatform = status.platform || status.result.platform || "android";
-              const restoredRadio = document.getElementById("platform-" + restoredPlatform);
-              if (restoredRadio) {
-                restoredRadio.checked = true;
-                handlePlatformChange();
-              }
-              const restoredTarget = status.url || (status.result.acquisition && status.result.acquisition.input_url) || "";
-              document.getElementById("apkUrl").value = restoredTarget;
-              handleUrlInput();
-              currentRunId = runIdToLoad;
-              const stages = status.stages || {};
-              for (const [stage, info] of Object.entries(stages)) {
-                setBadge(stage, info.state || "success");
-                setMessage(stage, info.message || "Completed.");
-                if (stage === 'acquisition' && info.data) renderAcquisition(info.data);
-                if (stage === 'preprocessing' && info.data) renderPreprocessing(info.data);
-                if (stage === 'static_analysis' && info.data) renderStatic(info.data);
-                if (stage === 'runtime' && info.data) renderRuntime(info.data);
-              }
-              document.getElementById("completedBanner").style.display = "flex";
-              renderAnalysisResults(status.result, runIdToLoad);
-            }
-          }
-        } catch (e) {
-          console.error("Auto-load run failed:", e);
-        }
       }
     });
 
