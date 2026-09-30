@@ -379,7 +379,8 @@ HTML_PAGE = """<!DOCTYPE html>
     }
 
     .stage-card {
-      flex: 1;
+      flex: 1 1 0;
+      min-width: 0;
       background: transparent;
       border: none;
       border-right: 1px solid var(--border);
@@ -410,6 +411,12 @@ HTML_PAGE = """<!DOCTYPE html>
 
     .stage-title { font-size: 12px; font-weight: 600; color: var(--text); }
     .stage-message { font-size: 11.5px; color: var(--text-3); margin-bottom: 4px; flex: 1; }
+
+    .stage-header { gap: 8px; flex-wrap: wrap; }
+    .stage-details .kv-row { display: block; }
+    .stage-details .kv-key,
+    .stage-details .kv-val { display: block; text-align: left; white-space: normal; word-break: normal; overflow-wrap: anywhere; }
+    .stage-details .kv-val { margin-top: 3px; }
 
     .stage-details {
       font-size: 11px;
@@ -890,6 +897,13 @@ HTML_PAGE = """<!DOCTYPE html>
       overflow: auto;
       border: 1px solid #1e293b;
     }
+    @media (max-width: 900px) {
+      .page-body { grid-template-columns: minmax(0, 1fr); }
+      .sidebar { position: relative; top: 0; max-height: none; }
+      .main-content { width: 100%; min-width: 0; padding: 24px 16px 40px; }
+      .stages-grid { flex-direction: column; }
+      .stage-card { border-right: none; border-bottom: 1px solid var(--border); }
+    }
   </style>
 </head>
 <body>
@@ -1154,12 +1168,12 @@ HTML_PAGE = """<!DOCTYPE html>
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:10px;">
               <div>
                 <div class="section-subtitle" style="margin-bottom:2px;">Security Findings</div>
-                <div style="font-size:12px; color:var(--text-3);">Automated static evaluation mapped to OWASP MASVS</div>
+                <div id="findingsSubtitle" style="font-size:12px; color:var(--text-3);">Automated static evaluation mapped to OWASP MASVS</div>
               </div>
               <div id="riskScoreBadgeContainer"></div>
             </div>
 
-            <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:10px; margin-bottom:16px;">
+            <div id="findingsSeverityGrid" style="display:grid; grid-template-columns:repeat(4, 1fr); gap:10px; margin-bottom:16px;">
               <div style="background:var(--error-bg); border:1px solid #fecaca; border-radius:8px; padding:12px; text-align:center;">
                 <div style="font-size:10px; font-weight:600; color:var(--error); text-transform:uppercase; letter-spacing:0.5px;">Critical</div>
                 <div id="countCritical" style="font-size:22px; font-weight:700; color:var(--error); margin-top:2px;">0</div>
@@ -1178,7 +1192,7 @@ HTML_PAGE = """<!DOCTYPE html>
               </div>
             </div>
 
-            <div style="display:flex; align-items:center; gap:8px; margin-bottom:14px; flex-wrap:wrap;">
+            <div id="findingsFilterBar" style="display:flex; align-items:center; gap:8px; margin-bottom:14px; flex-wrap:wrap;">
               <span style="font-size:12px; color:var(--text-3); font-weight:500;">Filter:</span>
               <button class="btn btn-secondary filter-btn active" onclick="filterFindings('ALL', this)" style="padding:3px 10px; font-size:11px;">All (<span id="filterCountAll">0</span>)</button>
               <button class="btn btn-secondary filter-btn" onclick="filterFindings('CRITICAL', this)" style="padding:3px 10px; font-size:11px; color:var(--error);">Critical (<span id="filterCountCrit">0</span>)</button>
@@ -2292,6 +2306,12 @@ HTML_PAGE = """<!DOCTYPE html>
       const isNotEvaluated = findingsData.status === "not_evaluated" || findingsData.risk_score === "NOT_EVALUATED";
       const risk = (findingsData.risk_score || (isNotEvaluated ? "NOT_EVALUATED" : "CLEAN")).toUpperCase();
 
+      document.getElementById("findingsSeverityGrid").style.display = isNotEvaluated ? "none" : "grid";
+      document.getElementById("findingsFilterBar").style.display = isNotEvaluated ? "none" : "flex";
+      document.getElementById("findingsSubtitle").textContent = isNotEvaluated
+        ? "iOS package facts are available; vulnerability rules have not been run."
+        : "Automated static evaluation mapped to OWASP MASVS";
+
       // Counts
       document.getElementById("findingsCountTag").textContent = isNotEvaluated ? "N/A" : (sum.total || 0);
       document.getElementById("countCritical").textContent = sum.critical || 0;
@@ -2363,11 +2383,10 @@ HTML_PAGE = """<!DOCTYPE html>
       if (currentVulnData && (currentVulnData.status === "not_evaluated" || currentVulnData.risk_score === "NOT_EVALUATED")) {
         container.innerHTML = `
           <div style="background:rgba(167,139,250,0.06); border:1px solid rgba(167,139,250,0.25); border-radius:6px; padding:24px; text-align:center;">
-            <div style="font-weight:700; font-size:15px; margin-bottom:6px; color:#f1f5f9;">Vulnerability Analysis</div>
-            <div style="font-size:14px; font-weight:700; color:#a78bfa; margin-bottom:8px;">Not evaluated</div>
-            <div style="font-size:12.5px; color:var(--text-muted); margin-bottom:6px;"><strong>Reason:</strong> iOS vulnerability evaluation is not implemented in Phase 1.</div>
-            <div style="font-size:11.5px; color:var(--text-dim); line-height:1.5; max-width:620px; margin:0 auto;">
-              0 findings does not imply the application is clean or secure. Absence of evaluation is not a negative finding (unsupported != passed, not evaluated != secure).
+            <div style="font-weight:700; font-size:15px; margin-bottom:6px; color:#172033;">Vulnerability analysis not evaluated</div>
+            <div style="font-size:12.5px; color:#344054; margin-bottom:6px;">iOS risk rules are not implemented in this version. The IPA's static facts remain available in the other tabs and reports.</div>
+            <div style="font-size:11.5px; color:#667085; line-height:1.5; max-width:620px; margin:0 auto;">
+              No security conclusion can be drawn from the absence of iOS findings.
             </div>
           </div>
         `;
@@ -2475,8 +2494,8 @@ HTML_PAGE = """<!DOCTYPE html>
 
       const acq = result.acquisition || {};
       const prep = result.preprocessing || {};
-      const stat = result.static_analysis || {};
-      const app = stat.app || {};
+      const stat = result.static_analysis || result;
+      const app = stat.app || stat.application || {};
       const struct = stat.structure || {};
       const net = stat.network_indicators || {};
       const candidates = stat.api_candidates || [];
@@ -2551,7 +2570,7 @@ HTML_PAGE = """<!DOCTYPE html>
 
       const filesCount = (demo3Scan.statistics && demo3Scan.statistics.files_analyzed !== undefined)
         ? demo3Scan.statistics.files_analyzed
-        : (prep.decompiled_files || struct.total_files || (apkComponents.reduce((acc, c) => acc + (c.dex_count || 1), 0)) || '-');
+        : (prep.decompiled_files || prep.total_files || struct.total_files || (apkComponents.reduce((acc, c) => acc + (c.dex_count || 1), 0)) || '-');
       const sumFiles = document.getElementById("sumFiles");
       if (sumFiles) {
         sumFiles.textContent = typeof filesCount === 'number' ? filesCount.toLocaleString() : filesCount;
@@ -3442,6 +3461,15 @@ HTML_PAGE = """<!DOCTYPE html>
           if (resp.ok) {
             const status = await resp.json();
             if (status && status.result) {
+              const restoredPlatform = status.platform || status.result.platform || "android";
+              const restoredRadio = document.getElementById("platform-" + restoredPlatform);
+              if (restoredRadio) {
+                restoredRadio.checked = true;
+                handlePlatformChange();
+              }
+              const restoredTarget = status.url || (status.result.acquisition && status.result.acquisition.input_url) || "";
+              document.getElementById("apkUrl").value = restoredTarget;
+              handleUrlInput();
               currentRunId = runIdToLoad;
               const stages = status.stages || {};
               for (const [stage, info] of Object.entries(stages)) {
@@ -4111,6 +4139,8 @@ class DemoWebServer:
                             )
                             return {
                                 "run_id": run_id,
+                                "url": rep_data.get("acquisition", {}).get("input_url"),
+                                "platform": rep_data.get("platform"),
                                 "overall_status": "completed",
                                 "current_stage": "completed",
                                 "result": rep_data,
@@ -4122,7 +4152,7 @@ class DemoWebServer:
                                 "stages": {
                                     "acquisition": {"state": "success", "message": "Acquisition completed.", "data": rep_data.get("acquisition")},
                                     "preprocessing": {"state": "success", "message": "Preprocessing completed.", "data": rep_data.get("preprocessing")},
-                                    "static_analysis": {"state": "success", "message": "Static analysis completed.", "data": rep_data.get("static_analysis")},
+                                    "static_analysis": {"state": "success", "message": "Static analysis completed.", "data": rep_data.get("static_analysis") or rep_data},
                                     "runtime": {"state": runtime_state, "message": runtime_message, "data": runtime_data},
                                 }
                             }
