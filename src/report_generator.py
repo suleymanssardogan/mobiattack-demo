@@ -390,10 +390,19 @@ def _render_ios_html_report(report: dict[str, Any]) -> str:
         ent_html = f"<p class='empty-text'>Entitlements status: {ent_status} ({html.escape(str(ents.get('reason', 'no entitlements extracted')))}).</p>"
 
     # Network Indicators
-    net_urls = net.get("network_urls", [])
-    domains = net.get("domains", [])
-    ips = net.get("ip_addresses", [])
-    paths = net.get("path_candidates", [])
+    def app_owned(items: list[dict]) -> list[dict]:
+        return [item for item in items if not any(
+            marker in str(item.get("source_file", "")).lower()
+            for marker in ("/frameworks/", "/assets.plist", "/readme.txt")
+        ) and not any(
+            marker in str(item.get("value", "")).lower()
+            for marker in ("crl.apple.com/", "ocsp.apple.com/", "apple.com/certificateauthority/", "apple.com/appleca/")
+        )]
+
+    net_urls = app_owned(net.get("network_urls", []))
+    domains = app_owned(net.get("domains", []))
+    ips = app_owned(net.get("ip_addresses", []))
+    paths = app_owned(net.get("path_candidates", []))
 
     def render_indicator_table(items: list[dict], label: str, default_type: str) -> str:
         if not items:
@@ -511,6 +520,7 @@ def _render_ios_html_report(report: dict[str, Any]) -> str:
 
     <div class="section">
       <h2>6. Static Network Indicators</h2>
+      <p style="color:#94a3b8; font-size:13px;">App-owned artifacts only; the JSON report retains the full raw indicator set, including embedded frameworks and documentation.</p>
       <h4>Network URLs ({len(net_urls)})</h4>
       {urls_html}
       <h4 style="margin-top:14px;">Domains ({len(domains)})</h4>

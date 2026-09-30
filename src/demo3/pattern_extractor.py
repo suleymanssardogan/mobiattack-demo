@@ -6,6 +6,7 @@ import re
 from typing import Generator
 
 from src.demo3.candidate_model import RawCandidate
+from src.ios.ios_network_indicator_extractor import is_valid_domain
 
 # Regex patterns
 NETWORK_URL_RE = re.compile(r'\bhttps?://[a-zA-Z0-9][-a-zA-Z0-9.]*(?::[0-9]+)?(?:/[^\s"\'<>]*)?')
@@ -175,6 +176,17 @@ def extract_candidates_from_text(
     # 4. Bare Domains (ignoring hosts already represented inside URLs on this line)
     for m in DOMAIN_RE.finditer(line):
         val = _clean_trailing(m.group(0))
+        if not is_valid_domain(val):
+            continue
+        if val.lower().startswith(("com.", "org.", "net.")):
+            continue
+        if any(ch.isupper() for label in val.split(".") for ch in label[1:]):
+            continue
+        # Do not report a partial package/class identifier as a host.
+        if m.start() > 0 and (line[m.start() - 1].isalnum() or line[m.start() - 1] in "._"):
+            continue
+        if m.end() < len(line) and (line[m.end()].isalnum() or line[m.end()] in "._"):
+            continue
         if any(val in u for u in all_urls_on_line):
             continue
         val_lower = val.lower()

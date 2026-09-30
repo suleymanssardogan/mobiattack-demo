@@ -51,6 +51,11 @@ def scan_artifacts_deterministically(
                         line_str = line.strip()
                         if not line_str:
                             continue
+                        # Smali class/method descriptors contain slash-delimited
+                        # package names that look like API routes. Only literal
+                        # strings are evidence of embedded network values.
+                        if fpath.suffix.lower() == ".smali" and "const-string" not in line_str:
+                            continue
                         for raw_cand in extract_candidates_from_text(line, rel_path, line_num):
                             deduplicator.add_raw(raw_cand)
                             raw_candidates_count += 1

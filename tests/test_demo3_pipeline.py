@@ -56,6 +56,13 @@ class TestDemo3Pipeline(unittest.TestCase):
         self.assertEqual(c.extraction_method, "network_url_pattern")
         self.assertIn("https://api.example.com", c.evidence)
 
+    def test_smali_class_paths_are_not_api_candidates(self) -> None:
+        smali = self.root_path / "Client.smali"
+        smali.write_text(""".class public Lcom/google/android/api/internal/Client;\nconst-string v0, "com.google.android.youtube.tv"\nconst-string v1, "CharMatcher.is"\nconst-string v2, "https://api.example.com/v1/users"\n""")
+        scan = scan_artifacts_deterministically(self.root_path, include_fuel_smali=False)
+        self.assertEqual([(c["type"], c["value"]) for c in scan["candidates"]],
+                         [("url", "https://api.example.com/v1/users")])
+
     # --- TEST 2: Normalization ---
     def test_02_normalization_preserves_semantics(self) -> None:
         # Case A: URL host lowercasing, path/query case preserved, default port stripped
@@ -206,6 +213,43 @@ class TestDemo3Pipeline(unittest.TestCase):
         with open(out_path, "r", encoding="utf-8") as f:
             disk_data = json.load(f)
         self.assertEqual(disk_data["schema_version"], "1.0.0")
+
+    def test_baseline_uses_scan_statistics_and_request_context_route(self) -> None:
+        result = {
+            "platform": "android",
+            "demo_status": "completed",
+            "demo3_scan": {
+                "status": "completed",
+                "statistics": {"files_discovered": 3, "files_analyzed": 2, "files_skipped": 1, "files_failed": 0},
+                "candidates": [],
+            },
+            "static_analysis": {
+                "api_candidates": [{"path": "/signup", "full_url": "https://api.example.com/signup",
+                                    "method": "POST", "source_file": "Client.smali", "request_line": 42}],
+            },
+        }
+        report = build_baseline_report("run_context", result)
+        self.assertEqual(report["analysis"]["files_discovered"], 3)
+        self.assertEqual([(c["type"], c["value"]) for c in report["inventory"]["candidates"]],
+                         [("api_path", "/signup"), ("url", "https://api.example.com/signup")])
+        validate_baseline_report(report)
+
+    def test_ios_inventory_prioritizes_app_urls_over_certificate_metadata(self) -> None:
+        result = {
+            "platform": "ios", "demo_status": "completed",
+            "demo3_scan": {"status": "completed", "statistics": {"files_discovered": 2, "files_analyzed": 1,
+                "files_skipped": 1, "files_failed": 0}, "candidates": []},
+            "static_analysis": {"network_indicators": {"network_urls": [
+                {"value": "https://api.example.com/login", "source_file": "Payload/App.app/App"},
+                {"value": "http://crl.apple.com/root.crl0", "source_file": "Payload/App.app/App"},
+                {"value": "https://docs.example.com", "source_file": "Payload/App.app/Frameworks/SDK.framework/SDK"},
+            ]}},
+        }
+        report = build_baseline_report("run_ios", result)
+        self.assertEqual([c["value"] for c in report["inventory"]["candidates"]],
+                         ["https://api.example.com/login"])
+        self.assertEqual(report["analysis"]["files_discovered"], 2)
+        validate_baseline_report(report)
 
     # --- TEST 7: Malformed candidate / report fails validation correctly ---
     def test_07_malformed_report_fails_validation(self) -> None:

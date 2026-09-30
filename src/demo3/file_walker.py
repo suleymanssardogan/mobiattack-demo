@@ -90,6 +90,13 @@ def deterministic_walk(
         rel_path = fpath.relative_to(root_path).as_posix()
         ext = fpath.suffix.lower()
 
+        # Apktool keeps the original binary manifest beside the decoded text
+        # manifest. It is expected binary input, not a failed text scan.
+        if rel_path == "original/AndroidManifest.xml":
+            if stats:
+                stats.files_skipped += 1
+            continue
+
         # Check explicit exclusions or non-supported types
         if ext in EXCLUDED_EXTENSIONS or (ext not in SUPPORTED_EXTENSIONS and not fpath.name.lower().endswith("manifest.xml")):
             if stats:

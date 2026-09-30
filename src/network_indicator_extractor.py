@@ -19,6 +19,7 @@ Semantic Notes:
 
 from pathlib import Path
 import re
+from src.ios.ios_network_indicator_extractor import is_valid_domain
 
 # Supported textual extensions to scan
 SUPPORTED_EXTENSIONS = {
@@ -220,6 +221,8 @@ def extract_network_indicators(analysis_root: str | Path) -> dict:
                 line = raw_line.strip()
                 if not line:
                     continue
+                if ext == ".smali" and "const-string" not in line:
+                    continue
 
                 line_network_urls: list[str] = []
                 line_local_urls: list[str] = []
@@ -275,6 +278,16 @@ def extract_network_indicators(analysis_root: str | Path) -> dict:
                 for m in DOMAIN_RE.finditer(line):
                     dom_val = _clean_trailing_punctuation(m.group(0))
                     dom_lower = dom_val.lower()
+                    if not is_valid_domain(dom_val):
+                        continue
+                    if dom_lower.startswith(("com.", "org.", "net.")):
+                        continue
+                    if any(ch.isupper() for label in dom_val.split(".") for ch in label[1:]):
+                        continue
+                    if m.start() > 0 and (line[m.start() - 1].isalnum() or line[m.start() - 1] in "._"):
+                        continue
+                    if m.end() < len(line) and (line[m.end()].isalnum() or line[m.end()] in "._"):
+                        continue
 
                     # Suppress if already part of any URL on this line
                     if any(dom_val in url for url in all_urls_on_line):
@@ -330,8 +343,10 @@ def extract_network_indicators(analysis_root: str | Path) -> dict:
                         continue
 
                     path_lower = path_val.lower()
+                    if path_lower.startswith(("/files/", "/databases", "/phenotype/")) or path_lower == "/cmdline":
+                        continue
                     ext_candidate = path_lower.split(".")[-1] if "." in path_lower else ""
-                    if ext_candidate in COMMON_FILE_EXTENSIONS:
+                    if ext_candidate in COMMON_FILE_EXTENSIONS | {"db", "pb", "bak", "db-shm", "db-wal"}:
                         continue
 
                     if path_val.endswith(";"):

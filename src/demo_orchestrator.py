@@ -199,7 +199,7 @@ def _run_ios_pipeline(
     demo3_scan = None
     try:
         from src.demo3.scanner import scan_artifacts_deterministically
-        demo3_scan = scan_artifacts_deterministically(app_bundle_dir)
+        demo3_scan = scan_artifacts_deterministically(extract_res["app_bundle_dir"])
     except Exception:
         pass
 
@@ -492,7 +492,23 @@ def run_demo(
         demo3_scan = None
         try:
             from src.demo3.scanner import scan_artifacts_deterministically
-            demo3_scan = scan_artifacts_deterministically(workspaces_dir / "unified_analysis")
+            component_roots = sorted((workspaces_dir / "processed").glob("*/apktool_out"))
+            if component_roots:
+                scans = [scan_artifacts_deterministically(root) for root in component_roots]
+                numeric_keys = ("files_discovered", "files_analyzed", "files_skipped", "files_failed")
+                statistics = {key: sum(scan["statistics"].get(key, 0) for scan in scans) for key in numeric_keys}
+                statistics["failed_files"] = [
+                    {**item, "component": root.parent.name}
+                    for root, scan in zip(component_roots, scans)
+                    for item in scan["statistics"].get("failed_files", [])
+                ]
+                demo3_scan = {
+                    "status": "partial" if statistics["files_failed"] else "completed",
+                    "statistics": statistics,
+                    # The split static context already combines component
+                    # indicators with source APK provenance for the inventory.
+                    "candidates": [],
+                }
         except Exception:
             pass
 

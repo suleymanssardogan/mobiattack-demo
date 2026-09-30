@@ -66,6 +66,20 @@ class TestNetworkIndicatorExtractorUnit(unittest.TestCase):
         self.assertIn("auth.gateway.tr", vals)
         self.assertIn("portal.service.uk", vals)
 
+    def test_smali_descriptors_and_local_files_do_not_look_like_network_targets(self):
+        self._write_file("classes.smali", """
+        .class public Lcom/google/android/api/internal/Client;
+        const-string v0, "com.google.android.youtube.tv"
+        const-string v1, "CharMatcher.is"
+        const-string v2, "/databases/Expressions.db"
+        const-string v3, "https://api.example.com/v1/users"
+        const-string v4, "/signup"
+        """)
+        result = extract_network_indicators(self.root_path)
+        self.assertEqual([item["value"] for item in result["network_urls"]], ["https://api.example.com/v1/users"])
+        self.assertEqual(result["domains"], [])
+        self.assertEqual([item["value"] for item in result["path_candidates"]], ["/signup"])
+
     def test_05_ipv4_detection(self):
         self._write_file("network.conf", "server_ip = 10.0.2.2\ngateway = 127.0.0.1")
         res = extract_network_indicators(self.root_path)

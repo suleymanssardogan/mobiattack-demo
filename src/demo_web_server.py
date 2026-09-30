@@ -1240,7 +1240,7 @@ HTML_PAGE = """<!DOCTYPE html>
             <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
               <div>
                 <div class="section-subtitle" style="margin-bottom:2px;">Structured Inventory</div>
-                <div style="font-size:12px; color:var(--text-3);">Canonical static candidates with preserved source provenance.</div>
+              <div style="font-size:12px; color:var(--text-3);">URLs, domains, route candidates and IPs found in app files, with source locations. These strings are not confirmed API calls.</div>
               </div>
             </div>
             <div id="apiCandidatesContainer">
@@ -1659,9 +1659,9 @@ HTML_PAGE = """<!DOCTYPE html>
       if (allCands.length === 0) {
         container.innerHTML = `
           <div class="notice-box">
-            <div style="font-weight:600; color:var(--text); margin-bottom:2px;">No API candidates discovered.</div>
+            <div style="font-weight:600; color:var(--text); margin-bottom:2px;">No network or route candidates found.</div>
             <div style="font-size:12px; color:var(--text-3);">
-              Deterministic static extraction completed with zero identified candidates. Zero candidates does not imply the application makes no network calls.
+              Static extraction found no candidate strings in the files scanned. This does not establish whether the app makes network calls.
             </div>
           </div>
         `;
@@ -1708,7 +1708,7 @@ HTML_PAGE = """<!DOCTYPE html>
         const shortSource = fullSource.split('/').pop() + (firstOcc.line_number ? ':' + firstOcc.line_number : '');
         const allSources = occs.map(o => o.source_file + (o.line_number ? ':' + o.line_number : '')).join('\\n');
         const sourceHtml = occs.length > 1
-          ? `<code>Multiple</code> <span class="tag" style="font-size:9.5px; padding:1px 5px; background:#f1f5f9; color:#475569;">${occs.length} files</span>`
+          ? `<code>Multiple</code> <span class="tag" style="font-size:9.5px; padding:1px 5px; background:#f1f5f9; color:#475569;">${occs.length} sources</span>`
           : `<code>${escapeHtml(shortSource)}</code>`;
 
         return `
@@ -1729,7 +1729,7 @@ HTML_PAGE = """<!DOCTYPE html>
                 <button class="filter-chip ${state.filterType === 'ALL' ? 'active' : ''}" onclick="setDemo3Filter('ALL', this)">All (${counts.ALL})</button>
                 ${counts.URL > 0 ? `<button class="filter-chip ${state.filterType === 'URL' ? 'active' : ''}" onclick="setDemo3Filter('URL', this)">URLs (${counts.URL})</button>` : ''}
                 ${counts.DOMAIN > 0 ? `<button class="filter-chip ${state.filterType === 'DOMAIN' ? 'active' : ''}" onclick="setDemo3Filter('DOMAIN', this)">Domains (${counts.DOMAIN})</button>` : ''}
-                ${counts.API_PATH > 0 ? `<button class="filter-chip ${state.filterType === 'API_PATH' ? 'active' : ''}" onclick="setDemo3Filter('API_PATH', this)">Paths (${counts.API_PATH})</button>` : ''}
+                ${counts.API_PATH > 0 ? `<button class="filter-chip ${state.filterType === 'API_PATH' ? 'active' : ''}" onclick="setDemo3Filter('API_PATH', this)">Route candidates (${counts.API_PATH})</button>` : ''}
                 ${counts.IP_ADDRESS > 0 ? `<button class="filter-chip ${state.filterType === 'IP_ADDRESS' ? 'active' : ''}" onclick="setDemo3Filter('IP_ADDRESS', this)">IPs (${counts.IP_ADDRESS})</button>` : ''}
                 ${counts.WEBSOCKET > 0 ? `<button class="filter-chip ${state.filterType === 'WEBSOCKET' ? 'active' : ''}" onclick="setDemo3Filter('WEBSOCKET', this)">WebSockets (${counts.WEBSOCKET})</button>` : ''}
               </div>
@@ -1773,7 +1773,7 @@ HTML_PAGE = """<!DOCTYPE html>
       if (!cand) {
         container.innerHTML = `
           <div style="color:var(--text-3); font-size:12.5px; text-align:center; padding:36px 12px;">
-            Select an API or network candidate from the inventory table to inspect its canonical normalization, occurrence provenance, and raw extraction evidence.
+            Select a static string to inspect its normalized value, source location, and extraction evidence.
           </div>
         `;
         return;
@@ -1887,6 +1887,17 @@ HTML_PAGE = """<!DOCTYPE html>
             window.demo3State.rawJsonData = data;
             window.demo3State.rawJsonLoaded = true;
             window.demo3State.loadedRunId = runId;
+            // The validated baseline report is the canonical structured
+            // inventory shown in this tab and in downloaded JSON.
+            if (data.inventory && Array.isArray(data.inventory.candidates)) {
+              window.demo3State.candidates = data.inventory.candidates;
+              window.demo3State.selectedIndex = 0;
+              window.demo3State.filterType = "ALL";
+              window.demo3State.searchQuery = "";
+              const count = document.getElementById("inventoryCountTag");
+              if (count) count.textContent = data.inventory.candidates.length;
+              renderDemo3Inventory();
+            }
           }
           if (vVer) vVer.textContent = `"${data.schema_version || '1.0.0'}"`;
           if (vBadge) {
@@ -1969,7 +1980,7 @@ HTML_PAGE = """<!DOCTYPE html>
       const startIdx = (state.currentPage - 1) * state.pageSize;
       const pageItems = filtered.slice(startIdx, startIdx + state.pageSize);
 
-      const catButtonsHtml = Object.keys(state.categories).map(catKey => {
+      const catButtonsHtml = Object.keys(state.categories).filter(catKey => (state.categories[catKey] || []).length > 0).map(catKey => {
         const count = (state.categories[catKey] || []).length;
         const activeClass = (catKey === state.currentCategory) ? 'active' : '';
         return `<button class="cat-btn ${activeClass}" onclick="setNetCategory('${catKey}')">${catLabels[catKey]} (${count})</button>`;

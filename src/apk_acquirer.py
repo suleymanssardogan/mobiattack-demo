@@ -12,6 +12,7 @@ import hashlib
 import os
 from pathlib import Path
 import re
+import ssl
 import tempfile
 import urllib.error
 import urllib.parse
@@ -242,7 +243,19 @@ def acquire_apk(
             cleaned_url,
             headers={"User-Agent": "MobiAttack-Acquirer/1.0"},
         )
-        opener = urllib.request.build_opener(SchemeRestrictedRedirectHandler())
+        # Framework Python on macOS can lack its own CA bundle. Keep TLS
+        # verification enabled and use the system trust bundle in that case.
+        default_ca = ssl.get_default_verify_paths().openssl_cafile
+        mac_ca = Path("/etc/ssl/cert.pem")
+        tls_context = (
+            ssl.create_default_context(cafile=str(mac_ca))
+            if default_ca and not Path(default_ca).is_file() and mac_ca.is_file()
+            else ssl.create_default_context()
+        )
+        opener = urllib.request.build_opener(
+            SchemeRestrictedRedirectHandler(),
+            urllib.request.HTTPSHandler(context=tls_context),
+        )
 
         try:
             response = opener.open(req, timeout=timeout)

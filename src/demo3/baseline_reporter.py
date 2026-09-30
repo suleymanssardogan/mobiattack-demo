@@ -31,7 +31,7 @@ def build_baseline_report(
     acq = res.get("acquisition") or {}
     static = res.get("static_analysis") or {}
     app = static.get("application") or static.get("app") or res.get("application") or {}
-    scan_meta = demo3_scan_data or static.get("demo3_scan") or {}
+    scan_meta = demo3_scan_data or res.get("demo3_scan") or static.get("demo3_scan") or {}
 
     stats = scan_meta.get("statistics") or {
         "files_discovered": 0,
@@ -93,13 +93,32 @@ def build_baseline_report(
         or "android"
     )
 
-    candidates = scan_meta.get("candidates") or []
+    # iOS binary-string extraction covers executable URLs that the text-file
+    # scanner cannot see. Use those sourced indicators for its inventory while
+    # retaining the scanner's truthful file statistics.
+    candidates = [] if platform == "ios" else (scan_meta.get("candidates") or [])
     if not candidates and (static.get("network_indicators") or static.get("api_candidates")):
         from src.demo3.deduplicator import CandidateDeduplicator
         from src.demo3.candidate_model import RawCandidate
         fallback_dedup = CandidateDeduplicator()
         net = static.get("network_indicators") or {}
+        def include_indicator(item: Any) -> bool:
+            if platform != "ios" or not isinstance(item, dict):
+                return True
+            source_file = str(item.get("source_file", "")).lower()
+            value = str(item.get("value", "")).lower()
+            # Keep the complete set in raw network_indicators; prioritize the
+            # app's own artifacts in the presentation inventory.
+            return not (
+                "/frameworks/" in source_file
+                or source_file.endswith("/assets.plist")
+                or source_file.endswith("/readme.txt")
+                or value.startswith(("http://crl.apple.com/", "http://ocsp.apple.com/"))
+                or ("apple.com/certificateauthority/" in value or "apple.com/appleca/" in value)
+            )
         for item in net.get("network_urls", []):
+            if not include_indicator(item):
+                continue
             val = item.get("value", "") if isinstance(item, dict) else str(item)
             if val:
                 fallback_dedup.add_raw(RawCandidate(
@@ -111,6 +130,8 @@ def build_baseline_report(
                     evidence=val,
                 ))
         for item in net.get("domains", []):
+            if not include_indicator(item):
+                continue
             val = item.get("value", "") if isinstance(item, dict) else str(item)
             if val:
                 fallback_dedup.add_raw(RawCandidate(
@@ -122,6 +143,8 @@ def build_baseline_report(
                     evidence=val,
                 ))
         for item in net.get("ip_addresses", []):
+            if not include_indicator(item):
+                continue
             val = item.get("value", "") if isinstance(item, dict) else str(item)
             if val:
                 fallback_dedup.add_raw(RawCandidate(
@@ -133,7 +156,11 @@ def build_baseline_report(
                     evidence=val,
                 ))
         for item in net.get("path_candidates", []):
+            if not include_indicator(item):
+                continue
             val = item.get("value", "") if isinstance(item, dict) else str(item)
+            if val.lower().startswith(("/sbin/", "/su/bin/", "/system/", "/proc/", "/data/")):
+                continue
             if val:
                 fallback_dedup.add_raw(RawCandidate(
                     type="api_path",
@@ -156,6 +183,27 @@ def build_baseline_report(
                     evidence=f"Fuel.{item.get('method', 'request')}({val})",
                 ))
         candidates = [c.to_dict() for c in fallback_dedup.get_canonical_candidates()]
+
+    # Surface a request-context path separately from generic URL strings.
+    # These are the strongest Android API candidates available in this demo.
+    if platform == "android":
+        from src.demo3.deduplicator import CandidateDeduplicator
+        from src.demo3.candidate_model import RawCandidate
+        for item in static.get("api_candidates", []):
+            path = item.get("path") or ""
+            if not path or any(c.get("type") == "api_path" and c.get("value") == path for c in candidates):
+                continue
+            dedup = CandidateDeduplicator()
+            dedup.add_raw(RawCandidate(
+                type="api_path",
+                raw_value=path,
+                source_file=item.get("source_file", "unknown.smali"),
+                line_number=item.get("request_line"),
+                extraction_method="fuel_smali_call_context",
+                evidence=f"Fuel.{item.get('method', 'request')}({item.get('full_url') or path})",
+            ))
+            candidates.extend(c.to_dict() for c in dedup.get_canonical_candidates())
+        candidates.sort(key=lambda c: (c.get("type", ""), c.get("value", "")))
 
     # Map static findings from vulnerabilities if available
     findings_list: list[dict[str, Any]] = []
