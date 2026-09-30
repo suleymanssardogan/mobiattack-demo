@@ -113,7 +113,8 @@ class TestDemoWebServer(unittest.TestCase):
         self.assertNotIn("com.sec.android.app.popupcalculator", html)
         self.assertIn('value="emulator-5554" readonly', html)
         self.assertIn('window.location.hostname === "mobiattack-demo.vercel.app"', html)
-        self.assertIn('fetch(backendUrl("/api/run")', html)
+        self.assertIn('localPage.searchParams.set("target", url)', html)
+        self.assertIn('id="presentationNotice"', html)
 
         # Analysis Results & Tabs
         self.assertIn("Analysis Results", html)
@@ -135,21 +136,6 @@ class TestDemoWebServer(unittest.TestCase):
         self.assertIn("Static network indicators do not prove runtime network use.", html)
         self.assertIn("API candidates are static call-context candidates only.", html)
         self.assertIn("Zero API candidates does not mean no APIs exist.", html)
-
-    def test_vercel_origin_can_reach_local_backend(self):
-        req = urllib.request.Request(
-            f"{self.server.base_url}/api/runs/recent",
-            method="OPTIONS",
-            headers={
-                "Origin": "https://mobiattack-demo.vercel.app",
-                "Access-Control-Request-Method": "GET",
-                "Access-Control-Request-Private-Network": "true",
-            },
-        )
-        with urllib.request.urlopen(req) as response:
-            self.assertEqual(response.status, 204)
-            self.assertEqual(response.headers["Access-Control-Allow-Origin"], "https://mobiattack-demo.vercel.app")
-            self.assertEqual(response.headers["Access-Control-Allow-Private-Network"], "true")
 
     def test_api_run_validation_missing_or_invalid_url(self):
         # Empty payload

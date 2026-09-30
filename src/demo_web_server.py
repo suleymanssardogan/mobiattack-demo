@@ -932,6 +932,9 @@ HTML_PAGE = """<!DOCTYPE html>
         <div id="iosNotice" class="notice-box" style="display:none; margin-bottom:12px;">
           ℹ️ iOS static analysis accepts direct or local IPA artifacts. Runtime remains unavailable.
         </div>
+        <div id="presentationNotice" class="notice-box" style="display:none; margin-bottom:12px;">
+          Live analysis opens on this Mac. Keep the local MobiAttack backend running at <code>127.0.0.1:8082</code>.
+        </div>
 
         <div class="sidebar-section">
           <label for="apkUrl" class="sidebar-label">Target URL (Direct APK or Google Play Store)</label>
@@ -1357,10 +1360,7 @@ HTML_PAGE = """<!DOCTYPE html>
   </div><!-- end container -->
 
   <script>
-    // The public presentation page uses the backend on this Mac for device access.
-    const BACKEND_ORIGIN = window.location.hostname === "mobiattack-demo.vercel.app"
-      ? "http://127.0.0.1:8082" : "";
-    function backendUrl(path) { return BACKEND_ORIGIN + path; }
+    function backendUrl(path) { return path; }
 
     function fillPreset(url) {
       const input = document.getElementById("apkUrl");
@@ -3328,6 +3328,16 @@ HTML_PAGE = """<!DOCTYPE html>
         return;
       }
 
+      if (window.location.hostname === "mobiattack-demo.vercel.app") {
+        const localPage = new URL("http://127.0.0.1:8082/");
+        localPage.searchParams.set("target", url);
+        localPage.searchParams.set("platform", platform);
+        const selectedMode = document.querySelector('input[name="installMode"]:checked');
+        localPage.searchParams.set("install_mode", selectedMode ? selectedMode.value : "manual");
+        window.location.assign(localPage.toString());
+        return;
+      }
+
       // Reset UI
       document.getElementById("completedBanner").style.display = "none";
       document.getElementById("errorBanner").style.display = "none";
@@ -3385,6 +3395,23 @@ HTML_PAGE = """<!DOCTYPE html>
 
     window.addEventListener("DOMContentLoaded", async () => {
       const params = new URLSearchParams(window.location.search);
+      if (window.location.hostname === "mobiattack-demo.vercel.app") {
+        document.getElementById("presentationNotice").style.display = "block";
+        return;
+      }
+      const transferredTarget = params.get("target");
+      if (transferredTarget) {
+        const transferredPlatform = params.get("platform") === "ios" ? "ios" : "android";
+        document.getElementById("platform-" + transferredPlatform).checked = true;
+        handlePlatformChange();
+        document.getElementById("apkUrl").value = transferredTarget;
+        const transferredMode = params.get("install_mode") === "ui_automation" ? "ui_automation" : "manual";
+        const modeRadio = document.querySelector(`input[name="installMode"][value="${transferredMode}"]`);
+        if (modeRadio) modeRadio.checked = true;
+        handleUrlInput();
+        window.history.replaceState({}, "", "/");
+        return;
+      }
       let runIdToLoad = params.get("run_id");
       if (!runIdToLoad) {
         try {
@@ -3450,20 +3477,6 @@ class _DemoRequestHandler(BaseHTTPRequestHandler):
 
     def log_message(self, format: str, *args) -> None:
         pass
-
-    def end_headers(self) -> None:
-        if self.headers.get("Origin") == "https://mobiattack-demo.vercel.app":
-            self.send_header("Access-Control-Allow-Origin", "https://mobiattack-demo.vercel.app")
-            self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-            self.send_header("Access-Control-Allow-Headers", "Content-Type")
-            self.send_header("Access-Control-Allow-Private-Network", "true")
-            self.send_header("Vary", "Origin")
-        super().end_headers()
-
-    def do_OPTIONS(self) -> None:
-        self.send_response(204)
-        self.send_header("Content-Length", "0")
-        self.end_headers()
 
     def _send_json(self, status_code: int, data: dict) -> None:
         try:
