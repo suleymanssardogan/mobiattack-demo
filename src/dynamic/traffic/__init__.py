@@ -3,6 +3,7 @@
 from src.dynamic.traffic.capture_backend import TrafficCaptureBackend
 from src.dynamic.traffic.correlator import TrafficCorrelator
 from src.dynamic.traffic.mitmproxy_backend import MitmproxyCaptureBackend
+from src.dynamic.traffic.native_backend import NativeProxyCaptureBackend
 from src.dynamic.traffic.models import (
     CaptureSession,
     CaptureStatus,
@@ -35,6 +36,7 @@ __all__ = [
     "HttpResponseModel",
     "HttpsInterceptionReadiness",
     "MitmproxyCaptureBackend",
+    "NativeProxyCaptureBackend",
     "ProxyReadinessResult",
     "TrafficCaptureBackend",
     "TrafficCorrelator",

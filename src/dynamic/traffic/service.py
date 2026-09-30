@@ -338,8 +338,13 @@ class DynamicTrafficService:
 
     def _on_transaction_captured(self, transaction: TrafficTransaction) -> None:
         """Persists transaction to transactions.jsonl and keeps memory reference."""
+        if self.correlator and not transaction.correlation:
+            transaction = self.correlator.correlate(transaction)
+
         self.captured_transactions.append(transaction)
         if self.active_capture:
+            transaction.capture_id = self.active_capture.capture_id
+            transaction.session_id = self.active_capture.session_id
             self.storage.append_transaction(self.active_capture.session_id, transaction)
 
     def _emergency_cleanup(self) -> None:
