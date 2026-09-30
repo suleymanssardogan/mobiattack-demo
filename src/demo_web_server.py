@@ -953,7 +953,7 @@ HTML_PAGE = """<!DOCTYPE html>
           </div>
         </div>
 
-        <div class="sidebar-section">
+        <div class="sidebar-section" id="androidAnalysisOptions">
           <div class="sidebar-group-title">Analysis Options</div>
           <div style="display:flex; flex-direction:column; gap:6px;">
             <label class="checkbox-row">
@@ -2614,7 +2614,7 @@ HTML_PAGE = """<!DOCTYPE html>
           <div class="kv-row"><span class="kv-key">Usage Descriptions:</span><span class="kv-val">${(iosConfig.usage_descriptions || []).length}</span></div>
           <div class="kv-row"><span class="kv-key">Network Indicators:</span><span class="kv-val">${netCnt.toLocaleString()}</span></div>
           <div class="kv-row"><span class="kv-key">API Candidates:</span><span class="kv-val" style="color:#60a5fa;">0 (None inferred)</span></div>
-          <div class="kv-row"><span class="kv-key">Security Risk:</span><span class="kv-val" id="overviewRiskVal">CLEAN (0 findings)</span></div>
+          <div class="kv-row"><span class="kv-key">Security Risk:</span><span class="kv-val" id="overviewRiskVal">Not evaluated</span></div>
           <div class="kv-row"><span class="kv-key">Runtime Status:</span><span class="kv-val" style="color:var(--text-muted);">Not implemented</span></div>
         `;
       } else if (packageLayout === "split") {
@@ -3099,6 +3099,9 @@ HTML_PAGE = """<!DOCTYPE html>
       const urlLabel = document.querySelector('label[for="apkUrl"]');
       document.getElementById("quickTargetsAndroid").style.display = isIos ? "none" : "grid";
       document.getElementById("quickTargetsIos").style.display = isIos ? "grid" : "none";
+      document.getElementById("androidAnalysisOptions").style.display = isIos ? "none" : "block";
+      document.getElementById("adbTargetSection").style.display = isIos ? "none" : "block";
+      document.getElementById("installModeSection").style.display = isIos ? "none" : "block";
       if (urlInput) urlInput.value = "";
 
       startBtn.disabled = false;

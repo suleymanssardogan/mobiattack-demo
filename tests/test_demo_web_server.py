@@ -108,6 +108,8 @@ class TestDemoWebServer(unittest.TestCase):
         self.assertIn("Grant permissions", html)
         self.assertIn('id="quickTargetsAndroid"', html)
         self.assertIn('id="quickTargetsIos"', html)
+        self.assertIn('id="androidAnalysisOptions"', html)
+        self.assertIn('id="overviewRiskVal">Not evaluated', html)
         self.assertIn("com.google.android.calculator", html)
         self.assertIn("MSTG-JWT.ipa", html)
         self.assertNotIn("com.sec.android.app.popupcalculator", html)
