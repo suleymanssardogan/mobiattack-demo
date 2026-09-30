@@ -15,6 +15,7 @@ demo_runs/run_sample_flashlight/workspaces/
 demo_runs/run_sample_flashlight/downloads/
 workspaces/
 apk_lab/
+artifacts/
 *.apk
 *.ipa
 *.aab
