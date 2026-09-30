@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -27,13 +28,19 @@
       --info: #0284c7;
       --font: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
       --mono: "JetBrains Mono", "SF Mono", Consolas, monospace;
-      --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.04);
-      --shadow-lg: 0 4px 16px rgba(0,0,0,0.1);
+      --shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.04);
+      --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.1);
       --r: 8px;
       --r-sm: 6px;
     }
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
     body {
       background: var(--bg);
@@ -85,7 +92,10 @@
       letter-spacing: 0.08em;
     }
 
-    .brand-subtext, .brand-desc { display: none; }
+    .brand-subtext,
+    .brand-desc {
+      display: none;
+    }
 
     .header-device {
       display: inline-flex;
@@ -102,7 +112,8 @@
     }
 
     .device-dot {
-      width: 6px; height: 6px;
+      width: 6px;
+      height: 6px;
       border-radius: 50%;
       background: var(--success);
     }
@@ -121,8 +132,14 @@
     }
 
     @media (max-width: 900px) {
-      .page-body { grid-template-columns: 1fr; }
-      .sidebar { border-right: none !important; border-bottom: 1px solid var(--border); }
+      .page-body {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        border-right: none !important;
+        border-bottom: 1px solid var(--border);
+      }
     }
 
     /* ── SIDEBAR ─────────────────────────────────────── */
@@ -140,7 +157,9 @@
       margin-bottom: 20px;
     }
 
-    .sidebar-section:last-child { margin-bottom: 0; }
+    .sidebar-section:last-child {
+      margin-bottom: 0;
+    }
 
     .sidebar-label {
       font-size: 10px;
@@ -169,8 +188,13 @@
     }
 
     /* ── FORM ─────────────────────────────────────────── */
-    .form-group { margin-bottom: 16px; }
-    .form-group:last-child { margin-bottom: 0; }
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group:last-child {
+      margin-bottom: 0;
+    }
 
     label {
       display: block;
@@ -197,10 +221,12 @@
 
     input[type="text"]:focus {
       border-color: var(--border-focus);
-      box-shadow: 0 0 0 3px rgba(37,99,235,0.08);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08);
     }
 
-    input[type="text"]::placeholder { color: var(--text-4); }
+    input[type="text"]::placeholder {
+      color: var(--text-4);
+    }
 
     .form-grid-2 {
       display: grid;
@@ -209,7 +235,12 @@
     }
 
     /* ── RADIOS / CHECKBOXES ─────────────────────────── */
-    .segmented-group { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+    .segmented-group {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
 
     .radio-option {
       display: inline-flex;
@@ -226,9 +257,19 @@
       transition: all 0.1s;
     }
 
-    .radio-option:hover { background: #eef2f7; border-color: #d1d5db; }
-    .radio-option input[type="radio"] { accent-color: var(--accent); }
-    .radio-option-secondary { opacity: 0.7; font-size: 12px; }
+    .radio-option:hover {
+      background: #eef2f7;
+      border-color: #d1d5db;
+    }
+
+    .radio-option input[type="radio"] {
+      accent-color: var(--accent);
+    }
+
+    .radio-option-secondary {
+      opacity: 0.7;
+      font-size: 12px;
+    }
 
     .checkbox-row {
       display: inline-flex;
@@ -240,7 +281,9 @@
       user-select: none;
     }
 
-    .checkbox-row input[type="checkbox"] { accent-color: var(--accent); }
+    .checkbox-row input[type="checkbox"] {
+      accent-color: var(--accent);
+    }
 
     .presets-row {
       display: flex;
@@ -251,11 +294,24 @@
       align-items: baseline;
     }
 
-    .presets-label { color: var(--text-4); font-weight: 500; }
+    .presets-label {
+      color: var(--text-4);
+      font-weight: 500;
+    }
 
-    .preset-link { color: var(--accent); cursor: pointer; text-decoration: none; }
-    .preset-link:hover { text-decoration: underline; }
-    .preset-link-warn { color: var(--warning); }
+    .preset-link {
+      color: var(--accent);
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .preset-link:hover {
+      text-decoration: underline;
+    }
+
+    .preset-link-warn {
+      color: var(--warning);
+    }
 
     /* ── BUTTONS ──────────────────────────────────────── */
     .btn {
@@ -280,7 +336,9 @@
       margin-top: 0;
     }
 
-    .btn-primary:hover:not(:disabled) { background: var(--accent-hover); }
+    .btn-primary:hover:not(:disabled) {
+      background: var(--accent-hover);
+    }
 
     .btn-primary:disabled {
       background: #e5e7eb;
@@ -298,7 +356,9 @@
       font-weight: 500;
     }
 
-    .btn-secondary:hover:not(:disabled) { background: var(--surface-alt); }
+    .btn-secondary:hover:not(:disabled) {
+      background: var(--surface-alt);
+    }
 
     .btn-stop {
       background: var(--error-bg);
@@ -308,7 +368,9 @@
       padding: 8px 18px;
     }
 
-    .btn-stop:hover { background: #fee2e2; }
+    .btn-stop:hover {
+      background: #fee2e2;
+    }
 
     /* ── BANNERS ──────────────────────────────────────── */
     .banner {
@@ -321,8 +383,17 @@
       font-size: 13px;
     }
 
-    .banner-success { background: var(--success-bg); border: 1px solid #a7f3d0; color: var(--success); }
-    .banner-error { background: var(--error-bg); border: 1px solid #fecaca; color: var(--error); }
+    .banner-success {
+      background: var(--success-bg);
+      border: 1px solid #a7f3d0;
+      color: var(--success);
+    }
+
+    .banner-error {
+      background: var(--error-bg);
+      border: 1px solid #fecaca;
+      color: var(--error);
+    }
 
     .notice-box {
       background: var(--accent-bg);
@@ -333,7 +404,12 @@
       color: var(--text-2);
     }
 
-    .notice-info { font-size: 12px; color: var(--text-3); padding: 4px 0; line-height: 1.5; }
+    .notice-info {
+      font-size: 12px;
+      color: var(--text-3);
+      padding: 4px 0;
+      line-height: 1.5;
+    }
 
     /* ── PIPELINE STAGES ─────────────────────────────── */
     .stages-grid {
@@ -361,13 +437,27 @@
       transition: background 0.1s;
     }
 
-    .stage-card:last-child { border-right: none; }
-    .stage-card:hover { background: var(--surface-alt); }
+    .stage-card:last-child {
+      border-right: none;
+    }
+
+    .stage-card:hover {
+      background: var(--surface-alt);
+    }
 
     @media (max-width: 900px) {
-      .stages-grid { flex-direction: column; }
-      .stage-card { border-right: none; border-bottom: 1px solid var(--border); }
-      .stage-card:last-child { border-bottom: none; }
+      .stages-grid {
+        flex-direction: column;
+      }
+
+      .stage-card {
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .stage-card:last-child {
+        border-bottom: none;
+      }
     }
 
     .stage-header {
@@ -377,14 +467,40 @@
       margin-bottom: 6px;
     }
 
-    .stage-title { font-size: 12px; font-weight: 600; color: var(--text); }
-    .stage-message { font-size: 11.5px; color: var(--text-3); margin-bottom: 4px; flex: 1; }
+    .stage-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text);
+    }
 
-    .stage-header { gap: 8px; flex-wrap: wrap; }
-    .stage-details .kv-row { display: block; }
+    .stage-message {
+      font-size: 11.5px;
+      color: var(--text-3);
+      margin-bottom: 4px;
+      flex: 1;
+    }
+
+    .stage-header {
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .stage-details .kv-row {
+      display: block;
+    }
+
     .stage-details .kv-key,
-    .stage-details .kv-val { display: block; text-align: left; white-space: normal; word-break: normal; overflow-wrap: anywhere; }
-    .stage-details .kv-val { margin-top: 3px; }
+    .stage-details .kv-val {
+      display: block;
+      text-align: left;
+      white-space: normal;
+      word-break: normal;
+      overflow-wrap: anywhere;
+    }
+
+    .stage-details .kv-val {
+      margin-top: 3px;
+    }
 
     .stage-details {
       font-size: 11px;
@@ -407,13 +523,48 @@
       letter-spacing: 0.03em;
     }
 
-    .badge-pending  { background: #f3f4f6; color: #9ca3af; border: 1px solid #e5e7eb; }
-    .badge-running  { background: var(--accent-bg); color: var(--accent); border: 1px solid #bfdbfe; }
-    .badge-success  { background: var(--success-bg); color: var(--success); border: 1px solid #a7f3d0; }
-    .badge-warning  { background: var(--warning-bg); color: var(--warning); border: 1px solid #fde68a; }
-    .badge-failed   { background: var(--error-bg); color: var(--error); border: 1px solid #fecaca; }
-    .badge-skipped  { background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; }
-    .badge-waiting, .badge-waiting_for_installation { background: #f0f9ff; color: var(--info); border: 1px solid #bae6fd; }
+    .badge-pending {
+      background: #f3f4f6;
+      color: #9ca3af;
+      border: 1px solid #e5e7eb;
+    }
+
+    .badge-running {
+      background: var(--accent-bg);
+      color: var(--accent);
+      border: 1px solid #bfdbfe;
+    }
+
+    .badge-success {
+      background: var(--success-bg);
+      color: var(--success);
+      border: 1px solid #a7f3d0;
+    }
+
+    .badge-warning {
+      background: var(--warning-bg);
+      color: var(--warning);
+      border: 1px solid #fde68a;
+    }
+
+    .badge-failed {
+      background: var(--error-bg);
+      color: var(--error);
+      border: 1px solid #fecaca;
+    }
+
+    .badge-skipped {
+      background: #f1f5f9;
+      color: #475569;
+      border: 1px solid #cbd5e1;
+    }
+
+    .badge-waiting,
+    .badge-waiting_for_installation {
+      background: #f0f9ff;
+      color: var(--info);
+      border: 1px solid #bae6fd;
+    }
 
     .tag {
       display: inline-block;
@@ -436,9 +587,24 @@
       gap: 16px;
     }
 
-    .kv-row:last-child { border-bottom: none; }
-    .kv-key { color: var(--text-3); font-size: 13px; font-weight: 500; white-space: nowrap; }
-    .kv-val { color: var(--text); font-family: var(--mono); font-size: 12.5px; text-align: right; word-break: break-all; }
+    .kv-row:last-child {
+      border-bottom: none;
+    }
+
+    .kv-key {
+      color: var(--text-3);
+      font-size: 13px;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .kv-val {
+      color: var(--text);
+      font-family: var(--mono);
+      font-size: 12.5px;
+      text-align: right;
+      word-break: break-all;
+    }
 
     /* ── PROBE ────────────────────────────────────────── */
     .probe-card {
@@ -449,8 +615,19 @@
       margin-bottom: 20px;
     }
 
-    .probe-header { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
-    .probe-disclaimer { font-size: 11px; color: var(--text-4); margin-top: 8px; }
+    .probe-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .probe-disclaimer {
+      font-size: 11px;
+      color: var(--text-4);
+      margin-top: 8px;
+    }
 
     /* ── ANALYSIS SECTION ────────────────────────────── */
     .analysis-card {
@@ -500,7 +677,9 @@
       white-space: nowrap;
     }
 
-    .tab-btn:hover { color: var(--text-2); }
+    .tab-btn:hover {
+      color: var(--text-2);
+    }
 
     .tab-btn.active {
       color: var(--accent);
@@ -508,8 +687,14 @@
       font-weight: 600;
     }
 
-    .tab-pane { display: none; padding: 20px 24px; }
-    .tab-pane.active { display: block; }
+    .tab-pane {
+      display: none;
+      padding: 20px 24px;
+    }
+
+    .tab-pane.active {
+      display: block;
+    }
 
     .section-subtitle {
       font-weight: 600;
@@ -538,11 +723,21 @@
       border-bottom: 1px solid #f3f4f6;
     }
 
-    .scroll-list-item:hover { background: #f1f5f9; }
-    .scroll-list-item:last-child { border-bottom: none; }
+    .scroll-list-item:hover {
+      background: #f1f5f9;
+    }
+
+    .scroll-list-item:last-child {
+      border-bottom: none;
+    }
 
     /* ── TABLES ───────────────────────────────────────── */
-    table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 8px 0; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      margin: 8px 0;
+    }
 
     th {
       background: var(--surface-alt);
@@ -554,53 +749,117 @@
       letter-spacing: 0.05em;
       padding: 9px 14px;
       border-bottom: 1px solid var(--border);
-      position: sticky; top: 0; z-index: 2;
+      position: sticky;
+      top: 0;
+      z-index: 2;
     }
 
-    td { padding: 8px 14px; border-bottom: 1px solid #f3f4f6; color: var(--text); }
-    tr:last-child td { border-bottom: none; }
-    tr:hover td { background: #f9fafb; }
+    td {
+      padding: 8px 14px;
+      border-bottom: 1px solid #f3f4f6;
+      color: var(--text);
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
+      background: #f9fafb;
+    }
 
     /* ── FILTERS ──────────────────────────────────────── */
-    .filter-bar { display: flex; gap: 8px; margin: 10px 0; align-items: center; flex-wrap: wrap; }
+    .filter-bar {
+      display: flex;
+      gap: 8px;
+      margin: 10px 0;
+      align-items: center;
+      flex-wrap: wrap;
+    }
 
     .filter-input {
-      flex: 1; min-width: 200px;
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: var(--r-sm); padding: 7px 12px;
-      font-size: 12px; color: var(--text); font-family: var(--mono); outline: none;
+      flex: 1;
+      min-width: 200px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r-sm);
+      padding: 7px 12px;
+      font-size: 12px;
+      color: var(--text);
+      font-family: var(--mono);
+      outline: none;
     }
 
-    .filter-input:focus { border-color: var(--accent); }
+    .filter-input:focus {
+      border-color: var(--accent);
+    }
 
     .filter-select {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: var(--r-sm); padding: 7px 10px;
-      font-size: 12px; color: var(--text); outline: none;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r-sm);
+      padding: 7px 10px;
+      font-size: 12px;
+      color: var(--text);
+      outline: none;
     }
 
-    .category-tabs { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 10px; }
+    .category-tabs {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
 
     .cat-btn {
-      background: var(--surface); border: 1px solid var(--border);
-      color: var(--text-3); font-size: 12px; padding: 4px 12px;
-      border-radius: 999px; cursor: pointer; font-family: var(--font);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text-3);
+      font-size: 12px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-family: var(--font);
     }
 
-    .cat-btn.active { background: var(--accent-bg); border-color: #bfdbfe; color: var(--accent); font-weight: 600; }
+    .cat-btn.active {
+      background: var(--accent-bg);
+      border-color: #bfdbfe;
+      color: var(--accent);
+      font-weight: 600;
+    }
 
-    .pagination-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; font-size: 12px; color: var(--text-3); }
+    .pagination-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      font-size: 12px;
+      color: var(--text-3);
+    }
 
     .pagination-btn {
-      background: var(--surface); border: 1px solid var(--border);
-      color: var(--text-2); padding: 4px 12px; border-radius: var(--r-sm);
-      cursor: pointer; font-size: 12px; font-family: var(--font);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text-2);
+      padding: 4px 12px;
+      border-radius: var(--r-sm);
+      cursor: pointer;
+      font-size: 12px;
+      font-family: var(--font);
     }
 
-    .pagination-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+    .pagination-btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
 
     /* ── NOTES LIST ───────────────────────────────────── */
-    .analysis-notes-list { list-style: none; padding: 0; margin: 0; }
+    .analysis-notes-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
 
     .analysis-notes-list li {
       padding: 7px 0;
@@ -612,26 +871,49 @@
       gap: 10px;
     }
 
-    .analysis-notes-list li:last-child { border-bottom: none; }
+    .analysis-notes-list li:last-child {
+      border-bottom: none;
+    }
 
     .analysis-notes-list li::before {
-      content: ""; display: inline-block;
-      width: 4px; height: 4px; border-radius: 50%;
-      background: var(--text-4); flex-shrink: 0; margin-top: 7px;
+      content: "";
+      display: inline-block;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--text-4);
+      flex-shrink: 0;
+      margin-top: 7px;
     }
 
     /* ── REPORT ACTIONS ──────────────────────────────── */
-    .report-actions { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
+    .report-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
 
     .btn-action {
-      display: inline-flex; align-items: center; gap: 6px;
-      background: var(--surface); border: 1px solid var(--border);
-      color: var(--text-2); padding: 8px 14px; border-radius: var(--r-sm);
-      font-size: 12px; text-decoration: none; font-family: var(--font);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text-2);
+      padding: 8px 14px;
+      border-radius: var(--r-sm);
+      font-size: 12px;
+      text-decoration: none;
+      font-family: var(--font);
       transition: all 0.1s;
     }
 
-    .btn-action:hover { background: var(--surface-alt); border-color: #d1d5db; text-decoration: none; }
+    .btn-action:hover {
+      background: var(--surface-alt);
+      border-color: #d1d5db;
+      text-decoration: none;
+    }
 
     .comp-card {
       background: var(--surface-alt);
@@ -642,85 +924,568 @@
     }
 
     /* ── SCROLLBAR ────────────────────────────────────── */
-    ::-webkit-scrollbar { width: 5px; height: 5px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 999px; }
-    ::selection { background: rgba(37,99,235,0.12); }
+    ::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #d1d5db;
+      border-radius: 999px;
+    }
+
+    ::selection {
+      background: rgba(37, 99, 235, 0.12);
+    }
 
     /* ── MINIMAL PRODUCT SHELL ───────────────────────── */
-    :root { --bg:#070707; --surface:#0d0d0d; --surface-alt:#121212; --border:#272727; --border-focus:#747474; --text:#f4f4f4; --text-2:#d0d0d0; --text-3:#a3a3a3; --text-4:#6d6d6d; --accent:#f4f4f4; --accent-hover:#fff; --accent-bg:#191919; --success:#b8e5c2; --success-bg:#112015; --warning:#f0cf7d; --warning-bg:#251e0f; --error:#f0a3ad; --error-bg:#281317; --info:#b6ccea; --font:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; --mono:"SFMono-Regular",Consolas,"Liberation Mono",monospace; --r:12px; --r-sm:8px; --shadow:none; }
-    body { background:var(--bg); }
-    header { height:56px; padding:0 32px; background:rgba(7,7,7,.92); backdrop-filter:blur(14px); border-color:var(--border); }
-    .page-body { min-height:calc(100vh - 56px); grid-template-columns:304px 1fr; }
-    .sidebar { top:56px; max-height:calc(100vh - 56px); background:#090909; padding:24px 20px; }
-    .main-content { padding:42px 42px 64px; max-width:1420px; width:100%; }
-    .brand-title { font-size:16px; letter-spacing:-.025em; } .brand-title svg { color:#bcbcbc; }
-    .brand-tag { background:#151515; border-color:#2b2b2b; color:#aaa; }
-    .header-device { border-color:#2b2b2b; background:#101010; color:#aaa; border-radius:999px; }
-    .device-dot { background:#b8e5c2; }
-    .sidebar-label { color:#858585; }
-    .radio-option,input[type="text"],.filter-input,.filter-select { background:#101010; border-color:#2b2b2b; color:var(--text); }
-    .radio-option:hover,.btn-secondary:hover:not(:disabled),.btn-action:hover { background:#181818; border-color:#424242; }
-    .btn-primary { color:#101010; background:#f1f1f1; border-color:#f1f1f1; box-shadow:none; }
-    .btn-primary:hover:not(:disabled) { color:#080808; background:#fff; }
-    .card,.analysis-card,.probe-card,.stages-grid { background:#0d0d0d; border-color:#292929; box-shadow:none; }
-    .stage-card { padding:16px; } .stage-card:hover { background:#121212; }
-    .analysis-header,.tabs-nav,th { background:#101010; border-color:#292929; }
-    td,.kv-row,.scroll-list-item,.analysis-notes-list li { border-color:#222; }
-    tr:hover td,.scroll-list-item:hover { background:#151515; }
-    .scroll-container,.comp-card { background:#0a0a0a; border-color:#252525; }
-    .hero { display:block; padding:0 0 20px; margin-bottom:20px; background:none; border:none; border-bottom:1px solid #dfe3e8; }
-    .hero-eyebrow { display:flex; justify-content:space-between; align-items:center; color:#64748b; font:600 11px var(--mono); letter-spacing:.08em; text-transform:uppercase; margin-bottom:8px; }
-    .hero h1 { font-size:26px; font-weight:700; line-height:1.2; letter-spacing:-.03em; margin:0 0 6px; color:#0f172a; }
-    .hero p { max-width:760px; color:#475467; font-size:14px; line-height:1.55; }
-    .evidence-legend { display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-start; margin-top:14px; }
-    .evidence-pill { padding:4px 10px; border:1px solid #d0d5dd; border-radius:4px; background:#f8fafc; color:#475467; font:500 11px var(--mono); letter-spacing:.02em; }
-    .evidence-pill strong { color:#0f172a; font-weight:600; margin-right:4px; }
-    @media (max-width:900px) { .page-body { grid-template-columns:1fr; } .sidebar { position:relative; top:0; max-height:none; border-right:none; border-bottom:1px solid var(--border); } .hero { grid-template-columns:1fr; } .evidence-legend { justify-content:flex-start; } .main-content { padding:28px 20px 44px; } }
+    :root {
+      --bg: #070707;
+      --surface: #0d0d0d;
+      --surface-alt: #121212;
+      --border: #272727;
+      --border-focus: #747474;
+      --text: #f4f4f4;
+      --text-2: #d0d0d0;
+      --text-3: #a3a3a3;
+      --text-4: #6d6d6d;
+      --accent: #f4f4f4;
+      --accent-hover: #fff;
+      --accent-bg: #191919;
+      --success: #b8e5c2;
+      --success-bg: #112015;
+      --warning: #f0cf7d;
+      --warning-bg: #251e0f;
+      --error: #f0a3ad;
+      --error-bg: #281317;
+      --info: #b6ccea;
+      --font: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      --r: 12px;
+      --r-sm: 8px;
+      --shadow: none;
+    }
+
+    body {
+      background: var(--bg);
+    }
+
+    header {
+      height: 56px;
+      padding: 0 32px;
+      background: rgba(7, 7, 7, .92);
+      backdrop-filter: blur(14px);
+      border-color: var(--border);
+    }
+
+    .page-body {
+      min-height: calc(100vh - 56px);
+      grid-template-columns: 304px 1fr;
+    }
+
+    .sidebar {
+      top: 56px;
+      max-height: calc(100vh - 56px);
+      background: #090909;
+      padding: 24px 20px;
+    }
+
+    .main-content {
+      padding: 42px 42px 64px;
+      max-width: 1420px;
+      width: 100%;
+    }
+
+    .brand-title {
+      font-size: 16px;
+      letter-spacing: -.025em;
+    }
+
+    .brand-title svg {
+      color: #bcbcbc;
+    }
+
+    .brand-tag {
+      background: #151515;
+      border-color: #2b2b2b;
+      color: #aaa;
+    }
+
+    .header-device {
+      border-color: #2b2b2b;
+      background: #101010;
+      color: #aaa;
+      border-radius: 999px;
+    }
+
+    .device-dot {
+      background: #b8e5c2;
+    }
+
+    .sidebar-label {
+      color: #858585;
+    }
+
+    .radio-option,
+    input[type="text"],
+    .filter-input,
+    .filter-select {
+      background: #101010;
+      border-color: #2b2b2b;
+      color: var(--text);
+    }
+
+    .radio-option:hover,
+    .btn-secondary:hover:not(:disabled),
+    .btn-action:hover {
+      background: #181818;
+      border-color: #424242;
+    }
+
+    .btn-primary {
+      color: #101010;
+      background: #f1f1f1;
+      border-color: #f1f1f1;
+      box-shadow: none;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      color: #080808;
+      background: #fff;
+    }
+
+    .card,
+    .analysis-card,
+    .probe-card,
+    .stages-grid {
+      background: #0d0d0d;
+      border-color: #292929;
+      box-shadow: none;
+    }
+
+    .stage-card {
+      padding: 16px;
+    }
+
+    .stage-card:hover {
+      background: #121212;
+    }
+
+    .analysis-header,
+    .tabs-nav,
+    th {
+      background: #101010;
+      border-color: #292929;
+    }
+
+    td,
+    .kv-row,
+    .scroll-list-item,
+    .analysis-notes-list li {
+      border-color: #222;
+    }
+
+    tr:hover td,
+    .scroll-list-item:hover {
+      background: #151515;
+    }
+
+    .scroll-container,
+    .comp-card {
+      background: #0a0a0a;
+      border-color: #252525;
+    }
+
+    .hero {
+      display: block;
+      padding: 0 0 20px;
+      margin-bottom: 20px;
+      background: none;
+      border: none;
+      border-bottom: 1px solid #dfe3e8;
+    }
+
+    .hero-eyebrow {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #64748b;
+      font: 600 11px var(--mono);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .hero h1 {
+      font-size: 26px;
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: -.03em;
+      margin: 0 0 6px;
+      color: #0f172a;
+    }
+
+    .hero p {
+      max-width: 760px;
+      color: #475467;
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .evidence-legend {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+      margin-top: 14px;
+    }
+
+    .evidence-pill {
+      padding: 4px 10px;
+      border: 1px solid #d0d5dd;
+      border-radius: 4px;
+      background: #f8fafc;
+      color: #475467;
+      font: 500 11px var(--mono);
+      letter-spacing: .02em;
+    }
+
+    .evidence-pill strong {
+      color: #0f172a;
+      font-weight: 600;
+      margin-right: 4px;
+    }
+
+    @media (max-width:900px) {
+      .page-body {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: relative;
+        top: 0;
+        max-height: none;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .hero {
+        grid-template-columns: 1fr;
+      }
+
+      .evidence-legend {
+        justify-content: flex-start;
+      }
+
+      .main-content {
+        padding: 28px 20px 44px;
+      }
+    }
 
     /* ── READABLE WORKSPACE ──────────────────────────── */
-    :root { --bg:#f5f6f8; --surface:#fff; --surface-alt:#f8fafc; --border:#dfe3e8; --border-focus:#2563eb; --text:#172033; --text-2:#344054; --text-3:#667085; --text-4:#98a2b3; --accent:#2563eb; --accent-hover:#1d4ed8; --accent-bg:#eff6ff; --success:#067647; --success-bg:#ecfdf3; --warning:#b54708; --warning-bg:#fffaeb; --error:#b42318; --error-bg:#fef3f2; --info:#175cd3; --r:10px; --r-sm:7px; }
-    body { background:var(--bg); color:var(--text); }
-    header { height:58px; background:#fff; border-color:var(--border); box-shadow:0 1px 2px rgba(16,24,40,.04); }
-    .page-body { min-height:calc(100vh - 58px); grid-template-columns:300px 1fr; }
-    .sidebar { top:58px; max-height:calc(100vh - 58px); background:#fff; padding:24px 20px; }
-    .main-content { padding:30px 34px 52px; max-width:1440px; }
-    .brand-title { font-size:16px; color:#101828; } .brand-title svg { color:#2563eb; }
-    .brand-tag { background:#eff6ff; border-color:#bfdbfe; color:#1d4ed8; }
-    .header-device { color:#475467; background:#f8fafc; border:1px solid #d0d5dd; border-radius:999px; padding:4px 12px; font-size:11px; font-family:var(--mono); display:inline-flex; align-items:center; gap:6px; }
-    .device-dot { width:6px; height:6px; border-radius:50%; }
-    .device-dot-neutral { background:#94a3b8; }
-    .device-dot-connected { background:#12b76a; }
-    .sidebar-group-title { font-size:10px; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:8px; padding-bottom:4px; border-bottom:1px solid #f1f5f9; }
-    .sidebar-label { color:#667085; }
-    .radio-option,input[type="text"],.filter-input,.filter-select { background:#fff; border-color:#d0d5dd; color:var(--text); }
-    .radio-option:hover,.btn-secondary:hover:not(:disabled),.btn-action:hover { background:#f9fafb; border-color:#98a2b3; }
-    .btn-primary { color:#fff; background:#2563eb; border-color:#2563eb; }
-    .btn-primary:hover:not(:disabled) { color:#fff; background:#1d4ed8; }
-    .btn-stop { border:1px solid #fecaca; background:#fff5f4; color:#b42318; font-weight:500; font-size:12px; padding:6px 14px; border-radius:var(--r-sm); cursor:pointer; }
-    .btn-stop:hover { background:#fee2e2; }
-    .card,.analysis-card,.probe-card,.stages-grid { background:#fff; border-color:#dfe3e8; box-shadow:0 1px 2px rgba(16,24,40,.04); }
-    .stage-card { padding:18px; transition:all 0.15s; border-left:3px solid transparent; }
-    .stage-card:hover { background:#f8fafc; }
-    .stage-card.stage-running { background:#f0f7ff; border-left-color:#2563eb; }
-    .stage-card.stage-completed, .stage-card.stage-success { background:#f0fdf4; border-left-color:#16a34a; }
-    .stage-card.stage-skipped { background:#f8fafc; border-left-color:#94a3b8; }
-    .stage-card.stage-failed { background:#fef2f2; border-left-color:#dc2626; }
-    .stage-card.stage-warning { background:#fffbeb; border-left-color:#d97706; }
-    .quick-targets-panel { margin-top:14px; padding:12px; border:1px solid #93c5fd; border-radius:10px; background:#eff6ff; }
-    .quick-targets-heading { color:#1d4ed8; font-size:12px; font-weight:800; letter-spacing:.02em; }
-    .quick-targets-hint { color:#475569; font-size:11px; margin-top:3px; line-height:1.4; }
-    .preset-chips-grid { display:grid; grid-template-columns:1fr; gap:8px; margin-top:10px; }
-    .preset-chip { display:flex; flex-direction:column; align-items:flex-start; gap:3px; width:100%; padding:10px 12px; background:#fff; border:1px solid #bfdbfe; border-radius:8px; color:#0f172a; font-family:var(--font); text-align:left; cursor:pointer; box-shadow:0 1px 3px rgba(37,99,235,.08); transition:border-color .15s,box-shadow .15s,transform .15s; }
-    .preset-chip strong { font-size:12px; font-weight:700; }
-    .preset-chip span { color:#64748b; font-size:10.5px; line-height:1.35; }
-    .preset-chip:hover { border-color:#2563eb; box-shadow:0 3px 9px rgba(37,99,235,.16); transform:translateY(-1px); }
-    .preset-chip:focus-visible { outline:2px solid #2563eb; outline-offset:2px; }
-    .candidate-val { font-family:var(--mono); font-size:12px; overflow-wrap:anywhere; word-break:normal; line-height:1.45; }
-    .analysis-header,.tabs-nav,th { background:#f8fafc; border-color:#dfe3e8; }
-    td,.kv-row,.scroll-list-item,.analysis-notes-list li { border-color:#eaecf0; }
-    tr:hover td,.scroll-list-item:hover { background:#f9fafb; }
-    .scroll-container,.comp-card { background:#f8fafc; border-color:#eaecf0; }
+    :root {
+      --bg: #f5f6f8;
+      --surface: #fff;
+      --surface-alt: #f8fafc;
+      --border: #dfe3e8;
+      --border-focus: #2563eb;
+      --text: #172033;
+      --text-2: #344054;
+      --text-3: #667085;
+      --text-4: #98a2b3;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --accent-bg: #eff6ff;
+      --success: #067647;
+      --success-bg: #ecfdf3;
+      --warning: #b54708;
+      --warning-bg: #fffaeb;
+      --error: #b42318;
+      --error-bg: #fef3f2;
+      --info: #175cd3;
+      --r: 10px;
+      --r-sm: 7px;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    header {
+      height: 58px;
+      background: #fff;
+      border-color: var(--border);
+      box-shadow: 0 1px 2px rgba(16, 24, 40, .04);
+    }
+
+    .page-body {
+      min-height: calc(100vh - 58px);
+      grid-template-columns: 300px 1fr;
+    }
+
+    .sidebar {
+      top: 58px;
+      max-height: calc(100vh - 58px);
+      background: #fff;
+      padding: 24px 20px;
+    }
+
+    .main-content {
+      padding: 30px 34px 52px;
+      max-width: 1440px;
+    }
+
+    .brand-title {
+      font-size: 16px;
+      color: #101828;
+    }
+
+    .brand-title svg {
+      color: #2563eb;
+    }
+
+    .brand-tag {
+      background: #eff6ff;
+      border-color: #bfdbfe;
+      color: #1d4ed8;
+    }
+
+    .header-device {
+      color: #475467;
+      background: #f8fafc;
+      border: 1px solid #d0d5dd;
+      border-radius: 999px;
+      padding: 4px 12px;
+      font-size: 11px;
+      font-family: var(--mono);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .device-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+    }
+
+    .device-dot-neutral {
+      background: #94a3b8;
+    }
+
+    .device-dot-connected {
+      background: #12b76a;
+    }
+
+    .sidebar-group-title {
+      font-size: 10px;
+      font-weight: 700;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 8px;
+      padding-bottom: 4px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .sidebar-label {
+      color: #667085;
+    }
+
+    .radio-option,
+    input[type="text"],
+    .filter-input,
+    .filter-select {
+      background: #fff;
+      border-color: #d0d5dd;
+      color: var(--text);
+    }
+
+    .radio-option:hover,
+    .btn-secondary:hover:not(:disabled),
+    .btn-action:hover {
+      background: #f9fafb;
+      border-color: #98a2b3;
+    }
+
+    .btn-primary {
+      color: #fff;
+      background: #2563eb;
+      border-color: #2563eb;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      color: #fff;
+      background: #1d4ed8;
+    }
+
+    .btn-stop {
+      border: 1px solid #fecaca;
+      background: #fff5f4;
+      color: #b42318;
+      font-weight: 500;
+      font-size: 12px;
+      padding: 6px 14px;
+      border-radius: var(--r-sm);
+      cursor: pointer;
+    }
+
+    .btn-stop:hover {
+      background: #fee2e2;
+    }
+
+    .card,
+    .analysis-card,
+    .probe-card,
+    .stages-grid {
+      background: #fff;
+      border-color: #dfe3e8;
+      box-shadow: 0 1px 2px rgba(16, 24, 40, .04);
+    }
+
+    .stage-card {
+      padding: 18px;
+      transition: all 0.15s;
+      border-left: 3px solid transparent;
+    }
+
+    .stage-card:hover {
+      background: #f8fafc;
+    }
+
+    .stage-card.stage-running {
+      background: #f0f7ff;
+      border-left-color: #2563eb;
+    }
+
+    .stage-card.stage-completed,
+    .stage-card.stage-success {
+      background: #f0fdf4;
+      border-left-color: #16a34a;
+    }
+
+    .stage-card.stage-skipped {
+      background: #f8fafc;
+      border-left-color: #94a3b8;
+    }
+
+    .stage-card.stage-failed {
+      background: #fef2f2;
+      border-left-color: #dc2626;
+    }
+
+    .stage-card.stage-warning {
+      background: #fffbeb;
+      border-left-color: #d97706;
+    }
+
+    .quick-targets-panel {
+      margin-top: 14px;
+      padding: 12px;
+      border: 1px solid #93c5fd;
+      border-radius: 10px;
+      background: #eff6ff;
+    }
+
+    .quick-targets-heading {
+      color: #1d4ed8;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .02em;
+    }
+
+    .quick-targets-hint {
+      color: #475569;
+      font-size: 11px;
+      margin-top: 3px;
+      line-height: 1.4;
+    }
+
+    .preset-chips-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .preset-chip {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 3px;
+      width: 100%;
+      padding: 10px 12px;
+      background: #fff;
+      border: 1px solid #bfdbfe;
+      border-radius: 8px;
+      color: #0f172a;
+      font-family: var(--font);
+      text-align: left;
+      cursor: pointer;
+      box-shadow: 0 1px 3px rgba(37, 99, 235, .08);
+      transition: border-color .15s, box-shadow .15s, transform .15s;
+    }
+
+    .preset-chip strong {
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .preset-chip span {
+      color: #64748b;
+      font-size: 10.5px;
+      line-height: 1.35;
+    }
+
+    .preset-chip:hover {
+      border-color: #2563eb;
+      box-shadow: 0 3px 9px rgba(37, 99, 235, .16);
+      transform: translateY(-1px);
+    }
+
+    .preset-chip:focus-visible {
+      outline: 2px solid #2563eb;
+      outline-offset: 2px;
+    }
+
+    .candidate-val {
+      font-family: var(--mono);
+      font-size: 12px;
+      overflow-wrap: anywhere;
+      word-break: normal;
+      line-height: 1.45;
+    }
+
+    .analysis-header,
+    .tabs-nav,
+    th {
+      background: #f8fafc;
+      border-color: #dfe3e8;
+    }
+
+    td,
+    .kv-row,
+    .scroll-list-item,
+    .analysis-notes-list li {
+      border-color: #eaecf0;
+    }
+
+    tr:hover td,
+    .scroll-list-item:hover {
+      background: #f9fafb;
+    }
+
+    .scroll-container,
+    .comp-card {
+      background: #f8fafc;
+      border-color: #eaecf0;
+    }
+
     /* ── DEMO 3 TECHNICAL PRESENTATION STYLES ──────── */
     .scan-summary-grid {
       display: grid;
@@ -732,24 +1497,50 @@
       border: 1px solid #dfe3e8;
       border-radius: var(--r-sm);
     }
-    .summary-cell { display: flex; flex-direction: column; gap: 4px; }
-    .summary-label { font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; }
-    .summary-value { font-size: 13.5px; font-weight: 600; color: #0f172a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    .summary-cell {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .summary-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .summary-value {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: #0f172a;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
     .inventory-split-container {
       display: grid;
       grid-template-columns: 1fr 430px;
       gap: 16px;
       align-items: start;
     }
+
     @media (max-width: 1200px) {
-      .inventory-split-container { grid-template-columns: 1fr; }
+      .inventory-split-container {
+        grid-template-columns: 1fr;
+      }
     }
+
     .inventory-table-container {
       border: 1px solid #dfe3e8;
       border-radius: var(--r-sm);
       background: #fff;
       overflow: hidden;
     }
+
     .inventory-filter-bar {
       display: flex;
       justify-content: space-between;
@@ -760,7 +1551,13 @@
       gap: 10px;
       flex-wrap: wrap;
     }
-    .filter-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+
+    .filter-chips {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
     .filter-chip {
       background: #fff;
       border: 1px solid #cbd5e1;
@@ -772,11 +1569,32 @@
       cursor: pointer;
       transition: all 0.15s;
     }
-    .filter-chip:hover { border-color: #64748b; }
-    .filter-chip.active { background: #0284c7; color: #fff; border-color: #0284c7; }
-    .candidate-row { cursor: pointer; transition: background 0.1s; }
-    .candidate-row:hover td { background: #f1f5f9; }
-    .candidate-row.selected td { background: #e0f2fe; color: #0369a1; font-weight: 600; }
+
+    .filter-chip:hover {
+      border-color: #64748b;
+    }
+
+    .filter-chip.active {
+      background: #0284c7;
+      color: #fff;
+      border-color: #0284c7;
+    }
+
+    .candidate-row {
+      cursor: pointer;
+      transition: background 0.1s;
+    }
+
+    .candidate-row:hover td {
+      background: #f1f5f9;
+    }
+
+    .candidate-row.selected td {
+      background: #e0f2fe;
+      color: #0369a1;
+      font-weight: 600;
+    }
+
     .candidate-detail-card {
       border: 1px solid #dfe3e8;
       border-radius: var(--r-sm);
@@ -784,8 +1602,9 @@
       padding: 18px;
       position: sticky;
       top: 72px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
     }
+
     .detail-header {
       display: flex;
       justify-content: space-between;
@@ -794,8 +1613,15 @@
       margin-bottom: 14px;
       border-bottom: 1px solid #e2e8f0;
     }
-    .detail-section { margin-bottom: 14px; }
-    .detail-section:last-child { margin-bottom: 0; }
+
+    .detail-section {
+      margin-bottom: 14px;
+    }
+
+    .detail-section:last-child {
+      margin-bottom: 0;
+    }
+
     .detail-label {
       font-size: 11px;
       font-weight: 700;
@@ -804,6 +1630,7 @@
       letter-spacing: 0.05em;
       margin-bottom: 6px;
     }
+
     .detail-value-box {
       display: flex;
       align-items: center;
@@ -814,7 +1641,14 @@
       border-radius: 4px;
       padding: 8px 10px;
     }
-    .selectable-mono { font-family: var(--mono); font-size: 12px; color: #0f172a; word-break: break-all; }
+
+    .selectable-mono {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: #0f172a;
+      word-break: break-all;
+    }
+
     .btn-copy-small {
       background: #fff;
       border: 1px solid #cbd5e1;
@@ -827,8 +1661,20 @@
       white-space: nowrap;
       transition: all 0.1s;
     }
-    .btn-copy-small:hover { background: #f1f5f9; border-color: #94a3b8; }
-    .occurrences-list { display: flex; flex-direction: column; gap: 6px; max-height: 200px; overflow-y: auto; }
+
+    .btn-copy-small:hover {
+      background: #f1f5f9;
+      border-color: #94a3b8;
+    }
+
+    .occurrences-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
     .occurrence-item {
       background: #f8fafc;
       border: 1px solid #e2e8f0;
@@ -836,8 +1682,22 @@
       padding: 6px 10px;
       font-size: 11.5px;
     }
-    .occurrence-source { font-family: var(--mono); font-weight: 600; color: #0f172a; display: flex; align-items: center; gap: 4px; }
-    .occurrence-rule { font-size: 10px; color: #64748b; margin-top: 2px; }
+
+    .occurrence-source {
+      font-family: var(--mono);
+      font-weight: 600;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .occurrence-rule {
+      font-size: 10px;
+      color: #64748b;
+      margin-top: 2px;
+    }
+
     .evidence-code-block {
       background: #0f172a;
       color: #38bdf8;
@@ -851,8 +1711,23 @@
       line-height: 1.5;
       max-height: 180px;
     }
-    .components-kv-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; font-size: 11.5px; }
-    .component-tag { background: #f8fafc; border: 1px solid #e2e8f0; padding: 4px 8px; border-radius: 4px; font-family: var(--mono); color: #334155; }
+
+    .components-kv-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 6px;
+      font-size: 11.5px;
+    }
+
+    .component-tag {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-family: var(--mono);
+      color: #334155;
+    }
+
     .raw-json-viewer {
       background: #0f172a;
       color: #e2e8f0;
@@ -867,11 +1742,15 @@
     }
   </style>
 </head>
+
 <body>
   <header>
     <div>
       <div class="brand-title">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+        </svg>
         <span>MobiAttack</span>
         <span class="brand-tag">Demo 3 / Static Analysis</span>
       </div>
@@ -894,11 +1773,13 @@
           <div class="sidebar-label">Platform</div>
           <div class="segmented-group">
             <label class="radio-option">
-              <input type="radio" id="platform-android" name="platformRadio" value="android" checked onchange="handlePlatformChange()" />
+              <input type="radio" id="platform-android" name="platformRadio" value="android" checked
+                onchange="handlePlatformChange()" />
               Android
             </label>
             <label class="radio-option">
-              <input type="radio" id="platform-ios" name="platformRadio" value="ios" onchange="handlePlatformChange()" />
+              <input type="radio" id="platform-ios" name="platformRadio" value="ios"
+                onchange="handlePlatformChange()" />
               iOS
             </label>
           </div>
@@ -913,19 +1794,31 @@
 
         <div class="sidebar-section">
           <label for="apkUrl" class="sidebar-label">Target URL (Direct APK or Google Play Store)</label>
-          <input type="text" id="apkUrl" placeholder="Paste APK, IPA, or Play Store URL..." oninput="handleUrlInput()" />
-          <div id="urlClassificationBadge" style="display:none; margin-top:6px; font-family:var(--mono); font-size:11px;"></div>
+          <input type="text" id="apkUrl" placeholder="Paste APK, IPA, or Play Store URL..."
+            oninput="handleUrlInput()" />
+          <div id="urlClassificationBadge"
+            style="display:none; margin-top:6px; font-family:var(--mono); font-size:11px;"></div>
           <div class="quick-targets-panel">
             <div class="quick-targets-heading">Quick Demos</div>
             <div class="quick-targets-hint">Choose a sample to fill the target field.</div>
             <div class="preset-chips-grid" id="quickTargetsAndroid">
-              <button type="button" class="preset-chip" onclick="fillPreset('https://github.com/OWASP/MASTG-Hacking-Playground/releases/download/1.0/MSTG-Android-Kotlin.apk')"><strong>OWASP Kotlin APK</strong><span>2.9 MB · Direct APK demo</span></button>
-              <button type="button" class="preset-chip" onclick="fillPreset('https://play.google.com/store/apps/details?id=mobi.freeapps.flashlight.free')"><strong>Flashlight · Play Store</strong><span>Lightweight (~3 MB) · Fast store demo</span></button>
-              <button type="button" class="preset-chip" onclick="fillPreset('https://play.google.com/store/apps/details?id=com.alphainventor.filemanager')"><strong>File Manager · Play Store</strong><span>Storage permissions & endpoints</span></button>
-              <button type="button" class="preset-chip" onclick="fillPreset('https://play.google.com/store/apps/details?id=com.google.android.calculator')"><strong>Google Calculator · Play Store</strong><span>Split APK App Bundle demo</span></button>
+              <button type="button" class="preset-chip"
+                onclick="fillPreset('https://github.com/OWASP/MASTG-Hacking-Playground/releases/download/1.0/MSTG-Android-Kotlin.apk')"><strong>OWASP
+                  Kotlin APK</strong><span>2.9 MB · Direct APK demo</span></button>
+              <button type="button" class="preset-chip"
+                onclick="fillPreset('https://play.google.com/store/apps/details?id=mobi.freeapps.flashlight.free')"><strong>Flashlight
+                  · Play Store</strong><span>Lightweight (~3 MB) · Fast store demo</span></button>
+              <button type="button" class="preset-chip"
+                onclick="fillPreset('https://play.google.com/store/apps/details?id=com.alphainventor.filemanager')"><strong>File
+                  Manager · Play Store</strong><span>Storage permissions & endpoints</span></button>
+              <button type="button" class="preset-chip"
+                onclick="fillPreset('https://play.google.com/store/apps/details?id=com.google.android.calculator')"><strong>Google
+                  Calculator · Play Store</strong><span>Split APK App Bundle demo</span></button>
             </div>
             <div class="preset-chips-grid" id="quickTargetsIos" style="display:none;">
-              <button type="button" class="preset-chip" onclick="fillPreset('https://github.com/OWASP/MASTG-Hacking-Playground/releases/download/1.0/MSTG-JWT.ipa')"><strong>OWASP iOS Swift IPA</strong><span>5.9 MB · Static analysis only</span></button>
+              <button type="button" class="preset-chip"
+                onclick="fillPreset('https://github.com/OWASP/MASTG-Hacking-Playground/releases/download/1.0/MSTG-JWT.ipa')"><strong>OWASP
+                  iOS Swift IPA</strong><span>5.9 MB · Static analysis only</span></button>
             </div>
           </div>
         </div>
@@ -946,7 +1839,8 @@
           <div class="sidebar-group-title">Device / Runtime</div>
           <div class="sidebar-label">ADB Target</div>
           <input type="text" id="adbSerial" value="emulator-5554" readonly aria-readonly="true" />
-          <div style="font-size:11px; color:var(--text-4); margin-top:4px;">Fixed Android Studio emulator on this Mac backend.</div>
+          <div style="font-size:11px; color:var(--text-4); margin-top:4px;">Fixed Android Studio emulator on this Mac
+            backend.</div>
         </div>
 
         <div class="sidebar-section" id="installModeSection">
@@ -965,9 +1859,12 @@
 
         <div class="sidebar-section">
           <div class="sidebar-group-title">Action</div>
-          <button class="btn btn-primary" id="startBtn" onclick="startDemo()" data-action="START DEMO" title="START DEMO">▶ Start Analysis</button>
-          <button class="btn btn-secondary" id="resetBtn" onclick="resetDashboardToInitial()" style="margin-top:8px; width:100%; font-size:12px;">↺ Reset View</button>
-          <button class="btn btn-stop" id="stopBtn" onclick="stopDemo()" style="display:none; margin-top:8px; width:100%;">Stop Analysis</button>
+          <button class="btn btn-primary" id="startBtn" onclick="startDemo()" data-action="START DEMO"
+            title="START DEMO">▶ Start Analysis</button>
+          <button class="btn btn-secondary" id="resetBtn" onclick="resetDashboardToInitial()"
+            style="margin-top:8px; width:100%; font-size:12px;">↺ Reset View</button>
+          <button class="btn btn-stop" id="stopBtn" onclick="stopDemo()"
+            style="display:none; margin-top:8px; width:100%;">Stop Analysis</button>
         </div>
       </div>
 
@@ -980,7 +1877,8 @@
             <span>DEMO 3 / STATIC ANALYSIS</span>
           </div>
           <h1>Mobile Application Security Analysis</h1>
-          <p>Deterministic APK analysis with canonical normalization, provenance tracking, and structured security output.</p>
+          <p>Deterministic APK analysis with canonical normalization, provenance tracking, and structured security
+            output.</p>
           <div class="evidence-legend" aria-label="Supported analysis modes">
             <span class="evidence-pill"><strong>Android</strong> Monolithic &amp; Split APK</span>
             <span class="evidence-pill"><strong>iOS</strong> IPA Static Analysis</span>
@@ -988,43 +1886,66 @@
         </section>
 
         <!-- iOS Scope & App Store Limitation Callout (Visible when iOS Quick Preset is clicked or iOS is selected) -->
-        <div id="iosScopeCard" style="display:none; margin-bottom:20px; background:var(--warning-bg, #fffbeb); border:1px solid #fde047; border-left:5px solid #d97706; border-radius:var(--r, 10px); padding:16px 20px; box-shadow:0 1px 4px rgba(0,0,0,0.04);">
-          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
+        <div id="iosScopeCard"
+          style="display:none; margin-bottom:20px; background:var(--warning-bg, #fffbeb); border:1px solid #fde047; border-left:5px solid #d97706; border-radius:var(--r, 10px); padding:16px 20px; box-shadow:0 1px 4px rgba(0,0,0,0.04);">
+          <div
+            style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
             <div style="display:flex; align-items:center; gap:8px;">
               <span style="font-size:18px;">⚠️</span>
-              <strong style="color:#b45309; font-size:14px; font-weight:700;">iOS Statik Analiz Kapsamı &amp; App Store (FairPlay DRM) Kısıtı</strong>
+              <strong style="color:#b45309; font-size:14px; font-weight:700;">iOS Statik Analiz Kapsamı &amp; App Store
+                (FairPlay DRM) Kısıtı</strong>
             </div>
-            <span class="badge" style="background:rgba(217,119,6,0.12); color:#b45309; border:1px solid rgba(217,119,6,0.3); font-size:11px; font-weight:600; text-transform:uppercase;">Phase 1: Sınırlı Statik İnceleme</span>
+            <span class="badge"
+              style="background:rgba(217,119,6,0.12); color:#b45309; border:1px solid rgba(217,119,6,0.3); font-size:11px; font-weight:600; text-transform:uppercase;">Phase
+              1: Sınırlı Statik İnceleme</span>
           </div>
 
-          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:14px; font-size:12.5px; line-height:1.55; color:var(--text-2, #344054);">
-            <div style="background:rgba(254, 242, 242, 0.85); border:1px solid #fecaca; border-radius:8px; padding:12px 14px;">
-              <div style="font-weight:700; color:#b91c1c; margin-bottom:6px; display:flex; align-items:center; gap:6px;">
+          <div
+            style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:14px; font-size:12.5px; line-height:1.55; color:var(--text-2, #344054);">
+            <div
+              style="background:rgba(254, 242, 242, 0.85); border:1px solid #fecaca; border-radius:8px; padding:12px 14px;">
+              <div
+                style="font-weight:700; color:#b91c1c; margin-bottom:6px; display:flex; align-items:center; gap:6px;">
                 <span>🚫</span> Neden apps.apple.com Linki Doğrudan Analiz Edilemez?
               </div>
               <ul style="margin:0; padding-left:18px; color:#475569;">
-                <li style="margin-bottom:5px;"><strong>Sadece Web Vitrini:</strong> App Store sayfaları (<code>apps.apple.com</code>) birer tanıtım sayfasıdır; tarayıcı veya HTTP ile doğrudan <code>.ipa</code> dosyası inmez.</li>
-                <li style="margin-bottom:5px;"><strong>FairPlay DRM Şifrelemesi:</strong> Apple, App Store'daki tüm ikili kodları FairPlay DRM ile şifreler (<code>cryptid = 1</code>). Şifreli kodlar jailbreak'li bir fiziksel cihazda RAM'den deşifre edilmeden statik olarak açılamaz ve taranamaz.</li>
-                <li><strong>Gereksinim:</strong> Gerçek kod analizi için şifresiz, doğrudan bir <code>.ipa</code> URL'si veya geliştirici test paketi gereklidir.</li>
+                <li style="margin-bottom:5px;"><strong>Sadece Web Vitrini:</strong> App Store sayfaları
+                  (<code>apps.apple.com</code>) birer tanıtım sayfasıdır; tarayıcı veya HTTP ile doğrudan
+                  <code>.ipa</code> dosyası inmez.
+                </li>
+                <li style="margin-bottom:5px;"><strong>FairPlay DRM Şifrelemesi:</strong> Apple, App Store'daki tüm
+                  ikili kodları FairPlay DRM ile şifreler (<code>cryptid = 1</code>). Şifreli kodlar jailbreak'li bir
+                  fiziksel cihazda RAM'den deşifre edilmeden statik olarak açılamaz ve taranamaz.</li>
+                <li><strong>Gereksinim:</strong> Gerçek kod analizi için şifresiz, doğrudan bir <code>.ipa</code> URL'si
+                  veya geliştirici test paketi gereklidir.</li>
               </ul>
             </div>
 
-            <div style="background:rgba(254, 249, 195, 0.7); border:1px solid #fde047; border-radius:8px; padding:12px 14px;">
-              <div style="font-weight:700; color:#a16207; margin-bottom:6px; display:flex; align-items:center; gap:6px;">
+            <div
+              style="background:rgba(254, 249, 195, 0.7); border:1px solid #fde047; border-radius:8px; padding:12px 14px;">
+              <div
+                style="font-weight:700; color:#a16207; margin-bottom:6px; display:flex; align-items:center; gap:6px;">
                 <span>🔍</span> Şu Anda Bu Pakette Neleri Analiz Ediyoruz?
               </div>
               <ul style="margin:0; padding-left:18px; color:#475569;">
-                <li style="margin-bottom:5px;"><strong>ATS İstisnaları (App Transport Security):</strong> Güvensiz HTTP trafiğine (<code>NSAllowsArbitraryLoads</code>) izin verilip verilmediği.</li>
-                <li style="margin-bottom:5px;"><strong>İmzalı Debug Yetkisi (Entitlements):</strong> <code>get-task-allow</code> yetkisi ile uygulamanın üretimde hata ayıklamaya açık bırakılıp bırakılmadığı.</li>
-                <li style="margin-bottom:5px;"><strong>Paket ve İkili Yapı:</strong> <code>Info.plist</code> gizlilik izinleri, mimari ve Mach-O ikili başlıkları.</li>
-                <li><em>(Not: iOS Simulator ortamında runtime doğrulama Phase 1'de desteklenmez, sadece statik analiz yapılır).</em></li>
+                <li style="margin-bottom:5px;"><strong>ATS İstisnaları (App Transport Security):</strong> Güvensiz HTTP
+                  trafiğine (<code>NSAllowsArbitraryLoads</code>) izin verilip verilmediği.</li>
+                <li style="margin-bottom:5px;"><strong>İmzalı Debug Yetkisi (Entitlements):</strong>
+                  <code>get-task-allow</code> yetkisi ile uygulamanın üretimde hata ayıklamaya açık bırakılıp
+                  bırakılmadığı.
+                </li>
+                <li style="margin-bottom:5px;"><strong>Paket ve İkili Yapı:</strong> <code>Info.plist</code> gizlilik
+                  izinleri, mimari ve Mach-O ikili başlıkları.</li>
+                <li><em>(Not: iOS Simulator ortamında runtime doğrulama Phase 1'de desteklenmez, sadece statik analiz
+                    yapılır).</em></li>
               </ul>
             </div>
           </div>
         </div>
 
         <div id="completedBanner" class="banner banner-success">
-          <div><strong>COMPLETED</strong> — Pipeline execution completed. Review skipped stages and analysis notes.</div>
+          <div><strong>COMPLETED</strong> — Pipeline execution completed. Review skipped stages and analysis notes.
+          </div>
         </div>
 
         <div id="errorBanner" class="banner banner-error">
@@ -1072,7 +1993,8 @@
 
         <!-- Connectivity Probe (Collapsible Secondary Utility) -->
         <details class="probe-card" id="probeCard" style="margin-bottom:20px; cursor:default;">
-          <summary style="display:flex; justify-content:space-between; align-items:center; cursor:pointer; list-style:none; user-select:none;">
+          <summary
+            style="display:flex; justify-content:space-between; align-items:center; cursor:pointer; list-style:none; user-select:none;">
             <div style="display:flex; align-items:center; gap:8px;">
               <span style="font-size:12.5px; font-weight:600; color:var(--text-2);">Device / Emulator Utilities</span>
               <span class="tag" style="font-size:9.5px; padding:1px 6px;">Optional</span>
@@ -1083,17 +2005,24 @@
             <div class="probe-header">
               <div>
                 <div style="font-size:12.5px; font-weight:600; color:var(--text);">Connectivity Probe</div>
-                <div style="font-size:11.5px; color:var(--text-3);">Verify emulator reverse socket reachability (optional pre-flight)</div>
+                <div style="font-size:11.5px; color:var(--text-3);">Verify emulator reverse socket reachability
+                  (optional pre-flight)</div>
               </div>
-              <button class="btn btn-secondary" id="probeBtn" onclick="runProbe()" style="padding:4px 10px; font-size:11px;">Test Connectivity</button>
+              <button class="btn btn-secondary" id="probeBtn" onclick="runProbe()"
+                style="padding:4px 10px; font-size:11px;">Test Connectivity</button>
             </div>
             <div id="probeDetails" style="font-size:12px; display:none; margin-top:10px;">
-              <div class="kv-row"><span class="kv-key">Probe URL:</span><span class="kv-val" id="probeUrl">-</span></div>
+              <div class="kv-row"><span class="kv-key">Probe URL:</span><span class="kv-val" id="probeUrl">-</span>
+              </div>
               <div class="kv-row"><span class="kv-key">Hit:</span><span class="kv-val" id="probeHit">-</span></div>
-              <div class="kv-row"><span class="kv-key">Hit Count:</span><span class="kv-val" id="probeHitCount">-</span></div>
-              <div class="kv-row"><span class="kv-key">Status:</span><span class="kv-val" id="probeStatus" style="color:var(--success);">-</span></div>
+              <div class="kv-row"><span class="kv-key">Hit Count:</span><span class="kv-val" id="probeHitCount">-</span>
+              </div>
+              <div class="kv-row"><span class="kv-key">Status:</span><span class="kv-val" id="probeStatus"
+                  style="color:var(--success);">-</span></div>
             </div>
-            <div class="probe-disclaimer" style="font-size:11px; color:var(--text-4); margin-top:6px;">⚠️ Emulator connectivity only — not application navigation. Deterministic static analysis runs independently of ADB.</div>
+            <div class="probe-disclaimer" style="font-size:11px; color:var(--text-4); margin-top:6px;">⚠️ Emulator
+              connectivity only — not application navigation. Deterministic static analysis runs independently of ADB.
+            </div>
           </div>
         </details>
 
@@ -1102,19 +2031,26 @@
           <div class="analysis-header">
             <div>
               <h2 style="font-size:15px; font-weight:700; color:var(--text);">Analysis Results</h2>
-              <div style="font-size:12px; color:var(--text-3); margin-top:1px;">Deterministic evidence from pipeline execution</div>
+              <div style="font-size:12px; color:var(--text-3); margin-top:1px;">Deterministic evidence from pipeline
+                execution</div>
             </div>
             <span class="tag" id="analysisRunIdBadge">RUN ID: -</span>
           </div>
 
           <div class="tabs-nav">
             <button class="tab-btn active" id="tab-btn-overview" onclick="switchTab('overview')">Overview</button>
-            <button class="tab-btn" id="tab-btn-api_candidates" onclick="switchTab('api_candidates')">Structured Inventory <span class="tag" id="inventoryCountTag" style="margin-left:4px; font-size:10px; background:#eff6ff; color:#1d4ed8; font-weight:700;">0</span></button>
-            <button class="tab-btn" id="tab-btn-findings" onclick="switchTab('findings')">Static Findings <span class="tag" id="findingsCountTag" style="margin-left:4px; font-size:10px; background:var(--error-bg); color:var(--error); border-color:#fecaca;">0</span></button>
-            <button class="tab-btn" id="tab-btn-analysis_details" onclick="switchTab('analysis_details')">Analysis Details<span id="tab-btn-notes" style="display:none;"></span></button>
+            <button class="tab-btn" id="tab-btn-api_candidates" onclick="switchTab('api_candidates')">Structured
+              Inventory <span class="tag" id="inventoryCountTag"
+                style="margin-left:4px; font-size:10px; background:#eff6ff; color:#1d4ed8; font-weight:700;">0</span></button>
+            <button class="tab-btn" id="tab-btn-findings" onclick="switchTab('findings')">Static Findings <span
+                class="tag" id="findingsCountTag"
+                style="margin-left:4px; font-size:10px; background:var(--error-bg); color:var(--error); border-color:#fecaca;">0</span></button>
+            <button class="tab-btn" id="tab-btn-analysis_details" onclick="switchTab('analysis_details')">Analysis
+              Details<span id="tab-btn-notes" style="display:none;"></span></button>
             <button class="tab-btn" id="tab-btn-raw_json" onclick="switchTab('raw_json')">Raw JSON</button>
             <button class="tab-btn" id="tab-btn-runtime" onclick="switchTab('runtime')">Launch Check</button>
-            <button class="tab-btn" id="tab-btn-components" onclick="switchTab('components')" style="display:none;">Components</button>
+            <button class="tab-btn" id="tab-btn-components" onclick="switchTab('components')"
+              style="display:none;">Components</button>
             <button class="tab-btn" id="tab-btn-application" onclick="switchTab('application')">Application</button>
             <button class="tab-btn" id="tab-btn-structure" onclick="switchTab('structure')">Structure</button>
             <button class="tab-btn" id="tab-btn-network" onclick="switchTab('network')">Raw Indicators</button>
@@ -1134,9 +2070,11 @@
               </div>
               <div class="summary-cell">
                 <div class="summary-label">SHA-256</div>
-                <div class="summary-value font-mono" id="sumShaContainer" style="display:flex; align-items:center; gap:6px;">
+                <div class="summary-value font-mono" id="sumShaContainer"
+                  style="display:flex; align-items:center; gap:6px;">
                   <span id="sumShaText">-</span>
-                  <button class="btn-copy-small" id="btnCopySha" onclick="copyShaText(this)" title="Copy SHA-256">Copy</button>
+                  <button class="btn-copy-small" id="btnCopySha" onclick="copyShaText(this)"
+                    title="Copy SHA-256">Copy</button>
                 </div>
               </div>
               <div class="summary-cell">
@@ -1165,40 +2103,67 @@
 
           <!-- Tab: Security Findings -->
           <div class="tab-pane" id="tab-pane-findings">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:10px;">
+            <div
+              style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:10px;">
               <div>
                 <div class="section-subtitle" style="margin-bottom:2px;">Security Findings</div>
-                <div id="findingsSubtitle" style="font-size:12px; color:var(--text-3);">Automated static evaluation mapped to OWASP MASVS</div>
+                <div id="findingsSubtitle" style="font-size:12px; color:var(--text-3);">Automated static evaluation
+                  mapped to OWASP MASVS</div>
               </div>
               <div id="riskScoreBadgeContainer"></div>
             </div>
 
-            <div id="findingsSeverityGrid" style="display:grid; grid-template-columns:repeat(4, 1fr); gap:10px; margin-bottom:16px;">
-              <div style="background:var(--error-bg); border:1px solid #fecaca; border-radius:8px; padding:12px; text-align:center;">
-                <div style="font-size:10px; font-weight:600; color:var(--error); text-transform:uppercase; letter-spacing:0.5px;">Critical</div>
-                <div id="countCritical" style="font-size:22px; font-weight:700; color:var(--error); margin-top:2px;">0</div>
+            <div id="findingsSeverityGrid"
+              style="display:grid; grid-template-columns:repeat(4, 1fr); gap:10px; margin-bottom:16px;">
+              <div
+                style="background:var(--error-bg); border:1px solid #fecaca; border-radius:8px; padding:12px; text-align:center;">
+                <div
+                  style="font-size:10px; font-weight:600; color:var(--error); text-transform:uppercase; letter-spacing:0.5px;">
+                  Critical</div>
+                <div id="countCritical" style="font-size:22px; font-weight:700; color:var(--error); margin-top:2px;">0
+                </div>
               </div>
-              <div style="background:#fff7ed; border:1px solid #fed7aa; border-radius:8px; padding:12px; text-align:center;">
-                <div style="font-size:10px; font-weight:600; color:#ea580c; text-transform:uppercase; letter-spacing:0.5px;">High</div>
+              <div
+                style="background:#fff7ed; border:1px solid #fed7aa; border-radius:8px; padding:12px; text-align:center;">
+                <div
+                  style="font-size:10px; font-weight:600; color:#ea580c; text-transform:uppercase; letter-spacing:0.5px;">
+                  High</div>
                 <div id="countHigh" style="font-size:22px; font-weight:700; color:#ea580c; margin-top:2px;">0</div>
               </div>
-              <div style="background:var(--warning-bg); border:1px solid #fde68a; border-radius:8px; padding:12px; text-align:center;">
-                <div style="font-size:10px; font-weight:600; color:var(--warning); text-transform:uppercase; letter-spacing:0.5px;">Medium</div>
-                <div id="countMedium" style="font-size:22px; font-weight:700; color:var(--warning); margin-top:2px;">0</div>
+              <div
+                style="background:var(--warning-bg); border:1px solid #fde68a; border-radius:8px; padding:12px; text-align:center;">
+                <div
+                  style="font-size:10px; font-weight:600; color:var(--warning); text-transform:uppercase; letter-spacing:0.5px;">
+                  Medium</div>
+                <div id="countMedium" style="font-size:22px; font-weight:700; color:var(--warning); margin-top:2px;">0
+                </div>
               </div>
-              <div style="background:var(--accent-bg); border:1px solid #bfdbfe; border-radius:8px; padding:12px; text-align:center;">
-                <div style="font-size:10px; font-weight:600; color:var(--accent); text-transform:uppercase; letter-spacing:0.5px;">Low</div>
+              <div
+                style="background:var(--accent-bg); border:1px solid #bfdbfe; border-radius:8px; padding:12px; text-align:center;">
+                <div
+                  style="font-size:10px; font-weight:600; color:var(--accent); text-transform:uppercase; letter-spacing:0.5px;">
+                  Low</div>
                 <div id="countLow" style="font-size:22px; font-weight:700; color:var(--accent); margin-top:2px;">0</div>
               </div>
             </div>
 
-            <div id="findingsFilterBar" style="display:flex; align-items:center; gap:8px; margin-bottom:14px; flex-wrap:wrap;">
+            <div id="findingsFilterBar"
+              style="display:flex; align-items:center; gap:8px; margin-bottom:14px; flex-wrap:wrap;">
               <span style="font-size:12px; color:var(--text-3); font-weight:500;">Filter:</span>
-              <button class="btn btn-secondary filter-btn active" onclick="filterFindings('ALL', this)" style="padding:3px 10px; font-size:11px;">All (<span id="filterCountAll">0</span>)</button>
-              <button class="btn btn-secondary filter-btn" onclick="filterFindings('CRITICAL', this)" style="padding:3px 10px; font-size:11px; color:var(--error);">Critical (<span id="filterCountCrit">0</span>)</button>
-              <button class="btn btn-secondary filter-btn" onclick="filterFindings('HIGH', this)" style="padding:3px 10px; font-size:11px; color:#ea580c;">High (<span id="filterCountHigh">0</span>)</button>
-              <button class="btn btn-secondary filter-btn" onclick="filterFindings('MEDIUM', this)" style="padding:3px 10px; font-size:11px; color:var(--warning);">Medium (<span id="filterCountMed">0</span>)</button>
-              <button class="btn btn-secondary filter-btn" onclick="filterFindings('LOW', this)" style="padding:3px 10px; font-size:11px; color:var(--accent);">Low (<span id="filterCountLow">0</span>)</button>
+              <button class="btn btn-secondary filter-btn active" onclick="filterFindings('ALL', this)"
+                style="padding:3px 10px; font-size:11px;">All (<span id="filterCountAll">0</span>)</button>
+              <button class="btn btn-secondary filter-btn" onclick="filterFindings('CRITICAL', this)"
+                style="padding:3px 10px; font-size:11px; color:var(--error);">Critical (<span
+                  id="filterCountCrit">0</span>)</button>
+              <button class="btn btn-secondary filter-btn" onclick="filterFindings('HIGH', this)"
+                style="padding:3px 10px; font-size:11px; color:#ea580c;">High (<span
+                  id="filterCountHigh">0</span>)</button>
+              <button class="btn btn-secondary filter-btn" onclick="filterFindings('MEDIUM', this)"
+                style="padding:3px 10px; font-size:11px; color:var(--warning);">Medium (<span
+                  id="filterCountMed">0</span>)</button>
+              <button class="btn btn-secondary filter-btn" onclick="filterFindings('LOW', this)"
+                style="padding:3px 10px; font-size:11px; color:var(--accent);">Low (<span
+                  id="filterCountLow">0</span>)</button>
             </div>
 
             <div id="findingsListContainer"></div>
@@ -1217,12 +2182,14 @@
           <div class="tab-pane" id="tab-pane-application">
             <div class="section-subtitle">Application Identity</div>
             <div id="appDetailsRows"></div>
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:16px; margin-bottom:6px;">
+            <div
+              style="display:flex; justify-content:space-between; align-items:center; margin-top:16px; margin-bottom:6px;">
               <div class="section-subtitle" style="margin-bottom:0;" id="appPermsHeader">Declared Permissions</div>
               <span class="tag" id="appPermsCount">0 declared</span>
             </div>
             <div class="scroll-container" id="appPermsList"></div>
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:16px; margin-bottom:6px;">
+            <div
+              style="display:flex; justify-content:space-between; align-items:center; margin-top:16px; margin-bottom:6px;">
               <div class="section-subtitle" style="margin-bottom:0;" id="appActsHeader">Declared Activities</div>
               <span class="tag" id="appActsCount">0 declared</span>
             </div>
@@ -1251,10 +2218,12 @@
 
           <!-- Tab: API Candidates & Structured Inventory -->
           <div class="tab-pane" id="tab-pane-api_candidates">
-            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
+            <div
+              style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
               <div>
                 <div class="section-subtitle" style="margin-bottom:2px;">Structured Inventory</div>
-              <div style="font-size:12px; color:var(--text-3);">URLs, domains, route candidates and IPs found in app files, with source locations. These strings are not confirmed API calls.</div>
+                <div style="font-size:12px; color:var(--text-3);">URLs, domains, route candidates and IPs found in app
+                  files, with source locations. These strings are not confirmed API calls.</div>
               </div>
             </div>
             <div id="apiCandidatesContainer">
@@ -1264,20 +2233,28 @@
 
           <!-- Tab: Raw JSON (Baseline Report) -->
           <div class="tab-pane" id="tab-pane-raw_json">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:8px;">
+            <div
+              style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:8px;">
               <div>
                 <div class="section-subtitle" style="margin-bottom:2px;">Baseline Report (baseline_report.json)</div>
-                <div style="font-size:12px; color:var(--text-3);">Machine-readable structured contract validated against <code>schemas/baseline_report.schema.json</code></div>
+                <div style="font-size:12px; color:var(--text-3);">Machine-readable structured contract validated against
+                  <code>schemas/baseline_report.schema.json</code>
+                </div>
               </div>
               <div style="display:flex; gap:8px;">
-                <button class="btn btn-secondary" id="btnCopyRawJson" onclick="copyRawJsonText(this)" style="font-size:12px; padding:6px 12px;">Copy JSON</button>
-                <a class="btn btn-secondary" id="btnDownloadRawJson" href="#" download style="font-size:12px; padding:6px 12px; text-decoration:none;">Download File</a>
+                <button class="btn btn-secondary" id="btnCopyRawJson" onclick="copyRawJsonText(this)"
+                  style="font-size:12px; padding:6px 12px;">Copy JSON</button>
+                <a class="btn btn-secondary" id="btnDownloadRawJson" href="#" download
+                  style="font-size:12px; padding:6px 12px; text-decoration:none;">Download File</a>
               </div>
             </div>
 
-            <div style="display:flex; align-items:center; gap:16px; margin-bottom:12px; background:#f8fafc; border:1px solid #dfe3e8; border-radius:6px; padding:8px 14px; font-size:12px; flex-wrap:wrap;">
-              <div><span style="color:#64748b; font-weight:600;">Format:</span> <code style="font-size:11.5px; color:#0f172a;">Draft-07 JSON Schema</code></div>
-              <div><span style="color:#64748b; font-weight:600;">schema_version:</span> <code id="rawJsonSchemaVersion" style="font-size:11.5px; color:#0284c7; font-weight:700;">"1.0.0"</code></div>
+            <div
+              style="display:flex; align-items:center; gap:16px; margin-bottom:12px; background:#f8fafc; border:1px solid #dfe3e8; border-radius:6px; padding:8px 14px; font-size:12px; flex-wrap:wrap;">
+              <div><span style="color:#64748b; font-weight:600;">Format:</span> <code
+                  style="font-size:11.5px; color:#0f172a;">Draft-07 JSON Schema</code></div>
+              <div><span style="color:#64748b; font-weight:600;">schema_version:</span> <code id="rawJsonSchemaVersion"
+                  style="font-size:11.5px; color:#0284c7; font-weight:700;">"1.0.0"</code></div>
               <div style="display:flex; align-items:center; gap:6px;">
                 <span style="color:#64748b; font-weight:600;">Schema Validation:</span>
                 <span id="rawJsonValidationBadge" class="badge badge-success">Passed</span>
@@ -1292,7 +2269,8 @@
           <div class="tab-pane" id="tab-pane-runtime">
             <div class="section-subtitle">Application Launch Check (ADB)</div>
             <div class="notice-info" style="margin-bottom:12px;">
-              ℹ️ Verifies basic APK installation, process startup, and foreground activity on an emulator. This is <strong>not</strong> dynamic security testing or traffic interception.
+              ℹ️ Verifies basic APK installation, process startup, and foreground activity on an emulator. This is
+              <strong>not</strong> dynamic security testing or traffic interception.
             </div>
             <div id="runtimeRows"></div>
           </div>
@@ -1332,7 +2310,9 @@
             </div>
 
             <div class="notice-info" style="margin-bottom:16px;">
-              ℹ️ <strong>Scan Integrity Guarantee:</strong> <code>COMPLETED + 0 candidates</code> indicates deterministic rule execution ran across all discovered files without matching patterns. <code>PARTIAL + 0 candidates</code> indicates incomplete decompression or unreadable targets.
+              ℹ️ <strong>Scan Integrity Guarantee:</strong> <code>COMPLETED + 0 candidates</code> indicates
+              deterministic rule execution ran across all discovered files without matching patterns.
+              <code>PARTIAL + 0 candidates</code> indicates incomplete decompression or unreadable targets.
             </div>
 
             <div class="section-subtitle">Analysis Notes & Method Constraints</div>
@@ -1350,19 +2330,37 @@
             <div id="reportSummaryRows"></div>
             <div class="report-actions">
               <a class="btn-action" id="btnViewHtmlReport" href="#" target="_blank">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
                 View HTML Report
               </a>
               <a class="btn-action" id="btnDownloadJsonReport" href="#" download>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
                 Download JSON
               </a>
-              <a class="btn-action" id="btnDownloadBaselineReport" href="#" download style="border-color:#38bdf8; color:#38bdf8;">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+              <a class="btn-action" id="btnDownloadBaselineReport" href="#" download
+                style="border-color:#38bdf8; color:#38bdf8;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <line x1="16" y1="13" x2="8" y2="13"></line>
+                  <line x1="16" y1="17" x2="8" y2="17"></line>
+                  <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
                 Baseline Report (Demo 3)
               </a>
               <a class="btn-action" id="btnOpenNewTab" href="#" target="_blank">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                  <polyline points="15 3 21 3 21 9"></polyline>
+                  <line x1="10" y1="14" x2="21" y2="3"></line>
+                </svg>
                 Open in New Tab
               </a>
             </div>
@@ -1429,7 +2427,7 @@
       if (data.platform === 'ios') {
         el.innerHTML = `
           <div class="kv-row"><span class="kv-key">File:</span><span class="kv-val">${escapeHtml(data.filename || '-')}</span></div>
-          <div class="kv-row"><span class="kv-key">Size:</span><span class="kv-val">${data.size_bytes ? (data.size_bytes / (1024*1024)).toFixed(2) + ' MB' : '-'}</span></div>
+          <div class="kv-row"><span class="kv-key">Size:</span><span class="kv-val">${data.size_bytes ? (data.size_bytes / (1024 * 1024)).toFixed(2) + ' MB' : '-'}</span></div>
           <div class="kv-row"><span class="kv-key">Platform:</span><span class="kv-val"><span class="tag">iOS</span></span></div>
         `;
         return;
@@ -1447,7 +2445,7 @@
       }
       el.innerHTML = `
         <div class="kv-row"><span class="kv-key">File:</span><span class="kv-val">${escapeHtml(data.filename || '-')}</span></div>
-        <div class="kv-row"><span class="kv-key">Size:</span><span class="kv-val">${data.size_bytes ? (data.size_bytes / (1024*1024)).toFixed(2) + ' MB' : '-'}</span></div>
+        <div class="kv-row"><span class="kv-key">Size:</span><span class="kv-val">${data.size_bytes ? (data.size_bytes / (1024 * 1024)).toFixed(2) + ' MB' : '-'}</span></div>
         <div class="kv-row"><span class="kv-key">Package:</span><span class="kv-val">${escapeHtml(data.package_name || '-')}</span></div>
       `;
     }
@@ -1481,7 +2479,7 @@
       const apktool = data.apktool || {};
       const jadx = data.jadx || {};
       const jadxWarn = jadx.status === "success_with_warnings";
-      
+
       el.innerHTML = `
         <div class="kv-row"><span class="kv-key">Raw Extract:</span><span class="kv-val">${raw.file_count || 0} files</span></div>
         <div class="kv-row"><span class="kv-key">Apktool:</span><span class="kv-val">${escapeHtml(apktool.status || '-')}</span></div>
@@ -1642,13 +2640,13 @@
           btnElement.textContent = "Copied!";
           setTimeout(() => { btnElement.textContent = orig; }, 1500);
         }
-      } catch (e) {}
+      } catch (e) { }
       document.body.removeChild(ta);
     }
 
     function copyShaText(btn) {
       const sha = (window.demo3State && window.demo3State.currentSha) ||
-                  document.getElementById("sumShaText").getAttribute("data-full-sha") || "";
+        document.getElementById("sumShaText").getAttribute("data-full-sha") || "";
       copyText(sha, btn);
     }
 
@@ -1880,7 +2878,7 @@
             ${occs.map((occ, oIdx) => `
               <div class="occurrence-item">
                 <div class="occurrence-source">
-                  <span style="color:var(--text-3); font-size:10.5px;">#${oIdx+1}</span>
+                  <span style="color:var(--text-3); font-size:10.5px;">#${oIdx + 1}</span>
                   <code style="overflow-wrap:anywhere; word-break:break-all;">${escapeHtml(occ.source_file)}${occ.line_number ? ':' + occ.line_number : ''}</code>
                 </div>
                 ${occ.raw_value && occ.raw_value !== cand.value ? `<div style="margin-top:2px; color:#64748b; font-family:var(--mono); font-size:10.5px;">Raw: <code>${escapeHtml(occ.raw_value)}</code></div>` : ''}
@@ -2122,7 +3120,7 @@
       renderNetworkViewer();
     }
 
-    
+
     let currentFindings = [];
     let currentVulnData = null;
     let activeFindingFilter = "ALL";
@@ -2134,7 +3132,7 @@
       renderFindingsList();
     }
 
-    
+
     function evaluateClientVulnerabilities(result) {
       if (result && (result.platform === "ios" || (result.static_analysis && result.static_analysis.platform === "ios"))) {
         return {
@@ -2425,8 +3423,8 @@
         return;
       }
 
-      const filtered = activeFindingFilter === "ALL" 
-        ? currentFindings 
+      const filtered = activeFindingFilter === "ALL"
+        ? currentFindings
         : currentFindings.filter(f => (f.severity || "").toUpperCase() === activeFindingFilter);
 
       if (filtered.length === 0) {
@@ -2767,28 +3765,28 @@
             </thead>
             <tbody>
               ${apkComponents.map(c => {
-                const cPrep = c.preprocessing || {};
-                const rawSt = c.raw_extract_status || cPrep.raw_extract_status || '-';
-                const apkSt = c.apktool_status || cPrep.apktool_status || '-';
-                const jadxSt = c.jadx_status || cPrep.jadx_status || '-';
+          const cPrep = c.preprocessing || {};
+          const rawSt = c.raw_extract_status || cPrep.raw_extract_status || '-';
+          const apkSt = c.apktool_status || cPrep.apktool_status || '-';
+          const jadxSt = c.jadx_status || cPrep.jadx_status || '-';
 
-                function formatBadge(st) {
-                  if (st === 'success') return `<span class="badge badge-success">success</span>`;
-                  if (st === 'success_with_warnings') return `<span class="badge badge-warning">success_with_warnings</span>`;
-                  if (st === 'skipped_no_dex') return `<span class="badge badge-pending">skipped_no_dex</span>`;
-                  return `<span class="badge">${escapeHtml(st)}</span>`;
-                }
+          function formatBadge(st) {
+            if (st === 'success') return `<span class="badge badge-success">success</span>`;
+            if (st === 'success_with_warnings') return `<span class="badge badge-warning">success_with_warnings</span>`;
+            if (st === 'skipped_no_dex') return `<span class="badge badge-pending">skipped_no_dex</span>`;
+            return `<span class="badge">${escapeHtml(st)}</span>`;
+          }
 
-                let szStr = '-';
-                if (typeof c.size_bytes === 'number') {
-                  if (c.size_bytes >= 1024 * 1024) szStr = (c.size_bytes / (1024 * 1024)).toFixed(2) + ' MB';
-                  else if (c.size_bytes >= 1024) szStr = (c.size_bytes / 1024).toFixed(1) + ' KB';
-                  else szStr = c.size_bytes + ' B';
-                }
+          let szStr = '-';
+          if (typeof c.size_bytes === 'number') {
+            if (c.size_bytes >= 1024 * 1024) szStr = (c.size_bytes / (1024 * 1024)).toFixed(2) + ' MB';
+            else if (c.size_bytes >= 1024) szStr = (c.size_bytes / 1024).toFixed(1) + ' KB';
+            else szStr = c.size_bytes + ' B';
+          }
 
-                const shaShort = (c.sha256 || '').slice(0, 12) + '...';
+          const shaShort = (c.sha256 || '').slice(0, 12) + '...';
 
-                return `
+          return `
                   <tr>
                     <td><code>${escapeHtml(c.filename)}</code></td>
                     <td><span class="tag">${escapeHtml(c.role || '-')}</span></td>
@@ -2800,7 +3798,7 @@
                     <td>${formatBadge(jadxSt)}</td>
                   </tr>
                 `;
-              }).join('')}
+        }).join('')}
             </tbody>
           </table>
         `;
@@ -2874,7 +3872,7 @@
         document.getElementById("appPermsList").innerHTML = perms.length > 0
           ? perms.map(p => `<div class="scroll-list-item">${escapeHtml(p)}</div>`).join('')
           : `<div style="color:var(--text-dim); padding:8px;">No permissions declared.</div>`;
-        
+
         document.getElementById("appActsCount").textContent = acts.length + " declared";
         document.getElementById("appActsList").innerHTML = acts.length > 0
           ? acts.map(a => `<div class="scroll-list-item">${escapeHtml(a)}</div>`).join('')
@@ -2902,16 +3900,16 @@
 
           <div class="comp-card" style="margin-bottom:12px;">
             <div style="font-weight:600; color:#fff; margin-bottom:8px; border-bottom:1px solid #1c2130; padding-bottom:4px;">Embedded Frameworks & Libraries (${fws.length})</div>
-            ${fws.length > 0 
-              ? fws.map(f => `<div class="kv-row"><span class="kv-key">${escapeHtml(f.type || 'framework')}:</span><span class="kv-val"><code>${escapeHtml(f.name || f.relative_path)}</code></span></div>`).join('')
-              : '<div style="color:var(--text-dim); padding:4px 0;">No embedded frameworks in Frameworks/</div>'}
+            ${fws.length > 0
+            ? fws.map(f => `<div class="kv-row"><span class="kv-key">${escapeHtml(f.type || 'framework')}:</span><span class="kv-val"><code>${escapeHtml(f.name || f.relative_path)}</code></span></div>`).join('')
+            : '<div style="color:var(--text-dim); padding:4px 0;">No embedded frameworks in Frameworks/</div>'}
           </div>
 
           <div class="comp-card" style="margin-bottom:12px;">
             <div style="font-weight:600; color:#fff; margin-bottom:8px; border-bottom:1px solid #1c2130; padding-bottom:4px;">App Extensions & PlugIns (${exts.length})</div>
             ${exts.length > 0
-              ? exts.map(e => `<div class="kv-row"><span class="kv-key">Extension:</span><span class="kv-val"><code>${escapeHtml(e.name || e.relative_path)}</code></span></div>`).join('')
-              : '<div style="color:var(--text-dim); padding:4px 0;">No app extensions (.appex) found.</div>'}
+            ? exts.map(e => `<div class="kv-row"><span class="kv-key">Extension:</span><span class="kv-val"><code>${escapeHtml(e.name || e.relative_path)}</code></span></div>`).join('')
+            : '<div style="color:var(--text-dim); padding:4px 0;">No app extensions (.appex) found.</div>'}
           </div>
 
           <div class="comp-card" style="margin-bottom:12px;">
@@ -2925,19 +3923,19 @@
           <div class="comp-card">
             <div style="font-weight:600; color:#fff; margin-bottom:8px; border-bottom:1px solid #1c2130; padding-bottom:4px;">Provisioning Entitlements (${entEntries.length})</div>
             ${entEntries.length > 0
-              ? entEntries.map(([k, v]) => `<div class="kv-row"><span class="kv-key"><code>${escapeHtml(k)}</code>:</span><span class="kv-val">${escapeHtml(typeof v === 'object' ? JSON.stringify(v) : String(v))}</span></div>`).join('')
-              : '<div style="color:var(--text-dim); padding:4px 0;">No entitlements extracted or embedded.mobileprovision absent.</div>'}
+            ? entEntries.map(([k, v]) => `<div class="kv-row"><span class="kv-key"><code>${escapeHtml(k)}</code>:</span><span class="kv-val">${escapeHtml(typeof v === 'object' ? JSON.stringify(v) : String(v))}</span></div>`).join('')
+            : '<div style="color:var(--text-dim); padding:4px 0;">No entitlements extracted or embedded.mobileprovision absent.</div>'}
           </div>
         `;
       } else if (packageLayout === "split" && splitStructure.length > 0) {
         document.getElementById("structureRows").innerHTML = `
           <div>
             ${splitStructure.map(sc => {
-              const sDex = sc.dex_files || [];
-              const sLibs = sc.native_libraries || [];
-              const sAssets = sc.assets || [];
-              const sSmali = sc.smali_roots || [];
-              return `
+          const sDex = sc.dex_files || [];
+          const sLibs = sc.native_libraries || [];
+          const sAssets = sc.assets || [];
+          const sSmali = sc.smali_roots || [];
+          return `
                 <div class="comp-card">
                   <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; border-bottom:1px solid #1c2130; padding-bottom:4px;">
                     <strong style="color:#ffffff; font-size:12.5px;">Source APK: <code>${escapeHtml(sc.source_apk || '-')}</code></strong>
@@ -2951,7 +3949,7 @@
                   <div class="kv-row"><span class="kv-key">Kotlin Metadata:</span><span class="kv-val">${sc.has_kotlin_metadata ? 'Present' : 'Not detected'}</span></div>
                 </div>
               `;
-            }).join('')}
+        }).join('')}
           </div>
         `;
       } else {
@@ -3404,7 +4402,7 @@
           document.getElementById("startBtn").disabled = false;
           const stopBtn = document.getElementById("stopBtn");
           if (stopBtn) stopBtn.style.display = "none";
-          
+
           document.getElementById("completedBanner").style.display = "flex";
           if (status.result) {
             renderAnalysisResults(status.result, status.run_id);
@@ -3415,7 +4413,7 @@
           document.getElementById("startBtn").disabled = false;
           const stopBtn = document.getElementById("stopBtn");
           if (stopBtn) stopBtn.style.display = "none";
-          
+
           const errMsg = status.error || "Stage execution failed.";
           let openStoreBtnHtml = "";
           if (errMsg.includes("not installed on the connected Android device")) {
@@ -3456,7 +4454,7 @@
         let data = {};
         try {
           data = await resp.json();
-        } catch (_) {}
+        } catch (_) { }
         document.getElementById("startBtn").disabled = false;
         ["acquisition", "preprocessing", "static_analysis", "runtime"].forEach(stage => {
           const b = document.getElementById("badge-" + stage);
@@ -3540,7 +4538,7 @@
             alert(data.message || "Failed to start demo");
           }
           document.getElementById("startBtn").disabled = false;
-          
+
           return;
         }
 
@@ -3636,4 +4634,5 @@
     }
   </script>
 </body>
+
 </html>
