@@ -984,6 +984,42 @@
           </div>
         </section>
 
+        <!-- iOS Scope & App Store Limitation Callout (Visible when iOS Quick Preset is clicked or iOS is selected) -->
+        <div id="iosScopeCard" style="display:none; margin-bottom:20px; background:var(--warning-bg, #fffbeb); border:1px solid #fde047; border-left:5px solid #d97706; border-radius:var(--r, 10px); padding:16px 20px; box-shadow:0 1px 4px rgba(0,0,0,0.04);">
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="font-size:18px;">⚠️</span>
+              <strong style="color:#b45309; font-size:14px; font-weight:700;">iOS Statik Analiz Kapsamı &amp; App Store (FairPlay DRM) Kısıtı</strong>
+            </div>
+            <span class="badge" style="background:rgba(217,119,6,0.12); color:#b45309; border:1px solid rgba(217,119,6,0.3); font-size:11px; font-weight:600; text-transform:uppercase;">Phase 1: Sınırlı Statik İnceleme</span>
+          </div>
+
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:14px; font-size:12.5px; line-height:1.55; color:var(--text-2, #344054);">
+            <div style="background:rgba(254, 242, 242, 0.85); border:1px solid #fecaca; border-radius:8px; padding:12px 14px;">
+              <div style="font-weight:700; color:#b91c1c; margin-bottom:6px; display:flex; align-items:center; gap:6px;">
+                <span>🚫</span> Neden apps.apple.com Linki Doğrudan Analiz Edilemez?
+              </div>
+              <ul style="margin:0; padding-left:18px; color:#475569;">
+                <li style="margin-bottom:5px;"><strong>Sadece Web Vitrini:</strong> App Store sayfaları (<code>apps.apple.com</code>) birer tanıtım sayfasıdır; tarayıcı veya HTTP ile doğrudan <code>.ipa</code> dosyası inmez.</li>
+                <li style="margin-bottom:5px;"><strong>FairPlay DRM Şifrelemesi:</strong> Apple, App Store'daki tüm ikili kodları FairPlay DRM ile şifreler (<code>cryptid = 1</code>). Şifreli kodlar jailbreak'li bir fiziksel cihazda RAM'den deşifre edilmeden statik olarak açılamaz ve taranamaz.</li>
+                <li><strong>Gereksinim:</strong> Gerçek kod analizi için şifresiz, doğrudan bir <code>.ipa</code> URL'si veya geliştirici test paketi gereklidir.</li>
+              </ul>
+            </div>
+
+            <div style="background:rgba(254, 249, 195, 0.7); border:1px solid #fde047; border-radius:8px; padding:12px 14px;">
+              <div style="font-weight:700; color:#a16207; margin-bottom:6px; display:flex; align-items:center; gap:6px;">
+                <span>🔍</span> Şu Anda Bu Pakette Neleri Analiz Ediyoruz?
+              </div>
+              <ul style="margin:0; padding-left:18px; color:#475569;">
+                <li style="margin-bottom:5px;"><strong>ATS İstisnaları (App Transport Security):</strong> Güvensiz HTTP trafiğine (<code>NSAllowsArbitraryLoads</code>) izin verilip verilmediği.</li>
+                <li style="margin-bottom:5px;"><strong>İmzalı Debug Yetkisi (Entitlements):</strong> <code>get-task-allow</code> yetkisi ile uygulamanın üretimde hata ayıklamaya açık bırakılıp bırakılmadığı.</li>
+                <li style="margin-bottom:5px;"><strong>Paket ve İkili Yapı:</strong> <code>Info.plist</code> gizlilik izinleri, mimari ve Mach-O ikili başlıkları.</li>
+                <li><em>(Not: iOS Simulator ortamında runtime doğrulama Phase 1'de desteklenmez, sadece statik analiz yapılır).</em></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
         <div id="completedBanner" class="banner banner-success">
           <div><strong>COMPLETED</strong> — Pipeline execution completed. Review skipped stages and analysis notes.</div>
         </div>
@@ -1341,7 +1377,17 @@
       const input = document.getElementById("apkUrl");
       input.value = url;
       handleUrlInput();
-      input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      const platform = getSelectedPlatform();
+      const scopeCard = document.getElementById("iosScopeCard");
+      if (platform === "ios" || (url && url.endsWith(".ipa"))) {
+        if (scopeCard) {
+          scopeCard.style.display = "block";
+          scopeCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+      } else {
+        if (scopeCard) scopeCard.style.display = "none";
+        input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
     }
 
     let pollTimer = null;
@@ -3110,11 +3156,16 @@
 
       if (isIos) {
         iosNotice.style.display = "block";
+        iosNotice.style.background = "";
+        iosNotice.style.borderColor = "";
+        iosNotice.style.color = "";
         iosNotice.innerHTML = "ℹ️ <strong>iOS Static Analysis Mode:</strong> Enter a direct <code>.ipa</code> URL or local file path. Runtime verification is not implemented for iOS in Phase 1.";
         badge.style.display = "none";
         if (urlLabel) urlLabel.textContent = "Target IPA (Direct URL or Local File Path)";
         if (urlInput) urlInput.placeholder = "https://.../app.ipa or /path/to/app.ipa";
       } else {
+        const scopeCard = document.getElementById("iosScopeCard");
+        if (scopeCard) scopeCard.style.display = "none";
         iosNotice.style.display = "none";
         if (urlLabel) urlLabel.textContent = "Target URL (Direct APK or Google Play Store)";
         if (urlInput) urlInput.placeholder = "https://play.google.com/store/apps/details?id=... or direct .apk URL";
@@ -3131,9 +3182,20 @@
         const url = document.getElementById("apkUrl").value.trim();
         const isAppStore = /^https?:\/\/apps\.apple\.com\//i.test(url);
         const notice = document.getElementById("iosNotice");
-        notice.textContent = isAppStore
-          ? "App Store links are product pages, not IPA downloads. For package analysis, use a direct .ipa URL or local IPA file path."
-          : "iOS static analysis accepts a direct .ipa URL or local IPA file path. Runtime verification is not available.";
+        const scopeCard = document.getElementById("iosScopeCard");
+        if (isAppStore) {
+          if (scopeCard) scopeCard.style.display = "block";
+          notice.style.display = "block";
+          notice.style.background = "#fef2f2";
+          notice.style.borderColor = "#fca5a5";
+          notice.style.color = "#991b1b";
+          notice.innerHTML = "🚫 <strong>App Store Sayfası Algılandı:</strong> <code>apps.apple.com</code> linkleri ürün vitrinidir ve Apple DRM ile şifrelidir. Doğrudan analiz başlatılamaz. Gerçek kod analizi için Quick Demos'taki OWASP IPA'yı veya doğrudan bir <code>.ipa</code> URL'sini kullanın.";
+        } else {
+          notice.style.background = "";
+          notice.style.borderColor = "";
+          notice.style.color = "";
+          notice.innerHTML = "ℹ️ <strong>iOS Static Analysis Mode:</strong> Enter a direct <code>.ipa</code> URL or local file path. Runtime verification is not implemented for iOS in Phase 1.";
+        }
         return;
       }
       const url = document.getElementById("apkUrl").value.trim();

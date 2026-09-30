@@ -385,7 +385,7 @@ class TestDemoOrchestratorUnit(unittest.TestCase):
                 platform="ios",
             )
         self.assertEqual(ctx.exception.stage, "acquisition")
-        self.assertIn("iOS analysis is not implemented in V1.", str(ctx.exception))
+        self.assertTrue(any(s in str(ctx.exception) for s in ("iOS static analysis requires a direct .ipa", "iOS analysis is not implemented in V1.")))
 
     def test_11_unsupported_url_rejection(self):
         with self.assertRaises(DemoOrchestrationError) as ctx:

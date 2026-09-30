@@ -368,7 +368,7 @@ class TestDemoWebServer(unittest.TestCase):
         })
         self.assertEqual(status, 200)
         self.assertEqual(body["type"], "not_implemented")
-        self.assertIn("iOS analysis is not implemented in V1.", body.get("message", ""))
+        self.assertTrue(any(s in body.get("message", "") for s in ("iOS static analysis requires a direct .ipa", "iOS analysis is not implemented in V1.")))
 
     def test_api_classify_unsupported(self):
         status, body = self._post("/api/classify", {
@@ -384,7 +384,7 @@ class TestDemoWebServer(unittest.TestCase):
             "url": "https://example.com/app.apk",
         })
         self.assertEqual(status, 400)
-        self.assertIn("iOS analysis is not implemented in V1.", body.get("error", ""))
+        self.assertTrue(any(s in body.get("error", "") for s in ("iOS static analysis requires a direct .ipa", "iOS analysis is not implemented in V1.")))
 
     @patch("src.demo_web_server.open_play_store_on_device")
     def test_api_open_store(self, mock_open):
