@@ -70,7 +70,12 @@ class TestUrlClassifier(unittest.TestCase):
         res = classify_input_url(url, platform="ios")
         self.assertEqual(res["platform"], "ios")
         self.assertEqual(res["type"], "not_implemented")
-        self.assertEqual(res["message"], "iOS analysis is not implemented in V1.")
+        self.assertIn("direct .ipa", res["message"])
+
+    def test_app_store_page_is_not_an_ipa(self):
+        res = classify_input_url("https://apps.apple.com/us/app/testflight/id899247664", platform="ios")
+        self.assertEqual(res["type"], "unsupported")
+        self.assertIn("not an IPA download", res["reason"])
 
 
 if __name__ == "__main__":

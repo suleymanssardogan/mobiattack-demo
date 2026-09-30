@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import re
 import urllib.parse
+from pathlib import Path
 
 # Android package name regex: components separated by dots, each starting with a letter
 ANDROID_PACKAGE_RE = re.compile(r"^[a-zA-Z][a-zA-Z0-9_]*(?:\.[a-zA-Z][a-zA-Z0-9_]*)+$")
@@ -41,6 +42,12 @@ def classify_input_url(url: str, platform: str = "android") -> dict:
                 pass
         url_path = parsed.path if parsed else raw_url
         unquoted_path = urllib.parse.unquote(url_path).strip()
+        if parsed and (parsed.hostname or "").lower() == "apps.apple.com":
+            return {
+                "platform": "ios", "type": "unsupported", "normalized_url": raw_url,
+                "package_name": None,
+                "reason": "An App Store page is not an IPA download. Provide a direct .ipa URL or a local IPA file path for static analysis.",
+            }
         if unquoted_path.lower().endswith(".ipa"):
             return {
                 "platform": "ios",
@@ -64,7 +71,7 @@ def classify_input_url(url: str, platform: str = "android") -> dict:
             "type": "not_implemented",
             "normalized_url": raw_url,
             "package_name": None,
-            "message": "iOS analysis is not implemented in V1.",
+            "message": "iOS static analysis requires a direct .ipa URL or a local IPA file path.",
         }
 
     # 2. Android Platform Handling

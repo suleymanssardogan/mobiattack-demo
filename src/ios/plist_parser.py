@@ -165,6 +165,7 @@ def parse_info_plist(
         "allows_arbitrary_loads": False,
         "allows_local_networking": False,
         "allows_arbitrary_loads_in_web_content": False,
+        "allows_arbitrary_loads_for_media": False,
         "exception_domains": [],
         "configuration_facts": [],
     }
@@ -196,6 +197,16 @@ def parse_info_plist(
             ats_facts["configuration_facts"].append({
                 "key": "NSAllowsArbitraryLoadsInWebContent",
                 "value": allows_web,
+                "classification": "configuration_fact",
+                "source": source_label,
+            })
+
+        allows_media = ats_raw.get("NSAllowsArbitraryLoadsForMedia")
+        if isinstance(allows_media, bool):
+            ats_facts["allows_arbitrary_loads_for_media"] = allows_media
+            ats_facts["configuration_facts"].append({
+                "key": "NSAllowsArbitraryLoadsForMedia",
+                "value": allows_media,
                 "classification": "configuration_fact",
                 "source": source_label,
             })

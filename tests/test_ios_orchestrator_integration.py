@@ -136,12 +136,11 @@ class TestIOSOrchestratorIntegration(unittest.TestCase):
         runtime = result.get("runtime", {})
         self.assertEqual(runtime.get("status"), "not_implemented")
 
-        # Ground rule: iOS vulnerability analysis is not implemented (not_evaluated, NOT CLEAN)
+        # Limited iOS rules report the explicit insecure ATS exception.
         vulns = result.get("vulnerabilities", {})
-        self.assertEqual(vulns.get("status"), "not_evaluated")
-        self.assertEqual(vulns.get("reason"), "not_implemented")
-        self.assertEqual(vulns.get("risk_score"), "NOT_EVALUATED")
-        self.assertEqual(vulns.get("findings"), [])
+        self.assertEqual(vulns.get("status"), "evaluated_limited")
+        self.assertEqual(vulns.get("risk_score"), "MEDIUM")
+        self.assertTrue(any(f.get("id") == "IOS-NET-03" for f in vulns.get("findings", [])))
 
         # 6. Verify generated reports exist and contain factual content
         report_json_path = self.output_root / "report.json"
@@ -153,8 +152,7 @@ class TestIOSOrchestratorIntegration(unittest.TestCase):
             json_report = json.load(f)
         self.assertEqual(json_report.get("platform"), "ios")
         self.assertEqual(json_report.get("application", {}).get("bundle_identifier"), "com.example.integrationapp")
-        self.assertEqual(json_report.get("vulnerabilities", {}).get("status"), "not_evaluated")
-        self.assertEqual(json_report.get("vulnerabilities", {}).get("reason"), "not_implemented")
+        self.assertEqual(json_report.get("vulnerabilities", {}).get("status"), "evaluated_limited")
 
         with open(report_html_path, encoding="utf-8") as f:
             html_report = f.read()
@@ -162,8 +160,7 @@ class TestIOSOrchestratorIntegration(unittest.TestCase):
         self.assertIn("IntegrationApp", html_report)
         self.assertIn("NSCameraUsageDescription", html_report)
         self.assertIn("Vulnerability Analysis", html_report)
-        self.assertIn("Not evaluated", html_report)
-        self.assertIn("iOS vulnerability evaluation is not implemented in Phase 1", html_report)
+        self.assertIn("Insecure HTTP allowed for an ATS exception domain", html_report)
         # Ensure Android-specific terminology does not leak into iOS HTML report
         self.assertNotIn("Launcher Activity", html_report)
         self.assertNotIn("DEX Count", html_report)

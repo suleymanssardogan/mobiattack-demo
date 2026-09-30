@@ -2265,13 +2265,16 @@
       currentFindings = findingsData.findings || [];
       const sum = findingsData.summary || { critical: 0, high: 0, medium: 0, low: 0, total: currentFindings.length };
       const isNotEvaluated = findingsData.status === "not_evaluated" || findingsData.risk_score === "NOT_EVALUATED";
+      const isLimitedIos = findingsData.status === "evaluated_limited";
       const risk = (findingsData.risk_score || (isNotEvaluated ? "NOT_EVALUATED" : "CLEAN")).toUpperCase();
 
       document.getElementById("findingsSeverityGrid").style.display = isNotEvaluated ? "none" : "grid";
       document.getElementById("findingsFilterBar").style.display = isNotEvaluated ? "none" : "flex";
       document.getElementById("findingsSubtitle").textContent = isNotEvaluated
         ? "iOS package facts are available; vulnerability rules have not been run."
-        : "Automated static evaluation mapped to OWASP MASVS";
+        : isLimitedIos
+          ? "Limited iOS static checks: ATS exceptions and signed debug entitlement. Runtime behavior was not tested."
+          : "Automated static evaluation mapped to OWASP MASVS";
 
       // Counts
       document.getElementById("findingsCountTag").textContent = isNotEvaluated ? "N/A" : (sum.total || 0);
@@ -2294,6 +2297,10 @@
         riskColor = "#a78bfa";
         riskBg = "rgba(167,139,250,0.15)";
         riskBorder = "rgba(167,139,250,0.35)";
+      } else if (isLimitedIos && risk === "NO_FINDINGS") {
+        riskColor = "#667085";
+        riskBg = "#f2f4f7";
+        riskBorder = "#d0d5dd";
       } else if (risk === "CRITICAL") {
         riskColor = "#f87171";
         riskBg = "rgba(239,68,68,0.15)";
@@ -2314,7 +2321,7 @@
 
       const riskBadgeEl = document.getElementById("riskScoreBadgeContainer");
       if (riskBadgeEl) {
-        const badgeLabel = isNotEvaluated ? "NOT EVALUATED" : risk;
+        const badgeLabel = isNotEvaluated ? "NOT EVALUATED" : risk === "NO_FINDINGS" ? "NO FINDINGS IN CHECKED RULES" : risk;
         riskBadgeEl.innerHTML = `
           <div style="display:flex; align-items:center; gap:8px;">
             <span style="font-size:12px; color:var(--text-dim);">Assessed Risk:</span>
@@ -2330,7 +2337,7 @@
         if (isNotEvaluated) {
           ovRiskEl.innerHTML = `<span style="font-weight:700; color:${riskColor}; cursor:pointer;" onclick="switchTab('findings')">Not evaluated (iOS Phase 1) &rarr;</span>`;
         } else {
-          ovRiskEl.innerHTML = `<span style="font-weight:700; color:${riskColor}; cursor:pointer;" onclick="switchTab('findings')">${risk} (${sum.total} findings) &rarr;</span>`;
+          ovRiskEl.innerHTML = `<span style="font-weight:700; color:${riskColor}; cursor:pointer;" onclick="switchTab('findings')">${isLimitedIos && risk === 'NO_FINDINGS' ? 'No findings in checked rules' : risk} (${sum.total} findings) &rarr;</span>`;
         }
       }
 
@@ -2359,10 +2366,11 @@
         : currentFindings.filter(f => (f.severity || "").toUpperCase() === activeFindingFilter);
 
       if (filtered.length === 0) {
+        const limitedIos = currentVulnData && currentVulnData.status === "evaluated_limited";
         container.innerHTML = `
-          <div style="background:rgba(16,185,129,0.06); border:1px solid rgba(16,185,129,0.2); border-radius:6px; padding:18px; text-align:center; color:#34d399;">
-            <div style="font-weight:600; font-size:14px; margin-bottom:4px;">No Vulnerabilities in this category</div>
-            <div style="font-size:12px; color:var(--text-dim);">No matching security findings were identified.</div>
+          <div style="background:${limitedIos ? '#f8fafc' : 'rgba(16,185,129,0.06)'}; border:1px solid ${limitedIos ? '#d0d5dd' : 'rgba(16,185,129,0.2)'}; border-radius:6px; padding:18px; text-align:center; color:${limitedIos ? '#344054' : '#34d399'};">
+            <div style="font-weight:600; font-size:14px; margin-bottom:4px;">${limitedIos ? 'No findings in the selected iOS checks' : 'No Vulnerabilities in this category'}</div>
+            <div style="font-size:12px; color:var(--text-dim);">${limitedIos ? 'Only ATS and signed debug entitlement were checked. This is not a clean bill of health.' : 'No matching security findings were identified.'}</div>
           </div>
         `;
         return;
@@ -2483,7 +2491,7 @@
       const splitStructure = struct.components || stat.structure?.components || [];
 
       // Render Security Findings early to get counts for summary bar
-      const vulnData = (result.vulnerabilities && ((result.vulnerabilities.findings && result.vulnerabilities.findings.length > 0) || result.vulnerabilities.status === "not_evaluated"))
+      const vulnData = (result.vulnerabilities && ((result.vulnerabilities.findings && result.vulnerabilities.findings.length > 0) || result.vulnerabilities.status === "not_evaluated" || result.vulnerabilities.status === "evaluated_limited"))
         ? result.vulnerabilities
         : evaluateClientVulnerabilities(result);
       renderFindings(vulnData);
@@ -3120,6 +3128,12 @@
       const badge = document.getElementById("urlClassificationBadge");
       if (platform === "ios") {
         badge.style.display = "none";
+        const url = document.getElementById("apkUrl").value.trim();
+        const isAppStore = /^https?:\/\/apps\.apple\.com\//i.test(url);
+        const notice = document.getElementById("iosNotice");
+        notice.textContent = isAppStore
+          ? "App Store links are product pages, not IPA downloads. For package analysis, use a direct .ipa URL or local IPA file path."
+          : "iOS static analysis accepts a direct .ipa URL or local IPA file path. Runtime verification is not available.";
         return;
       }
       const url = document.getElementById("apkUrl").value.trim();

@@ -35,7 +35,7 @@ import urllib.parse
 import urllib.request
 from src.platform_detector import detect_platform
 from src.ios.ipa_extractor import IpaExtractionError, extract_ipa
-from src.constants import make_ios_vuln_not_evaluated, IOS_RUNTIME_NOT_IMPLEMENTED
+from src.constants import IOS_RUNTIME_NOT_IMPLEMENTED
 from src.ios.ios_static_context_builder import build_ios_static_context
 
 
@@ -221,10 +221,12 @@ def _run_ios_pipeline(
         "preprocessing": prep_meta,
         "static_analysis": static_context,
         "runtime": runtime_meta,
-        "vulnerabilities": make_ios_vuln_not_evaluated(),
+        "vulnerabilities": None,
         "demo3_scan": demo3_scan,
         "demo_status": "completed",
     }
+    from src.vulnerability_evaluator import evaluate_vulnerabilities
+    final_result["vulnerabilities"] = evaluate_vulnerabilities(final_result)
     from src.report_generator import generate_reports
     generate_reports(run_dir=output_root, run_id=output_root.name, pipeline_result=final_result)
 

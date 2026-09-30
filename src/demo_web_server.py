@@ -16,7 +16,7 @@ import time
 import urllib.parse
 import uuid
 
-from src.constants import PRESENTATION_ADB_SERIAL, make_ios_vuln_not_evaluated
+from src.constants import PRESENTATION_ADB_SERIAL
 from src.demo_orchestrator import DemoOrchestrationError, run_demo
 from src.html_probe_server import (
     ProbeServer,
@@ -494,10 +494,7 @@ class DemoWebServer:
                 if stage == "demo" and state == "completed":
                     run["overall_status"] = "completed"
                     if data and "vulnerabilities" not in data:
-                        if data.get("platform") == "ios" or str(platform).lower() == "ios":
-                            data["vulnerabilities"] = make_ios_vuln_not_evaluated()
-                        else:
-                            data["vulnerabilities"] = evaluate_vulnerabilities(data)
+                        data["vulnerabilities"] = evaluate_vulnerabilities(data)
                     run["result"] = data
                     self._active_run_id = None
                 elif state == "failed":

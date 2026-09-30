@@ -136,16 +136,16 @@ def build_report_dict(
             "Analysis is limited to static package analysis of the provided IPA archive.",
             "Static network indicators prove only that the string constant exists in the package; they do not prove runtime use.",
             "Declared usage descriptions indicate capability declarations in Info.plist; they do not prove runtime permission access.",
-            "App Transport Security (ATS) settings are recorded as factual configuration; security interpretation belongs to a later phase.",
+            "Selected ATS and signed debug entitlement settings are checked against limited static risk rules.",
             "Runtime launch verification is not implemented for iOS in Phase 1.",
             "No vulnerability exploitation was performed.",
-            "No security verdict was produced.",
+            "A finding severity is not a complete security verdict for the application.",
         ]
         limitations = [
             "Runtime launch verification and process monitoring are not implemented for iOS targets in Phase 1.",
             "Call-context API candidate extraction is not implemented for iOS in Phase 1 (zero candidates reported).",
             "Dynamic instrumentation, traffic interception (MITM/Burp), and deep UI exploration were not performed.",
-            "No security verdict, vulnerability score, or risk classification is provided.",
+            "Only selected iOS configuration checks are scored; no findings do not establish that the app is secure.",
         ]
     else:
         application_data = {
@@ -228,8 +228,8 @@ def build_report_dict(
 
     if str(platform).lower() == "ios":
         report["configuration"] = static.get("configuration") or {}
-        from src.constants import make_ios_vuln_not_evaluated
-        report["vulnerabilities"] = make_ios_vuln_not_evaluated()
+        from src.vulnerability_evaluator import evaluate_vulnerabilities
+        report["vulnerabilities"] = res.get("vulnerabilities") or evaluate_vulnerabilities(report)
     elif "vulnerabilities" in res:
         report["vulnerabilities"] = res["vulnerabilities"]
 
@@ -423,6 +423,33 @@ def _render_ios_html_report(report: dict[str, Any]) -> str:
     notes_html = "".join(f"<li>{html.escape(str(n))}</li>" for n in notes)
     limits_html = "".join(f"<li>{html.escape(str(l))}</li>" for l in limits)
 
+    vulnerabilities = report.get("vulnerabilities") or {}
+    findings = vulnerabilities.get("findings") or []
+    if vulnerabilities.get("status") == "not_evaluated":
+        vuln_html = "<p class='empty-text'>Selected iOS risk checks could not run because configuration facts were unavailable.</p>"
+    else:
+        risk = html.escape(str(vulnerabilities.get("risk_score", "NO_FINDINGS")))
+        rows = []
+        for finding in findings:
+            rows.append(
+                "<tr><td><strong>" + html.escape(str(finding.get("severity", ""))) + "</strong></td>"
+                "<td>" + html.escape(str(finding.get("title", ""))) + "</td>"
+                "<td><code>" + html.escape(str(finding.get("evidence", ""))) + "</code></td>"
+                "<td>" + html.escape(str(finding.get("remediation", ""))) + "</td></tr>"
+            )
+        table = (
+            "<table class='data-table'><thead><tr><th>Severity</th><th>Finding</th><th>Evidence</th><th>Recommendation</th></tr></thead>"
+            "<tbody>" + "".join(rows) + "</tbody></table>"
+            if rows else "<p class='empty-text'>No findings in the selected iOS checks.</p>"
+        )
+        vuln_html = (
+            f"<p><strong>Highest observed severity:</strong> {risk} &middot; "
+            f"<strong>Findings:</strong> {len(findings)}</p>"
+            "<p class='empty-text'>Coverage is limited to ATS exceptions and signed debug entitlement; "
+            "no runtime behavior was tested. No findings do not establish that the app is secure.</p>"
+            + table
+        )
+
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -527,13 +554,7 @@ def _render_ios_html_report(report: dict[str, Any]) -> str:
 
     <div class="section">
       <h2>7. Vulnerability Analysis</h2>
-      <div class="note-box" style="background: #1e1b2e; border-left: 4px solid #a855f7; color: #e9d5ff;">
-        <strong>Status:</strong> Not evaluated<br/>
-        <strong>Reason:</strong> iOS vulnerability evaluation is not implemented in Phase 1.<br/>
-        <span style="font-size:12px; color:#c4b5fd; margin-top:4px; display:inline-block;">
-          Note: 0 findings does not imply the application is clean or secure. Absence of evaluation is not a negative finding.
-        </span>
-      </div>
+      {vuln_html}
     </div>
 
     <div class="section">

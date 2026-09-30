@@ -162,7 +162,7 @@ def build_ios_static_context(
         "Dynamic instrumentation, traffic interception (MITM/Burp), and deep UI exploration were not performed.",
         "Static network indicators prove only that the string constant exists in the package; they do not prove runtime use.",
         "Presence of a usage description does not prove runtime permission access.",
-        "No security verdict, vulnerability score, or risk classification is provided.",
+        "Only selected ATS and signed debug entitlement checks are scored later; no overall security verdict is provided.",
     ]
 
     return {
