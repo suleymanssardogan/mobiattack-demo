@@ -42,7 +42,7 @@ Applications Memory Usage (in Kilobytes):
 
     def test_parse_logcat_lines_detects_sensitive_data_and_exceptions(self):
         leaky_lines = [
-            "09-30 12:00:01.000 D/Auth(100): Sending Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9 to server",
+            "09-30 12:00:01.000 D/Auth(100): Sending Bearer sample_mock_test_token_12345 to server",
             "09-30 12:00:02.000 D/Login(100): User password=SecretPassword123",
             "09-30 12:00:03.000 E/AndroidRuntime(100): FATAL EXCEPTION: main",
         ]
