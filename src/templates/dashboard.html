@@ -1567,6 +1567,20 @@
       const adb = data.adb || {};
       const inst = data.install || {};
       const rt = data.runtime || {};
+      const insp = rt.inspection || {};
+      const mem = insp.memory_footprint || {};
+      const logcat = insp.logcat_audit || {};
+
+      let extraRows = '';
+      if (mem.status === 'measured') {
+        extraRows += `<div class="kv-row"><span class="kv-key">Memory:</span><span class="kv-val font-mono">${escapeHtml(mem.total_pss_mb)} MB</span></div>`;
+      }
+      if (logcat.lines_captured > 0) {
+        const leakBadge = logcat.has_leak_warnings
+          ? `<span class="badge badge-error" style="font-size:9.5px; padding:1px 5px;">⚠️ ${logcat.leak_count} Leaks</span>`
+          : `<span class="badge badge-success" style="font-size:9.5px; padding:1px 5px;">Clean (${logcat.lines_captured} l)</span>`;
+        extraRows += `<div class="kv-row"><span class="kv-key">Logcat:</span><span class="kv-val">${leakBadge}</span></div>`;
+      }
 
       if (devDot) devDot.className = "device-dot device-dot-connected";
       if (devText) devText.textContent = "ADB " + escapeHtml(adb.serial || 'emulator-5554');
@@ -1576,6 +1590,7 @@
         <div class="kv-row"><span class="kv-key">Installed:</span><span class="kv-val">${inst.success === true ? 'Success' : (inst.skipped ? 'Skipped (pre-installed)' : 'No')}</span></div>
         <div class="kv-row"><span class="kv-key">PID:</span><span class="kv-val">${escapeHtml(rt.pid || '-')}</span></div>
         <div class="kv-row"><span class="kv-key">Foreground:</span><span class="kv-val" style="color:#10b981;">${rt.foreground_verified === true}</span></div>
+        ${extraRows}
         <div class="kv-row"><span class="kv-key">Status:</span><span class="kv-val" style="color:#60a5fa;">${escapeHtml(data.status || '-')}</span></div>
       `;
     }
@@ -3042,6 +3057,78 @@
         const inst = rt.install || {};
         const lnc = rt.launch || {};
         const rtProc = rt.runtime || {};
+        const insp = rtProc.inspection || {};
+        const mem = insp.memory_footprint || {};
+        const logcat = insp.logcat_audit || {};
+
+        let inspectionHtml = '';
+        if (mem.status === 'measured') {
+          inspectionHtml += `
+            <div style="margin-top:16px; margin-bottom:8px; font-weight:600; font-size:13px; color:var(--text-2);">
+              🧠 Live Process Memory Footprint
+            </div>
+            <div class="scan-summary-grid" style="margin-bottom:12px;">
+              <div class="summary-cell">
+                <div class="summary-label">Total PSS RAM</div>
+                <div class="summary-value font-mono" style="color:#0284c7;">${escapeHtml(mem.total_pss_mb)} MB</div>
+              </div>
+              <div class="summary-cell">
+                <div class="summary-label">Native Heap</div>
+                <div class="summary-value font-mono">${(mem.native_heap_kb || 0).toLocaleString()} KB</div>
+              </div>
+              <div class="summary-cell">
+                <div class="summary-label">Dalvik (ART) Heap</div>
+                <div class="summary-value font-mono">${(mem.dalvik_heap_kb || 0).toLocaleString()} KB</div>
+              </div>
+            </div>
+          `;
+        }
+
+        if (logcat.lines_captured > 0) {
+          const hasLeaks = logcat.has_leak_warnings;
+          const statusBadge = hasLeaks
+            ? `<span class="badge" style="background:var(--error-bg); color:var(--error); border:1px solid #fecaca;">⚠️ ${logcat.leak_count} Sensitive Leak(s) Detected</span>`
+            : `<span class="badge" style="background:rgba(16,185,129,0.1); color:#10b981; border:1px solid rgba(16,185,129,0.3);">✅ Clean — No Plaintext Leaks</span>`;
+
+          let leakTable = '';
+          if (hasLeaks && logcat.leak_findings && logcat.leak_findings.length > 0) {
+            const leakRows = logcat.leak_findings.map(f => `
+              <tr>
+                <td style="font-family:var(--mono); font-size:11px;">Line ${escapeHtml(f.line_number)}</td>
+                <td><span class="tag" style="background:#fee2e2; color:#b91c1c; font-size:10px;">${escapeHtml((f.severity || '').toUpperCase())}</span></td>
+                <td>${escapeHtml(f.pattern_type || '-')}</td>
+                <td style="font-family:var(--mono); font-size:11px; word-break:break-all;"><code>${escapeHtml(f.evidence || '')}</code></td>
+              </tr>
+            `).join('');
+
+            leakTable = `
+              <div style="overflow-x:auto; margin-top:8px;">
+                <table style="width:100%; font-size:12px;">
+                  <thead>
+                    <tr>
+                      <th>Line</th>
+                      <th>Severity</th>
+                      <th>Pattern</th>
+                      <th>Sanitized Evidence</th>
+                    </tr>
+                  </thead>
+                  <tbody>${leakRows}</tbody>
+                </table>
+              </div>
+            `;
+          }
+
+          inspectionHtml += `
+            <div style="margin-top:16px; margin-bottom:8px; font-weight:600; font-size:13px; color:var(--text-2); display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:6px;">
+              <span>📜 Live Logcat Security Audit (CWE-532 / OWASP M2)</span>
+              ${statusBadge}
+            </div>
+            <div class="notice-info" style="font-size:11.5px; margin-bottom:8px;">
+              Lines Inspected: <code>${logcat.lines_captured}</code>. Scanned for unhandled exceptions, Bearer tokens, hardcoded credentials, and query params logged to system logcat.
+            </div>
+            ${leakTable}
+          `;
+        }
 
         document.getElementById("runtimeRows").innerHTML = `
           <div class="kv-row"><span class="kv-key">Device Serial:</span><span class="kv-val">${escapeHtml(adb.serial || '-')}</span></div>
@@ -3054,6 +3141,7 @@
           <div class="kv-row"><span class="kv-key">Observed Activity:</span><span class="kv-val">${escapeHtml(rtProc.observed_activity || '-')}</span></div>
           <div class="kv-row"><span class="kv-key">Foreground Verified:</span><span class="kv-val" style="color:#10b981;">${rtProc.foreground_verified === true}</span></div>
           <div class="kv-row"><span class="kv-key">Runtime Status:</span><span class="kv-val" style="color:#10b981; font-weight:600;">${escapeHtml(rt.status || '-')}</span></div>
+          ${inspectionHtml}
         `;
       }
 

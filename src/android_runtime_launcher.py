@@ -534,6 +534,20 @@ def launch_android_app(
     foreground_verified = bool(observed_pkg == package_name)
     status = "runtime_launch_verified" if foreground_verified else "runtime_presence_verified"
 
+    # 5. Live Process Memory & Logcat Leak Inspection (CWE-532 / OWASP M2)
+    inspection_meta = None
+    try:
+        from src.android_runtime_inspector import inspect_runtime_process
+        inspection_meta = inspect_runtime_process(
+            adb_bin=adb_bin,
+            serial=serial,
+            package_name=package_name,
+            pid=pid,
+            timeout_seconds=min(timeout_seconds, 6.0),
+        )
+    except Exception as exc:
+        inspection_meta = {"status": "unavailable", "error": str(exc)}
+
     return {
         "adb": {
             "executable": adb_bin,
@@ -547,6 +561,7 @@ def launch_android_app(
             "observed_package": observed_pkg,
             "observed_activity": observed_act,
             "foreground_verified": foreground_verified,
+            "inspection": inspection_meta,
         },
         "status": status,
     }

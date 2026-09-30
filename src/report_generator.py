@@ -958,6 +958,46 @@ def render_html_report(report: dict[str, Any]) -> str:
     </div>
     """
 
+    insp = rt.get("inspection") or {}
+    mem = insp.get("memory_footprint") or {}
+    logcat = insp.get("logcat_audit") or {}
+
+    if mem.get("status") == "measured":
+        runtime_html += f"""
+        <h3 style="margin-top:16px;">11.1 Live Process Memory Footprint</h3>
+        <table class="data-table">
+          <tbody>
+            <tr><td><strong>Total PSS RAM:</strong></td><td><code>{mem.get('total_pss_mb', 0)} MB ({mem.get('total_pss_kb', 0):,} KB)</code></td></tr>
+            <tr><td><strong>Native Heap:</strong></td><td><code>{mem.get('native_heap_kb', 0):,} KB</code></td></tr>
+            <tr><td><strong>Dalvik (ART) Heap:</strong></td><td><code>{mem.get('dalvik_heap_kb', 0):,} KB</code></td></tr>
+          </tbody>
+        </table>
+        """
+
+    if logcat.get("lines_captured", 0) > 0:
+        has_leaks = logcat.get("has_leak_warnings", False)
+        badge_cls = "badge-error" if has_leaks else "badge-accent"
+        badge_lbl = f"⚠️ {logcat.get('leak_count', 0)} Sensitive Leaks" if has_leaks else "✅ No Plaintext Leaks"
+
+        leak_rows = ""
+        for f in logcat.get("leak_findings", []):
+            leak_rows += f"<tr><td>Line {f.get('line_number')}</td><td><span class='badge badge-error'>{html.escape(str(f.get('severity', '')).upper())}</span></td><td>{html.escape(str(f.get('pattern_type', '')))}</td><td><code>{html.escape(str(f.get('evidence', '')))}</code></td></tr>"
+
+        runtime_html += f"""
+        <h3 style="margin-top:16px;">11.2 Live Logcat Security Audit (CWE-532 / OWASP M2)</h3>
+        <p style="font-size:13px; color:var(--text-muted);">
+          Scanned <code>{logcat.get('lines_captured', 0)}</code> logcat lines for credentials, tokens, and unhandled exceptions:
+          <span class="badge {badge_cls}">{badge_lbl}</span>
+        </p>
+        """
+        if leak_rows:
+            runtime_html += f"""
+            <table class="data-table">
+              <thead><tr><th>Line</th><th>Severity</th><th>Pattern</th><th>Evidence (Sanitized)</th></tr></thead>
+              <tbody>{leak_rows}</tbody>
+            </table>
+            """
+
     # Probe info
     probe_url = html.escape(str(probe.get("probe_url", "-")))
     probe_hit = probe.get("probe_hit", False)
