@@ -13,6 +13,15 @@ demo_runs/*
 !demo_runs/run_sample_flashlight/
 demo_runs/run_sample_flashlight/workspaces/
 demo_runs/run_sample_flashlight/downloads/
+!demo_runs/preset_android_monolithic/
+demo_runs/preset_android_monolithic/workspaces/
+demo_runs/preset_android_monolithic/downloads/
+!demo_runs/preset_android_split/
+demo_runs/preset_android_split/workspaces/
+demo_runs/preset_android_split/downloads/
+!demo_runs/preset_ios_ipa/
+demo_runs/preset_ios_ipa/workspaces/
+demo_runs/preset_ios_ipa/downloads/
 workspaces/
 apk_lab/
 artifacts/

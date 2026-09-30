@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MobiAttack Analysis Report - me.zhanghai.android.files</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: #334155;
+      --accent: #38bdf8;
+      --success: #22c55e;
+      --warning: #f59e0b;
+      --error: #ef4444;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding: 24px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    header {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 16px;
+      margin-bottom: 24px;
+    }
+    h1 { font-size: 24px; font-weight: 700; color: #fff; }
+    .subtitle { font-size: 14px; color: var(--text-muted); margin-top: 4px; }
+    h2 {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--accent);
+      margin-top: 28px;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    h4 { font-size: 13px; font-weight: 600; color: var(--text-muted); margin: 12px 0 6px; }
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      font-size: 11px;
+      font-weight: 700;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .badge-success { background: rgba(34, 197, 94, 0.15); color: var(--success); }
+    .badge-warning { background: rgba(245, 158, 11, 0.15); color: var(--warning); }
+    .badge-error { background: rgba(239, 68, 68, 0.15); color: var(--error); }
+    .badge-muted { background: rgba(148, 163, 184, 0.15); color: var(--text-muted); }
+    .badge-accent { background: rgba(56, 189, 248, 0.15); color: var(--accent); }
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      margin-bottom: 16px;
+    }
+    .data-table th, .data-table td {
+      padding: 8px 12px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    .data-table th {
+      background: var(--card-bg);
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+    .data-table td code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 12px;
+      word-break: break-all;
+    }
+    .code-list {
+      list-style: none;
+      max-height: 240px;
+      overflow-y: auto;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 10px 14px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 12px;
+      margin-bottom: 14px;
+    }
+    .code-list li { padding: 3px 0; border-bottom: 1px dashed var(--border); }
+    .code-list li:last-child { border-bottom: none; }
+    .count-badge { font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; }
+    .disclaimer-banner {
+      background: rgba(245, 158, 11, 0.08);
+      border-left: 4px solid var(--warning);
+      padding: 10px 14px;
+      font-size: 12px;
+      margin: 12px 0;
+      border-radius: 0 6px 6px 0;
+    }
+    .failure-banner {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid var(--error);
+      padding: 12px 16px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      color: var(--error);
+    }
+    .note-box {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      padding: 10px 14px;
+      font-size: 12px;
+      border-radius: 6px;
+      margin: 10px 0 16px;
+      font-style: italic;
+    }
+    .info-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 14px;
+      margin-bottom: 14px;
+    }
+    .empty-text { font-size: 13px; color: var(--text-muted); font-style: italic; margin-bottom: 10px; }
+    ul.bullet-list { padding-left: 20px; font-size: 13px; margin-bottom: 14px; }
+    ul.bullet-list li { margin-bottom: 6px; }
+    @media print {
+      body { background: #fff !important; color: #000 !important; padding: 0 !important; }
+      .data-table th { background: #eee !important; }
+      .code-list { max-height: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>1. MobiAttack Android Demo Analysis Report</h1>
+    <div class="subtitle">Deterministic Android Security Analysis & Runtime Evidence Dossier</div>
+  </header>
+
+  
+
+  <h2>2. Run Information</h2>
+  <table class="data-table">
+    <tbody>
+      <tr><td><strong>Run ID:</strong></td><td><code>run_1790752041_46f9db</code></td></tr>
+      <tr><td><strong>Demo Status:</strong></td><td><span class="badge" style="background:#22c55e22; color:#22c55e;">completed</span></td></tr>
+      <tr><td><strong>Package Layout:</strong></td><td><span class="badge badge-accent">Split APK (3 components)</span></td></tr>
+      <tr><td><strong>Report Version:</strong></td><td>1.0</td></tr>
+    </tbody>
+  </table>
+
+  <h2>3. Application Overview</h2>
+  <table class="data-table">
+    <tbody>
+      <tr><td><strong>Package Name:</strong></td><td><code>me.zhanghai.android.files</code></td></tr>
+      <tr><td><strong>Launcher Activity:</strong></td><td><code>me.zhanghai.android.files.filelist.FileListActivity</code></td></tr>
+      <tr><td><strong>Package Layout:</strong></td><td><span class="badge badge-accent">Split APK (3 components)</span></td></tr>
+      
+        <tr><td><strong>Total DEX Count:</strong></td><td>2</td></tr>
+        <tr><td><strong>Network Indicators:</strong></td><td>666</td></tr>
+        <tr><td><strong>API Candidates:</strong></td><td>0</td></tr>
+        
+      <tr><td><strong>APK Filename:</strong></td><td><code>unknown</code></td></tr>
+      <tr><td><strong>SHA-256:</strong></td><td><code>unknown</code></td></tr>
+      <tr><td><strong>File Size:</strong></td><td>-</td></tr>
+    </tbody>
+  </table>
+
+  <h2>4. APK Acquisition</h2>
+  <table class="data-table">
+    <tbody>
+      <tr><td><strong>Platform:</strong></td><td>ANDROID</td></tr>
+      <tr><td><strong>Source Type:</strong></td><td><code>play_store</code></td></tr>
+      <tr><td><strong>Input URL:</strong></td><td><code>https://play.google.com/store/apps/details?id=me.zhanghai.android.files</code></td></tr>
+      
+        <tr><td><strong>Play Store Package:</strong></td><td><code>me.zhanghai.android.files</code></td></tr>
+        <tr><td><strong>Initially Installed:</strong></td><td>No</td></tr>
+        <tr><td><strong>Install Mode:</strong></td><td><code>ui_automation</code></td></tr>
+        <tr><td><strong>Install Status:</strong></td><td><code>installed_via_ui_automation</code></td></tr>
+        <tr><td><strong>Play Store Open Method:</strong></td><td><code>market_uri</code></td></tr>
+        <tr><td><strong>Installed on Device:</strong></td><td>Yes</td></tr>
+        
+      <tr><td><strong>Package Layout:</strong></td><td>Split APK (3 components)</td></tr>
+      <tr><td><strong>Filename:</strong></td><td><code>unknown</code></td></tr>
+      <tr><td><strong>SHA-256 Digest:</strong></td><td><code>unknown</code></td></tr>
+      <tr><td><strong>Package Verification:</strong></td><td>Unverified</td></tr>
+    </tbody>
+  </table>
+
+  <h2>5. Preprocessing</h2>
+  
+        <div style="font-weight:600; font-size:14px; margin-bottom:8px; color:var(--accent);">APK Component Inventory</div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Filename</th>
+              <th>Role</th>
+              <th>Size</th>
+              <th>SHA-256</th>
+              <th>DEX Count</th>
+              <th>Raw Extract</th>
+              <th>Apktool</th>
+              <th>JADX</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+            <tr>
+              <td><strong><code>base.apk</code></strong></td>
+              <td><span class="badge badge-accent">base</span></td>
+              <td>10.69 MB</td>
+              <td><code title="f7abbb8afe79087794f9a418f185fc7972531c0e2b9e2633fdaba12b127de60c">f7abbb8afe...</code></td>
+              <td>2</td>
+              <td><span class="badge badge-success">success</span></td>
+              <td><span class="badge badge-warning">success_with_warnings</span></td>
+              <td><span class="badge badge-warning">success_with_warnings</span></td>
+            </tr>
+            
+            <tr>
+              <td><strong><code>split_config.arm64_v8a.apk</code></strong></td>
+              <td><span class="badge badge-accent">config_abi</span></td>
+              <td>1.54 MB</td>
+              <td><code title="ce9007e0321aaff99ee940aaa709e047e75faf7e9d9a9ac898fa800c3ff617a6">ce9007e032...</code></td>
+              <td>0</td>
+              <td><span class="badge badge-success">success</span></td>
+              <td><span class="badge badge-success">success</span></td>
+              <td><span class="badge badge-muted">skipped_no_dex</span></td>
+            </tr>
+            
+            <tr>
+              <td><strong><code>split_config.xxhdpi.apk</code></strong></td>
+              <td><span class="badge badge-accent">config_density</span></td>
+              <td>47.9 KB</td>
+              <td><code title="c6a49731d2fb67713c4ea05ac0581ba57af78ca73a225638d20abe584b347635">c6a49731d2...</code></td>
+              <td>0</td>
+              <td><span class="badge badge-success">success</span></td>
+              <td><span class="badge badge-warning">success_with_warnings</span></td>
+              <td><span class="badge badge-muted">skipped_no_dex</span></td>
+            </tr>
+            
+          </tbody>
+        </table>
+        <div class="note-box">
+          <strong>Component note:</strong> DEX-less splits (e.g. config splits) intentionally skip JADX decompilation (<code>skipped_no_dex</code>), which is normal informational state. Only installed splits returned by <code>pm path</code> were analyzed.
+        </div>
+        
+
+  <h2>6. Application Structure</h2>
+  
+            <div class="info-card" style="margin-bottom:12px;">
+              <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+                <strong style="color:var(--accent);">Source APK: <code>base.apk</code></strong>
+                <span class="badge badge-accent">base</span>
+              </div>
+              <table class="data-table">
+                <tbody>
+                  <tr><td><strong>DEX Files (2):</strong></td><td>classes.dex, classes2.dex (multidex=True)</td></tr>
+                  <tr><td><strong>Native Libraries (0):</strong></td><td>None (has_native_code=False)</td></tr>
+                  <tr><td><strong>Assets Count:</strong></td><td>4 files (assets/PublicSuffixDatabase.list, assets/dexopt/baseline.prof, assets/dexopt/baseline.profm)</td></tr>
+                  <tr><td><strong>Smali Roots:</strong></td><td>smali, smali_classes2</td></tr>
+                  <tr><td><strong>Kotlin Metadata:</strong></td><td>Present in APK</td></tr>
+                </tbody>
+              </table>
+            </div>
+            
+            <div class="info-card" style="margin-bottom:12px;">
+              <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+                <strong style="color:var(--accent);">Source APK: <code>split_config.arm64_v8a.apk</code></strong>
+                <span class="badge badge-accent">config_abi</span>
+              </div>
+              <table class="data-table">
+                <tbody>
+                  <tr><td><strong>DEX Files (0):</strong></td><td>None (multidex=False)</td></tr>
+                  <tr><td><strong>Native Libraries (9):</strong></td><td>lib/arm64-v8a/libarchive-jni.so, lib/arm64-v8a/libcrashlytics-common.so, lib/arm64-v8a/libcrashlytics-handler.so, lib/arm64-v8a/libcrashlytics-trampoline.so, lib/arm64-v8a/libcrashlytics.so ... (has_native_code=True)</td></tr>
+                  <tr><td><strong>Assets Count:</strong></td><td>0 files </td></tr>
+                  <tr><td><strong>Smali Roots:</strong></td><td>None</td></tr>
+                  <tr><td><strong>Kotlin Metadata:</strong></td><td>Not detected</td></tr>
+                </tbody>
+              </table>
+            </div>
+            
+            <div class="info-card" style="margin-bottom:12px;">
+              <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+                <strong style="color:var(--accent);">Source APK: <code>split_config.xxhdpi.apk</code></strong>
+                <span class="badge badge-accent">config_density</span>
+              </div>
+              <table class="data-table">
+                <tbody>
+                  <tr><td><strong>DEX Files (0):</strong></td><td>None (multidex=False)</td></tr>
+                  <tr><td><strong>Native Libraries (0):</strong></td><td>None (has_native_code=False)</td></tr>
+                  <tr><td><strong>Assets Count:</strong></td><td>0 files </td></tr>
+                  <tr><td><strong>Smali Roots:</strong></td><td>None</td></tr>
+                  <tr><td><strong>Kotlin Metadata:</strong></td><td>Not detected</td></tr>
+                </tbody>
+              </table>
+            </div>
+            
+
+  <h2>7. Permissions</h2>
+  <div class='count-badge'>18 Permissions Declared</div><ul class='code-list'><li><code>android.permission.ACCESS_NETWORK_STATE</code></li><li><code>android.permission.ACCESS_WIFI_STATE</code></li><li><code>android.permission.FOREGROUND_SERVICE</code></li><li><code>android.permission.FOREGROUND_SERVICE_SPECIAL_USE</code></li><li><code>android.permission.INTERNET</code></li><li><code>android.permission.MANAGE_EXTERNAL_STORAGE</code></li><li><code>android.permission.POST_NOTIFICATIONS</code></li><li><code>android.permission.QUERY_ALL_PACKAGES</code></li><li><code>android.permission.REQUEST_INSTALL_PACKAGES</code></li><li><code>android.permission.WAKE_LOCK</code></li><li><code>android.permission.WRITE_EXTERNAL_STORAGE</code></li><li><code>com.android.launcher.permission.INSTALL_SHORTCUT</code></li><li><code>com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE</code></li><li><code>com.google.android.gms.permission.AD_ID</code></li><li><code>android.permission.ACCESS_ADSERVICES_ATTRIBUTION</code></li><li><code>android.permission.ACCESS_ADSERVICES_AD_ID</code></li><li><code>me.zhanghai.android.files.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION</code></li><li><code>moe.shizuku.manager.permission.API_V23</code></li></ul>
+
+  <h2>8. Activities</h2>
+  <div class='count-badge'>29 Activities Declared</div><ul class='code-list'><li><code>me.zhanghai.android.files.filelist.FileListActivity</code></li><li><code>me.zhanghai.android.files.filelist.OpenFileActivity</code></li><li><code>me.zhanghai.android.files.filelist.EditFileActivity</code></li><li><code>me.zhanghai.android.files.filelist.OpenFileAsDialogActivity</code></li><li><code>me.zhanghai.android.files.storage.AddStorageDialogActivity</code></li><li><code>me.zhanghai.android.files.storage.EditDeviceStorageDialogActivity</code></li><li><code>me.zhanghai.android.files.storage.AddExternalStorageShortcutActivity</code></li><li><code>me.zhanghai.android.files.storage.EditExternalStorageShortcutDialogActivity</code></li><li><code>me.zhanghai.android.files.storage.AddDocumentTreeActivity</code></li><li><code>me.zhanghai.android.files.storage.EditDocumentTreeDialogActivity</code></li><li><code>me.zhanghai.android.files.storage.EditFtpServerActivity</code></li><li><code>me.zhanghai.android.files.storage.EditSftpServerActivity</code></li><li><code>me.zhanghai.android.files.storage.AddLanSmbServerActivity</code></li><li><code>me.zhanghai.android.files.storage.EditSmbServerActivity</code></li><li><code>me.zhanghai.android.files.storage.EditWebDavServerActivity</code></li><li><code>me.zhanghai.android.files.navigation.EditBookmarkDirectoryDialogActivity</code></li><li><code>me.zhanghai.android.files.ftpserver.FtpServerActivity</code></li><li><code>me.zhanghai.android.files.settings.SettingsActivity</code></li><li><code>me.zhanghai.android.files.storage.StorageListActivity</code></li><li><code>me.zhanghai.android.files.settings.StandardDirectoryListActivity</code></li><li><code>me.zhanghai.android.files.settings.BookmarkDirectoryListActivity</code></li><li><code>me.zhanghai.android.files.about.AboutActivity</code></li><li><code>me.zhanghai.android.files.fileaction.ArchivePasswordDialogActivity</code></li><li><code>me.zhanghai.android.files.filejob.FileJobErrorDialogActivity</code></li><li><code>me.zhanghai.android.files.filejob.FileJobConflictDialogActivity</code></li><li><code>me.zhanghai.android.files.viewer.saveas.SaveAsActivity</code></li><li><code>me.zhanghai.android.files.viewer.text.TextEditorActivity</code></li><li><code>me.zhanghai.android.files.viewer.image.ImageViewerActivity</code></li><li><code>com.google.android.gms.common.api.GoogleApiActivity</code></li></ul>
+
+  <h2>9. Static Network Indicators</h2>
+  
+    <div class="disclaimer-banner">
+      <strong>Notice:</strong> Static network indicators prove the presence of strings in extracted application artifacts. They do not by themselves prove runtime network usage.
+    </div>
+    <h4>Network URLs (116)</h4>
+    
+        <table class="data-table">
+          <thead><tr><th>Value</th><th>Type</th><th>Source APK</th><th>Source File</th><th>Line</th></tr></thead>
+          <tbody><tr><td><code>http://apache.org/dav/propset/fs/1</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>smali/du.smali</code></td><td>15692</td></tr><tr><td><code>http://apple.com/ns/ical/</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>smali/hy.smali</code></td><td>28</td></tr><tr><td><code>http://calendarserver.org/ns/</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>smali/d73.smali</code></td><td>141</td></tr><tr><td><code>http://calendarserver.org/ns/</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>smali/hn1.smali</code></td><td>26</td></tr><tr><td><code>http://calendarserver.org/ns/</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>smali/ny.smali</code></td><td>23</td></tr><tr><td><code>http://calendarserver.org/ns/</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>smali/py.smali</code></td><td>23</td></tr><tr><td><code>http://calendarserver.org/ns/</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>smali/v04.smali</code></td><td>19</td></tr><tr><td><code>http://mozilla.org/MPL/1.1/.</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>res/raw/mpl_11_summary.txt</code></td><td>3</td></tr><tr><td><code>http://mozilla.org/MPL/2.0/.</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>res/raw/mpl_20_summary.txt</code></td><td>3</td></tr><tr><td><code>http://ns.adobe.com/xap/1.0/\u0000</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>smali/d31.smali</code></td><td>3476</td></tr><tr><td><code>http://psdev.de/LicensesDialog</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>smali/e32.smali</code></td><td>35</td></tr><tr><td><code>http://www.apache.org/licenses/</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>unknown/META-INF/androidx/annotation/annotation/LICENSE.txt</code></td><td>4</td></tr><tr><td><code>http://www.apache.org/licenses/</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>unknown/META-INF/androidx/collection/collection/LICENSE.txt</code></td><td>4</td></tr><tr><td><code>http://www.apache.org/licenses/</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>unknown/META-INF/androidx/constraintlayout/constraintlayout-core/LICENSE.txt</code></td><td>4</td></tr><tr><td><code>http://www.apache.org/licenses/</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>unknown/META-INF/androidx/lifecycle/lifecycle-common-java8/LICENSE.txt</code></td><td>4</td></tr><tr><td><code>http://www.apache.org/licenses/</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>unknown/META-INF/androidx/lifecycle/lifecycle-common/LICENSE.txt</code></td><td>4</td></tr><tr><td><code>http://www.apache.org/licenses/LICENSE-2.0</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>res/raw/asl_20_summary.txt</code></td><td>5</td></tr><tr><td><code>http://www.apache.org/licenses/LICENSE-2.0</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>unknown/org/apache/ftpserver/message/FtpStatus.properties</code></td><td>9</td></tr><tr><td><code>http://www.apache.org/licenses/LICENSE-2.0</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>unknown/org/apache/ftpserver/message/FtpStatus_en.properties</code></td><td>9</td></tr><tr><td><code>http://www.apache.org/licenses/LICENSE-2.0</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>unknown/org/apache/ftpserver/message/FtpStatus_zh-tw.properties</code></td><td>9</td></tr><tr><td><code>http://www.gnu.org/licenses/</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>res/raw/gpl_30_summary.txt</code></td><td>12</td></tr><tr><td><code>http://www.slf4j.org/codes.html#null_MDCA</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>smali/ji0.smali</code></td><td>7327</td></tr><tr><td><code>http://www.slf4j.org/codes.html#null_MDCA</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>smali/nb2.smali</code></td><td>156</td></tr><tr><td><code>http://www.slf4j.org/codes.html#null_MDCA</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>smali/nb2.smali</code></td><td>985</td></tr><tr><td><code>http://xml.org/sax/features/external-general-entities</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>smali/bk3.smali</code></td><td>10892</td></tr><tr><td><code>http://xml.org/sax/features/external-parameter-entities</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>smali/bk3.smali</code></td><td>10904</td></tr><tr><td><code>http://xml.org/sax/properties/lexical-handler</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>smali/bk3.smali</code></td><td>10943</td></tr><tr><td><code>http://xmlpull.org/v1/doc/features.html#process-docdecl</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>smali/bk3.smali</code></td><td>11059</td></tr><tr><td><code>http://xmlpull.org/v1/doc/features.html#process-namespaces</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>smali/bk3.smali</code></td><td>11071</td></tr><tr><td><code>http://xmlpull.org/v1/doc/features.html#process-namespaces</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>smali/me/zhanghai/android/files/ui/LicensesDialogFragment.smali</code></td><td>108</td></tr><tr><td><code>http://xmlpull.org/v1/doc/features.html#relaxed</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>smali/aq4.smali</code></td><td>33</td></tr><tr><td><code>https://app-measurement.com/a</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>smali/es3.smali</code></td><td>1821</td></tr><tr><td><code>https://app-measurement.com/a</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>smali/y25.smali</code></td><td>741</td></tr><tr><td><code>https://app-measurement.com/s/d</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>smali/ws3.smali</code></td><td>2093</td></tr><tr><td><code>https://app-measurement.com/s/d</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>smali/y25.smali</code></td><td>765</td></tr><tr><td><code>https://bitfire.at/webdav-push</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>smali/dl4.smali</code></td><td>26</td></tr><tr><td><code>https://bitfire.at/webdav-push</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>smali/el4.smali</code></td><td>30</td></tr><tr><td><code>https://bitfire.at/webdav-push</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>smali/gy.smali</code></td><td>1778</td></tr><tr><td><code>https://bitfire.at/webdav-push</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>smali/j54.smali</code></td><td>26</td></tr><tr><td><code>https://bitfire.at/webdav-push</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>smali/jx2.smali</code></td><td>26</td></tr><tr><td><code>https://bitfire.at/webdav-push</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>smali/kd4.smali</code></td><td>28</td></tr><tr><td><code>https://bitfire.at/webdav-push</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>smali/kh.smali</code></td><td>26</td></tr><tr><td><code>https://bitfire.at/webdav-push</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>smali/l54.smali</code></td><td>28</td></tr><tr><td><code>https://bitfire.at/webdav-push</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>smali/mb4.smali</code></td><td>26</td></tr><tr><td><code>https://bitfire.at/webdav-push</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>smali/n80.smali</code></td><td>28</td></tr><tr><td><code>https://bitfire.at/webdav-push</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>smali/py2.smali</code></td><td>30</td></tr><tr><td><code>https://bitfire.at/webdav-push</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>smali/qy2.smali</code></td><td>36</td></tr><tr><td><code>https://bitfire.at/webdav-push</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>smali/ry2.smali</code></td><td>26</td></tr><tr><td><code>https://bitfire.at/webdav-push</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>smali/sy2.smali</code></td><td>22</td></tr><tr><td><code>https://bitfire.at/webdav-push</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>smali/ug4.smali</code></td><td>28</td></tr><tr><td><code>https://commons.apache.org/proper/commons-net/</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>res/raw/licenses.xml</code></td><td>110</td></tr><tr><td><code>https://firebase-settings.crashlytics.com/spi/v2/platforms/android/gmp/</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>smali/t7.smali</code></td><td>3953</td></tr><tr><td><code>https://firebase.google.com/docs/crashlytics/get-started?platform=android#add-plugin</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>smali/t7.smali</code></td><td>4702</td></tr><tr><td><code>https://firebase.google.com/support/guides/disable-analytics</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>smali/sk1.smali</code></td><td>2041</td></tr><tr><td><code>https://firebase.google.com/support/privacy/init-options.</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>smali/rd1.smali</code></td><td>1833</td></tr><tr><td><code>https://firebase.google.com/support/privacy/init-options.</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>smali/rd1.smali</code></td><td>1855</td></tr><tr><td><code>https://firebase.google.com/support/privacy/init-options.</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>smali/rd1.smali</code></td><td>1877</td></tr><tr><td><code>https://firebaseinstallations.googleapis.com/v1/</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>smali/pd1.smali</code></td><td>148</td></tr><tr><td><code>https://github.com/AgNO3/jcifs-ng</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>res/raw/licenses.xml</code></td><td>138</td></tr><tr><td><code>https://github.com/BigBadaboom/androidsvg</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>res/raw/licenses.xml</code></td><td>19</td></tr><tr><td><code>https://github.com/JakeWharton/ThreeTenABP</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>res/raw/licenses.xml</code></td><td>89</td></tr><tr><td><code>https://github.com/Mbed-TLS/mbedtls</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>res/raw/licenses.xml</code></td><td>208</td></tr><tr><td><code>https://github.com/PureWriter/FullDraggableDrawer</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>res/raw/licenses.xml</code></td><td>33</td></tr><tr><td><code>https://github.com/RikkaApps/RikkaX</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>res/raw/licenses.xml</code></td><td>124</td></tr><tr><td><code>https://github.com/RikkaApps/Shizuku-API</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>res/raw/licenses.xml</code></td><td>131</td></tr><tr><td><code>https://github.com/bitfireAT/dav4jvm</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>res/raw/licenses.xml</code></td><td>47</td></tr><tr><td><code>https://github.com/chrisbanes/PhotoView</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>res/raw/licenses.xml</code></td><td>54</td></tr><tr><td><code>https://github.com/chrisbanes/insetter</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>res/raw/licenses.xml</code></td><td>117</td></tr><tr><td><code>https://github.com/coil-kt/coil</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>res/raw/licenses.xml</code></td><td>145</td></tr><tr><td><code>https://github.com/davemorrissey/subsampling-scale-image-view</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>res/raw/licenses.xml</code></td><td>26</td></tr><tr><td><code>https://github.com/facebook/stetho</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>res/raw/licenses.xml</code></td><td>40</td></tr><tr><td><code>https://github.com/facebook/zstd</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>res/raw/licenses.xml</code></td><td>201</td></tr><tr><td><code>https://github.com/google/AndroidForegroundCompat</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>res/raw/licenses.xml</code></td><td>166</td></tr><tr><td><code>https://github.com/h6ah4i/android-advancedrecyclerview</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>res/raw/licenses.xml</code></td><td>75</td></tr><tr><td><code>https://github.com/h6ah4i/android-materialshadowninepatch</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>res/raw/licenses.xml</code></td><td>68</td></tr><tr><td><code>https://github.com/hierynomus/smbj</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>res/raw/licenses.xml</code></td><td>82</td></tr><tr><td><code>https://github.com/leinardi/FloatingActionButtonSpeedDial</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>res/raw/licenses.xml</code></td><td>96</td></tr><tr><td><code>https://github.com/libarchive/libarchive</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>res/raw/licenses.xml</code></td><td>180</td></tr><tr><td><code>https://github.com/lz4/lz4</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>res/raw/licenses.xml</code></td><td>194</td></tr><tr><td><code>https://github.com/rapid7/smbj-rpc</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>res/raw/licenses.xml</code></td><td>103</td></tr><tr><td><code>https://github.com/retrostreams/android-retrostreams</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>res/raw/licenses.xml</code></td><td>236</td></tr><tr><td><code>https://github.com/topjohnwu/libsu</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>res/raw/licenses.xml</code></td><td>61</td></tr><tr><td><code>https://github.com/zhanghai</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>smali/h2.smali</code></td><td>75</td></tr><tr><td><code>https://github.com/zhanghai/AndroidFastScroll</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>res/raw/licenses.xml</code></td><td>159</td></tr><tr><td><code>https://github.com/zhanghai/AndroidRetroFile</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>res/raw/licenses.xml</code></td><td>222</td></tr><tr><td><code>https://github.com/zhanghai/AppIconLoader</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>res/raw/licenses.xml</code></td><td>152</td></tr><tr><td><code>https://github.com/zhanghai/MaterialFiles</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>res/raw/licenses.xml</code></td><td>12</td></tr><tr><td><code>https://github.com/zhanghai/MaterialFiles</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>smali/h2.smali</code></td><td>27</td></tr><tr><td><code>https://github.com/zhanghai/MaterialFiles/blob/master/PRIVACY.md</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>smali/h2.smali</code></td><td>43</td></tr><tr><td><code>https://github.com/zhanghai/SystemUiHelper</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>res/raw/licenses.xml</code></td><td>229</td></tr><tr><td><code>https://github.com/zhanghai/libarchive-android</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>res/raw/licenses.xml</code></td><td>173</td></tr><tr><td><code>https://github.com/zhanghai/libselinux-android</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>res/raw/licenses.xml</code></td><td>215</td></tr><tr><td><code>https://gitlab.com/bzip2/bzip2</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>res/raw/licenses.xml</code></td><td>187</td></tr><tr><td><code>https://goo.gl/NAOOOI</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>smali/kc5.smali</code></td><td>4266</td></tr><tr><td><code>https://goo.gl/NAOOOI.</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>smali/kc5.smali</code></td><td>4233</td></tr><tr><td><code>https://google.com/search?</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>smali/n75.smali</code></td><td>387</td></tr><tr><td><code>https://issuetracker.google.com/issues/241760537</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>smali/qf4.smali</code></td><td>83</td></tr><tr><td><code>https://issuetracker.google.com/issues/new?component=907884&amp;template=1466542</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>smali/fj0.smali</code></td><td>1349</td></tr><tr><td><code>https://issuetracker.google.com/issues/new?component=907884&amp;template=1466542</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>smali/gj0.smali</code></td><td>1018</td></tr><tr><td><code>https://issuetracker.google.com/issues/new?component=907884&amp;template=1466542</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>base.apk</code></td><td><code>smali/uj0.smali</code></td><td>2050</td></tr></tbody>
+        </table>
+        <p class='empty-text'>(Showing first 100 of 116 network urls indicators.)</p>
+        
+    <h4>Domains (57)</h4>
+    
+        <table class="data-table">
+          <thead><tr><th>Value</th><th>Type</th><th>Source APK</th><th>Source File</th><th>Line</th></tr></thead>
+          <tbody><tr><td><code>apache.org</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>base.apk</code></td><td><code>unknown/org/apache/ftpserver/ftpserver.properties</code></td><td>15</td></tr><tr><td><code>app-measurement.com</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>base.apk</code></td><td><code>smali/y25.smali</code></td><td>431</td></tr><tr><td><code>app-measurement.com</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>base.apk</code></td><td><code>smali/ys3.smali</code></td><td>1026</td></tr><tr><td><code>bus.id</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>base.apk</code></td><td><code>smali/c74.smali</code></td><td>1363</td></tr><tr><td><code>bus.id</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>base.apk</code></td><td><code>smali/c74.smali</code></td><td>9698</td></tr><tr><td><code>crashlytics.installation.id</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>base.apk</code></td><td><code>smali/gu1.smali</code></td><td>286</td></tr><tr><td><code>crashlytics.installation.id</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>base.apk</code></td><td><code>smali/gu1.smali</code></td><td>861</td></tr><tr><td><code>crashlytics.installation.id</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>base.apk</code></td><td><code>smali/gu1.smali</code></td><td>955</td></tr><tr><td><code>firebase-settings.crashlytics.com</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>base.apk</code></td><td><code>smali/v53.smali</code></td><td>70</td></tr><tr><td><code>firebase.installation.id</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>base.apk</code></td><td><code>smali/gu1.smali</code></td><td>298</td></tr><tr><td><code>firebase.installation.id</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>base.apk</code></td><td><code>smali/gu1.smali</code></td><td>676</td></tr><tr><td><code>gmail.com</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>base.apk</code></td><td><code>res/raw/licenses.xml</code></td><td>4</td></tr><tr><td><code>google-analytics.com</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>base.apk</code></td><td><code>smali/y25.smali</code></td><td>2102</td></tr><tr><td><code>google-analytics.com</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>base.apk</code></td><td><code>smali/ys3.smali</code></td><td>848</td></tr><tr><td><code>libssh.org</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>base.apk</code></td><td><code>smali/j00.smali</code></td><td>912</td></tr><tr><td><code>openssh.com</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>base.apk</code></td><td><code>smali/dl0.smali</code></td><td>1239</td></tr><tr><td><code>openssh.com</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>base.apk</code></td><td><code>smali/dl0.smali</code></td><td>1785</td></tr><tr><td><code>openssh.com</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>base.apk</code></td><td><code>smali/dl0.smali</code></td><td>1802</td></tr><tr><td><code>openssh.com</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>base.apk</code></td><td><code>smali/dl0.smali</code></td><td>3011</td></tr><tr><td><code>openssh.com</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>base.apk</code></td><td><code>smali/dl0.smali</code></td><td>3067</td></tr><tr><td><code>openssh.com</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>base.apk</code></td><td><code>smali/dl0.smali</code></td><td>3119</td></tr><tr><td><code>openssh.com</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>base.apk</code></td><td><code>smali/dl0.smali</code></td><td>3175</td></tr><tr><td><code>openssh.com</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>base.apk</code></td><td><code>smali/dl0.smali</code></td><td>3228</td></tr><tr><td><code>openssh.com</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>base.apk</code></td><td><code>smali/dl0.smali</code></td><td>3282</td></tr><tr><td><code>openssh.com</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>base.apk</code></td><td><code>smali/dl0.smali</code></td><td>3336</td></tr><tr><td><code>openssh.com</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>base.apk</code></td><td><code>smali/dl0.smali</code></td><td>3390</td></tr><tr><td><code>openssh.com</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>base.apk</code></td><td><code>smali/g02.smali</code></td><td>1879</td></tr><tr><td><code>openssh.com</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>base.apk</code></td><td><code>smali/g02.smali</code></td><td>2897</td></tr><tr><td><code>openssh.com</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>base.apk</code></td><td><code>smali/j00.smali</code></td><td>928</td></tr><tr><td><code>openssh.com</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>base.apk</code></td><td><code>smali/j00.smali</code></td><td>995</td></tr><tr><td><code>openssh.com</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>base.apk</code></td><td><code>smali/oa3.smali</code></td><td>908</td></tr><tr><td><code>openssh.com</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>base.apk</code></td><td><code>smali/oa3.smali</code></td><td>1025</td></tr><tr><td><code>openssh.com</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>base.apk</code></td><td><code>smali/q72.smali</code></td><td>2999</td></tr><tr><td><code>openssh.com</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>base.apk</code></td><td><code>smali/q72.smali</code></td><td>3221</td></tr><tr><td><code>openssh.com</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>base.apk</code></td><td><code>smali/vn2.smali</code></td><td>326</td></tr><tr><td><code>openssh.com</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>base.apk</code></td><td><code>smali/vn2.smali</code></td><td>348</td></tr><tr><td><code>openssh.com</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>base.apk</code></td><td><code>smali/vn2.smali</code></td><td>374</td></tr><tr><td><code>openssh.com</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>base.apk</code></td><td><code>smali/xn2.smali</code></td><td>2368</td></tr><tr><td><code>openssh.com</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>base.apk</code></td><td><code>smali/xn2.smali</code></td><td>2691</td></tr><tr><td><code>openssh.com</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>base.apk</code></td><td><code>smali/xn2.smali</code></td><td>2721</td></tr><tr><td><code>openssh.com</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>base.apk</code></td><td><code>smali/z02.smali</code></td><td>182</td></tr><tr><td><code>openssh.com</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>base.apk</code></td><td><code>smali/z02.smali</code></td><td>206</td></tr><tr><td><code>openssh.com</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>base.apk</code></td><td><code>smali/z02.smali</code></td><td>234</td></tr><tr><td><code>openssh.com</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>base.apk</code></td><td><code>smali/z02.smali</code></td><td>267</td></tr><tr><td><code>openssh.com</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>base.apk</code></td><td><code>smali/z02.smali</code></td><td>300</td></tr><tr><td><code>openssh.com</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>base.apk</code></td><td><code>smali/z02.smali</code></td><td>333</td></tr><tr><td><code>repository.apache.org</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>base.apk</code></td><td><code>unknown/org/apache/ftpserver/ftpserver.properties</code></td><td>10</td></tr><tr><td><code>repository.apache.org</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>base.apk</code></td><td><code>unknown/org/apache/ftpserver/ftpserver.properties</code></td><td>13</td></tr><tr><td><code>ssh.com</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>base.apk</code></td><td><code>smali/dl0.smali</code></td><td>518</td></tr><tr><td><code>ssh.com</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>base.apk</code></td><td><code>smali/dl0.smali</code></td><td>574</td></tr><tr><td><code>ssh.com</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>base.apk</code></td><td><code>smali/dl0.smali</code></td><td>604</td></tr><tr><td><code>ssh.com</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>base.apk</code></td><td><code>smali/dl0.smali</code></td><td>660</td></tr><tr><td><code>ssh.com</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>base.apk</code></td><td><code>smali/dl0.smali</code></td><td>690</td></tr><tr><td><code>ssh.com</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>base.apk</code></td><td><code>smali/dl0.smali</code></td><td>716</td></tr><tr><td><code>www.apache.org</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>base.apk</code></td><td><code>unknown/org/apache/ftpserver/ftpserver.properties</code></td><td>29</td></tr><tr><td><code>www.google.com</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>base.apk</code></td><td><code>smali/kc5.smali</code></td><td>328</td></tr><tr><td><code>zhanghai-materialfiles.appspot.com</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>base.apk</code></td><td><code>res/values/strings.xml</code></td><td>395</td></tr></tbody>
+        </table>
+        <p class='empty-text'>(Total 57 domains indicators.)</p>
+        
+    <h4>IP Addresses (448)</h4>
+    
+        <table class="data-table">
+          <thead><tr><th>Value</th><th>Type</th><th>Source APK</th><th>Source File</th><th>Line</th></tr></thead>
+          <tbody><tr><td><code>0.0.0.0</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/hg2.smali</code></td><td>165</td></tr><tr><td><code>0.0.0.0</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/qg2.smali</code></td><td>287</td></tr><tr><td><code>0.15.1.1</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/ay1.smali</code></td><td>20</td></tr><tr><td><code>0.15.1.1</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/ay1.smali</code></td><td>37</td></tr><tr><td><code>0.4.0.127</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/ay1.smali</code></td><td>20</td></tr><tr><td><code>0.4.0.127</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/ay1.smali</code></td><td>37</td></tr><tr><td><code>0.4.0.127</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/gq.smali</code></td><td>48</td></tr><tr><td><code>0.4.0.127</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/hu0.smali</code></td><td>26</td></tr><tr><td><code>1.1.1.22</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/j02.smali</code></td><td>304</td></tr><tr><td><code>1.1.2.1</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/gl1.smali</code></td><td>416</td></tr><tr><td><code>1.1.3.1</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/je4.smali</code></td><td>217</td></tr><tr><td><code>1.1.3.1</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/je4.smali</code></td><td>233</td></tr><tr><td><code>1.1.3.1</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/je4.smali</code></td><td>249</td></tr><tr><td><code>1.1.3.10</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/je4.smali</code></td><td>607</td></tr><tr><td><code>1.1.3.10</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/je4.smali</code></td><td>623</td></tr><tr><td><code>1.1.3.10</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/je4.smali</code></td><td>639</td></tr><tr><td><code>1.1.3.2</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/je4.smali</code></td><td>265</td></tr><tr><td><code>1.1.3.2</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/je4.smali</code></td><td>281</td></tr><tr><td><code>1.1.3.2</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/je4.smali</code></td><td>297</td></tr><tr><td><code>1.1.3.3</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/je4.smali</code></td><td>313</td></tr><tr><td><code>1.1.3.3</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/je4.smali</code></td><td>329</td></tr><tr><td><code>1.1.3.3</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/je4.smali</code></td><td>345</td></tr><tr><td><code>1.1.3.4</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/je4.smali</code></td><td>361</td></tr><tr><td><code>1.1.3.4</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/je4.smali</code></td><td>370</td></tr><tr><td><code>1.1.3.4</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/je4.smali</code></td><td>379</td></tr><tr><td><code>1.1.3.5</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/je4.smali</code></td><td>388</td></tr><tr><td><code>1.1.3.5</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/je4.smali</code></td><td>404</td></tr><tr><td><code>1.1.3.5</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/je4.smali</code></td><td>420</td></tr><tr><td><code>1.1.3.6</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/je4.smali</code></td><td>436</td></tr><tr><td><code>1.1.3.6</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/je4.smali</code></td><td>452</td></tr><tr><td><code>1.1.3.6</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/je4.smali</code></td><td>468</td></tr><tr><td><code>1.1.3.7</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/je4.smali</code></td><td>484</td></tr><tr><td><code>1.1.3.7</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/je4.smali</code></td><td>500</td></tr><tr><td><code>1.1.3.7</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/je4.smali</code></td><td>516</td></tr><tr><td><code>1.1.3.8</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/je4.smali</code></td><td>532</td></tr><tr><td><code>1.1.3.8</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/je4.smali</code></td><td>548</td></tr><tr><td><code>1.1.3.8</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/je4.smali</code></td><td>564</td></tr><tr><td><code>1.1.3.9</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/je4.smali</code></td><td>580</td></tr><tr><td><code>1.1.3.9</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/je4.smali</code></td><td>589</td></tr><tr><td><code>1.1.3.9</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/je4.smali</code></td><td>598</td></tr><tr><td><code>1.10.12.0</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/vt1.smali</code></td><td>149</td></tr><tr><td><code>1.101.3.4</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/of2.smali</code></td><td>212</td></tr><tr><td><code>1.101.3.4</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/org/bouncycastle/jcajce/provider/symmetric/AES$Mappings.smali</code></td><td>98</td></tr><tr><td><code>1.101.3.4</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/org/bouncycastle/jcajce/provider/symmetric/AES$Mappings.smali</code></td><td>111</td></tr><tr><td><code>1.101.3.4</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/org/bouncycastle/jcajce/provider/symmetric/AES$Mappings.smali</code></td><td>120</td></tr><tr><td><code>1.101.3.4</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/org/bouncycastle/jcajce/provider/symmetric/AES$Mappings.smali</code></td><td>311</td></tr><tr><td><code>1.101.3.4</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/org/bouncycastle/jcajce/provider/symmetric/AES$Mappings.smali</code></td><td>320</td></tr><tr><td><code>1.101.3.4</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/org/bouncycastle/jcajce/provider/symmetric/AES$Mappings.smali</code></td><td>329</td></tr><tr><td><code>1.101.3.4</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/org/bouncycastle/jcajce/provider/symmetric/AES$Mappings.smali</code></td><td>443</td></tr><tr><td><code>1.101.3.4</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/org/bouncycastle/jcajce/provider/symmetric/AES$Mappings.smali</code></td><td>452</td></tr><tr><td><code>1.101.3.4</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/org/bouncycastle/jcajce/provider/symmetric/AES$Mappings.smali</code></td><td>461</td></tr><tr><td><code>1.101.3.4</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/org/bouncycastle/jcajce/provider/symmetric/AES$Mappings.smali</code></td><td>1362</td></tr><tr><td><code>1.101.3.4</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/org/bouncycastle/jcajce/provider/symmetric/AES$Mappings.smali</code></td><td>1382</td></tr><tr><td><code>1.101.3.4</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/org/bouncycastle/jcajce/provider/symmetric/AES$Mappings.smali</code></td><td>1402</td></tr><tr><td><code>1.12.1.3</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/org/bouncycastle/jcajce/provider/symmetric/DESede$Mappings.smali</code></td><td>877</td></tr><tr><td><code>1.12.1.3</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/org/bouncycastle/jcajce/provider/symmetric/DESede$Mappings.smali</code></td><td>904</td></tr><tr><td><code>1.12.1.4</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/org/bouncycastle/jcajce/provider/symmetric/DESede$Mappings.smali</code></td><td>886</td></tr><tr><td><code>1.12.1.4</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/org/bouncycastle/jcajce/provider/symmetric/DESede$Mappings.smali</code></td><td>913</td></tr><tr><td><code>1.12.1.5</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/org/bouncycastle/jcajce/provider/symmetric/RC2$Mappings.smali</code></td><td>350</td></tr><tr><td><code>1.12.1.5</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/org/bouncycastle/jcajce/provider/symmetric/RC2$Mappings.smali</code></td><td>477</td></tr><tr><td><code>1.12.1.6</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/org/bouncycastle/jcajce/provider/symmetric/RC2$Mappings.smali</code></td><td>363</td></tr><tr><td><code>1.12.1.6</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/org/bouncycastle/jcajce/provider/symmetric/RC2$Mappings.smali</code></td><td>490</td></tr><tr><td><code>1.2.156.197</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/org/bouncycastle/jcajce/provider/digest/SM3$Mappings.smali</code></td><td>101</td></tr><tr><td><code>1.2.2.1</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/je4.smali</code></td><td>121</td></tr><tr><td><code>1.2.2.2</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/je4.smali</code></td><td>137</td></tr><tr><td><code>1.2.2.3</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/je4.smali</code></td><td>153</td></tr><tr><td><code>1.2.2.4</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/je4.smali</code></td><td>169</td></tr><tr><td><code>1.2.2.5</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/je4.smali</code></td><td>185</td></tr><tr><td><code>1.2.2.6</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/je4.smali</code></td><td>201</td></tr><tr><td><code>1.2.250.1</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/a0.smali</code></td><td>18</td></tr><tr><td><code>1.3.1.1</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/je4.smali</code></td><td>89</td></tr><tr><td><code>1.3.1.1</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/je4.smali</code></td><td>105</td></tr><tr><td><code>1.3.101.75</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/co4.smali</code></td><td>560</td></tr><tr><td><code>1.3.101.78</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/co4.smali</code></td><td>578</td></tr><tr><td><code>1.3.132.0</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/kp2.smali</code></td><td>49</td></tr><tr><td><code>1.3.132.0</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/kp2.smali</code></td><td>73</td></tr><tr><td><code>1.3.133.16</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/qo4.smali</code></td><td>736</td></tr><tr><td><code>1.3.133.16</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/qo4.smali</code></td><td>847</td></tr><tr><td><code>1.3.14.3</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/co4.smali</code></td><td>226</td></tr><tr><td><code>1.3.14.3</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/org/bouncycastle/jcajce/provider/asymmetric/DSA$Mappings.smali</code></td><td>517</td></tr><tr><td><code>1.3.14.3</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/org/bouncycastle/jcajce/provider/asymmetric/DSA$Mappings.smali</code></td><td>526</td></tr><tr><td><code>1.3.14.3</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/tl2.smali</code></td><td>34</td></tr><tr><td><code>1.3.14.3</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/tl2.smali</code></td><td>47</td></tr><tr><td><code>1.3.14.3</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/tl2.smali</code></td><td>60</td></tr><tr><td><code>1.3.14.3</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/tl2.smali</code></td><td>73</td></tr><tr><td><code>1.3.14.3</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/tl2.smali</code></td><td>90</td></tr><tr><td><code>1.3.14.3</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/tl2.smali</code></td><td>107</td></tr><tr><td><code>1.3.14.3</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/tl2.smali</code></td><td>124</td></tr><tr><td><code>1.3.14.3</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/tl2.smali</code></td><td>141</td></tr><tr><td><code>1.3.14.3</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/tl2.smali</code></td><td>158</td></tr><tr><td><code>1.3.14.3</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/tl2.smali</code></td><td>175</td></tr><tr><td><code>1.3.14.3</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/tl2.smali</code></td><td>192</td></tr><tr><td><code>1.3.14.7</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/tl2.smali</code></td><td>209</td></tr><tr><td><code>1.3.36.3</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/co4.smali</code></td><td>246</td></tr><tr><td><code>1.3.36.3</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/co4.smali</code></td><td>264</td></tr><tr><td><code>1.3.36.3</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/v84.smali</code></td><td>60</td></tr><tr><td><code>1.3.36.8</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/bo4.smali</code></td><td>371</td></tr><tr><td><code>1.3.36.8</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/bp.smali</code></td><td>431</td></tr><tr><td><code>1.3.36.8</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/vt1.smali</code></td><td>18</td></tr><tr><td><code>1.3.6.1</code></td><td><span class='badge badge-muted'>ip_address</span></td><td><code>base.apk</code></td><td><code>smali/ai2.smali</code></td><td>25</td></tr></tbody>
+        </table>
+        <p class='empty-text'>(Showing first 100 of 448 ip addresses indicators.)</p>
+        
+    <h4>Path Candidates (40)</h4>
+    
+        <table class="data-table">
+          <thead><tr><th>Value</th><th>Type</th><th>Source APK</th><th>Source File</th><th>Line</th></tr></thead>
+          <tbody><tr><td><code>/CBC</code></td><td><span class='badge badge-muted'>path_candidate</span></td><td><code>base.apk</code></td><td><code>smali/jw.smali</code></td><td>109</td></tr><tr><td><code>/CCM</code></td><td><span class='badge badge-muted'>path_candidate</span></td><td><code>base.apk</code></td><td><code>smali/mw.smali</code></td><td>1167</td></tr><tr><td><code>/CCM</code></td><td><span class='badge badge-muted'>path_candidate</span></td><td><code>base.apk</code></td><td><code>smali/org/bouncycastle/jcajce/provider/symmetric/util/BaseBlockCipher.smali</code></td><td>1676</td></tr><tr><td><code>/CFB</code></td><td><span class='badge badge-muted'>path_candidate</span></td><td><code>base.apk</code></td><td><code>smali/rw.smali</code></td><td>384</td></tr><tr><td><code>/CFB</code></td><td><span class='badge badge-muted'>path_candidate</span></td><td><code>base.apk</code></td><td><code>smali/sw.smali</code></td><td>310</td></tr><tr><td><code>/EAX</code></td><td><span class='badge badge-muted'>path_candidate</span></td><td><code>base.apk</code></td><td><code>smali/iu0.smali</code></td><td>874</td></tr><tr><td><code>/ECB/NoPadding</code></td><td><span class='badge badge-muted'>path_candidate</span></td><td><code>base.apk</code></td><td><code>smali/i44.smali</code></td><td>60</td></tr><tr><td><code>/GCM</code></td><td><span class='badge badge-muted'>path_candidate</span></td><td><code>base.apk</code></td><td><code>smali/yk1.smali</code></td><td>2037</td></tr><tr><td><code>/GCTR</code></td><td><span class='badge badge-muted'>path_candidate</span></td><td><code>base.apk</code></td><td><code>smali/jl1.smali</code></td><td>509</td></tr><tr><td><code>/GOv0GOo1GO</code></td><td><span class='badge badge-muted'>path_candidate</span></td><td><code>base.apk</code></td><td><code>smali/oq4.smali</code></td><td>1857</td></tr><tr><td><code>/GPv0GPo1GP</code></td><td><span class='badge badge-muted'>path_candidate</span></td><td><code>base.apk</code></td><td><code>smali/oq4.smali</code></td><td>1857</td></tr><tr><td><code>/HMAC</code></td><td><span class='badge badge-muted'>path_candidate</span></td><td><code>base.apk</code></td><td><code>smali/mm2.smali</code></td><td>156</td></tr><tr><td><code>/HMAC</code></td><td><span class='badge badge-muted'>path_candidate</span></td><td><code>base.apk</code></td><td><code>smali/vo1.smali</code></td><td>519</td></tr><tr><td><code>/IPC</code></td><td><span class='badge badge-muted'>path_candidate</span></td><td><code>base.apk</code></td><td><code>smali/nk0.smali</code></td><td>772</td></tr><tr><td><code>/KCCM</code></td><td><span class='badge badge-muted'>path_candidate</span></td><td><code>base.apk</code></td><td><code>smali/gz1.smali</code></td><td>1765</td></tr><tr><td><code>/KCTR</code></td><td><span class='badge badge-muted'>path_candidate</span></td><td><code>base.apk</code></td><td><code>smali/hz1.smali</code></td><td>258</td></tr><tr><td><code>/KGCM</code></td><td><span class='badge badge-muted'>path_candidate</span></td><td><code>base.apk</code></td><td><code>smali/pz1.smali</code></td><td>1100</td></tr><tr><td><code>/NoPadding</code></td><td><span class='badge badge-muted'>path_candidate</span></td><td><code>base.apk</code></td><td><code>smali/ft.smali</code></td><td>98</td></tr><tr><td><code>/OCB</code></td><td><span class='badge badge-muted'>path_candidate</span></td><td><code>base.apk</code></td><td><code>smali/ol2.smali</code></td><td>1277</td></tr><tr><td><code>/OFB</code></td><td><span class='badge badge-muted'>path_candidate</span></td><td><code>base.apk</code></td><td><code>smali/sl2.smali</code></td><td>281</td></tr><tr><td><code>/OpenPGPCFB</code></td><td><span class='badge badge-muted'>path_candidate</span></td><td><code>base.apk</code></td><td><code>smali/tn2.smali</code></td><td>81</td></tr><tr><td><code>/PGPCFB</code></td><td><span class='badge badge-muted'>path_candidate</span></td><td><code>base.apk</code></td><td><code>smali/bp2.smali</code></td><td>110</td></tr><tr><td><code>/PGPCFBwithIV</code></td><td><span class='badge badge-muted'>path_candidate</span></td><td><code>base.apk</code></td><td><code>smali/bp2.smali</code></td><td>93</td></tr><tr><td><code>/PI</code></td><td><span class='badge badge-muted'>path_candidate</span></td><td><code>base.apk</code></td><td><code>smali/oq4.smali</code></td><td>1857</td></tr><tr><td><code>/RFC3211Wrap</code></td><td><span class='badge badge-muted'>path_candidate</span></td><td><code>base.apk</code></td><td><code>smali/zq0.smali</code></td><td>820</td></tr><tr><td><code>/RSA</code></td><td><span class='badge badge-muted'>path_candidate</span></td><td><code>base.apk</code></td><td><code>smali/org/bouncycastle/jcajce/provider/asymmetric/RSA$Mappings.smali</code></td><td>69</td></tr><tr><td><code>/SIC</code></td><td><span class='badge badge-muted'>path_candidate</span></td><td><code>base.apk</code></td><td><code>smali/cb3.smali</code></td><td>594</td></tr><tr><td><code>/authTokens</code></td><td><span class='badge badge-muted'>path_candidate</span></td><td><code>base.apk</code></td><td><code>smali/rd1.smali</code></td><td>838</td></tr><tr><td><code>/ftp.dat</code></td><td><span class='badge badge-muted'>path_candidate</span></td><td><code>base.apk</code></td><td><code>smali/jh3.smali</code></td><td>137</td></tr><tr><td><code>/hG</code></td><td><span class='badge badge-muted'>path_candidate</span></td><td><code>base.apk</code></td><td><code>smali/oq4.smali</code></td><td>1857</td></tr><tr><td><code>/installations</code></td><td><span class='badge badge-muted'>path_candidate</span></td><td><code>base.apk</code></td><td><code>smali/rd1.smali</code></td><td>2697</td></tr><tr><td><code>/installations/</code></td><td><span class='badge badge-muted'>path_candidate</span></td><td><code>base.apk</code></td><td><code>smali/rd1.smali</code></td><td>824</td></tr><tr><td><code>/lib/</code></td><td><span class='badge badge-muted'>path_candidate</span></td><td><code>base.apk</code></td><td><code>smali/com/google/firebase/crashlytics/ndk/JniNativeApi.smali</code></td><td>831</td></tr><tr><td><code>/settings</code></td><td><span class='badge badge-muted'>path_candidate</span></td><td><code>base.apk</code></td><td><code>smali/t7.smali</code></td><td>3961</td></tr><tr><td><code>/verified-splits</code></td><td><span class='badge badge-muted'>path_candidate</span></td><td><code>base.apk</code></td><td><code>smali/com/google/firebase/crashlytics/ndk/JniNativeApi.smali</code></td><td>211</td></tr><tr><td><code>/y--</code></td><td><span class='badge badge-muted'>path_candidate</span></td><td><code>base.apk</code></td><td><code>smali/oq4.smali</code></td><td>1857</td></tr><tr><td><code>/y--0x--</code></td><td><span class='badge badge-muted'>path_candidate</span></td><td><code>base.apk</code></td><td><code>smali/oq4.smali</code></td><td>1857</td></tr><tr><td><code>/y--0x--7y--8x--</code></td><td><span class='badge badge-muted'>path_candidate</span></td><td><code>base.apk</code></td><td><code>smali/oq4.smali</code></td><td>1857</td></tr><tr><td><code>/y--1x--</code></td><td><span class='badge badge-muted'>path_candidate</span></td><td><code>base.apk</code></td><td><code>smali/oq4.smali</code></td><td>1857</td></tr><tr><td><code>/ze-1</code></td><td><span class='badge badge-muted'>path_candidate</span></td><td><code>base.apk</code></td><td><code>smali/oq4.smali</code></td><td>1857</td></tr></tbody>
+        </table>
+        <p class='empty-text'>(Total 40 path candidates indicators.)</p>
+        
+    <h4>Local File URLs (5)</h4>
+    
+        <table class="data-table">
+          <thead><tr><th>Value</th><th>Type</th><th>Source APK</th><th>Source File</th><th>Line</th></tr></thead>
+          <tbody><tr><td><code>file:///android_asset/</code></td><td><span class='badge badge-muted'>local_file_url</span></td><td><code>base.apk</code></td><td><code>smali/com/davemorrissey/labs/subscaleview/ImageSource.smali</code></td><td>225</td></tr><tr><td><code>file:///android_asset/</code></td><td><span class='badge badge-muted'>local_file_url</span></td><td><code>base.apk</code></td><td><code>smali/com/davemorrissey/labs/subscaleview/SubsamplingScaleImageView.smali</code></td><td>4095</td></tr><tr><td><code>file:///android_asset/</code></td><td><span class='badge badge-muted'>local_file_url</span></td><td><code>base.apk</code></td><td><code>smali/com/davemorrissey/labs/subscaleview/decoder/SkiaImageDecoder.smali</code></td><td>347</td></tr><tr><td><code>file:///android_asset/</code></td><td><span class='badge badge-muted'>local_file_url</span></td><td><code>base.apk</code></td><td><code>smali/com/davemorrissey/labs/subscaleview/decoder/SkiaImageRegionDecoder.smali</code></td><td>538</td></tr><tr><td><code>file:///android_asset/</code></td><td><span class='badge badge-muted'>local_file_url</span></td><td><code>base.apk</code></td><td><code>smali/com/davemorrissey/labs/subscaleview/decoder/SkiaPooledImageRegionDecoder.smali</code></td><td>645</td></tr></tbody>
+        </table>
+        <p class='empty-text'>(Total 5 local file urls indicators.)</p>
+        
+    
+
+  <h2>10. Static API Candidates</h2>
+  
+        <div class="info-card">
+          <div style="font-weight:600; margin-bottom:6px; color:#38bdf8;">
+            No API candidates were identified by the current call-context extractor.
+          </div>
+          <div style="color:#94a3b8; font-size:13px; line-height:1.5;">
+            The current V1 call-context extractor supports limited framework-specific patterns. Zero candidates does not mean the application has no APIs.
+          </div>
+        </div>
+        
+
+  <h2>11. Runtime Evidence</h2>
+  
+    <table class="data-table">
+      <tbody>
+        <tr><td><strong>Device Serial:</strong></td><td><code>emulator-5554</code></td></tr>
+        <tr><td><strong>Install Result:</strong></td><td>Success</td></tr>
+        <tr><td><strong>Reinstall Allowed:</strong></td><td>True</td></tr>
+        <tr><td><strong>Grant Permissions (-g):</strong></td><td>True</td></tr>
+        <tr><td><strong>Launched Component:</strong></td><td><code>me.zhanghai.android.files/me.zhanghai.android.files.filelist.FileListActivity</code></td></tr>
+        <tr><td><strong>Observed PID:</strong></td><td><code>9913</code></td></tr>
+        <tr><td><strong>Observed Package:</strong></td><td><code>me.zhanghai.android.files</code></td></tr>
+        <tr><td><strong>Observed Activity:</strong></td><td><code>me.zhanghai.android.files.filelist.FileListActivity</code></td></tr>
+        <tr><td><strong>Foreground Verified:</strong></td><td>Yes</td></tr>
+        <tr><td><strong>Runtime Status:</strong></td><td><span class="badge badge-accent">runtime_launch_verified</span></td></tr>
+      </tbody>
+    </table>
+    <div class="note-box">
+      The application process was observed and the expected package/activity was detected in the foreground.
+    </div>
+    
+
+  <h2>12. HTML Connectivity Probe</h2>
+  
+    <table class="data-table">
+      <tbody>
+        <tr><td><strong>Probe URL:</strong></td><td><code>-</code></td></tr>
+        <tr><td><strong>Probe Hit:</strong></td><td>No</td></tr>
+        <tr><td><strong>Hit Count:</strong></td><td>0</td></tr>
+        <tr><td><strong>Status:</strong></td><td><span class="badge badge-accent">not_executed</span></td></tr>
+      </tbody>
+    </table>
+    <div class="note-box">
+      Emulator connectivity only &mdash; not target application navigation. Verifies browser/emulator network reachability via ADB reverse.
+    </div>
+    
+
+  <h2>13. Analysis Notes</h2>
+  <ul class="bullet-list">
+    <li>Split package analysis: only installed splits returned by pm path on the device were analyzed.</li><li>[base.apk] Apktool decode warning in &#x27;base.apk&#x27;: W: Unresolved resource reference: ResReference{pkg=ResPackage{id=0x7f, name=me.zhanghai.android.files}, id=0x7f080034, type=ref}
+W: Unresolved resource reference: ResReference{pkg=ResPackage{id=0x7f, </li><li>[base.apk] JADX exited with warnings (code 3) for &#x27;base.apk&#x27;</li><li>[split_config.xxhdpi.apk] Apktool decode warning in &#x27;split_config.xxhdpi.apk&#x27;: W: Unresolved resource reference: ResReference{pkg=ResPackage{id=0x7f, name=me.zhanghai.android.files}, id=0x7f0801b2, type=ref}</li><li>Static network indicators are extracted from application content and do not by themselves prove runtime network usage.</li><li>API candidates are static call-context candidates extracted from Smali register flows and do not represent confirmed runtime endpoints.</li><li>No API candidates were identified by the current call-context extractor.</li><li>Static network indicators may still exist. The current V1 API candidate extractor supports limited framework-specific call patterns. Zero candidates does not mean the application has no APIs.</li><li>The application process was observed and the expected package/activity was detected in the foreground.</li><li>No vulnerability exploitation was performed.</li><li>No security verdict was produced.</li>
+  </ul>
+
+  <h2>14. Limitations</h2>
+  <ul class="bullet-list">
+    <li>Analysis is limited to static heuristics and basic process/activity foreground observation.</li><li>V1 API candidate extractor only tracks specific call-context register patterns (e.g. Fuel).</li><li>Emulator connectivity verification uses browser intent and does not evaluate application network security posture.</li><li>Dynamic instrumentation, traffic interception (MITM/Burp), and deep UI exploration were not performed.</li><li>No security verdict, vulnerability score, or risk classification is provided.</li><li>Split package analysis is limited to installed splits returned by pm path. Dynamic feature modules or config splits not delivered to the device were not analyzed.</li>
+  </ul>
+</body>
+</html>

@@ -14,6 +14,8 @@ import shutil
 import subprocess
 import time
 
+from src.system_env import resolve_executable
+
 DEFAULT_COMMAND_TIMEOUT_SECONDS: float = 30.0
 DEFAULT_MAX_WAIT_SECONDS: float = 8.0
 DEFAULT_POLL_INTERVAL: float = 0.5
@@ -38,7 +40,7 @@ def resolve_adb_executable(adb_executable: str | None = None) -> str:
     Raises:
         AndroidDeviceUnavailableError: If adb executable cannot be found.
     """
-    resolved = shutil.which(adb_executable or "adb")
+    resolved = resolve_executable("adb", adb_executable)
     if not resolved:
         raise AndroidDeviceUnavailableError(
             f"Required executable 'adb' not found on system PATH. "

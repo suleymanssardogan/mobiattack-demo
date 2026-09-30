@@ -1,0 +1,31 @@
+{
+  "status": "evaluated_limited",
+  "risk_score": "HIGH",
+  "summary": {
+    "critical": 0,
+    "high": 1,
+    "medium": 0,
+    "low": 0,
+    "total": 1
+  },
+  "findings": [
+    {
+      "id": "IOS-CODE-01",
+      "title": "Debug entitlement in signed application",
+      "severity": "HIGH",
+      "owasp_category": "Insufficient Binary Protections",
+      "masvs_id": "MASVS-RESILIENCE-1",
+      "cwe_id": "CWE-489: Active Debug Code",
+      "description": "The signed app claims get-task-allow=true, which enables debugger attachment in development builds. This can be intentional for a test IPA; verify that release builds remove it.",
+      "evidence": "Payload/MSTG-JWT.app/_CodeSignature: signed get-task-allow=true",
+      "remediation": "Build and sign the distributed release without the get-task-allow entitlement.",
+      "affected_items": [
+        "Payload/MSTG-JWT.app/_CodeSignature: get-task-allow"
+      ]
+    }
+  ],
+  "message": "Limited IPA static checks: ATS exceptions and signed debug entitlement. No runtime behavior was tested.",
+  "limitations": [
+    "Only selected iOS configuration rules were evaluated; no findings does not establish that the app is secure."
+  ]
+}

@@ -6,8 +6,12 @@ from pathlib import Path
 ROOT_DIR = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT_DIR))
 
-# Ensure writable temporary directory for serverless runs
+# Ensure writable temporary directory and declare serverless environment
 os.environ.setdefault("DEMO_RUNS_DIR", "/tmp/demo_runs")
+os.environ.setdefault("VERCEL", "1")
+
+from src.system_env import ensure_system_paths
+ensure_system_paths()
 
 from src.demo_web_server import DemoWebServer, _DemoRequestHandler
 

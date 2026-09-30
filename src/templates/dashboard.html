@@ -3486,7 +3486,7 @@
         return;
       }
 
-      if (window.location.hostname === "mobiattack-demo.vercel.app") {
+      if (window.location.hostname === "mobiattack-demo.vercel.app" && window.location.search.includes("local=1")) {
         const localPage = new URL("http://127.0.0.1:8082/");
         localPage.searchParams.set("target", url);
         localPage.searchParams.set("platform", platform);
@@ -3553,7 +3553,7 @@
 
     window.addEventListener("DOMContentLoaded", async () => {
       const params = new URLSearchParams(window.location.search);
-      if (window.location.hostname === "mobiattack-demo.vercel.app") {
+      if (window.location.hostname === "mobiattack-demo.vercel.app" && window.location.search.includes("local=1")) {
         document.getElementById("presentationNotice").style.display = "block";
         return;
       }

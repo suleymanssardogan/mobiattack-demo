@@ -18,6 +18,8 @@ import shutil
 import subprocess
 import zipfile
 
+from src.system_env import resolve_executable
+
 # Strict Smali root directory pattern (matching Task 02 conventions)
 SMALI_ROOT_PATTERN = re.compile(r"^smali(_classes\d+)?$")
 
@@ -216,14 +218,14 @@ def preprocess_apk(
         raise ApkPreprocessingError(f"APK path is not a file: '{apk_path}'")
 
     # Detect external executables
-    apktool_bin = shutil.which(apktool_executable or "apktool")
+    apktool_bin = resolve_executable("apktool", apktool_executable)
     if not apktool_bin:
         raise ApkPreprocessingError(
             f"Required executable 'apktool' not found on system PATH. "
             f"(Specified: '{apktool_executable or 'apktool'}')"
         )
 
-    jadx_bin = shutil.which(jadx_executable or "jadx")
+    jadx_bin = resolve_executable("jadx", jadx_executable)
     if not jadx_bin:
         raise ApkPreprocessingError(
             f"Required executable 'jadx' not found on system PATH. "
@@ -280,9 +282,35 @@ def preprocess_apk(
 
         if res_apktool.returncode != 0:
             err_msg = (res_apktool.stderr or res_apktool.stdout or "").strip()
-            raise ApkPreprocessingError(
-                f"apktool failed with exit code {res_apktool.returncode}: {err_msg[:300]}"
-            )
+            # If apktool failed due to framework access/permissions, retry with a workspace-local framework directory
+            if "framework" in err_msg.lower() or "1.apk" in err_msg.lower() or "operation not permitted" in err_msg.lower():
+                local_frame_dir = workspace_dir / ".apktool_framework"
+                local_frame_dir.mkdir(parents=True, exist_ok=True)
+                retry_cmd = [apktool_bin, "d", str(apk_file), "-o", str(apktool_dir), "-p", str(local_frame_dir), "-f"]
+                try:
+                    res_retry = subprocess.run(
+                        retry_cmd,
+                        capture_output=True,
+                        text=True,
+                        timeout=timeout_seconds,
+                    )
+                    if res_retry.returncode == 0:
+                        res_apktool = res_retry
+                    else:
+                        retry_err = (res_retry.stderr or res_retry.stdout or "").strip()
+                        raise ApkPreprocessingError(
+                            f"apktool failed with exit code {res_retry.returncode}: {retry_err[:300]}"
+                        )
+                except subprocess.TimeoutExpired as err:
+                    raise ApkPreprocessingError(
+                        f"apktool timed out after {timeout_seconds} seconds."
+                    ) from err
+                except OSError as err:
+                    raise ApkPreprocessingError(f"Failed to invoke apktool: {err}") from err
+            else:
+                raise ApkPreprocessingError(
+                    f"apktool failed with exit code {res_apktool.returncode}: {err_msg[:300]}"
+                )
 
         if not validate_apktool_output(apktool_dir):
             raise ApkPreprocessingError(

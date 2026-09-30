@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <title>MobiAttack iOS Report &mdash; sg.vp.MSTG.JWT</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; background: #0b0f19; color: #f1f5f9; padding: 24px; }
+    .container { max-width: 1000px; margin: 0 auto; }
+    .header-card { background: #111827; border: 1px solid #1f2937; border-radius: 8px; padding: 20px; margin-bottom: 24px; }
+    h1, h2, h3, h4 { color: #f8fafc; margin-bottom: 12px; }
+    .section { background: #111827; border: 1px solid #1f2937; border-radius: 8px; padding: 18px; margin-bottom: 20px; }
+    .data-table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 13px; }
+    .data-table th, .data-table td { border: 1px solid #1f2937; padding: 8px 10px; text-align: left; }
+    .data-table th { background: #1f2937; color: #94a3b8; font-weight: 600; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+    .badge-accent { background: #2563eb; color: #fff; }
+    .badge-success { background: #10b981; color: #fff; }
+    .badge-muted { background: #374151; color: #94a3b8; }
+    .note-box { background: #182234; border-left: 4px solid #3b82f6; padding: 10px 14px; border-radius: 4px; font-size: 13px; color: #93c5fd; margin-top: 10px; }
+    .empty-text { color: #64748b; font-style: italic; font-size: 13px; }
+    code { font-family: SFMono-Regular, Consolas, Menlo, monospace; color: #38bdf8; }
+    ul { margin-left: 20px; line-height: 1.6; font-size: 13px; color: #cbd5e1; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header-card">
+      <h1>MobiAttack iOS Analysis Report</h1>
+      <p style="color:#94a3b8; font-size:14px;">Deterministic Static Security Analysis Report</p>
+    </div>
+
+    <div class="section">
+      <h2>1. Run Information</h2>
+      <table class="data-table">
+        <tbody>
+          <tr><td><strong>Run ID:</strong></td><td><code>run_1790758052_05224d</code></td></tr>
+          <tr><td><strong>Platform:</strong></td><td><span class="badge badge-accent">iOS</span></td></tr>
+          <tr><td><strong>Status:</strong></td><td><span class="badge badge-success">completed</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section">
+      <h2>2. Application Overview</h2>
+      <table class="data-table">
+        <tbody>
+          <tr><td><strong>Bundle Identifier:</strong></td><td><code>sg.vp.MSTG.JWT</code></td></tr>
+          <tr><td><strong>Display Name:</strong></td><td>MSTG-JWT</td></tr>
+          <tr><td><strong>Executable:</strong></td><td><code>MSTG-JWT</code></td></tr>
+          <tr><td><strong>Version / Build:</strong></td><td>1.0 (build 1)</td></tr>
+          <tr><td><strong>Minimum OS:</strong></td><td>10.0</td></tr>
+          <tr><td><strong>Package File:</strong></td><td><code>MSTG-JWT.ipa</code> (5,853,214 bytes)</td></tr>
+          <tr><td><strong>SHA-256:</strong></td><td><code>d25df71640dc4f5af3ae48c58f7cad1c7f6ba53a28334b5407f9a0a11291934c</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section">
+      <h2>3. Application Structure & Mach-O</h2>
+      <h4 style="margin-top:6px;">Main Executable</h4>
+      <table class="data-table">
+        <tbody>
+          <tr><td><strong>Architectures:</strong></td><td><code>armv7, arm64</code></td></tr>
+          <tr><td><strong>Bitness:</strong></td><td>64-bit</td></tr>
+          <tr><td><strong>File Type:</strong></td><td>Mach-O universal binary</td></tr>
+          <tr><td><strong>UUID:</strong></td><td><code>None</code></td></tr>
+        </tbody>
+      </table>
+      <h4 style="margin-top:16px;">Embedded Frameworks (16)</h4>
+      
+    <table class="data-table">
+      <thead><tr><th>Name</th><th>Type</th><th>Relative Path</th></tr></thead>
+      <tbody><tr><td><code>Alamofire.framework</code></td><td><span class='badge badge-accent'>framework_bundle</span></td><td><code>Payload/MSTG-JWT.app/Frameworks/Alamofire.framework</code></td></tr><tr><td><code>KeychainSwift.framework</code></td><td><span class='badge badge-accent'>framework_bundle</span></td><td><code>Payload/MSTG-JWT.app/Frameworks/KeychainSwift.framework</code></td></tr><tr><td><code>SwiftyJSON.framework</code></td><td><span class='badge badge-accent'>framework_bundle</span></td><td><code>Payload/MSTG-JWT.app/Frameworks/SwiftyJSON.framework</code></td></tr><tr><td><code>libswiftCore.dylib</code></td><td><span class='badge badge-accent'>dynamic_library</span></td><td><code>Payload/MSTG-JWT.app/Frameworks/libswiftCore.dylib</code></td></tr><tr><td><code>libswiftCoreData.dylib</code></td><td><span class='badge badge-accent'>dynamic_library</span></td><td><code>Payload/MSTG-JWT.app/Frameworks/libswiftCoreData.dylib</code></td></tr><tr><td><code>libswiftCoreFoundation.dylib</code></td><td><span class='badge badge-accent'>dynamic_library</span></td><td><code>Payload/MSTG-JWT.app/Frameworks/libswiftCoreFoundation.dylib</code></td></tr><tr><td><code>libswiftCoreGraphics.dylib</code></td><td><span class='badge badge-accent'>dynamic_library</span></td><td><code>Payload/MSTG-JWT.app/Frameworks/libswiftCoreGraphics.dylib</code></td></tr><tr><td><code>libswiftCoreImage.dylib</code></td><td><span class='badge badge-accent'>dynamic_library</span></td><td><code>Payload/MSTG-JWT.app/Frameworks/libswiftCoreImage.dylib</code></td></tr><tr><td><code>libswiftDarwin.dylib</code></td><td><span class='badge badge-accent'>dynamic_library</span></td><td><code>Payload/MSTG-JWT.app/Frameworks/libswiftDarwin.dylib</code></td></tr><tr><td><code>libswiftDispatch.dylib</code></td><td><span class='badge badge-accent'>dynamic_library</span></td><td><code>Payload/MSTG-JWT.app/Frameworks/libswiftDispatch.dylib</code></td></tr><tr><td><code>libswiftFoundation.dylib</code></td><td><span class='badge badge-accent'>dynamic_library</span></td><td><code>Payload/MSTG-JWT.app/Frameworks/libswiftFoundation.dylib</code></td></tr><tr><td><code>libswiftMetal.dylib</code></td><td><span class='badge badge-accent'>dynamic_library</span></td><td><code>Payload/MSTG-JWT.app/Frameworks/libswiftMetal.dylib</code></td></tr><tr><td><code>libswiftObjectiveC.dylib</code></td><td><span class='badge badge-accent'>dynamic_library</span></td><td><code>Payload/MSTG-JWT.app/Frameworks/libswiftObjectiveC.dylib</code></td></tr><tr><td><code>libswiftQuartzCore.dylib</code></td><td><span class='badge badge-accent'>dynamic_library</span></td><td><code>Payload/MSTG-JWT.app/Frameworks/libswiftQuartzCore.dylib</code></td></tr><tr><td><code>libswiftUIKit.dylib</code></td><td><span class='badge badge-accent'>dynamic_library</span></td><td><code>Payload/MSTG-JWT.app/Frameworks/libswiftUIKit.dylib</code></td></tr><tr><td><code>libswiftos.dylib</code></td><td><span class='badge badge-accent'>dynamic_library</span></td><td><code>Payload/MSTG-JWT.app/Frameworks/libswiftos.dylib</code></td></tr></tbody>
+    </table>
+    
+      <h4 style="margin-top:16px;">Resources Summary</h4>
+      
+    <table class="data-table">
+      <tbody>
+        <tr><td><strong>Total Files in Bundle:</strong></td><td>49 files</td></tr>
+        <tr><td><strong>Plist Files:</strong></td><td>1 files</td></tr>
+        <tr><td><strong>JSON Files:</strong></td><td>0 files</td></tr>
+        <tr><td><strong>Asset Catalogs:</strong></td><td>None</td></tr>
+        <tr><td><strong>Localizations:</strong></td><td>Base.lproj</td></tr>
+      </tbody>
+    </table>
+    
+    </div>
+
+    <div class="section">
+      <h2>4. Declared Usage Descriptions & URL Schemes</h2>
+      <h4 style="margin-top:6px; margin-bottom:6px;">Usage Descriptions (1)</h4>
+      
+        <table class="data-table">
+          <thead><tr><th>Key</th><th>Declared String</th><th>Classification</th><th>Evidence Source</th></tr></thead>
+          <tbody><tr><td><code>NSFaceIDUsageDescription</code></td><td>Face ID testing</td><td><span class='badge badge-muted'>declared_usage_description</span></td><td><code>Payload/MSTG-JWT.app/Info.plist</code></td></tr></tbody>
+        </table>
+        
+      
+        <h4 style="margin-top:16px; margin-bottom:6px;">Declared URL Schemes (0)</h4>
+        <p class='empty-text'>No custom URL schemes declared.</p>
+        
+    </div>
+
+    <div class="section">
+      <h2>5. Entitlements & ATS Configuration</h2>
+      <h4>App Transport Security (ATS)</h4>
+      
+    <table class="data-table">
+      <tbody>
+        <tr><td><strong>Allows Arbitrary Loads:</strong></td><td><code>False</code></td></tr>
+        <tr><td><strong>Allows Local Networking:</strong></td><td><code>False</code></td></tr>
+        <tr><td><strong>Exception Domains Count:</strong></td><td>0</td></tr>
+      </tbody>
+    </table>
+    
+    
+      <h4 style="margin-top:16px;">Entitlements</h4>
+      
+        <p style="margin-bottom:8px;">Extraction Status: <span class="badge badge-success">extracted</span> (Source: <code>Payload/MSTG-JWT.app/embedded.mobileprovision</code>)</p>
+        <table class="data-table"><thead><tr><th>Entitlement Key</th><th>Value</th></tr></thead><tbody><tr><td><code>keychain-access-groups</code></td><td><code>[&#x27;6MMFRV23J5.*&#x27;]</code></td></tr><tr><td><code>get-task-allow</code></td><td><code>True</code></td></tr><tr><td><code>application-identifier</code></td><td><code>6MMFRV23J5.*</code></td></tr><tr><td><code>com.apple.developer.team-identifier</code></td><td><code>6MMFRV23J5</code></td></tr></tbody></table>
+        
+    </div>
+
+    <div class="section">
+      <h2>6. Static Network Indicators</h2>
+      <p style="color:#94a3b8; font-size:13px;">App-owned artifacts only; the JSON report retains the full raw indicator set, including embedded frameworks and documentation.</p>
+      <h4>Network URLs (8)</h4>
+      
+        <table class="data-table">
+          <thead><tr><th>Indicator Value</th><th>Type</th><th>Source Artifact</th><th>Location</th></tr></thead>
+          <tbody><tr><td><code>http://192.168.2.73:8181/test.html</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>Payload/MSTG-JWT.app/MSTG-JWT</code></td><td>87616</td></tr><tr><td><code>http://192.168.2.73:8181/test.html</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>Payload/MSTG-JWT.app/MSTG-JWT</code></td><td>249536</td></tr><tr><td><code>http://54.255.184.119:8181/auth/login</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>Payload/MSTG-JWT.app/MSTG-JWT</code></td><td>87360</td></tr><tr><td><code>http://54.255.184.119:8181/auth/login</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>Payload/MSTG-JWT.app/MSTG-JWT</code></td><td>249344</td></tr><tr><td><code>http://54.255.184.119:8181/signup</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>Payload/MSTG-JWT.app/MSTG-JWT</code></td><td>88912</td></tr><tr><td><code>http://54.255.184.119:8181/signup</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>Payload/MSTG-JWT.app/MSTG-JWT</code></td><td>250864</td></tr><tr><td><code>http://54.255.184.119:8181/todos</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>Payload/MSTG-JWT.app/MSTG-JWT</code></td><td>88576</td></tr><tr><td><code>http://54.255.184.119:8181/todos</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>Payload/MSTG-JWT.app/MSTG-JWT</code></td><td>250544</td></tr></tbody>
+        </table>
+        
+      <h4 style="margin-top:14px;">Domains (3)</h4>
+      
+        <table class="data-table">
+          <thead><tr><th>Indicator Value</th><th>Type</th><th>Source Artifact</th><th>Location</th></tr></thead>
+          <tbody><tr><td><code>foo.org</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>Payload/MSTG-JWT.app/MSTG-JWT</code></td><td>86936</td></tr><tr><td><code>subject.CN</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>Payload/MSTG-JWT.app/MSTG-JWT</code></td><td>138870</td></tr><tr><td><code>subject.CN</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>Payload/MSTG-JWT.app/MSTG-JWT</code></td><td>303174</td></tr></tbody>
+        </table>
+        
+      <h4 style="margin-top:14px;">IP Addresses (0)</h4>
+      <p class='empty-text'>No ip addresses discovered.</p>
+      <h4 style="margin-top:14px;">Path Candidates (0)</h4>
+      <p class='empty-text'>No path candidates discovered.</p>
+    </div>
+
+    <div class="section">
+      <h2>7. Vulnerability Analysis</h2>
+      <p><strong>Highest observed severity:</strong> HIGH &middot; <strong>Findings:</strong> 1</p><p class='empty-text'>Coverage is limited to ATS exceptions and signed debug entitlement; no runtime behavior was tested. No findings do not establish that the app is secure.</p><table class='data-table'><thead><tr><th>Severity</th><th>Finding</th><th>Evidence</th><th>Recommendation</th></tr></thead><tbody><tr><td><strong>HIGH</strong></td><td>Debug entitlement in signed application</td><td><code>Payload/MSTG-JWT.app/_CodeSignature: signed get-task-allow=true</code></td><td>Build and sign the distributed release without the get-task-allow entitlement.</td></tr></tbody></table>
+    </div>
+
+    <div class="section">
+      <h2>8. Static API Candidates</h2>
+      <div class="note-box">
+        Zero candidates extracted. Static call-context API candidate extraction is not implemented for iOS in Phase 1.
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>9. Runtime Verification</h2>
+      <div class="note-box">
+        Runtime launch verification is not implemented for iOS targets in Phase 1.
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>10. Analysis Notes</h2>
+      <ul><li>Analysis is limited to static package analysis of the provided IPA archive.</li><li>Static network indicators prove only that the string constant exists in the package; they do not prove runtime use.</li><li>Declared usage descriptions indicate capability declarations in Info.plist; they do not prove runtime permission access.</li><li>Selected ATS and signed debug entitlement settings are checked against limited static risk rules.</li><li>Runtime launch verification is not implemented for iOS in Phase 1.</li><li>No vulnerability exploitation was performed.</li><li>A finding severity is not a complete security verdict for the application.</li><li>No API candidates were identified by the current call-context extractor.</li><li>Static network indicators may still exist. The current V1 API candidate extractor supports limited framework-specific call patterns. Zero candidates does not mean the application has no APIs.</li><li>Runtime execution finished with status: not_implemented.</li><li>No vulnerability exploitation was performed.</li><li>No security verdict was produced.</li></ul>
+    </div>
+
+    <div class="section">
+      <h2>11. Limitations</h2>
+      <ul><li>Analysis is limited to static heuristics and basic process/activity foreground observation.</li><li>V1 API candidate extractor only tracks specific call-context register patterns (e.g. Fuel).</li><li>Emulator connectivity verification uses browser intent and does not evaluate application network security posture.</li><li>Dynamic instrumentation, traffic interception (MITM/Burp), and deep UI exploration were not performed.</li><li>No security verdict, vulnerability score, or risk classification is provided.</li></ul>
+    </div>
+  </div>
+</body>
+</html>

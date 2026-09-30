@@ -20,6 +20,8 @@ import subprocess
 import threading
 import urllib.parse
 
+from src.system_env import resolve_executable
+
 PROBE_HTML_TEMPLATE = """<!DOCTYPE html>
 <html>
 <head>
@@ -219,7 +221,7 @@ def configure_adb_reverse(
     Returns:
         dict: {"serial": str, "device_port": int, "host_port": int, "success": True}
     """
-    adb_bin = shutil.which(adb_executable or "adb")
+    adb_bin = resolve_executable("adb", adb_executable)
     if not adb_bin:
         raise AdbReverseError(
             f"Required executable 'adb' not found on system PATH. (Specified: '{adb_executable or 'adb'}')"
@@ -272,7 +274,7 @@ def remove_adb_reverse(
     Command equivalent:
         adb -s <serial> reverse --remove tcp:<device_port>
     """
-    adb_bin = shutil.which(adb_executable or "adb")
+    adb_bin = resolve_executable("adb", adb_executable)
     if not adb_bin:
         return False
 
@@ -309,7 +311,7 @@ def trigger_device_browser(
     This helper proves ONLY emulator-to-host network connectivity.
     It does NOT represent, prove, or imply target-application navigation.
     """
-    adb_bin = shutil.which(adb_executable or "adb")
+    adb_bin = resolve_executable("adb", adb_executable)
     if not adb_bin:
         raise AdbReverseError(f"Required executable 'adb' not found on system PATH.")
 

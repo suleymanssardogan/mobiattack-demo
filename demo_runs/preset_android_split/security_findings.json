@@ -1,0 +1,91 @@
+{
+  "risk_score": "HIGH",
+  "summary": {
+    "critical": 0,
+    "high": 1,
+    "medium": 2,
+    "low": 1,
+    "total": 4
+  },
+  "findings": [
+    {
+      "id": "SEC-NET-01",
+      "title": "Cleartext HTTP Traffic Permitted",
+      "severity": "HIGH",
+      "owasp_category": "M3: Insecure Communication",
+      "masvs_id": "MASVS-NETWORK-1",
+      "cwe_id": "CWE-319: Cleartext Transmission of Sensitive Information",
+      "description": "The application allows unencrypted HTTP network communication. Traffic sent over plaintext HTTP can be intercepted, read, or modified by adversaries via Man-in-the-Middle (MitM) attacks.",
+      "evidence": "31 unencrypted HTTP URLs discovered in code (e.g., http://apache.org/dav/propset/fs/1, http://apple.com/ns/ical/, http://calendarserver.org/ns/, http://calendarserver.org/ns/, http://calendarserver.org/ns/)",
+      "remediation": "Enforce HTTPS for all network endpoints. Configure Android Network Security Configuration (res/xml/network_security_config.xml) with cleartextTrafficPermitted=\"false\" and ensure TLS 1.2+ is required.",
+      "affected_items": [
+        "http://apache.org/dav/propset/fs/1",
+        "http://apple.com/ns/ical/",
+        "http://calendarserver.org/ns/",
+        "http://calendarserver.org/ns/",
+        "http://calendarserver.org/ns/",
+        "http://calendarserver.org/ns/",
+        "http://calendarserver.org/ns/",
+        "http://mozilla.org/MPL/1.1/.",
+        "http://mozilla.org/MPL/2.0/.",
+        "http://ns.adobe.com/xap/1.0/\\u0000",
+        "http://psdev.de/LicensesDialog",
+        "http://www.apache.org/licenses/",
+        "http://www.apache.org/licenses/",
+        "http://www.apache.org/licenses/",
+        "http://www.apache.org/licenses/",
+        "http://www.apache.org/licenses/",
+        "http://www.apache.org/licenses/LICENSE-2.0",
+        "http://www.apache.org/licenses/LICENSE-2.0",
+        "http://www.apache.org/licenses/LICENSE-2.0",
+        "http://www.apache.org/licenses/LICENSE-2.0"
+      ]
+    },
+    {
+      "id": "SEC-PERM-01",
+      "title": "High-Risk Sensitive Permissions Requested",
+      "severity": "MEDIUM",
+      "owasp_category": "M1: Improper Platform Usage",
+      "masvs_id": "MASVS-PLATFORM-1",
+      "cwe_id": "CWE-250: Execution with Unnecessary Privileges",
+      "description": "The application requests 1 sensitive high-risk permission(s). Overprivileged applications increase the attack surface and potential blast radius if the app is compromised.",
+      "evidence": "Dangerous permissions requested: android.permission.WRITE_EXTERNAL_STORAGE",
+      "remediation": "Apply the Principle of Least Privilege. Audit permission usage and remove unnecessary declarations. Use system framework pickers (such as Android Photo Picker or Storage Access Framework) to eliminate broad storage permissions.",
+      "affected_items": [
+        "android.permission.WRITE_EXTERNAL_STORAGE"
+      ]
+    },
+    {
+      "id": "SEC-NET-02",
+      "title": "Hardcoded Private / Internal Network IP Addresses",
+      "severity": "MEDIUM",
+      "owasp_category": "M9: Insecure Reverse Engineering",
+      "masvs_id": "MASVS-CODE-3",
+      "cwe_id": "CWE-200: Exposure of Sensitive Information to an Unauthorized Actor",
+      "description": "The application codebase contains hardcoded private RFC-1918 IP addresses (127.0.0.1). This indicates potential remnants of development/staging environments, exposing internal infrastructure topologies.",
+      "evidence": "Detected internal IP addresses: 127.0.0.1",
+      "remediation": "Remove hardcoded internal IP addresses before releasing to production. Use dynamically resolved domain names or environment configuration flags.",
+      "affected_items": [
+        "127.0.0.1"
+      ]
+    },
+    {
+      "id": "SEC-PLAT-02",
+      "title": "Insecure file:// Local URL Schemes Detected",
+      "severity": "LOW",
+      "owasp_category": "M1: Improper Platform Usage",
+      "masvs_id": "MASVS-PLATFORM-2",
+      "cwe_id": "CWE-749: Exposed Dangerous Method or Function",
+      "description": "The application references local 'file://' URI schemes (5 occurrences). If passed to WebViews with allowFileAccess enabled, this can lead to arbitrary local file disclosure and Cross-App Scripting.",
+      "evidence": "Detected file:// scheme references in code: file:///android_asset/, file:///android_asset/, file:///android_asset/, file:///android_asset/, file:///android_asset/",
+      "remediation": "Avoid using file:// schemes. Use content:// URIs with FileProvider or modern WebViewAssetLoader to restrict file system access securely.",
+      "affected_items": [
+        "file:///android_asset/",
+        "file:///android_asset/",
+        "file:///android_asset/",
+        "file:///android_asset/",
+        "file:///android_asset/"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MobiAttack Analysis Report - sg.vantagepoint.mstgkotlin</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: #334155;
+      --accent: #38bdf8;
+      --success: #22c55e;
+      --warning: #f59e0b;
+      --error: #ef4444;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding: 24px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    header {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 16px;
+      margin-bottom: 24px;
+    }
+    h1 { font-size: 24px; font-weight: 700; color: #fff; }
+    .subtitle { font-size: 14px; color: var(--text-muted); margin-top: 4px; }
+    h2 {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--accent);
+      margin-top: 28px;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    h4 { font-size: 13px; font-weight: 600; color: var(--text-muted); margin: 12px 0 6px; }
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      font-size: 11px;
+      font-weight: 700;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .badge-success { background: rgba(34, 197, 94, 0.15); color: var(--success); }
+    .badge-warning { background: rgba(245, 158, 11, 0.15); color: var(--warning); }
+    .badge-error { background: rgba(239, 68, 68, 0.15); color: var(--error); }
+    .badge-muted { background: rgba(148, 163, 184, 0.15); color: var(--text-muted); }
+    .badge-accent { background: rgba(56, 189, 248, 0.15); color: var(--accent); }
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      margin-bottom: 16px;
+    }
+    .data-table th, .data-table td {
+      padding: 8px 12px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    .data-table th {
+      background: var(--card-bg);
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+    .data-table td code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 12px;
+      word-break: break-all;
+    }
+    .code-list {
+      list-style: none;
+      max-height: 240px;
+      overflow-y: auto;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 10px 14px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 12px;
+      margin-bottom: 14px;
+    }
+    .code-list li { padding: 3px 0; border-bottom: 1px dashed var(--border); }
+    .code-list li:last-child { border-bottom: none; }
+    .count-badge { font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; }
+    .disclaimer-banner {
+      background: rgba(245, 158, 11, 0.08);
+      border-left: 4px solid var(--warning);
+      padding: 10px 14px;
+      font-size: 12px;
+      margin: 12px 0;
+      border-radius: 0 6px 6px 0;
+    }
+    .failure-banner {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid var(--error);
+      padding: 12px 16px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      color: var(--error);
+    }
+    .note-box {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      padding: 10px 14px;
+      font-size: 12px;
+      border-radius: 6px;
+      margin: 10px 0 16px;
+      font-style: italic;
+    }
+    .info-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 14px;
+      margin-bottom: 14px;
+    }
+    .empty-text { font-size: 13px; color: var(--text-muted); font-style: italic; margin-bottom: 10px; }
+    ul.bullet-list { padding-left: 20px; font-size: 13px; margin-bottom: 14px; }
+    ul.bullet-list li { margin-bottom: 6px; }
+    @media print {
+      body { background: #fff !important; color: #000 !important; padding: 0 !important; }
+      .data-table th { background: #eee !important; }
+      .code-list { max-height: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>1. MobiAttack Android Demo Analysis Report</h1>
+    <div class="subtitle">Deterministic Android Security Analysis & Runtime Evidence Dossier</div>
+  </header>
+
+  
+
+  <h2>2. Run Information</h2>
+  <table class="data-table">
+    <tbody>
+      <tr><td><strong>Run ID:</strong></td><td><code>run_1790699486_de126b</code></td></tr>
+      <tr><td><strong>Demo Status:</strong></td><td><span class="badge" style="background:#22c55e22; color:#22c55e;">completed</span></td></tr>
+      <tr><td><strong>Package Layout:</strong></td><td><span class="badge badge-accent">Single APK</span></td></tr>
+      <tr><td><strong>Report Version:</strong></td><td>1.0</td></tr>
+    </tbody>
+  </table>
+
+  <h2>3. Application Overview</h2>
+  <table class="data-table">
+    <tbody>
+      <tr><td><strong>Package Name:</strong></td><td><code>sg.vantagepoint.mstgkotlin</code></td></tr>
+      <tr><td><strong>Launcher Activity:</strong></td><td><code>sg.vantagepoint.mstgkotlin.MainActivity</code></td></tr>
+      <tr><td><strong>Package Layout:</strong></td><td><span class="badge badge-accent">Single APK</span></td></tr>
+      
+      <tr><td><strong>APK Filename:</strong></td><td><code>MSTG-Android-Kotlin.apk</code></td></tr>
+      <tr><td><strong>SHA-256:</strong></td><td><code>86c059775aa09e4794defd40f81e69751a81019b1b1f285b30b8f7c5bb5e8b68</code></td></tr>
+      <tr><td><strong>File Size:</strong></td><td>2,914,676 bytes</td></tr>
+    </tbody>
+  </table>
+
+  <h2>4. APK Acquisition</h2>
+  <table class="data-table">
+    <tbody>
+      <tr><td><strong>Platform:</strong></td><td>ANDROID</td></tr>
+      <tr><td><strong>Source Type:</strong></td><td><code>direct_apk</code></td></tr>
+      <tr><td><strong>Input URL:</strong></td><td><code>https://github.com/OWASP/MASTG-Hacking-Playground/releases/download/1.0/MSTG-Android-Kotlin.apk</code></td></tr>
+      
+      <tr><td><strong>Package Layout:</strong></td><td>Single APK</td></tr>
+      <tr><td><strong>Filename:</strong></td><td><code>MSTG-Android-Kotlin.apk</code></td></tr>
+      <tr><td><strong>SHA-256 Digest:</strong></td><td><code>86c059775aa09e4794defd40f81e69751a81019b1b1f285b30b8f7c5bb5e8b68</code></td></tr>
+      <tr><td><strong>Package Verification:</strong></td><td>Valid APK format</td></tr>
+    </tbody>
+  </table>
+
+  <h2>5. Preprocessing</h2>
+  
+        <table class="data-table">
+          <thead><tr><th>Component</th><th>Status</th><th>Details</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><strong>Raw APK Extraction</strong></td>
+              <td><span class="badge badge-success">extracted</span></td>
+              <td>436 files unpacked</td>
+            </tr>
+            <tr>
+              <td><strong>Apktool Disassembly</strong></td>
+              <td><span class="badge badge-success">success</span></td>
+              <td>Exit code 0</td>
+            </tr>
+            <tr>
+              <td><strong>JADX Decompilation</strong></td>
+              <td><span class="badge badge-warning">success_with_warnings</span></td>
+              <td>Exit code 3 (Completed with warnings)</td>
+            </tr>
+          </tbody>
+        </table>
+        
+
+  <h2>6. Application Structure</h2>
+  
+        <table class="data-table">
+          <tbody>
+            <tr><td><strong>DEX Count:</strong></td><td>1 (multidex=False)</td></tr>
+            <tr><td><strong>DEX Files:</strong></td><td>classes.dex</td></tr>
+            <tr><td><strong>Native Libraries:</strong></td><td>0 libraries (has_native_code=False)</td></tr>
+            
+            <tr><td><strong>Assets Count:</strong></td><td>1 files</td></tr>
+            <tr><td><strong>Smali Roots:</strong></td><td>smali</td></tr>
+            <tr><td><strong>Kotlin Metadata:</strong></td><td>Present in APK</td></tr>
+          </tbody>
+        </table>
+        <div class="note-box">
+          <strong>Structural note:</strong> "Kotlin metadata present" confirms Kotlin module or metadata indicators were discovered; it does not assume authoring language of third-party libraries.
+        </div>
+        
+
+  <h2>7. Permissions</h2>
+  <div class='count-badge'>1 Permissions Declared</div><ul class='code-list'><li><code>android.permission.INTERNET</code></li></ul>
+
+  <h2>8. Activities</h2>
+  <div class='count-badge'>5 Activities Declared</div><ul class='code-list'><li><code>sg.vantagepoint.mstgkotlin.MainActivity</code></li><li><code>sg.vantagepoint.mstgkotlin.RegisterActivity</code></li><li><code>sg.vantagepoint.mstgkotlin.MenuActivity</code></li><li><code>sg.vantagepoint.mstgkotlin.SecureWebViewActivity</code></li><li><code>sg.vantagepoint.mstgkotlin.InsecureWebViewActivity</code></li></ul>
+
+  <h2>9. Static Network Indicators</h2>
+  
+    <div class="disclaimer-banner">
+      <strong>Notice:</strong> Static network indicators prove the presence of strings in extracted application artifacts. They do not by themselves prove runtime network usage.
+    </div>
+    <h4>Network URLs (1)</h4>
+    
+        <table class="data-table">
+          <thead><tr><th>Value</th><th>Type</th><th>Source APK</th><th>Source File</th><th>Line</th></tr></thead>
+          <tbody><tr><td><code>http://127.0.0.1</code></td><td><span class='badge badge-muted'>network_url</span></td><td><code>-</code></td><td><code>smali/sg/vantagepoint/mstgkotlin/RegisterActivity$onCreate$2.smali</code></td><td>97</td></tr></tbody>
+        </table>
+        <p class='empty-text'>(Total 1 network urls indicators.)</p>
+        
+    <h4>Domains (123)</h4>
+    
+        <table class="data-table">
+          <thead><tr><th>Value</th><th>Type</th><th>Source APK</th><th>Source File</th><th>Line</th></tr></thead>
+          <tbody><tr><td><code>com.github.kittinunf.fuel.android</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/com/github/kittinunf/fuel/android/BuildConfig.smali</code></td><td>7</td></tr><tr><td><code>com.koushikdutta.superuser.daemon</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/sg/vantagepoint/mstgkotlin/MainActivity.smali</code></td><td>144</td></tr><tr><td><code>com.koushikdutta.superuser.daemon</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/sg/vantagepoint/mstgkotlin/MenuActivity.smali</code></td><td>144</td></tr><tr><td><code>context.task</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/org/jetbrains/anko/custom/DeprecatedKt.smali</code></td><td>128</td></tr><tr><td><code>context.task</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/org/jetbrains/anko/custom/DeprecatedKt.smali</code></td><td>268</td></tr><tr><td><code>ctx.assets</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/org/jetbrains/anko/ContextUtilsKt.smali</code></td><td>1110</td></tr><tr><td><code>ctx.resources</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/org/jetbrains/anko/AlertDialogBuilder.smali</code></td><td>888</td></tr><tr><td><code>ctx.resources</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/org/jetbrains/anko/ContextUtilsKt.smali</code></td><td>1629</td></tr><tr><td><code>entries.iterator</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/kotlin/collections/MapsKt__MapsKt.smali</code></td><td>4600</td></tr><tr><td><code>executor.submit</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/org/jetbrains/anko/BackgroundExecutor.smali</code></td><td>179</td></tr><tr><td><code>executorService.submit</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/org/jetbrains/anko/AsyncKt.smali</code></td><td>501</td></tr><tr><td><code>executorService.submit</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/org/jetbrains/anko/AsyncKt.smali</code></td><td>683</td></tr><tr><td><code>executorService.submit</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/org/jetbrains/anko/custom/DeprecatedKt.smali</code></td><td>128</td></tr><tr><td><code>executorService.submit</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/org/jetbrains/anko/custom/DeprecatedKt.smali</code></td><td>268</td></tr><tr><td><code>file.name</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/com/github/kittinunf/fuel/core/Request$dataParts$3.smali</code></td><td>209</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Completable.smali</code></td><td>1217</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Completable.smali</code></td><td>1941</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Completable.smali</code></td><td>3306</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Completable.smali</code></td><td>3338</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Flowable.smali</code></td><td>3728</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Flowable.smali</code></td><td>3843</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Flowable.smali</code></td><td>3934</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Flowable.smali</code></td><td>6882</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Flowable.smali</code></td><td>9562</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Flowable.smali</code></td><td>9749</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Flowable.smali</code></td><td>9797</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Flowable.smali</code></td><td>11373</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Flowable.smali</code></td><td>11557</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Flowable.smali</code></td><td>11717</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Flowable.smali</code></td><td>11855</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Flowable.smali</code></td><td>17149</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Flowable.smali</code></td><td>17358</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Flowable.smali</code></td><td>17598</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Flowable.smali</code></td><td>17754</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Flowable.smali</code></td><td>18251</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Flowable.smali</code></td><td>18415</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Flowable.smali</code></td><td>20611</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Flowable.smali</code></td><td>20999</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Flowable.smali</code></td><td>21203</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Flowable.smali</code></td><td>21496</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Flowable.smali</code></td><td>21594</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Flowable.smali</code></td><td>21664</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Flowable.smali</code></td><td>21895</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Flowable.smali</code></td><td>22041</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Flowable.smali</code></td><td>23468</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Flowable.smali</code></td><td>23671</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Flowable.smali</code></td><td>23721</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Flowable.smali</code></td><td>23772</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Maybe.smali</code></td><td>2373</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Maybe.smali</code></td><td>4170</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Maybe.smali</code></td><td>4310</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Maybe.smali</code></td><td>6949</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Maybe.smali</code></td><td>6984</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Observable.smali</code></td><td>3488</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Observable.smali</code></td><td>3595</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Observable.smali</code></td><td>3678</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Observable.smali</code></td><td>6558</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Observable.smali</code></td><td>9145</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Observable.smali</code></td><td>9320</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Observable.smali</code></td><td>9364</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Observable.smali</code></td><td>10897</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Observable.smali</code></td><td>11065</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Observable.smali</code></td><td>11209</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Observable.smali</code></td><td>11335</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Observable.smali</code></td><td>15289</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Observable.smali</code></td><td>15486</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Observable.smali</code></td><td>15706</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Observable.smali</code></td><td>15845</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Observable.smali</code></td><td>16294</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Observable.smali</code></td><td>16446</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Observable.smali</code></td><td>16902</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Observable.smali</code></td><td>17039</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Observable.smali</code></td><td>17256</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Observable.smali</code></td><td>18633</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Observable.smali</code></td><td>18838</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Observable.smali</code></td><td>19026</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Observable.smali</code></td><td>19258</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Observable.smali</code></td><td>19348</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Observable.smali</code></td><td>19410</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Observable.smali</code></td><td>19617</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Observable.smali</code></td><td>19660</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Observable.smali</code></td><td>21117</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Observable.smali</code></td><td>21308</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Observable.smali</code></td><td>21354</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Observable.smali</code></td><td>21401</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Single.smali</code></td><td>1596</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Single.smali</code></td><td>3310</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Single.smali</code></td><td>3460</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Single.smali</code></td><td>3502</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Single.smali</code></td><td>5612</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/Single.smali</code></td><td>5736</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/annotations/SchedulerSupport.smali</code></td><td>26</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/annotations/SchedulerSupport.smali</code></td><td>30</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/annotations/SchedulerSupport.smali</code></td><td>32</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/annotations/SchedulerSupport.smali</code></td><td>36</td></tr><tr><td><code>io.reactivex</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/annotations/SchedulerSupport.smali</code></td><td>41</td></tr><tr><td><code>io.reactivex.android</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/android/BuildConfig.smali</code></td><td>7</td></tr><tr><td><code>it.name</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/com/github/kittinunf/fuel/core/Request$sources$1.smali</code></td><td>201</td></tr><tr><td><code>jctools.spsc.max.lookahead.step</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/internal/queue/SpscArrayQueue.smali</code></td><td>46</td></tr><tr><td><code>jctools.spsc.max.lookahead.step</code></td><td><span class='badge badge-muted'>domain</span></td><td><code>-</code></td><td><code>smali/io/reactivex/internal/queue/SpscLinkedArrayQueue.smali</code></td><td>67</td></tr></tbody>
+        </table>
+        <p class='empty-text'>(Showing first 100 of 123 domains indicators.)</p>
+        
+    <h4>IP Addresses (0)</h4>
+    <p class='empty-text'>No ip addresses discovered.</p>
+    <h4>Path Candidates (5)</h4>
+    
+        <table class="data-table">
+          <thead><tr><th>Value</th><th>Type</th><th>Source APK</th><th>Source File</th><th>Line</th></tr></thead>
+          <tbody><tr><td><code>/sbin/su</code></td><td><span class='badge badge-muted'>path_candidate</span></td><td><code>-</code></td><td><code>smali/sg/vantagepoint/mstgkotlin/MainActivity.smali</code></td><td>148</td></tr><tr><td><code>/sbin/su</code></td><td><span class='badge badge-muted'>path_candidate</span></td><td><code>-</code></td><td><code>smali/sg/vantagepoint/mstgkotlin/MenuActivity.smali</code></td><td>148</td></tr><tr><td><code>/signup</code></td><td><span class='badge badge-muted'>path_candidate</span></td><td><code>-</code></td><td><code>smali/sg/vantagepoint/mstgkotlin/RegisterActivity$onCreate$2.smali</code></td><td>102</td></tr><tr><td><code>/su/bin/su</code></td><td><span class='badge badge-muted'>path_candidate</span></td><td><code>-</code></td><td><code>smali/sg/vantagepoint/mstgkotlin/MainActivity.smali</code></td><td>164</td></tr><tr><td><code>/su/bin/su</code></td><td><span class='badge badge-muted'>path_candidate</span></td><td><code>-</code></td><td><code>smali/sg/vantagepoint/mstgkotlin/MenuActivity.smali</code></td><td>164</td></tr></tbody>
+        </table>
+        <p class='empty-text'>(Total 5 path candidates indicators.)</p>
+        
+    <h4>Local File URLs (2)</h4>
+    
+        <table class="data-table">
+          <thead><tr><th>Value</th><th>Type</th><th>Source APK</th><th>Source File</th><th>Line</th></tr></thead>
+          <tbody><tr><td><code>file:///android_asset/unsafe_content.html</code></td><td><span class='badge badge-muted'>local_file_url</span></td><td><code>-</code></td><td><code>smali/sg/vantagepoint/mstgkotlin/InsecureWebViewActivity.smali</code></td><td>130</td></tr><tr><td><code>file:///android_asset/unsafe_content.html</code></td><td><span class='badge badge-muted'>local_file_url</span></td><td><code>-</code></td><td><code>smali/sg/vantagepoint/mstgkotlin/SecureWebViewActivity.smali</code></td><td>130</td></tr></tbody>
+        </table>
+        <p class='empty-text'>(Total 2 local file urls indicators.)</p>
+        
+    
+
+  <h2>10. Static API Candidates</h2>
+  
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Method</th>
+              <th>Full URL</th>
+              <th>Base URL</th>
+              <th>Path</th>
+              <th>Framework</th>
+              <th>Source APK</th>
+              <th>Source Location</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="badge badge-accent">POST</span></td>
+              <td><code>http://127.0.0.1/signup</code></td>
+              <td><code>http://127.0.0.1</code></td>
+              <td><code>/signup</code></td>
+              <td>Fuel</td>
+              <td><code>-</code></td>
+              <td><code>smali/sg/vantagepoint/mstgkotlin/RegisterActivity$onCreate$2.smali:214</code></td>
+              <td><span class="badge badge-muted">static_api_candidate</span></td>
+            </tr>
+            </tbody>
+        </table>
+        
+
+  <h2>11. Runtime Evidence</h2>
+  
+    <table class="data-table">
+      <tbody>
+        <tr><td><strong>Device Serial:</strong></td><td><code>-</code></td></tr>
+        <tr><td><strong>Install Result:</strong></td><td>Failed / Not Executed</td></tr>
+        <tr><td><strong>Reinstall Allowed:</strong></td><td>False</td></tr>
+        <tr><td><strong>Grant Permissions (-g):</strong></td><td>False</td></tr>
+        <tr><td><strong>Launched Component:</strong></td><td><code>-</code></td></tr>
+        <tr><td><strong>Observed PID:</strong></td><td><code>None</code></td></tr>
+        <tr><td><strong>Observed Package:</strong></td><td><code>None</code></td></tr>
+        <tr><td><strong>Observed Activity:</strong></td><td><code>None</code></td></tr>
+        <tr><td><strong>Foreground Verified:</strong></td><td>No</td></tr>
+        <tr><td><strong>Runtime Status:</strong></td><td><span class="badge badge-accent">skipped</span></td></tr>
+      </tbody>
+    </table>
+    <div class="note-box">
+      The application process was observed and the expected package/activity was detected in the foreground.
+    </div>
+    
+
+  <h2>12. HTML Connectivity Probe</h2>
+  
+    <table class="data-table">
+      <tbody>
+        <tr><td><strong>Probe URL:</strong></td><td><code>-</code></td></tr>
+        <tr><td><strong>Probe Hit:</strong></td><td>No</td></tr>
+        <tr><td><strong>Hit Count:</strong></td><td>0</td></tr>
+        <tr><td><strong>Status:</strong></td><td><span class="badge badge-accent">not_executed</span></td></tr>
+      </tbody>
+    </table>
+    <div class="note-box">
+      Emulator connectivity only &mdash; not target application navigation. Verifies browser/emulator network reachability via ADB reverse.
+    </div>
+    
+
+  <h2>13. Analysis Notes</h2>
+  <ul class="bullet-list">
+    <li>JADX completed with warnings (exit code 3). Decompiled source may contain partial warnings.</li><li>Static network indicators are extracted from application content and do not by themselves prove runtime network usage.</li><li>API candidates are static call-context candidates extracted from Smali register flows and do not represent confirmed runtime endpoints.</li><li>Runtime execution finished with status: skipped.</li><li>No vulnerability exploitation was performed.</li><li>No security verdict was produced.</li>
+  </ul>
+
+  <h2>14. Limitations</h2>
+  <ul class="bullet-list">
+    <li>Analysis is limited to static heuristics and basic process/activity foreground observation.</li><li>V1 API candidate extractor only tracks specific call-context register patterns (e.g. Fuel).</li><li>Emulator connectivity verification uses browser intent and does not evaluate application network security posture.</li><li>Dynamic instrumentation, traffic interception (MITM/Burp), and deep UI exploration were not performed.</li><li>No security verdict, vulnerability score, or risk classification is provided.</li>
+  </ul>
+</body>
+</html>

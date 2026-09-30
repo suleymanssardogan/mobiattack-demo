@@ -1,0 +1,157 @@
+{
+  "schema_version": "1.0.0",
+  "scan": {
+    "run_id": "run_1790758052_05224d",
+    "status": "completed",
+    "timestamp": "2026-09-30T08:47:34.647257+00:00",
+    "errors": [],
+    "warnings": []
+  },
+  "artifact": {
+    "source": "direct_ipa",
+    "filename": "MSTG-JWT.ipa",
+    "sha256": "d25df71640dc4f5af3ae48c58f7cad1c7f6ba53a28334b5407f9a0a11291934c",
+    "package_name": "sg.vp.MSTG.JWT",
+    "size_bytes": 5853214,
+    "platform": "ios"
+  },
+  "analysis": {
+    "files_discovered": 49,
+    "files_analyzed": 1,
+    "files_skipped": 48,
+    "files_failed": 0,
+    "failed_files": []
+  },
+  "inventory": {
+    "candidate_count": 6,
+    "candidates": [
+      {
+        "id": "cand-e70d6abf1fab",
+        "type": "domain",
+        "value": "foo.org",
+        "components": {
+          "host": "foo.org"
+        },
+        "occurrence_count": 1,
+        "occurrences": [
+          {
+            "source_file": "Payload/MSTG-JWT.app/MSTG-JWT",
+            "extraction_method": "binary_strings_scan",
+            "raw_value": "foo.org",
+            "evidence": "foo.org"
+          }
+        ]
+      },
+      {
+        "id": "cand-262efea287f8",
+        "type": "domain",
+        "value": "subject.cn",
+        "components": {
+          "host": "subject.cn"
+        },
+        "occurrence_count": 1,
+        "occurrences": [
+          {
+            "source_file": "Payload/MSTG-JWT.app/MSTG-JWT",
+            "extraction_method": "binary_strings_scan",
+            "raw_value": "subject.CN",
+            "evidence": "subject.CN"
+          }
+        ]
+      },
+      {
+        "id": "cand-622f5fd19a10",
+        "type": "url",
+        "value": "http://192.168.2.73:8181/test.html",
+        "components": {
+          "scheme": "http",
+          "host": "192.168.2.73",
+          "port": 8181,
+          "path": "/test.html"
+        },
+        "occurrence_count": 1,
+        "occurrences": [
+          {
+            "source_file": "Payload/MSTG-JWT.app/MSTG-JWT",
+            "extraction_method": "binary_strings_scan",
+            "raw_value": "http://192.168.2.73:8181/test.html",
+            "evidence": "http://192.168.2.73:8181/test.html"
+          }
+        ]
+      },
+      {
+        "id": "cand-794e153c253a",
+        "type": "url",
+        "value": "http://54.255.184.119:8181/auth/login",
+        "components": {
+          "scheme": "http",
+          "host": "54.255.184.119",
+          "port": 8181,
+          "path": "/auth/login"
+        },
+        "occurrence_count": 1,
+        "occurrences": [
+          {
+            "source_file": "Payload/MSTG-JWT.app/MSTG-JWT",
+            "extraction_method": "binary_strings_scan",
+            "raw_value": "http://54.255.184.119:8181/auth/login",
+            "evidence": "http://54.255.184.119:8181/auth/login"
+          }
+        ]
+      },
+      {
+        "id": "cand-5d90731a1dc8",
+        "type": "url",
+        "value": "http://54.255.184.119:8181/signup",
+        "components": {
+          "scheme": "http",
+          "host": "54.255.184.119",
+          "port": 8181,
+          "path": "/signup"
+        },
+        "occurrence_count": 1,
+        "occurrences": [
+          {
+            "source_file": "Payload/MSTG-JWT.app/MSTG-JWT",
+            "extraction_method": "binary_strings_scan",
+            "raw_value": "http://54.255.184.119:8181/signup",
+            "evidence": "http://54.255.184.119:8181/signup"
+          }
+        ]
+      },
+      {
+        "id": "cand-c264ef6c544b",
+        "type": "url",
+        "value": "http://54.255.184.119:8181/todos",
+        "components": {
+          "scheme": "http",
+          "host": "54.255.184.119",
+          "port": 8181,
+          "path": "/todos"
+        },
+        "occurrence_count": 1,
+        "occurrences": [
+          {
+            "source_file": "Payload/MSTG-JWT.app/MSTG-JWT",
+            "extraction_method": "binary_strings_scan",
+            "raw_value": "http://54.255.184.119:8181/todos",
+            "evidence": "http://54.255.184.119:8181/todos"
+          }
+        ]
+      }
+    ]
+  },
+  "static_findings": [
+    {
+      "id": "IOS-CODE-01",
+      "rule_id": "IOS-CODE-01",
+      "title": "Debug entitlement in signed application",
+      "severity": "HIGH",
+      "category": "general",
+      "source_file": "AndroidManifest.xml",
+      "evidence": "Payload/MSTG-JWT.app/_CodeSignature: signed get-task-allow=true",
+      "description": "The signed app claims get-task-allow=true, which enables debugger attachment in development builds. This can be intentional for a test IPA; verify that release builds remove it.",
+      "recommendation": ""
+    }
+  ]
+}

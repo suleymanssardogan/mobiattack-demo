@@ -16,6 +16,7 @@ from pathlib import Path
 import shutil
 import subprocess
 
+from src.system_env import resolve_executable
 from src.apk_preprocessor import (
     DEFAULT_MAX_UNCOMPRESSED_BYTES,
     DEFAULT_TIMEOUT_SECONDS,
@@ -106,14 +107,14 @@ def preprocess_package_set(
     processed_dir.mkdir(parents=True, exist_ok=True)
 
     # 3. Resolve executables
-    apktool_bin = shutil.which(apktool_executable or "apktool")
+    apktool_bin = resolve_executable("apktool", apktool_executable)
     if not apktool_bin:
         raise ApkPreprocessingError(
             f"Required executable 'apktool' not found on system PATH. "
             f"(Specified: '{apktool_executable or 'apktool'}')"
         )
 
-    jadx_bin = shutil.which(jadx_executable or "jadx")
+    jadx_bin = resolve_executable("jadx", jadx_executable)
     if not jadx_bin:
         raise ApkPreprocessingError(
             f"Required executable 'jadx' not found on system PATH. "
@@ -185,6 +186,19 @@ def preprocess_package_set(
                 text=True,
                 timeout=timeout_seconds,
             )
+            # If apktool failed due to framework access/permissions, retry with a workspace-local framework directory
+            if res_apktool.returncode != 0:
+                err_text_check = (res_apktool.stderr or res_apktool.stdout or "").strip()
+                if "framework" in err_text_check.lower() or "1.apk" in err_text_check.lower() or "operation not permitted" in err_text_check.lower():
+                    local_frame_dir = comp_workspace / ".apktool_framework"
+                    local_frame_dir.mkdir(parents=True, exist_ok=True)
+                    res_apktool = subprocess.run(
+                        [apktool_bin, "d", str(local_apk), "-o", str(apktool_dir), "-p", str(local_frame_dir), "-f"],
+                        capture_output=True,
+                        text=True,
+                        timeout=timeout_seconds,
+                    )
+
             if res_apktool.returncode == 0:
                 is_valid_apktool = validate_split_apktool_output(apktool_dir, role=role, has_dex=has_dex)
                 if is_valid_apktool:
