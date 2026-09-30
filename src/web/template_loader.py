@@ -14,9 +14,6 @@ _CACHED_HTML: str | None = None
 
 
 def load_dashboard_html() -> str:
-    """Returns the dashboard HTML page content, caching on first read."""
-    global _CACHED_HTML
-    if _CACHED_HTML is None:
-        template_path = _TEMPLATE_DIR / "dashboard.html"
-        _CACHED_HTML = template_path.read_text(encoding="utf-8")
-    return _CACHED_HTML
+    """Returns the dashboard HTML page content."""
+    template_path = _TEMPLATE_DIR / "dashboard.html"
+    return template_path.read_text(encoding="utf-8")
