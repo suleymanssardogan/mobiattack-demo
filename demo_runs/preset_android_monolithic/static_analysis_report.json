@@ -1,0 +1,985 @@
+{
+  "report_type": "static_analysis",
+  "report_version": "1.0",
+  "run_id": "run_1790699486_de126b",
+  "status": "partial",
+  "platform": "android",
+  "package_layout": "monolithic",
+  "split_count": 1,
+  "application": {
+    "package_name": "sg.vantagepoint.mstgkotlin",
+    "launcher_activity": "sg.vantagepoint.mstgkotlin.MainActivity",
+    "filename": "MSTG-Android-Kotlin.apk",
+    "sha256": "86c059775aa09e4794defd40f81e69751a81019b1b1f285b30b8f7c5bb5e8b68",
+    "size_bytes": 2914676,
+    "is_valid_apk": true
+  },
+  "acquisition": {
+    "input_url": "https://github.com/OWASP/MASTG-Hacking-Playground/releases/download/1.0/MSTG-Android-Kotlin.apk",
+    "final_url": "https://release-assets.githubusercontent.com/github-production-release-asset/63831082/5d810800-e55c-11e9-93da-d91ee54bc86f?sp=r&sv=2018-11-09&sr=b&spr=https&se=2026-09-29T17%3A05%3A40Z&rscd=attachment%3B+filename%3DMSTG-Android-Kotlin.apk&rsct=application%2Fvnd.android.package-archive&skoid=96c2d410-5711-43a1-aedd-ab1947aa7ab0&sktid=398a6654-997b-47e9-b12b-9515b896b4de&skt=2026-09-29T16%3A05%3A28Z&ske=2026-09-29T17%3A05%3A40Z&sks=b&skv=2018-11-09&sig=0WDFzHfLs4fUDQmc6NZpkY7vW%2FTYtisBpn%2FKr%2BhEs%2B4%3D&jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmVsZWFzZS1hc3NldHMuZ2l0aHVidXNlcmNvbnRlbnQuY29tIiwia2V5Ijoia2V5MSIsImV4cCI6MTc5MDY5OTc4NiwibmJmIjoxNzkwNjk5NDg2LCJwYXRoIjoicmVsZWFzZWFzc2V0cHJvZHVjdGlvbi5ibG9iLmNvcmUud2luZG93cy5uZXQifQ.O-3NivS_bngaqY95-7N0CPt1NsLw75vBQ-oLqSDirJE&response-content-disposition=attachment%3B%20filename%3DMSTG-Android-Kotlin.apk&response-content-type=application%2Fvnd.android.package-archive",
+    "status_code": 200,
+    "content_type": "application/vnd.android.package-archive",
+    "filename": "MSTG-Android-Kotlin.apk",
+    "saved_path": "downloads/MSTG-Android-Kotlin.apk",
+    "size_bytes": 2914676,
+    "sha256": "86c059775aa09e4794defd40f81e69751a81019b1b1f285b30b8f7c5bb5e8b68",
+    "package_type": "apk",
+    "validation": {
+      "is_zip": true,
+      "has_android_manifest": true,
+      "dex_files": [
+        "classes.dex"
+      ],
+      "has_dex": true,
+      "is_valid_apk": true
+    },
+    "platform": "android",
+    "source_type": "direct_apk"
+  },
+  "preprocessing": {
+    "raw_apk": {
+      "success": true,
+      "file_count": 436
+    },
+    "apktool": {
+      "status": "success",
+      "returncode": 0
+    },
+    "jadx": {
+      "status": "success_with_warnings",
+      "returncode": 3
+    }
+  },
+  "structure": {
+    "dex_files": [
+      "classes.dex"
+    ],
+    "dex_count": 1,
+    "is_multidex": false,
+    "native_libraries": [],
+    "has_native_code": false,
+    "assets": [
+      "assets/unsafe_content.html"
+    ],
+    "smali_roots": [
+      "smali"
+    ],
+    "has_kotlin_metadata": true
+  },
+  "permissions": [
+    "android.permission.INTERNET"
+  ],
+  "activities": [
+    "sg.vantagepoint.mstgkotlin.MainActivity",
+    "sg.vantagepoint.mstgkotlin.RegisterActivity",
+    "sg.vantagepoint.mstgkotlin.MenuActivity",
+    "sg.vantagepoint.mstgkotlin.SecureWebViewActivity",
+    "sg.vantagepoint.mstgkotlin.InsecureWebViewActivity"
+  ],
+  "network_indicators": {
+    "network_urls": [
+      {
+        "type": "network_url",
+        "value": "http://127.0.0.1",
+        "source_file": "smali/sg/vantagepoint/mstgkotlin/RegisterActivity$onCreate$2.smali",
+        "line_number": 97
+      }
+    ],
+    "domains": [
+      {
+        "type": "domain",
+        "value": "com.github.kittinunf.fuel.android",
+        "source_file": "smali/com/github/kittinunf/fuel/android/BuildConfig.smali",
+        "line_number": 7
+      },
+      {
+        "type": "domain",
+        "value": "com.koushikdutta.superuser.daemon",
+        "source_file": "smali/sg/vantagepoint/mstgkotlin/MainActivity.smali",
+        "line_number": 144
+      },
+      {
+        "type": "domain",
+        "value": "com.koushikdutta.superuser.daemon",
+        "source_file": "smali/sg/vantagepoint/mstgkotlin/MenuActivity.smali",
+        "line_number": 144
+      },
+      {
+        "type": "domain",
+        "value": "context.task",
+        "source_file": "smali/org/jetbrains/anko/custom/DeprecatedKt.smali",
+        "line_number": 128
+      },
+      {
+        "type": "domain",
+        "value": "context.task",
+        "source_file": "smali/org/jetbrains/anko/custom/DeprecatedKt.smali",
+        "line_number": 268
+      },
+      {
+        "type": "domain",
+        "value": "ctx.assets",
+        "source_file": "smali/org/jetbrains/anko/ContextUtilsKt.smali",
+        "line_number": 1110
+      },
+      {
+        "type": "domain",
+        "value": "ctx.resources",
+        "source_file": "smali/org/jetbrains/anko/AlertDialogBuilder.smali",
+        "line_number": 888
+      },
+      {
+        "type": "domain",
+        "value": "ctx.resources",
+        "source_file": "smali/org/jetbrains/anko/ContextUtilsKt.smali",
+        "line_number": 1629
+      },
+      {
+        "type": "domain",
+        "value": "entries.iterator",
+        "source_file": "smali/kotlin/collections/MapsKt__MapsKt.smali",
+        "line_number": 4600
+      },
+      {
+        "type": "domain",
+        "value": "executor.submit",
+        "source_file": "smali/org/jetbrains/anko/BackgroundExecutor.smali",
+        "line_number": 179
+      },
+      {
+        "type": "domain",
+        "value": "executorService.submit",
+        "source_file": "smali/org/jetbrains/anko/AsyncKt.smali",
+        "line_number": 501
+      },
+      {
+        "type": "domain",
+        "value": "executorService.submit",
+        "source_file": "smali/org/jetbrains/anko/AsyncKt.smali",
+        "line_number": 683
+      },
+      {
+        "type": "domain",
+        "value": "executorService.submit",
+        "source_file": "smali/org/jetbrains/anko/custom/DeprecatedKt.smali",
+        "line_number": 128
+      },
+      {
+        "type": "domain",
+        "value": "executorService.submit",
+        "source_file": "smali/org/jetbrains/anko/custom/DeprecatedKt.smali",
+        "line_number": 268
+      },
+      {
+        "type": "domain",
+        "value": "file.name",
+        "source_file": "smali/com/github/kittinunf/fuel/core/Request$dataParts$3.smali",
+        "line_number": 209
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Completable.smali",
+        "line_number": 1217
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Completable.smali",
+        "line_number": 1941
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Completable.smali",
+        "line_number": 3306
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Completable.smali",
+        "line_number": 3338
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Flowable.smali",
+        "line_number": 3728
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Flowable.smali",
+        "line_number": 3843
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Flowable.smali",
+        "line_number": 3934
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Flowable.smali",
+        "line_number": 6882
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Flowable.smali",
+        "line_number": 9562
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Flowable.smali",
+        "line_number": 9749
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Flowable.smali",
+        "line_number": 9797
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Flowable.smali",
+        "line_number": 11373
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Flowable.smali",
+        "line_number": 11557
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Flowable.smali",
+        "line_number": 11717
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Flowable.smali",
+        "line_number": 11855
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Flowable.smali",
+        "line_number": 17149
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Flowable.smali",
+        "line_number": 17358
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Flowable.smali",
+        "line_number": 17598
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Flowable.smali",
+        "line_number": 17754
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Flowable.smali",
+        "line_number": 18251
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Flowable.smali",
+        "line_number": 18415
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Flowable.smali",
+        "line_number": 20611
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Flowable.smali",
+        "line_number": 20999
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Flowable.smali",
+        "line_number": 21203
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Flowable.smali",
+        "line_number": 21496
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Flowable.smali",
+        "line_number": 21594
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Flowable.smali",
+        "line_number": 21664
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Flowable.smali",
+        "line_number": 21895
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Flowable.smali",
+        "line_number": 22041
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Flowable.smali",
+        "line_number": 23468
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Flowable.smali",
+        "line_number": 23671
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Flowable.smali",
+        "line_number": 23721
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Flowable.smali",
+        "line_number": 23772
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Maybe.smali",
+        "line_number": 2373
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Maybe.smali",
+        "line_number": 4170
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Maybe.smali",
+        "line_number": 4310
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Maybe.smali",
+        "line_number": 6949
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Maybe.smali",
+        "line_number": 6984
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Observable.smali",
+        "line_number": 3488
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Observable.smali",
+        "line_number": 3595
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Observable.smali",
+        "line_number": 3678
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Observable.smali",
+        "line_number": 6558
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Observable.smali",
+        "line_number": 9145
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Observable.smali",
+        "line_number": 9320
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Observable.smali",
+        "line_number": 9364
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Observable.smali",
+        "line_number": 10897
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Observable.smali",
+        "line_number": 11065
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Observable.smali",
+        "line_number": 11209
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Observable.smali",
+        "line_number": 11335
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Observable.smali",
+        "line_number": 15289
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Observable.smali",
+        "line_number": 15486
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Observable.smali",
+        "line_number": 15706
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Observable.smali",
+        "line_number": 15845
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Observable.smali",
+        "line_number": 16294
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Observable.smali",
+        "line_number": 16446
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Observable.smali",
+        "line_number": 16902
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Observable.smali",
+        "line_number": 17039
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Observable.smali",
+        "line_number": 17256
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Observable.smali",
+        "line_number": 18633
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Observable.smali",
+        "line_number": 18838
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Observable.smali",
+        "line_number": 19026
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Observable.smali",
+        "line_number": 19258
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Observable.smali",
+        "line_number": 19348
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Observable.smali",
+        "line_number": 19410
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Observable.smali",
+        "line_number": 19617
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Observable.smali",
+        "line_number": 19660
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Observable.smali",
+        "line_number": 21117
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Observable.smali",
+        "line_number": 21308
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Observable.smali",
+        "line_number": 21354
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Observable.smali",
+        "line_number": 21401
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Single.smali",
+        "line_number": 1596
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Single.smali",
+        "line_number": 3310
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Single.smali",
+        "line_number": 3460
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Single.smali",
+        "line_number": 3502
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Single.smali",
+        "line_number": 5612
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/Single.smali",
+        "line_number": 5736
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/annotations/SchedulerSupport.smali",
+        "line_number": 26
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/annotations/SchedulerSupport.smali",
+        "line_number": 30
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/annotations/SchedulerSupport.smali",
+        "line_number": 32
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/annotations/SchedulerSupport.smali",
+        "line_number": 36
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex",
+        "source_file": "smali/io/reactivex/annotations/SchedulerSupport.smali",
+        "line_number": 41
+      },
+      {
+        "type": "domain",
+        "value": "io.reactivex.android",
+        "source_file": "smali/io/reactivex/android/BuildConfig.smali",
+        "line_number": 7
+      },
+      {
+        "type": "domain",
+        "value": "it.name",
+        "source_file": "smali/com/github/kittinunf/fuel/core/Request$sources$1.smali",
+        "line_number": 201
+      },
+      {
+        "type": "domain",
+        "value": "jctools.spsc.max.lookahead.step",
+        "source_file": "smali/io/reactivex/internal/queue/SpscArrayQueue.smali",
+        "line_number": 46
+      },
+      {
+        "type": "domain",
+        "value": "jctools.spsc.max.lookahead.step",
+        "source_file": "smali/io/reactivex/internal/queue/SpscLinkedArrayQueue.smali",
+        "line_number": 67
+      },
+      {
+        "type": "domain",
+        "value": "kotlin-reflect.jar",
+        "source_file": "smali/kotlin/jvm/KotlinReflectionNotSupportedError.smali",
+        "line_number": 11
+      },
+      {
+        "type": "domain",
+        "value": "matchResult.group",
+        "source_file": "smali/kotlin/text/MatcherMatchResult$groups$1.smali",
+        "line_number": 177
+      },
+      {
+        "type": "domain",
+        "value": "matchResult.group",
+        "source_file": "smali/kotlin/text/MatcherMatchResult.smali",
+        "line_number": 237
+      },
+      {
+        "type": "domain",
+        "value": "rx2.buffer",
+        "source_file": "smali/io/reactivex/Flowable.smali",
+        "line_number": 31
+      },
+      {
+        "type": "domain",
+        "value": "rx2.computation",
+        "source_file": "smali/io/reactivex/internal/schedulers/ComputationScheduler.smali",
+        "line_number": 20
+      },
+      {
+        "type": "domain",
+        "value": "rx2.computation",
+        "source_file": "smali/io/reactivex/internal/schedulers/ComputationScheduler.smali",
+        "line_number": 22
+      },
+      {
+        "type": "domain",
+        "value": "rx2.computation",
+        "source_file": "smali/io/reactivex/internal/schedulers/ComputationScheduler.smali",
+        "line_number": 62
+      },
+      {
+        "type": "domain",
+        "value": "rx2.computation",
+        "source_file": "smali/io/reactivex/internal/schedulers/ComputationScheduler.smali",
+        "line_number": 99
+      },
+      {
+        "type": "domain",
+        "value": "rx2.io",
+        "source_file": "smali/io/reactivex/internal/schedulers/IoScheduler.smali",
+        "line_number": 25
+      },
+      {
+        "type": "domain",
+        "value": "rx2.io",
+        "source_file": "smali/io/reactivex/internal/schedulers/IoScheduler.smali",
+        "line_number": 78
+      },
+      {
+        "type": "domain",
+        "value": "rx2.newthread",
+        "source_file": "smali/io/reactivex/internal/schedulers/NewThreadScheduler.smali",
+        "line_number": 7
+      },
+      {
+        "type": "domain",
+        "value": "rx2.newthread",
+        "source_file": "smali/io/reactivex/internal/schedulers/NewThreadScheduler.smali",
+        "line_number": 23
+      },
+      {
+        "type": "domain",
+        "value": "rx2.purge",
+        "source_file": "smali/io/reactivex/internal/schedulers/SchedulerPoolFactory.smali",
+        "line_number": 28
+      },
+      {
+        "type": "domain",
+        "value": "rx2.purge",
+        "source_file": "smali/io/reactivex/internal/schedulers/SchedulerPoolFactory.smali",
+        "line_number": 32
+      },
+      {
+        "type": "domain",
+        "value": "rx2.purge",
+        "source_file": "smali/io/reactivex/internal/schedulers/SchedulerPoolFactory.smali",
+        "line_number": 78
+      },
+      {
+        "type": "domain",
+        "value": "rx2.purge",
+        "source_file": "smali/io/reactivex/internal/schedulers/SchedulerPoolFactory.smali",
+        "line_number": 87
+      },
+      {
+        "type": "domain",
+        "value": "rx2.purge",
+        "source_file": "smali/io/reactivex/internal/schedulers/SchedulerPoolFactory.smali",
+        "line_number": 97
+      },
+      {
+        "type": "domain",
+        "value": "rx2.purge",
+        "source_file": "smali/io/reactivex/internal/schedulers/SchedulerPoolFactory.smali",
+        "line_number": 106
+      },
+      {
+        "type": "domain",
+        "value": "rx2.scheduler.drift",
+        "source_file": "smali/io/reactivex/Scheduler.smali",
+        "line_number": 27
+      },
+      {
+        "type": "domain",
+        "value": "rx2.single",
+        "source_file": "smali/io/reactivex/internal/schedulers/SingleScheduler.smali",
+        "line_number": 15
+      },
+      {
+        "type": "domain",
+        "value": "rx2.single",
+        "source_file": "smali/io/reactivex/internal/schedulers/SingleScheduler.smali",
+        "line_number": 57
+      },
+      {
+        "type": "domain",
+        "value": "sg.vantagepoint.mstgkotlin",
+        "source_file": "AndroidManifest.xml",
+        "line_number": 2
+      },
+      {
+        "type": "domain",
+        "value": "sg.vantagepoint.mstgkotlin",
+        "source_file": "smali/sg/vantagepoint/mstgkotlin/BuildConfig.smali",
+        "line_number": 7
+      }
+    ],
+    "ip_addresses": [],
+    "path_candidates": [
+      {
+        "type": "path_candidate",
+        "value": "/sbin/su",
+        "source_file": "smali/sg/vantagepoint/mstgkotlin/MainActivity.smali",
+        "line_number": 148
+      },
+      {
+        "type": "path_candidate",
+        "value": "/sbin/su",
+        "source_file": "smali/sg/vantagepoint/mstgkotlin/MenuActivity.smali",
+        "line_number": 148
+      },
+      {
+        "type": "path_candidate",
+        "value": "/signup",
+        "source_file": "smali/sg/vantagepoint/mstgkotlin/RegisterActivity$onCreate$2.smali",
+        "line_number": 102
+      },
+      {
+        "type": "path_candidate",
+        "value": "/su/bin/su",
+        "source_file": "smali/sg/vantagepoint/mstgkotlin/MainActivity.smali",
+        "line_number": 164
+      },
+      {
+        "type": "path_candidate",
+        "value": "/su/bin/su",
+        "source_file": "smali/sg/vantagepoint/mstgkotlin/MenuActivity.smali",
+        "line_number": 164
+      }
+    ],
+    "local_file_urls": [
+      {
+        "type": "local_file_url",
+        "value": "file:///android_asset/unsafe_content.html",
+        "source_file": "smali/sg/vantagepoint/mstgkotlin/InsecureWebViewActivity.smali",
+        "line_number": 130
+      },
+      {
+        "type": "local_file_url",
+        "value": "file:///android_asset/unsafe_content.html",
+        "source_file": "smali/sg/vantagepoint/mstgkotlin/SecureWebViewActivity.smali",
+        "line_number": 130
+      }
+    ]
+  },
+  "api_candidates": [
+    {
+      "framework": "Fuel",
+      "method": "POST",
+      "base_url": "http://127.0.0.1",
+      "path": "/signup",
+      "full_url": "http://127.0.0.1/signup",
+      "status": "static_api_candidate",
+      "source_file": "smali/sg/vantagepoint/mstgkotlin/RegisterActivity$onCreate$2.smali",
+      "request_line": 214,
+      "evidence": {
+        "path_value": "/signup",
+        "path_register": "v0",
+        "path_line": 102,
+        "request_call_line": 214,
+        "base_url_value": "http://127.0.0.1",
+        "base_url_register": "v1",
+        "base_url_line": 97,
+        "base_url_call_line": 99
+      }
+    }
+  ],
+  "vulnerabilities": {
+    "risk_score": "CRITICAL",
+    "summary": {
+      "critical": 1,
+      "high": 1,
+      "medium": 0,
+      "low": 2,
+      "total": 4
+    },
+    "findings": [
+      {
+        "id": "SEC-CODE-01",
+        "title": "Application Is Marked Debuggable",
+        "severity": "CRITICAL",
+        "owasp_category": "M7: Client Code Quality",
+        "masvs_id": "MASVS-CODE-2",
+        "cwe_id": "CWE-215: Insertion of Sensitive Information Into Debugging Code",
+        "description": "The application has android:debuggable=\"true\" enabled. Attackers can connect JDWP debuggers via ADB, dump memory, inspect encryption keys, bypass security controls, and execute arbitrary code in app context.",
+        "evidence": "android:debuggable=\"true\" is declared in AndroidManifest.xml under <application>.",
+        "remediation": "Ensure android:debuggable=\"false\" is set in production release builds. In build.gradle, verify that buildTypes { release { debuggable false } } is enforced.",
+        "affected_items": [
+          "AndroidManifest.xml: android:debuggable=\"true\""
+        ]
+      },
+      {
+        "id": "SEC-NET-01",
+        "title": "Cleartext HTTP Traffic Permitted",
+        "severity": "HIGH",
+        "owasp_category": "M3: Insecure Communication",
+        "masvs_id": "MASVS-NETWORK-1",
+        "cwe_id": "CWE-319: Cleartext Transmission of Sensitive Information",
+        "description": "The application allows unencrypted HTTP network communication. Traffic sent over plaintext HTTP can be intercepted, read, or modified by adversaries via Man-in-the-Middle (MitM) attacks.",
+        "evidence": "2 unencrypted HTTP URLs discovered in code (e.g., http://127.0.0.1, http://127.0.0.1/signup)",
+        "remediation": "Enforce HTTPS for all network endpoints. Configure Android Network Security Configuration (res/xml/network_security_config.xml) with cleartextTrafficPermitted=\"false\" and ensure TLS 1.2+ is required.",
+        "affected_items": [
+          "http://127.0.0.1",
+          "http://127.0.0.1/signup"
+        ]
+      },
+      {
+        "id": "SEC-PLAT-02",
+        "title": "Insecure file:// Local URL Schemes Detected",
+        "severity": "LOW",
+        "owasp_category": "M1: Improper Platform Usage",
+        "masvs_id": "MASVS-PLATFORM-2",
+        "cwe_id": "CWE-749: Exposed Dangerous Method or Function",
+        "description": "The application references local 'file://' URI schemes (2 occurrences). If passed to WebViews with allowFileAccess enabled, this can lead to arbitrary local file disclosure and Cross-App Scripting.",
+        "evidence": "Detected file:// scheme references in code: file:///android_asset/unsafe_content.html, file:///android_asset/unsafe_content.html",
+        "remediation": "Avoid using file:// schemes. Use content:// URIs with FileProvider or modern WebViewAssetLoader to restrict file system access securely.",
+        "affected_items": [
+          "file:///android_asset/unsafe_content.html",
+          "file:///android_asset/unsafe_content.html"
+        ]
+      },
+      {
+        "id": "SEC-RESI-01",
+        "title": "Client-Side Root Detection Binary Checks Detected",
+        "severity": "LOW",
+        "owasp_category": "M8: Code Tampering",
+        "masvs_id": "MASVS-RESILIENCE-1",
+        "cwe_id": "CWE-693: Protection Mechanism Failure",
+        "description": "The application inspects standard root binary paths (/sbin/su, /su/bin/su) to detect rooted devices. Standard file-existence checks are easily bypassed via Frida hooking or root-hiding modules.",
+        "evidence": "Root execution paths inspected: /sbin/su, /su/bin/su",
+        "remediation": "Supplement client-side file checks with hardware-backed Play Integrity API verification and anti-tampering controls.",
+        "affected_items": [
+          "/sbin/su",
+          "/su/bin/su"
+        ]
+      }
+    ]
+  },
+  "apk_components": [],
+  "split_structure": [],
+  "manifest_evidence": [],
+  "analysis_notes": [
+    "JADX completed with warnings (exit code 3). Decompiled source may contain partial warnings.",
+    "Static network indicators are extracted from application content and do not by themselves prove runtime network usage.",
+    "API candidates are static call-context candidates extracted from Smali register flows and do not represent confirmed runtime endpoints.",
+    "No vulnerability exploitation was performed.",
+    "No security verdict was produced."
+  ],
+  "limitations": [
+    "Analysis is limited to static heuristics on decoded package contents without runtime execution.",
+    "V1 API candidate extractor only tracks specific call-context register patterns (e.g. Fuel).",
+    "Dynamic instrumentation, traffic interception (MITM/Burp), and deep UI exploration were not performed.",
+    "No security verdict, vulnerability score, or risk classification is provided."
+  ]
+}

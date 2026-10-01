@@ -320,7 +320,7 @@ class TestDemoOrchestratorUnit(unittest.TestCase):
 
         run_demo("http://example.com/app.apk", self.output_root, progress_callback=tracker)
 
-        expected = [
+        self.assertEqual(events[:8], [
             ("acquisition", "running"),
             ("acquisition", "success"),
             ("preprocessing", "running"),
@@ -329,9 +329,9 @@ class TestDemoOrchestratorUnit(unittest.TestCase):
             ("static_analysis", "success"),
             ("runtime", "running"),
             ("runtime", "success"),
-            ("demo", "completed"),
-        ]
-        self.assertEqual(events, expected)
+        ])
+        self.assertIn(("dynamic_analysis", "running"), events)
+        self.assertEqual(events[-1], ("demo", "completed"))
 
     @patch("src.demo_orchestrator.acquire_apk")
     @patch("src.demo_orchestrator.preprocess_apk")

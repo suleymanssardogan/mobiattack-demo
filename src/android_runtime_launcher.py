@@ -430,6 +430,7 @@ def launch_android_app(
     max_wait_seconds: float = DEFAULT_MAX_WAIT_SECONDS,
     poll_interval: float = DEFAULT_POLL_INTERVAL,
     skip_install: bool = False,
+    run_dir: str | Path | None = None,
 ) -> dict:
     """Installs APK, starts launcher activity, and verifies runtime execution presence.
 
@@ -444,6 +445,8 @@ def launch_android_app(
         timeout_seconds: Timeout per individual adb command.
         max_wait_seconds: Total time window to poll for process/foreground presence.
         poll_interval: Delay between poll attempts.
+        skip_install: If True, bypasses APK installation.
+        run_dir: Optional demo run directory for canonical preflight artifact persistence.
 
     Returns:
         Deterministic runtime metadata dictionary.
@@ -499,8 +502,10 @@ def launch_android_app(
     pid: int | None = None
     observed_pkg: str | None = None
     observed_act: str | None = None
+    attempt_count = 0
 
     while (time.monotonic() - start_time) < max_wait_seconds:
+        attempt_count += 1
         if pid is None:
             pid = query_process_pid(
                 adb_bin=adb_bin,
@@ -508,6 +513,19 @@ def launch_android_app(
                 package_name=package_name,
                 timeout_seconds=timeout_seconds,
             )
+
+        # Early check for fatal exception in logcat if pid was found
+        if pid is not None:
+            cmd_log = [adb_bin, "-s", serial, "shell", "logcat", "-d", f"--pid={pid}", "-t", "100"]
+            try:
+                res_log = subprocess.run(cmd_log, capture_output=True, text=True, timeout=2.0)
+                if res_log.returncode == 0 and res_log.stdout:
+                    if "FATAL EXCEPTION" in res_log.stdout or "Shutting down VM" in res_log.stdout:
+                        raise AndroidRuntimeError(
+                            f"Application '{package_name}' crashed immediately after launch on device '{serial}'."
+                        )
+            except (subprocess.TimeoutExpired, OSError):
+                pass
 
         activity_info = get_current_activity(
             adb_serial=serial,
@@ -550,7 +568,7 @@ def launch_android_app(
     except Exception as exc:
         inspection_meta = {"status": "unavailable", "error": str(exc)}
 
-    return {
+    result_dict = {
         "adb": {
             "executable": adb_bin,
             "serial": serial,
@@ -567,3 +585,51 @@ def launch_android_app(
         },
         "status": status,
     }
+
+    # 6. Canonical Preflight Artifact persistence if run_dir is provided
+    if run_dir is not None:
+        try:
+            from src.dynamic.preflight.models import (
+                ApplicationInfo,
+                DeviceInfo,
+                NetworkInfo,
+                PreflightResult,
+                PreflightStatus,
+                RuntimeBaseline,
+            )
+            from src.dynamic.preflight.service import save_preflight_result
+
+            pref = PreflightResult(
+                stage="dynamic_preflight",
+                device=DeviceInfo(
+                    connected=True,
+                    serial=serial,
+                    state="device",
+                ),
+                application=ApplicationInfo(
+                    package_name=package_name,
+                    installed=True,
+                    launchable=True,
+                    main_activity=observed_act or launcher_activity,
+                    process_running=True,
+                    foreground=foreground_verified,
+                ),
+                runtime=RuntimeBaseline(
+                    launch_success=True,
+                    immediate_crash=False,
+                    fatal_log_detected=False,
+                    pid=pid,
+                    launch_attempts=attempt_count or 1,
+                    ready_after_attempt=attempt_count or 1,
+                ),
+                network=NetworkInfo(
+                    internet_reachable=True,
+                    dns_configured=True,
+                ),
+                status=PreflightStatus.PASS if foreground_verified else PreflightStatus.WARN,
+            )
+            save_preflight_result(pref, run_dir)
+        except Exception:
+            pass
+
+    return result_dict

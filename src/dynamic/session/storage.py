@@ -16,13 +16,28 @@ DEFAULT_SESSIONS_DIR = "artifacts/dynamic/sessions"
 
 
 class SessionStorage:
-    """Handles thread-safe and atomic JSON storage for dynamic sessions."""
+    """Handles thread-safe and atomic JSON storage for dynamic sessions.
 
-    def __init__(self, base_dir: str = DEFAULT_SESSIONS_DIR) -> None:
+    Args:
+        base_dir: Root directory for session storage.
+        run_scoped: When True, session.json and timeline.json are written
+            directly to base_dir (e.g. demo_runs/<run_id>/dynamic/) instead
+            of creating a per-session-id subdirectory. Default False preserves
+            backward compatibility with existing tests and isolated module use.
+    """
+
+    def __init__(self, base_dir: str = DEFAULT_SESSIONS_DIR, run_scoped: bool = False) -> None:
         self.base_dir = base_dir
+        self.run_scoped = run_scoped
 
     def get_session_dir(self, session_id: str) -> str:
-        """Returns the dedicated directory for the given session ID."""
+        """Returns the storage directory for the given session.
+
+        In run_scoped mode, returns base_dir directly (flat layout).
+        In default mode, returns base_dir/<session_id>/ (legacy layout).
+        """
+        if self.run_scoped:
+            return self.base_dir
         return os.path.join(self.base_dir, session_id)
 
     def save_session(self, session: DynamicSession) -> str:

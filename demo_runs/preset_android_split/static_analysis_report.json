@@ -1,0 +1,5310 @@
+{
+  "report_type": "static_analysis",
+  "report_version": "1.0",
+  "run_id": "run_1790752041_46f9db",
+  "status": "completed",
+  "platform": "android",
+  "package_layout": "split",
+  "split_count": 3,
+  "application": {
+    "package_name": "me.zhanghai.android.files",
+    "launcher_activity": "me.zhanghai.android.files.filelist.FileListActivity",
+    "filename": "unknown",
+    "sha256": "unknown",
+    "size_bytes": null,
+    "is_valid_apk": false
+  },
+  "acquisition": {
+    "input_url": "https://play.google.com/store/apps/details?id=me.zhanghai.android.files",
+    "platform": "android",
+    "source_type": "play_store",
+    "package_name": "me.zhanghai.android.files",
+    "installed_on_device": true,
+    "package_layout": "split",
+    "split_count": 3,
+    "package_set_path": "downloads/package_set/package_set.json",
+    "package_set": {
+      "package_name": "me.zhanghai.android.files",
+      "package_layout": "split",
+      "split_count": 3,
+      "components": [
+        {
+          "filename": "base.apk",
+          "role": "base",
+          "device_path": "/data/app/~~GIo0IEqZnSeWznBnah5vNw==/me.zhanghai.android.files-uoZp0hpqifoqyQRj02E52w==/base.apk",
+          "local_path": "downloads/package_set/apks/base.apk",
+          "size_bytes": 11213306,
+          "sha256": "f7abbb8afe79087794f9a418f185fc7972531c0e2b9e2633fdaba12b127de60c",
+          "is_valid_zip": true,
+          "has_android_manifest": true,
+          "has_dex": true,
+          "dex_count": 2,
+          "dex_files": [
+            "classes.dex",
+            "classes2.dex"
+          ],
+          "is_valid": true
+        },
+        {
+          "filename": "split_config.arm64_v8a.apk",
+          "role": "config_abi",
+          "device_path": "/data/app/~~GIo0IEqZnSeWznBnah5vNw==/me.zhanghai.android.files-uoZp0hpqifoqyQRj02E52w==/split_config.arm64_v8a.apk",
+          "local_path": "downloads/package_set/apks/split_config.arm64_v8a.apk",
+          "size_bytes": 1618796,
+          "sha256": "ce9007e0321aaff99ee940aaa709e047e75faf7e9d9a9ac898fa800c3ff617a6",
+          "is_valid_zip": true,
+          "has_android_manifest": true,
+          "has_dex": false,
+          "dex_count": 0,
+          "dex_files": [],
+          "is_valid": true
+        },
+        {
+          "filename": "split_config.xxhdpi.apk",
+          "role": "config_density",
+          "device_path": "/data/app/~~GIo0IEqZnSeWznBnah5vNw==/me.zhanghai.android.files-uoZp0hpqifoqyQRj02E52w==/split_config.xxhdpi.apk",
+          "local_path": "downloads/package_set/apks/split_config.xxhdpi.apk",
+          "size_bytes": 49050,
+          "sha256": "c6a49731d2fb67713c4ea05ac0581ba57af78ca73a225638d20abe584b347635",
+          "is_valid_zip": true,
+          "has_android_manifest": true,
+          "has_dex": false,
+          "dex_count": 0,
+          "dex_files": [],
+          "is_valid": true
+        }
+      ]
+    },
+    "components": [
+      {
+        "filename": "base.apk",
+        "role": "base",
+        "device_path": "/data/app/~~GIo0IEqZnSeWznBnah5vNw==/me.zhanghai.android.files-uoZp0hpqifoqyQRj02E52w==/base.apk",
+        "local_path": "downloads/package_set/apks/base.apk",
+        "size_bytes": 11213306,
+        "sha256": "f7abbb8afe79087794f9a418f185fc7972531c0e2b9e2633fdaba12b127de60c",
+        "is_valid_zip": true,
+        "has_android_manifest": true,
+        "has_dex": true,
+        "dex_count": 2,
+        "dex_files": [
+          "classes.dex",
+          "classes2.dex"
+        ],
+        "is_valid": true
+      },
+      {
+        "filename": "split_config.arm64_v8a.apk",
+        "role": "config_abi",
+        "device_path": "/data/app/~~GIo0IEqZnSeWznBnah5vNw==/me.zhanghai.android.files-uoZp0hpqifoqyQRj02E52w==/split_config.arm64_v8a.apk",
+        "local_path": "downloads/package_set/apks/split_config.arm64_v8a.apk",
+        "size_bytes": 1618796,
+        "sha256": "ce9007e0321aaff99ee940aaa709e047e75faf7e9d9a9ac898fa800c3ff617a6",
+        "is_valid_zip": true,
+        "has_android_manifest": true,
+        "has_dex": false,
+        "dex_count": 0,
+        "dex_files": [],
+        "is_valid": true
+      },
+      {
+        "filename": "split_config.xxhdpi.apk",
+        "role": "config_density",
+        "device_path": "/data/app/~~GIo0IEqZnSeWznBnah5vNw==/me.zhanghai.android.files-uoZp0hpqifoqyQRj02E52w==/split_config.xxhdpi.apk",
+        "local_path": "downloads/package_set/apks/split_config.xxhdpi.apk",
+        "size_bytes": 49050,
+        "sha256": "c6a49731d2fb67713c4ea05ac0581ba57af78ca73a225638d20abe584b347635",
+        "is_valid_zip": true,
+        "has_android_manifest": true,
+        "has_dex": false,
+        "dex_count": 0,
+        "dex_files": [],
+        "is_valid": true
+      }
+    ],
+    "remote_paths": [
+      "/data/app/~~GIo0IEqZnSeWznBnah5vNw==/me.zhanghai.android.files-uoZp0hpqifoqyQRj02E52w==/base.apk",
+      "/data/app/~~GIo0IEqZnSeWznBnah5vNw==/me.zhanghai.android.files-uoZp0hpqifoqyQRj02E52w==/split_config.arm64_v8a.apk",
+      "/data/app/~~GIo0IEqZnSeWznBnah5vNw==/me.zhanghai.android.files-uoZp0hpqifoqyQRj02E52w==/split_config.xxhdpi.apk"
+    ],
+    "initially_installed": false,
+    "install_mode": "ui_automation",
+    "install_status": "installed_via_ui_automation",
+    "play_store_open_status": "success",
+    "play_store_open_method": "market_uri",
+    "play_store_foreground_verified": true
+  },
+  "preprocessing": {
+    "status": "success_with_warnings",
+    "components": [
+      {
+        "filename": "base.apk",
+        "role": "base",
+        "raw_extract_status": "success",
+        "apktool_status": "success_with_warnings",
+        "jadx_status": "success_with_warnings",
+        "warnings": [
+          "Apktool decode warning in 'base.apk': W: Unresolved resource reference: ResReference{pkg=ResPackage{id=0x7f, name=me.zhanghai.android.files}, id=0x7f080034, type=ref}\nW: Unresolved resource reference: ResReference{pkg=ResPackage{id=0x7f, ",
+          "JADX exited with warnings (code 3) for 'base.apk'"
+        ]
+      },
+      {
+        "filename": "split_config.arm64_v8a.apk",
+        "role": "config_abi",
+        "raw_extract_status": "success",
+        "apktool_status": "success",
+        "jadx_status": "skipped_no_dex",
+        "warnings": []
+      },
+      {
+        "filename": "split_config.xxhdpi.apk",
+        "role": "config_density",
+        "raw_extract_status": "success",
+        "apktool_status": "success_with_warnings",
+        "jadx_status": "skipped_no_dex",
+        "warnings": [
+          "Apktool decode warning in 'split_config.xxhdpi.apk': W: Unresolved resource reference: ResReference{pkg=ResPackage{id=0x7f, name=me.zhanghai.android.files}, id=0x7f0801b2, type=ref}"
+        ]
+      }
+    ],
+    "warnings": [
+      "Apktool decode warning in 'base.apk': W: Unresolved resource reference: ResReference{pkg=ResPackage{id=0x7f, name=me.zhanghai.android.files}, id=0x7f080034, type=ref}\nW: Unresolved resource reference: ResReference{pkg=ResPackage{id=0x7f, ",
+      "JADX exited with warnings (code 3) for 'base.apk'",
+      "Apktool decode warning in 'split_config.xxhdpi.apk': W: Unresolved resource reference: ResReference{pkg=ResPackage{id=0x7f, name=me.zhanghai.android.files}, id=0x7f0801b2, type=ref}"
+    ]
+  },
+  "structure": {
+    "components": [
+      {
+        "source_apk": "base.apk",
+        "role": "base",
+        "status": "success",
+        "dex_files": [
+          "classes.dex",
+          "classes2.dex"
+        ],
+        "dex_count": 2,
+        "is_multidex": true,
+        "native_libraries": [],
+        "has_native_code": false,
+        "assets": [
+          "assets/PublicSuffixDatabase.list",
+          "assets/dexopt/baseline.prof",
+          "assets/dexopt/baseline.profm",
+          "assets/main.jar"
+        ],
+        "smali_roots": [
+          "smali",
+          "smali_classes2"
+        ],
+        "has_kotlin_metadata": true
+      },
+      {
+        "source_apk": "split_config.arm64_v8a.apk",
+        "role": "config_abi",
+        "status": "success",
+        "dex_files": [],
+        "dex_count": 0,
+        "is_multidex": false,
+        "native_libraries": [
+          "lib/arm64-v8a/libarchive-jni.so",
+          "lib/arm64-v8a/libcrashlytics-common.so",
+          "lib/arm64-v8a/libcrashlytics-handler.so",
+          "lib/arm64-v8a/libcrashlytics-trampoline.so",
+          "lib/arm64-v8a/libcrashlytics.so",
+          "lib/arm64-v8a/libdatastore_shared_counter.so",
+          "lib/arm64-v8a/libhiddenapi.so",
+          "lib/arm64-v8a/libselinux-jni.so",
+          "lib/arm64-v8a/libsyscall.so"
+        ],
+        "has_native_code": true,
+        "assets": [],
+        "smali_roots": [],
+        "has_kotlin_metadata": false
+      },
+      {
+        "source_apk": "split_config.xxhdpi.apk",
+        "role": "config_density",
+        "status": "success",
+        "dex_files": [],
+        "dex_count": 0,
+        "is_multidex": false,
+        "native_libraries": [],
+        "has_native_code": false,
+        "assets": [],
+        "smali_roots": [],
+        "has_kotlin_metadata": false
+      }
+    ],
+    "total_dex_count": 2,
+    "dex_files": [
+      "base.apk:classes.dex",
+      "base.apk:classes2.dex"
+    ],
+    "is_multidex": true,
+    "has_native_code": true,
+    "has_kotlin_metadata": true,
+    "dex_count": 2
+  },
+  "permissions": [
+    "android.permission.ACCESS_NETWORK_STATE",
+    "android.permission.ACCESS_WIFI_STATE",
+    "android.permission.FOREGROUND_SERVICE",
+    "android.permission.FOREGROUND_SERVICE_SPECIAL_USE",
+    "android.permission.INTERNET",
+    "android.permission.MANAGE_EXTERNAL_STORAGE",
+    "android.permission.POST_NOTIFICATIONS",
+    "android.permission.QUERY_ALL_PACKAGES",
+    "android.permission.REQUEST_INSTALL_PACKAGES",
+    "android.permission.WAKE_LOCK",
+    "android.permission.WRITE_EXTERNAL_STORAGE",
+    "com.android.launcher.permission.INSTALL_SHORTCUT",
+    "com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE",
+    "com.google.android.gms.permission.AD_ID",
+    "android.permission.ACCESS_ADSERVICES_ATTRIBUTION",
+    "android.permission.ACCESS_ADSERVICES_AD_ID",
+    "me.zhanghai.android.files.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION",
+    "moe.shizuku.manager.permission.API_V23"
+  ],
+  "activities": [
+    "me.zhanghai.android.files.filelist.FileListActivity",
+    "me.zhanghai.android.files.filelist.OpenFileActivity",
+    "me.zhanghai.android.files.filelist.EditFileActivity",
+    "me.zhanghai.android.files.filelist.OpenFileAsDialogActivity",
+    "me.zhanghai.android.files.storage.AddStorageDialogActivity",
+    "me.zhanghai.android.files.storage.EditDeviceStorageDialogActivity",
+    "me.zhanghai.android.files.storage.AddExternalStorageShortcutActivity",
+    "me.zhanghai.android.files.storage.EditExternalStorageShortcutDialogActivity",
+    "me.zhanghai.android.files.storage.AddDocumentTreeActivity",
+    "me.zhanghai.android.files.storage.EditDocumentTreeDialogActivity",
+    "me.zhanghai.android.files.storage.EditFtpServerActivity",
+    "me.zhanghai.android.files.storage.EditSftpServerActivity",
+    "me.zhanghai.android.files.storage.AddLanSmbServerActivity",
+    "me.zhanghai.android.files.storage.EditSmbServerActivity",
+    "me.zhanghai.android.files.storage.EditWebDavServerActivity",
+    "me.zhanghai.android.files.navigation.EditBookmarkDirectoryDialogActivity",
+    "me.zhanghai.android.files.ftpserver.FtpServerActivity",
+    "me.zhanghai.android.files.settings.SettingsActivity",
+    "me.zhanghai.android.files.storage.StorageListActivity",
+    "me.zhanghai.android.files.settings.StandardDirectoryListActivity",
+    "me.zhanghai.android.files.settings.BookmarkDirectoryListActivity",
+    "me.zhanghai.android.files.about.AboutActivity",
+    "me.zhanghai.android.files.fileaction.ArchivePasswordDialogActivity",
+    "me.zhanghai.android.files.filejob.FileJobErrorDialogActivity",
+    "me.zhanghai.android.files.filejob.FileJobConflictDialogActivity",
+    "me.zhanghai.android.files.viewer.saveas.SaveAsActivity",
+    "me.zhanghai.android.files.viewer.text.TextEditorActivity",
+    "me.zhanghai.android.files.viewer.image.ImageViewerActivity",
+    "com.google.android.gms.common.api.GoogleApiActivity"
+  ],
+  "network_indicators": {
+    "network_urls": [
+      {
+        "type": "network_url",
+        "value": "http://apache.org/dav/propset/fs/1",
+        "source_file": "smali/du.smali",
+        "line_number": 15692,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "http://apple.com/ns/ical/",
+        "source_file": "smali/hy.smali",
+        "line_number": 28,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "http://calendarserver.org/ns/",
+        "source_file": "smali/d73.smali",
+        "line_number": 141,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "http://calendarserver.org/ns/",
+        "source_file": "smali/hn1.smali",
+        "line_number": 26,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "http://calendarserver.org/ns/",
+        "source_file": "smali/ny.smali",
+        "line_number": 23,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "http://calendarserver.org/ns/",
+        "source_file": "smali/py.smali",
+        "line_number": 23,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "http://calendarserver.org/ns/",
+        "source_file": "smali/v04.smali",
+        "line_number": 19,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "http://mozilla.org/MPL/1.1/.",
+        "source_file": "res/raw/mpl_11_summary.txt",
+        "line_number": 3,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "http://mozilla.org/MPL/2.0/.",
+        "source_file": "res/raw/mpl_20_summary.txt",
+        "line_number": 3,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "http://ns.adobe.com/xap/1.0/\\u0000",
+        "source_file": "smali/d31.smali",
+        "line_number": 3476,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "http://psdev.de/LicensesDialog",
+        "source_file": "smali/e32.smali",
+        "line_number": 35,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "http://www.apache.org/licenses/",
+        "source_file": "unknown/META-INF/androidx/annotation/annotation/LICENSE.txt",
+        "line_number": 4,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "http://www.apache.org/licenses/",
+        "source_file": "unknown/META-INF/androidx/collection/collection/LICENSE.txt",
+        "line_number": 4,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "http://www.apache.org/licenses/",
+        "source_file": "unknown/META-INF/androidx/constraintlayout/constraintlayout-core/LICENSE.txt",
+        "line_number": 4,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "http://www.apache.org/licenses/",
+        "source_file": "unknown/META-INF/androidx/lifecycle/lifecycle-common-java8/LICENSE.txt",
+        "line_number": 4,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "http://www.apache.org/licenses/",
+        "source_file": "unknown/META-INF/androidx/lifecycle/lifecycle-common/LICENSE.txt",
+        "line_number": 4,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "http://www.apache.org/licenses/LICENSE-2.0",
+        "source_file": "res/raw/asl_20_summary.txt",
+        "line_number": 5,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "http://www.apache.org/licenses/LICENSE-2.0",
+        "source_file": "unknown/org/apache/ftpserver/message/FtpStatus.properties",
+        "line_number": 9,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "http://www.apache.org/licenses/LICENSE-2.0",
+        "source_file": "unknown/org/apache/ftpserver/message/FtpStatus_en.properties",
+        "line_number": 9,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "http://www.apache.org/licenses/LICENSE-2.0",
+        "source_file": "unknown/org/apache/ftpserver/message/FtpStatus_zh-tw.properties",
+        "line_number": 9,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "http://www.gnu.org/licenses/",
+        "source_file": "res/raw/gpl_30_summary.txt",
+        "line_number": 12,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "http://www.slf4j.org/codes.html#null_MDCA",
+        "source_file": "smali/ji0.smali",
+        "line_number": 7327,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "http://www.slf4j.org/codes.html#null_MDCA",
+        "source_file": "smali/nb2.smali",
+        "line_number": 156,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "http://www.slf4j.org/codes.html#null_MDCA",
+        "source_file": "smali/nb2.smali",
+        "line_number": 985,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "http://xml.org/sax/features/external-general-entities",
+        "source_file": "smali/bk3.smali",
+        "line_number": 10892,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "http://xml.org/sax/features/external-parameter-entities",
+        "source_file": "smali/bk3.smali",
+        "line_number": 10904,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "http://xml.org/sax/properties/lexical-handler",
+        "source_file": "smali/bk3.smali",
+        "line_number": 10943,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "http://xmlpull.org/v1/doc/features.html#process-docdecl",
+        "source_file": "smali/bk3.smali",
+        "line_number": 11059,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "http://xmlpull.org/v1/doc/features.html#process-namespaces",
+        "source_file": "smali/bk3.smali",
+        "line_number": 11071,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "http://xmlpull.org/v1/doc/features.html#process-namespaces",
+        "source_file": "smali/me/zhanghai/android/files/ui/LicensesDialogFragment.smali",
+        "line_number": 108,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "http://xmlpull.org/v1/doc/features.html#relaxed",
+        "source_file": "smali/aq4.smali",
+        "line_number": 33,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://app-measurement.com/a",
+        "source_file": "smali/es3.smali",
+        "line_number": 1821,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://app-measurement.com/a",
+        "source_file": "smali/y25.smali",
+        "line_number": 741,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://app-measurement.com/s/d",
+        "source_file": "smali/ws3.smali",
+        "line_number": 2093,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://app-measurement.com/s/d",
+        "source_file": "smali/y25.smali",
+        "line_number": 765,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://bitfire.at/webdav-push",
+        "source_file": "smali/dl4.smali",
+        "line_number": 26,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://bitfire.at/webdav-push",
+        "source_file": "smali/el4.smali",
+        "line_number": 30,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://bitfire.at/webdav-push",
+        "source_file": "smali/gy.smali",
+        "line_number": 1778,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://bitfire.at/webdav-push",
+        "source_file": "smali/j54.smali",
+        "line_number": 26,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://bitfire.at/webdav-push",
+        "source_file": "smali/jx2.smali",
+        "line_number": 26,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://bitfire.at/webdav-push",
+        "source_file": "smali/kd4.smali",
+        "line_number": 28,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://bitfire.at/webdav-push",
+        "source_file": "smali/kh.smali",
+        "line_number": 26,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://bitfire.at/webdav-push",
+        "source_file": "smali/l54.smali",
+        "line_number": 28,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://bitfire.at/webdav-push",
+        "source_file": "smali/mb4.smali",
+        "line_number": 26,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://bitfire.at/webdav-push",
+        "source_file": "smali/n80.smali",
+        "line_number": 28,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://bitfire.at/webdav-push",
+        "source_file": "smali/py2.smali",
+        "line_number": 30,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://bitfire.at/webdav-push",
+        "source_file": "smali/qy2.smali",
+        "line_number": 36,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://bitfire.at/webdav-push",
+        "source_file": "smali/ry2.smali",
+        "line_number": 26,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://bitfire.at/webdav-push",
+        "source_file": "smali/sy2.smali",
+        "line_number": 22,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://bitfire.at/webdav-push",
+        "source_file": "smali/ug4.smali",
+        "line_number": 28,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://commons.apache.org/proper/commons-net/",
+        "source_file": "res/raw/licenses.xml",
+        "line_number": 110,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://firebase-settings.crashlytics.com/spi/v2/platforms/android/gmp/",
+        "source_file": "smali/t7.smali",
+        "line_number": 3953,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://firebase.google.com/docs/crashlytics/get-started?platform=android#add-plugin",
+        "source_file": "smali/t7.smali",
+        "line_number": 4702,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://firebase.google.com/support/guides/disable-analytics",
+        "source_file": "smali/sk1.smali",
+        "line_number": 2041,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://firebase.google.com/support/privacy/init-options.",
+        "source_file": "smali/rd1.smali",
+        "line_number": 1833,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://firebase.google.com/support/privacy/init-options.",
+        "source_file": "smali/rd1.smali",
+        "line_number": 1855,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://firebase.google.com/support/privacy/init-options.",
+        "source_file": "smali/rd1.smali",
+        "line_number": 1877,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://firebaseinstallations.googleapis.com/v1/",
+        "source_file": "smali/pd1.smali",
+        "line_number": 148,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://github.com/AgNO3/jcifs-ng",
+        "source_file": "res/raw/licenses.xml",
+        "line_number": 138,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://github.com/BigBadaboom/androidsvg",
+        "source_file": "res/raw/licenses.xml",
+        "line_number": 19,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://github.com/JakeWharton/ThreeTenABP",
+        "source_file": "res/raw/licenses.xml",
+        "line_number": 89,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://github.com/Mbed-TLS/mbedtls",
+        "source_file": "res/raw/licenses.xml",
+        "line_number": 208,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://github.com/PureWriter/FullDraggableDrawer",
+        "source_file": "res/raw/licenses.xml",
+        "line_number": 33,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://github.com/RikkaApps/RikkaX",
+        "source_file": "res/raw/licenses.xml",
+        "line_number": 124,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://github.com/RikkaApps/Shizuku-API",
+        "source_file": "res/raw/licenses.xml",
+        "line_number": 131,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://github.com/bitfireAT/dav4jvm",
+        "source_file": "res/raw/licenses.xml",
+        "line_number": 47,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://github.com/chrisbanes/PhotoView",
+        "source_file": "res/raw/licenses.xml",
+        "line_number": 54,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://github.com/chrisbanes/insetter",
+        "source_file": "res/raw/licenses.xml",
+        "line_number": 117,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://github.com/coil-kt/coil",
+        "source_file": "res/raw/licenses.xml",
+        "line_number": 145,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://github.com/davemorrissey/subsampling-scale-image-view",
+        "source_file": "res/raw/licenses.xml",
+        "line_number": 26,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://github.com/facebook/stetho",
+        "source_file": "res/raw/licenses.xml",
+        "line_number": 40,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://github.com/facebook/zstd",
+        "source_file": "res/raw/licenses.xml",
+        "line_number": 201,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://github.com/google/AndroidForegroundCompat",
+        "source_file": "res/raw/licenses.xml",
+        "line_number": 166,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://github.com/h6ah4i/android-advancedrecyclerview",
+        "source_file": "res/raw/licenses.xml",
+        "line_number": 75,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://github.com/h6ah4i/android-materialshadowninepatch",
+        "source_file": "res/raw/licenses.xml",
+        "line_number": 68,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://github.com/hierynomus/smbj",
+        "source_file": "res/raw/licenses.xml",
+        "line_number": 82,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://github.com/leinardi/FloatingActionButtonSpeedDial",
+        "source_file": "res/raw/licenses.xml",
+        "line_number": 96,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://github.com/libarchive/libarchive",
+        "source_file": "res/raw/licenses.xml",
+        "line_number": 180,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://github.com/lz4/lz4",
+        "source_file": "res/raw/licenses.xml",
+        "line_number": 194,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://github.com/rapid7/smbj-rpc",
+        "source_file": "res/raw/licenses.xml",
+        "line_number": 103,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://github.com/retrostreams/android-retrostreams",
+        "source_file": "res/raw/licenses.xml",
+        "line_number": 236,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://github.com/topjohnwu/libsu",
+        "source_file": "res/raw/licenses.xml",
+        "line_number": 61,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://github.com/zhanghai",
+        "source_file": "smali/h2.smali",
+        "line_number": 75,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://github.com/zhanghai/AndroidFastScroll",
+        "source_file": "res/raw/licenses.xml",
+        "line_number": 159,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://github.com/zhanghai/AndroidRetroFile",
+        "source_file": "res/raw/licenses.xml",
+        "line_number": 222,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://github.com/zhanghai/AppIconLoader",
+        "source_file": "res/raw/licenses.xml",
+        "line_number": 152,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://github.com/zhanghai/MaterialFiles",
+        "source_file": "res/raw/licenses.xml",
+        "line_number": 12,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://github.com/zhanghai/MaterialFiles",
+        "source_file": "smali/h2.smali",
+        "line_number": 27,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://github.com/zhanghai/MaterialFiles/blob/master/PRIVACY.md",
+        "source_file": "smali/h2.smali",
+        "line_number": 43,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://github.com/zhanghai/SystemUiHelper",
+        "source_file": "res/raw/licenses.xml",
+        "line_number": 229,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://github.com/zhanghai/libarchive-android",
+        "source_file": "res/raw/licenses.xml",
+        "line_number": 173,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://github.com/zhanghai/libselinux-android",
+        "source_file": "res/raw/licenses.xml",
+        "line_number": 215,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://gitlab.com/bzip2/bzip2",
+        "source_file": "res/raw/licenses.xml",
+        "line_number": 187,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://goo.gl/NAOOOI",
+        "source_file": "smali/kc5.smali",
+        "line_number": 4266,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://goo.gl/NAOOOI.",
+        "source_file": "smali/kc5.smali",
+        "line_number": 4233,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://google.com/search?",
+        "source_file": "smali/n75.smali",
+        "line_number": 387,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://issuetracker.google.com/issues/241760537",
+        "source_file": "smali/qf4.smali",
+        "line_number": 83,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://issuetracker.google.com/issues/new?component=907884&template=1466542",
+        "source_file": "smali/fj0.smali",
+        "line_number": 1349,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://issuetracker.google.com/issues/new?component=907884&template=1466542",
+        "source_file": "smali/gj0.smali",
+        "line_number": 1018,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://issuetracker.google.com/issues/new?component=907884&template=1466542",
+        "source_file": "smali/uj0.smali",
+        "line_number": 2050,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://mina.apache.org/ftpserver-project/index.html",
+        "source_file": "res/raw/licenses.xml",
+        "line_number": 243,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://pagead2.googlesyndication.com/pagead/gen_204?id=gmob-apps",
+        "source_file": "smali/xk4.smali",
+        "line_number": 106,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://play.google.com/store",
+        "source_file": "AndroidManifest.xml",
+        "line_number": 235,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://resume.zhanghai.me/",
+        "source_file": "smali/h2.smali",
+        "line_number": 59,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://twitter.com/zhanghai95",
+        "source_file": "smali/h2.smali",
+        "line_number": 91,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://www.googleadservices.com/pagead/conversion/app/deeplink?id_type=adid&sdk_version=",
+        "source_file": "smali/i75.smali",
+        "line_number": 1262,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://www.slf4j.org/codes.html#ignoredBindings",
+        "source_file": "smali/p72.smali",
+        "line_number": 2350,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://www.slf4j.org/codes.html#loggerNameMismatch",
+        "source_file": "smali/p72.smali",
+        "line_number": 824,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://www.slf4j.org/codes.html#multiple_bindings",
+        "source_file": "smali/p72.smali",
+        "line_number": 2466,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://www.slf4j.org/codes.html#noProviders",
+        "source_file": "smali/p72.smali",
+        "line_number": 1156,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://www.slf4j.org/codes.html#replay",
+        "source_file": "smali/p72.smali",
+        "line_number": 1909,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://www.slf4j.org/codes.html#substituteLogger",
+        "source_file": "smali/p72.smali",
+        "line_number": 1978,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://www.slf4j.org/codes.html#unsuccessfulInit",
+        "source_file": "smali/p72.smali",
+        "line_number": 1016,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://www.slf4j.org/codes.html#version_mismatch",
+        "source_file": "smali/p72.smali",
+        "line_number": 1423,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://youtrack.jetbrains.com/issue/KT-55980",
+        "source_file": "smali/gx2.smali",
+        "line_number": 100,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "network_url",
+        "value": "https://zhanghai-materialfiles.firebaseio.com",
+        "source_file": "res/values/strings.xml",
+        "line_number": 368,
+        "source_apk": "base.apk"
+      }
+    ],
+    "domains": [
+      {
+        "type": "domain",
+        "value": "apache.org",
+        "source_file": "unknown/org/apache/ftpserver/ftpserver.properties",
+        "line_number": 15,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "domain",
+        "value": "app-measurement.com",
+        "source_file": "smali/y25.smali",
+        "line_number": 431,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "domain",
+        "value": "app-measurement.com",
+        "source_file": "smali/ys3.smali",
+        "line_number": 1026,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "domain",
+        "value": "bus.id",
+        "source_file": "smali/c74.smali",
+        "line_number": 1363,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "domain",
+        "value": "bus.id",
+        "source_file": "smali/c74.smali",
+        "line_number": 9698,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "domain",
+        "value": "crashlytics.installation.id",
+        "source_file": "smali/gu1.smali",
+        "line_number": 286,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "domain",
+        "value": "crashlytics.installation.id",
+        "source_file": "smali/gu1.smali",
+        "line_number": 861,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "domain",
+        "value": "crashlytics.installation.id",
+        "source_file": "smali/gu1.smali",
+        "line_number": 955,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "domain",
+        "value": "firebase-settings.crashlytics.com",
+        "source_file": "smali/v53.smali",
+        "line_number": 70,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "domain",
+        "value": "firebase.installation.id",
+        "source_file": "smali/gu1.smali",
+        "line_number": 298,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "domain",
+        "value": "firebase.installation.id",
+        "source_file": "smali/gu1.smali",
+        "line_number": 676,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "domain",
+        "value": "gmail.com",
+        "source_file": "res/raw/licenses.xml",
+        "line_number": 4,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "domain",
+        "value": "google-analytics.com",
+        "source_file": "smali/y25.smali",
+        "line_number": 2102,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "domain",
+        "value": "google-analytics.com",
+        "source_file": "smali/ys3.smali",
+        "line_number": 848,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "domain",
+        "value": "libssh.org",
+        "source_file": "smali/j00.smali",
+        "line_number": 912,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "domain",
+        "value": "openssh.com",
+        "source_file": "smali/dl0.smali",
+        "line_number": 1239,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "domain",
+        "value": "openssh.com",
+        "source_file": "smali/dl0.smali",
+        "line_number": 1785,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "domain",
+        "value": "openssh.com",
+        "source_file": "smali/dl0.smali",
+        "line_number": 1802,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "domain",
+        "value": "openssh.com",
+        "source_file": "smali/dl0.smali",
+        "line_number": 3011,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "domain",
+        "value": "openssh.com",
+        "source_file": "smali/dl0.smali",
+        "line_number": 3067,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "domain",
+        "value": "openssh.com",
+        "source_file": "smali/dl0.smali",
+        "line_number": 3119,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "domain",
+        "value": "openssh.com",
+        "source_file": "smali/dl0.smali",
+        "line_number": 3175,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "domain",
+        "value": "openssh.com",
+        "source_file": "smali/dl0.smali",
+        "line_number": 3228,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "domain",
+        "value": "openssh.com",
+        "source_file": "smali/dl0.smali",
+        "line_number": 3282,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "domain",
+        "value": "openssh.com",
+        "source_file": "smali/dl0.smali",
+        "line_number": 3336,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "domain",
+        "value": "openssh.com",
+        "source_file": "smali/dl0.smali",
+        "line_number": 3390,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "domain",
+        "value": "openssh.com",
+        "source_file": "smali/g02.smali",
+        "line_number": 1879,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "domain",
+        "value": "openssh.com",
+        "source_file": "smali/g02.smali",
+        "line_number": 2897,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "domain",
+        "value": "openssh.com",
+        "source_file": "smali/j00.smali",
+        "line_number": 928,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "domain",
+        "value": "openssh.com",
+        "source_file": "smali/j00.smali",
+        "line_number": 995,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "domain",
+        "value": "openssh.com",
+        "source_file": "smali/oa3.smali",
+        "line_number": 908,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "domain",
+        "value": "openssh.com",
+        "source_file": "smali/oa3.smali",
+        "line_number": 1025,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "domain",
+        "value": "openssh.com",
+        "source_file": "smali/q72.smali",
+        "line_number": 2999,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "domain",
+        "value": "openssh.com",
+        "source_file": "smali/q72.smali",
+        "line_number": 3221,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "domain",
+        "value": "openssh.com",
+        "source_file": "smali/vn2.smali",
+        "line_number": 326,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "domain",
+        "value": "openssh.com",
+        "source_file": "smali/vn2.smali",
+        "line_number": 348,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "domain",
+        "value": "openssh.com",
+        "source_file": "smali/vn2.smali",
+        "line_number": 374,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "domain",
+        "value": "openssh.com",
+        "source_file": "smali/xn2.smali",
+        "line_number": 2368,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "domain",
+        "value": "openssh.com",
+        "source_file": "smali/xn2.smali",
+        "line_number": 2691,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "domain",
+        "value": "openssh.com",
+        "source_file": "smali/xn2.smali",
+        "line_number": 2721,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "domain",
+        "value": "openssh.com",
+        "source_file": "smali/z02.smali",
+        "line_number": 182,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "domain",
+        "value": "openssh.com",
+        "source_file": "smali/z02.smali",
+        "line_number": 206,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "domain",
+        "value": "openssh.com",
+        "source_file": "smali/z02.smali",
+        "line_number": 234,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "domain",
+        "value": "openssh.com",
+        "source_file": "smali/z02.smali",
+        "line_number": 267,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "domain",
+        "value": "openssh.com",
+        "source_file": "smali/z02.smali",
+        "line_number": 300,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "domain",
+        "value": "openssh.com",
+        "source_file": "smali/z02.smali",
+        "line_number": 333,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "domain",
+        "value": "repository.apache.org",
+        "source_file": "unknown/org/apache/ftpserver/ftpserver.properties",
+        "line_number": 10,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "domain",
+        "value": "repository.apache.org",
+        "source_file": "unknown/org/apache/ftpserver/ftpserver.properties",
+        "line_number": 13,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "domain",
+        "value": "ssh.com",
+        "source_file": "smali/dl0.smali",
+        "line_number": 518,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "domain",
+        "value": "ssh.com",
+        "source_file": "smali/dl0.smali",
+        "line_number": 574,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "domain",
+        "value": "ssh.com",
+        "source_file": "smali/dl0.smali",
+        "line_number": 604,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "domain",
+        "value": "ssh.com",
+        "source_file": "smali/dl0.smali",
+        "line_number": 660,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "domain",
+        "value": "ssh.com",
+        "source_file": "smali/dl0.smali",
+        "line_number": 690,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "domain",
+        "value": "ssh.com",
+        "source_file": "smali/dl0.smali",
+        "line_number": 716,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "domain",
+        "value": "www.apache.org",
+        "source_file": "unknown/org/apache/ftpserver/ftpserver.properties",
+        "line_number": 29,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "domain",
+        "value": "www.google.com",
+        "source_file": "smali/kc5.smali",
+        "line_number": 328,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "domain",
+        "value": "zhanghai-materialfiles.appspot.com",
+        "source_file": "res/values/strings.xml",
+        "line_number": 395,
+        "source_apk": "base.apk"
+      }
+    ],
+    "ip_addresses": [
+      {
+        "type": "ip_address",
+        "value": "0.0.0.0",
+        "source_file": "smali/hg2.smali",
+        "line_number": 165,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "0.0.0.0",
+        "source_file": "smali/qg2.smali",
+        "line_number": 287,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "0.15.1.1",
+        "source_file": "smali/ay1.smali",
+        "line_number": 20,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "0.15.1.1",
+        "source_file": "smali/ay1.smali",
+        "line_number": 37,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "0.4.0.127",
+        "source_file": "smali/ay1.smali",
+        "line_number": 20,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "0.4.0.127",
+        "source_file": "smali/ay1.smali",
+        "line_number": 37,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "0.4.0.127",
+        "source_file": "smali/gq.smali",
+        "line_number": 48,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "0.4.0.127",
+        "source_file": "smali/hu0.smali",
+        "line_number": 26,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.1.1.22",
+        "source_file": "smali/j02.smali",
+        "line_number": 304,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.1.2.1",
+        "source_file": "smali/gl1.smali",
+        "line_number": 416,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.1.3.1",
+        "source_file": "smali/je4.smali",
+        "line_number": 217,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.1.3.1",
+        "source_file": "smali/je4.smali",
+        "line_number": 233,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.1.3.1",
+        "source_file": "smali/je4.smali",
+        "line_number": 249,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.1.3.10",
+        "source_file": "smali/je4.smali",
+        "line_number": 607,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.1.3.10",
+        "source_file": "smali/je4.smali",
+        "line_number": 623,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.1.3.10",
+        "source_file": "smali/je4.smali",
+        "line_number": 639,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.1.3.2",
+        "source_file": "smali/je4.smali",
+        "line_number": 265,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.1.3.2",
+        "source_file": "smali/je4.smali",
+        "line_number": 281,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.1.3.2",
+        "source_file": "smali/je4.smali",
+        "line_number": 297,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.1.3.3",
+        "source_file": "smali/je4.smali",
+        "line_number": 313,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.1.3.3",
+        "source_file": "smali/je4.smali",
+        "line_number": 329,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.1.3.3",
+        "source_file": "smali/je4.smali",
+        "line_number": 345,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.1.3.4",
+        "source_file": "smali/je4.smali",
+        "line_number": 361,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.1.3.4",
+        "source_file": "smali/je4.smali",
+        "line_number": 370,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.1.3.4",
+        "source_file": "smali/je4.smali",
+        "line_number": 379,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.1.3.5",
+        "source_file": "smali/je4.smali",
+        "line_number": 388,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.1.3.5",
+        "source_file": "smali/je4.smali",
+        "line_number": 404,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.1.3.5",
+        "source_file": "smali/je4.smali",
+        "line_number": 420,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.1.3.6",
+        "source_file": "smali/je4.smali",
+        "line_number": 436,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.1.3.6",
+        "source_file": "smali/je4.smali",
+        "line_number": 452,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.1.3.6",
+        "source_file": "smali/je4.smali",
+        "line_number": 468,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.1.3.7",
+        "source_file": "smali/je4.smali",
+        "line_number": 484,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.1.3.7",
+        "source_file": "smali/je4.smali",
+        "line_number": 500,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.1.3.7",
+        "source_file": "smali/je4.smali",
+        "line_number": 516,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.1.3.8",
+        "source_file": "smali/je4.smali",
+        "line_number": 532,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.1.3.8",
+        "source_file": "smali/je4.smali",
+        "line_number": 548,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.1.3.8",
+        "source_file": "smali/je4.smali",
+        "line_number": 564,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.1.3.9",
+        "source_file": "smali/je4.smali",
+        "line_number": 580,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.1.3.9",
+        "source_file": "smali/je4.smali",
+        "line_number": 589,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.1.3.9",
+        "source_file": "smali/je4.smali",
+        "line_number": 598,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.10.12.0",
+        "source_file": "smali/vt1.smali",
+        "line_number": 149,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.101.3.4",
+        "source_file": "smali/of2.smali",
+        "line_number": 212,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.101.3.4",
+        "source_file": "smali/org/bouncycastle/jcajce/provider/symmetric/AES$Mappings.smali",
+        "line_number": 98,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.101.3.4",
+        "source_file": "smali/org/bouncycastle/jcajce/provider/symmetric/AES$Mappings.smali",
+        "line_number": 111,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.101.3.4",
+        "source_file": "smali/org/bouncycastle/jcajce/provider/symmetric/AES$Mappings.smali",
+        "line_number": 120,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.101.3.4",
+        "source_file": "smali/org/bouncycastle/jcajce/provider/symmetric/AES$Mappings.smali",
+        "line_number": 311,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.101.3.4",
+        "source_file": "smali/org/bouncycastle/jcajce/provider/symmetric/AES$Mappings.smali",
+        "line_number": 320,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.101.3.4",
+        "source_file": "smali/org/bouncycastle/jcajce/provider/symmetric/AES$Mappings.smali",
+        "line_number": 329,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.101.3.4",
+        "source_file": "smali/org/bouncycastle/jcajce/provider/symmetric/AES$Mappings.smali",
+        "line_number": 443,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.101.3.4",
+        "source_file": "smali/org/bouncycastle/jcajce/provider/symmetric/AES$Mappings.smali",
+        "line_number": 452,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.101.3.4",
+        "source_file": "smali/org/bouncycastle/jcajce/provider/symmetric/AES$Mappings.smali",
+        "line_number": 461,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.101.3.4",
+        "source_file": "smali/org/bouncycastle/jcajce/provider/symmetric/AES$Mappings.smali",
+        "line_number": 1362,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.101.3.4",
+        "source_file": "smali/org/bouncycastle/jcajce/provider/symmetric/AES$Mappings.smali",
+        "line_number": 1382,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.101.3.4",
+        "source_file": "smali/org/bouncycastle/jcajce/provider/symmetric/AES$Mappings.smali",
+        "line_number": 1402,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.12.1.3",
+        "source_file": "smali/org/bouncycastle/jcajce/provider/symmetric/DESede$Mappings.smali",
+        "line_number": 877,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.12.1.3",
+        "source_file": "smali/org/bouncycastle/jcajce/provider/symmetric/DESede$Mappings.smali",
+        "line_number": 904,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.12.1.4",
+        "source_file": "smali/org/bouncycastle/jcajce/provider/symmetric/DESede$Mappings.smali",
+        "line_number": 886,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.12.1.4",
+        "source_file": "smali/org/bouncycastle/jcajce/provider/symmetric/DESede$Mappings.smali",
+        "line_number": 913,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.12.1.5",
+        "source_file": "smali/org/bouncycastle/jcajce/provider/symmetric/RC2$Mappings.smali",
+        "line_number": 350,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.12.1.5",
+        "source_file": "smali/org/bouncycastle/jcajce/provider/symmetric/RC2$Mappings.smali",
+        "line_number": 477,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.12.1.6",
+        "source_file": "smali/org/bouncycastle/jcajce/provider/symmetric/RC2$Mappings.smali",
+        "line_number": 363,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.12.1.6",
+        "source_file": "smali/org/bouncycastle/jcajce/provider/symmetric/RC2$Mappings.smali",
+        "line_number": 490,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.2.156.197",
+        "source_file": "smali/org/bouncycastle/jcajce/provider/digest/SM3$Mappings.smali",
+        "line_number": 101,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.2.2.1",
+        "source_file": "smali/je4.smali",
+        "line_number": 121,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.2.2.2",
+        "source_file": "smali/je4.smali",
+        "line_number": 137,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.2.2.3",
+        "source_file": "smali/je4.smali",
+        "line_number": 153,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.2.2.4",
+        "source_file": "smali/je4.smali",
+        "line_number": 169,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.2.2.5",
+        "source_file": "smali/je4.smali",
+        "line_number": 185,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.2.2.6",
+        "source_file": "smali/je4.smali",
+        "line_number": 201,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.2.250.1",
+        "source_file": "smali/a0.smali",
+        "line_number": 18,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.1.1",
+        "source_file": "smali/je4.smali",
+        "line_number": 89,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.1.1",
+        "source_file": "smali/je4.smali",
+        "line_number": 105,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.101.75",
+        "source_file": "smali/co4.smali",
+        "line_number": 560,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.101.78",
+        "source_file": "smali/co4.smali",
+        "line_number": 578,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.132.0",
+        "source_file": "smali/kp2.smali",
+        "line_number": 49,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.132.0",
+        "source_file": "smali/kp2.smali",
+        "line_number": 73,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.133.16",
+        "source_file": "smali/qo4.smali",
+        "line_number": 736,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.133.16",
+        "source_file": "smali/qo4.smali",
+        "line_number": 847,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.14.3",
+        "source_file": "smali/co4.smali",
+        "line_number": 226,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.14.3",
+        "source_file": "smali/org/bouncycastle/jcajce/provider/asymmetric/DSA$Mappings.smali",
+        "line_number": 517,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.14.3",
+        "source_file": "smali/org/bouncycastle/jcajce/provider/asymmetric/DSA$Mappings.smali",
+        "line_number": 526,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.14.3",
+        "source_file": "smali/tl2.smali",
+        "line_number": 34,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.14.3",
+        "source_file": "smali/tl2.smali",
+        "line_number": 47,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.14.3",
+        "source_file": "smali/tl2.smali",
+        "line_number": 60,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.14.3",
+        "source_file": "smali/tl2.smali",
+        "line_number": 73,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.14.3",
+        "source_file": "smali/tl2.smali",
+        "line_number": 90,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.14.3",
+        "source_file": "smali/tl2.smali",
+        "line_number": 107,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.14.3",
+        "source_file": "smali/tl2.smali",
+        "line_number": 124,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.14.3",
+        "source_file": "smali/tl2.smali",
+        "line_number": 141,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.14.3",
+        "source_file": "smali/tl2.smali",
+        "line_number": 158,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.14.3",
+        "source_file": "smali/tl2.smali",
+        "line_number": 175,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.14.3",
+        "source_file": "smali/tl2.smali",
+        "line_number": 192,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.14.7",
+        "source_file": "smali/tl2.smali",
+        "line_number": 209,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.36.3",
+        "source_file": "smali/co4.smali",
+        "line_number": 246,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.36.3",
+        "source_file": "smali/co4.smali",
+        "line_number": 264,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.36.3",
+        "source_file": "smali/v84.smali",
+        "line_number": 60,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.36.8",
+        "source_file": "smali/bo4.smali",
+        "line_number": 371,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.36.8",
+        "source_file": "smali/bp.smali",
+        "line_number": 431,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.36.8",
+        "source_file": "smali/vt1.smali",
+        "line_number": 18,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/ai2.smali",
+        "line_number": 25,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/bl2.smali",
+        "line_number": 81,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/bo4.smali",
+        "line_number": 286,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/bo4.smali",
+        "line_number": 303,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/bo4.smali",
+        "line_number": 320,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/bo4.smali",
+        "line_number": 337,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/bo4.smali",
+        "line_number": 354,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/bp.smali",
+        "line_number": 575,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/bp.smali",
+        "line_number": 592,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/bp.smali",
+        "line_number": 609,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/bq2.smali",
+        "line_number": 24,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/bq2.smali",
+        "line_number": 82,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/bq2.smali",
+        "line_number": 120,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/bq2.smali",
+        "line_number": 133,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/bq2.smali",
+        "line_number": 146,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/bq2.smali",
+        "line_number": 159,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/bq2.smali",
+        "line_number": 172,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/co4.smali",
+        "line_number": 307,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/co4.smali",
+        "line_number": 519,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/cs1.smali",
+        "line_number": 92,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/dm2.smali",
+        "line_number": 19,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/il1.smali",
+        "line_number": 44,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/il1.smali",
+        "line_number": 57,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/il1.smali",
+        "line_number": 70,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/il1.smali",
+        "line_number": 83,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/il1.smali",
+        "line_number": 96,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/il1.smali",
+        "line_number": 109,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/il1.smali",
+        "line_number": 122,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/il1.smali",
+        "line_number": 139,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/il1.smali",
+        "line_number": 152,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/il1.smali",
+        "line_number": 169,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/il1.smali",
+        "line_number": 186,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/il1.smali",
+        "line_number": 203,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/il1.smali",
+        "line_number": 220,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/il1.smali",
+        "line_number": 237,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/il1.smali",
+        "line_number": 254,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/il1.smali",
+        "line_number": 271,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/il1.smali",
+        "line_number": 288,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/il1.smali",
+        "line_number": 305,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/il1.smali",
+        "line_number": 322,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/il1.smali",
+        "line_number": 339,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/il1.smali",
+        "line_number": 356,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/il1.smali",
+        "line_number": 373,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/il1.smali",
+        "line_number": 386,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/il1.smali",
+        "line_number": 399,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/j02.smali",
+        "line_number": 291,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/j02.smali",
+        "line_number": 304,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/j02.smali",
+        "line_number": 317,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/nd0.smali",
+        "line_number": 18,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/no.smali",
+        "line_number": 586,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/no.smali",
+        "line_number": 2458,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/no.smali",
+        "line_number": 2475,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/no.smali",
+        "line_number": 2492,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/no.smali",
+        "line_number": 2509,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/no.smali",
+        "line_number": 2522,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/no.smali",
+        "line_number": 2535,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/org/bouncycastle/jcajce/provider/symmetric/IDEA$Mappings.smali",
+        "line_number": 91,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/org/bouncycastle/jcajce/provider/symmetric/IDEA$Mappings.smali",
+        "line_number": 103,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/p31.smali",
+        "line_number": 463,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/p31.smali",
+        "line_number": 483,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/p31.smali",
+        "line_number": 501,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/p31.smali",
+        "line_number": 519,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/p31.smali",
+        "line_number": 537,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/p31.smali",
+        "line_number": 555,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/v14.smali",
+        "line_number": 44,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/x14.smali",
+        "line_number": 55,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/y4.smali",
+        "line_number": 24,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/y4.smali",
+        "line_number": 37,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/yd2.smali",
+        "line_number": 269,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/yd2.smali",
+        "line_number": 282,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/yd2.smali",
+        "line_number": 299,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/yd2.smali",
+        "line_number": 384,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/yd2.smali",
+        "line_number": 545,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/yd2.smali",
+        "line_number": 562,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/zk2.smali",
+        "line_number": 50,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/zn4.smali",
+        "line_number": 317,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/zn4.smali",
+        "line_number": 330,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/zn4.smali",
+        "line_number": 343,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/zn4.smali",
+        "line_number": 356,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/zn4.smali",
+        "line_number": 369,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/zn4.smali",
+        "line_number": 382,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.3.6.1",
+        "source_file": "smali/zn4.smali",
+        "line_number": 395,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.8.0.10",
+        "source_file": "unknown/org/apache/ftpserver/ftpserver.properties",
+        "line_number": 18,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.9.16.0",
+        "source_file": "smali/mp2.smali",
+        "line_number": 1359,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.9.16.0",
+        "source_file": "smali/mp2.smali",
+        "line_number": 1372,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.9.16.0",
+        "source_file": "smali/mp2.smali",
+        "line_number": 1385,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "1.9.4.1",
+        "source_file": "smali/yd2.smali",
+        "line_number": 214,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "127.0.0.1",
+        "source_file": "smali/nk0.smali",
+        "line_number": 624,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "127.0.0.1",
+        "source_file": "smali/qg2.smali",
+        "line_number": 358,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.1.1.1",
+        "source_file": "smali/je4.smali",
+        "line_number": 80,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.1.1",
+        "source_file": "smali/r93.smali",
+        "line_number": 357,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.29.14",
+        "source_file": "smali/p31.smali",
+        "line_number": 80,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.29.14",
+        "source_file": "smali/zn4.smali",
+        "line_number": 31,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.29.15",
+        "source_file": "smali/p31.smali",
+        "line_number": 98,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.29.15",
+        "source_file": "smali/zn4.smali",
+        "line_number": 44,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.29.16",
+        "source_file": "smali/p31.smali",
+        "line_number": 123,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.29.16",
+        "source_file": "smali/zn4.smali",
+        "line_number": 57,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.29.17",
+        "source_file": "smali/p31.smali",
+        "line_number": 141,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.29.17",
+        "source_file": "smali/zn4.smali",
+        "line_number": 70,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.29.18",
+        "source_file": "smali/p31.smali",
+        "line_number": 162,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.29.18",
+        "source_file": "smali/zn4.smali",
+        "line_number": 83,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.29.19",
+        "source_file": "smali/p31.smali",
+        "line_number": 178,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.29.19",
+        "source_file": "smali/zn4.smali",
+        "line_number": 96,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.29.20",
+        "source_file": "smali/p31.smali",
+        "line_number": 194,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.29.20",
+        "source_file": "smali/zn4.smali",
+        "line_number": 109,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.29.21",
+        "source_file": "smali/p31.smali",
+        "line_number": 210,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.29.21",
+        "source_file": "smali/zn4.smali",
+        "line_number": 122,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.29.23",
+        "source_file": "smali/p31.smali",
+        "line_number": 230,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.29.23",
+        "source_file": "smali/zn4.smali",
+        "line_number": 135,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.29.24",
+        "source_file": "smali/p31.smali",
+        "line_number": 248,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.29.24",
+        "source_file": "smali/zn4.smali",
+        "line_number": 148,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.29.27",
+        "source_file": "smali/p31.smali",
+        "line_number": 266,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.29.27",
+        "source_file": "smali/zn4.smali",
+        "line_number": 161,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.29.28",
+        "source_file": "smali/p31.smali",
+        "line_number": 287,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.29.28",
+        "source_file": "smali/zn4.smali",
+        "line_number": 174,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.29.29",
+        "source_file": "smali/p31.smali",
+        "line_number": 303,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.29.29",
+        "source_file": "smali/zn4.smali",
+        "line_number": 187,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.29.30",
+        "source_file": "smali/p31.smali",
+        "line_number": 319,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.29.30",
+        "source_file": "smali/zn4.smali",
+        "line_number": 200,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.29.31",
+        "source_file": "smali/p31.smali",
+        "line_number": 335,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.29.31",
+        "source_file": "smali/zn4.smali",
+        "line_number": 213,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.29.32",
+        "source_file": "smali/org/bouncycastle/jce/provider/CertPathValidatorUtilities.smali",
+        "line_number": 5038,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.29.32",
+        "source_file": "smali/org/bouncycastle/jce/provider/CertPathValidatorUtilities.smali",
+        "line_number": 5387,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.29.32",
+        "source_file": "smali/org/bouncycastle/jce/provider/PKIXCertPathValidatorSpi.smali",
+        "line_number": 494,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.29.32",
+        "source_file": "smali/org/bouncycastle/jce/provider/PKIXCertPathValidatorSpi.smali",
+        "line_number": 525,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.29.32",
+        "source_file": "smali/org/bouncycastle/jce/provider/PKIXCertPathValidatorSpi_8.smali",
+        "line_number": 689,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.29.32",
+        "source_file": "smali/org/bouncycastle/jce/provider/PKIXCertPathValidatorSpi_8.smali",
+        "line_number": 720,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.29.32",
+        "source_file": "smali/org/bouncycastle/jce/provider/RFC3280CertPathUtilities.smali",
+        "line_number": 2693,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.29.32",
+        "source_file": "smali/org/bouncycastle/jce/provider/RFC3280CertPathUtilities.smali",
+        "line_number": 3107,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.29.32",
+        "source_file": "smali/org/bouncycastle/jce/provider/RFC3280CertPathUtilities.smali",
+        "line_number": 7404,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.29.32",
+        "source_file": "smali/org/bouncycastle/jce/provider/RFC3280CertPathUtilities.smali",
+        "line_number": 8570,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.29.32",
+        "source_file": "smali/p31.smali",
+        "line_number": 351,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.29.32",
+        "source_file": "smali/zn4.smali",
+        "line_number": 226,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.29.33",
+        "source_file": "smali/p31.smali",
+        "line_number": 367,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.29.33",
+        "source_file": "smali/zn4.smali",
+        "line_number": 239,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.29.35",
+        "source_file": "smali/p31.smali",
+        "line_number": 383,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.29.35",
+        "source_file": "smali/zn4.smali",
+        "line_number": 252,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.29.36",
+        "source_file": "smali/p31.smali",
+        "line_number": 399,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.29.36",
+        "source_file": "smali/zn4.smali",
+        "line_number": 265,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.29.37",
+        "source_file": "smali/p31.smali",
+        "line_number": 415,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.29.37",
+        "source_file": "smali/zn4.smali",
+        "line_number": 278,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.29.46",
+        "source_file": "smali/p31.smali",
+        "line_number": 431,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.29.46",
+        "source_file": "smali/zn4.smali",
+        "line_number": 291,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.29.54",
+        "source_file": "smali/p31.smali",
+        "line_number": 447,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.29.54",
+        "source_file": "smali/zn4.smali",
+        "line_number": 304,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.29.55",
+        "source_file": "smali/p31.smali",
+        "line_number": 591,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.29.55",
+        "source_file": "smali/zn4.smali",
+        "line_number": 421,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.29.56",
+        "source_file": "smali/p31.smali",
+        "line_number": 573,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.29.56",
+        "source_file": "smali/zn4.smali",
+        "line_number": 408,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.29.60",
+        "source_file": "smali/p31.smali",
+        "line_number": 604,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.29.72",
+        "source_file": "smali/p31.smali",
+        "line_number": 622,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.29.73",
+        "source_file": "smali/p31.smali",
+        "line_number": 640,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.29.74",
+        "source_file": "smali/p31.smali",
+        "line_number": 658,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.29.9",
+        "source_file": "smali/p31.smali",
+        "line_number": 62,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.29.9",
+        "source_file": "smali/zn4.smali",
+        "line_number": 18,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.10",
+        "source_file": "smali/bo4.smali",
+        "line_number": 49,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.10",
+        "source_file": "smali/bp.smali",
+        "line_number": 36,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.10",
+        "source_file": "smali/i03.smali",
+        "line_number": 248,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.11",
+        "source_file": "smali/bo4.smali",
+        "line_number": 62,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.11",
+        "source_file": "smali/bp.smali",
+        "line_number": 48,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.11",
+        "source_file": "smali/i03.smali",
+        "line_number": 264,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.12",
+        "source_file": "smali/bo4.smali",
+        "line_number": 75,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.12",
+        "source_file": "smali/bp.smali",
+        "line_number": 60,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.12",
+        "source_file": "smali/i03.smali",
+        "line_number": 556,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.13",
+        "source_file": "smali/bp.smali",
+        "line_number": 215,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.13",
+        "source_file": "smali/i03.smali",
+        "line_number": 72,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.14",
+        "source_file": "smali/i03.smali",
+        "line_number": 408,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.15",
+        "source_file": "smali/bo4.smali",
+        "line_number": 218,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.15",
+        "source_file": "smali/bp.smali",
+        "line_number": 227,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.15",
+        "source_file": "smali/i03.smali",
+        "line_number": 24,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.16",
+        "source_file": "smali/bo4.smali",
+        "line_number": 388,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.16",
+        "source_file": "smali/bp.smali",
+        "line_number": 443,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.16",
+        "source_file": "smali/i03.smali",
+        "line_number": 312,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.17",
+        "source_file": "smali/bo4.smali",
+        "line_number": 235,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.17",
+        "source_file": "smali/bp.smali",
+        "line_number": 239,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.17",
+        "source_file": "smali/i03.smali",
+        "line_number": 328,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.18",
+        "source_file": "smali/i03.smali",
+        "line_number": 344,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.19",
+        "source_file": "smali/i03.smali",
+        "line_number": 296,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.20",
+        "source_file": "smali/i03.smali",
+        "line_number": 508,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.21",
+        "source_file": "smali/i03.smali",
+        "line_number": 540,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.22",
+        "source_file": "smali/i03.smali",
+        "line_number": 524,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.23",
+        "source_file": "smali/i03.smali",
+        "line_number": 132,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.24",
+        "source_file": "smali/i03.smali",
+        "line_number": 620,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.25",
+        "source_file": "smali/i03.smali",
+        "line_number": 192,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.26",
+        "source_file": "smali/i03.smali",
+        "line_number": 376,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.27",
+        "source_file": "smali/i03.smali",
+        "line_number": 84,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.28",
+        "source_file": "smali/i03.smali",
+        "line_number": 360,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.3",
+        "source_file": "smali/bo4.smali",
+        "line_number": 88,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.3",
+        "source_file": "smali/bp.smali",
+        "line_number": 72,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.3",
+        "source_file": "smali/i03.smali",
+        "line_number": 48,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.31",
+        "source_file": "smali/i03.smali",
+        "line_number": 216,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.32",
+        "source_file": "smali/i03.smali",
+        "line_number": 280,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.33",
+        "source_file": "smali/i03.smali",
+        "line_number": 392,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.34",
+        "source_file": "smali/i03.smali",
+        "line_number": 424,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.35",
+        "source_file": "smali/i03.smali",
+        "line_number": 604,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.4",
+        "source_file": "smali/bo4.smali",
+        "line_number": 153,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.4",
+        "source_file": "smali/bp.smali",
+        "line_number": 155,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.4",
+        "source_file": "smali/i03.smali",
+        "line_number": 460,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.41",
+        "source_file": "smali/i03.smali",
+        "line_number": 232,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.42",
+        "source_file": "smali/bo4.smali",
+        "line_number": 166,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.42",
+        "source_file": "smali/bp.smali",
+        "line_number": 167,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.42",
+        "source_file": "smali/i03.smali",
+        "line_number": 156,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.43",
+        "source_file": "smali/bo4.smali",
+        "line_number": 179,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.43",
+        "source_file": "smali/bp.smali",
+        "line_number": 179,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.43",
+        "source_file": "smali/i03.smali",
+        "line_number": 180,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.44",
+        "source_file": "smali/bo4.smali",
+        "line_number": 192,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.44",
+        "source_file": "smali/bp.smali",
+        "line_number": 191,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.44",
+        "source_file": "smali/i03.smali",
+        "line_number": 144,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.45",
+        "source_file": "smali/bo4.smali",
+        "line_number": 205,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.45",
+        "source_file": "smali/bp.smali",
+        "line_number": 203,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.45",
+        "source_file": "smali/i03.smali",
+        "line_number": 636,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.46",
+        "source_file": "smali/bo4.smali",
+        "line_number": 252,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.46",
+        "source_file": "smali/bp.smali",
+        "line_number": 255,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.46",
+        "source_file": "smali/i03.smali",
+        "line_number": 108,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.47",
+        "source_file": "smali/i03.smali",
+        "line_number": 120,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.49",
+        "source_file": "smali/i03.smali",
+        "line_number": 96,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.5",
+        "source_file": "smali/bo4.smali",
+        "line_number": 101,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.5",
+        "source_file": "smali/bp.smali",
+        "line_number": 88,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.5",
+        "source_file": "smali/i03.smali",
+        "line_number": 440,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.50",
+        "source_file": "smali/i03.smali",
+        "line_number": 588,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.51",
+        "source_file": "smali/i03.smali",
+        "line_number": 168,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.54",
+        "source_file": "smali/bo4.smali",
+        "line_number": 405,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.54",
+        "source_file": "smali/bp.smali",
+        "line_number": 471,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.6",
+        "source_file": "smali/bo4.smali",
+        "line_number": 36,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.6",
+        "source_file": "smali/bp.smali",
+        "line_number": 24,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.6",
+        "source_file": "smali/i03.smali",
+        "line_number": 36,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.65",
+        "source_file": "smali/bo4.smali",
+        "line_number": 269,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.65",
+        "source_file": "smali/bp.smali",
+        "line_number": 271,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.7",
+        "source_file": "smali/bo4.smali",
+        "line_number": 127,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.7",
+        "source_file": "smali/bp.smali",
+        "line_number": 131,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.7",
+        "source_file": "smali/i03.smali",
+        "line_number": 204,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.72",
+        "source_file": "smali/bp.smali",
+        "line_number": 287,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.8",
+        "source_file": "smali/bo4.smali",
+        "line_number": 140,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.8",
+        "source_file": "smali/bp.smali",
+        "line_number": 143,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.8",
+        "source_file": "smali/i03.smali",
+        "line_number": 476,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.9",
+        "source_file": "smali/bo4.smali",
+        "line_number": 114,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.9",
+        "source_file": "smali/bp.smali",
+        "line_number": 106,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.4.9",
+        "source_file": "smali/i03.smali",
+        "line_number": 492,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "2.5.8.1",
+        "source_file": "smali/co4.smali",
+        "line_number": 282,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "255.255.255.255",
+        "source_file": "smali/dx2.smali",
+        "line_number": 2776,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "3.1.2.1",
+        "source_file": "smali/hu0.smali",
+        "line_number": 237,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "3.1.3.3",
+        "source_file": "smali/bq2.smali",
+        "line_number": 82,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "3.1.3.4",
+        "source_file": "smali/bq2.smali",
+        "line_number": 120,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "3.1.3.4",
+        "source_file": "smali/bq2.smali",
+        "line_number": 133,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "3.1.3.4",
+        "source_file": "smali/bq2.smali",
+        "line_number": 146,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "3.1.3.4",
+        "source_file": "smali/bq2.smali",
+        "line_number": 159,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "3.1.3.4",
+        "source_file": "smali/bq2.smali",
+        "line_number": 172,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "3.1.3.5",
+        "source_file": "smali/bq2.smali",
+        "line_number": 24,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "4.1.188.7",
+        "source_file": "smali/org/bouncycastle/jcajce/provider/symmetric/IDEA$Mappings.smali",
+        "line_number": 91,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "4.1.188.7",
+        "source_file": "smali/org/bouncycastle/jcajce/provider/symmetric/IDEA$Mappings.smali",
+        "line_number": 103,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "4.1.188.7",
+        "source_file": "smali/yd2.smali",
+        "line_number": 282,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "4.2.1.10",
+        "source_file": "unknown/org/bouncycastle/pkix/CertPathReviewerMessages.properties",
+        "line_number": 68,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "4.2.1.10",
+        "source_file": "unknown/org/bouncycastle/pkix/CertPathReviewerMessages.properties",
+        "line_number": 70,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "4.2.1.10",
+        "source_file": "unknown/org/bouncycastle/x509/CertPathReviewerMessages.properties",
+        "line_number": 68,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "4.2.1.10",
+        "source_file": "unknown/org/bouncycastle/x509/CertPathReviewerMessages.properties",
+        "line_number": 70,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "5.5.7.1",
+        "source_file": "smali/p31.smali",
+        "line_number": 463,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "5.5.7.1",
+        "source_file": "smali/p31.smali",
+        "line_number": 483,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "5.5.7.1",
+        "source_file": "smali/p31.smali",
+        "line_number": 501,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "5.5.7.1",
+        "source_file": "smali/p31.smali",
+        "line_number": 519,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "5.5.7.1",
+        "source_file": "smali/p31.smali",
+        "line_number": 537,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "5.5.7.1",
+        "source_file": "smali/p31.smali",
+        "line_number": 555,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "5.5.7.1",
+        "source_file": "smali/zn4.smali",
+        "line_number": 317,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "5.5.7.1",
+        "source_file": "smali/zn4.smali",
+        "line_number": 330,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "5.5.7.1",
+        "source_file": "smali/zn4.smali",
+        "line_number": 343,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "5.5.7.1",
+        "source_file": "smali/zn4.smali",
+        "line_number": 356,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "5.5.7.1",
+        "source_file": "smali/zn4.smali",
+        "line_number": 369,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "5.5.7.1",
+        "source_file": "smali/zn4.smali",
+        "line_number": 382,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "5.5.7.25",
+        "source_file": "smali/zn4.smali",
+        "line_number": 395,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "5.5.7.48",
+        "source_file": "smali/y4.smali",
+        "line_number": 24,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "5.5.7.48",
+        "source_file": "smali/y4.smali",
+        "line_number": 37,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "5.5.7.6",
+        "source_file": "smali/cs1.smali",
+        "line_number": 273,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "5.5.7.9",
+        "source_file": "smali/bo4.smali",
+        "line_number": 286,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "5.5.7.9",
+        "source_file": "smali/bo4.smali",
+        "line_number": 303,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "5.5.7.9",
+        "source_file": "smali/bo4.smali",
+        "line_number": 320,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "5.5.7.9",
+        "source_file": "smali/bo4.smali",
+        "line_number": 337,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "5.5.7.9",
+        "source_file": "smali/bo4.smali",
+        "line_number": 354,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "5.5.8.1",
+        "source_file": "smali/yd2.smali",
+        "line_number": 269,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "51.178.56.19",
+        "source_file": "unknown/org/apache/ftpserver/ftpserver.properties",
+        "line_number": 36,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "6.1.4.2",
+        "source_file": "smali/gl1.smali",
+        "line_number": 797,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "6.1.4.4",
+        "source_file": "smali/gl1.smali",
+        "line_number": 863,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "60.2.1.1",
+        "source_file": "smali/bp.smali",
+        "line_number": 609,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "60.2.1.2",
+        "source_file": "smali/bp.smali",
+        "line_number": 592,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "60.2.1.3",
+        "source_file": "smali/bp.smali",
+        "line_number": 575,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "61.1.1.1",
+        "source_file": "smali/gg2.smali",
+        "line_number": 28,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "61.1.1.1",
+        "source_file": "smali/gg2.smali",
+        "line_number": 45,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "61.1.1.1",
+        "source_file": "smali/gg2.smali",
+        "line_number": 62,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "61.1.1.3",
+        "source_file": "smali/gg2.smali",
+        "line_number": 79,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "61.1.1.3",
+        "source_file": "smali/gg2.smali",
+        "line_number": 96,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "61.1.1.3",
+        "source_file": "smali/gg2.smali",
+        "line_number": 113,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "7.1.1.1",
+        "source_file": "smali/sz1.smali",
+        "line_number": 69,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "80.5.1.1",
+        "source_file": "smali/bq2.smali",
+        "line_number": 217,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "80.5.1.10",
+        "source_file": "smali/bq2.smali",
+        "line_number": 334,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "80.5.1.2",
+        "source_file": "smali/bq2.smali",
+        "line_number": 230,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "80.5.1.3",
+        "source_file": "smali/bq2.smali",
+        "line_number": 243,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "80.5.1.4",
+        "source_file": "smali/bq2.smali",
+        "line_number": 256,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "80.5.1.5",
+        "source_file": "smali/bq2.smali",
+        "line_number": 269,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "80.5.1.6",
+        "source_file": "smali/bq2.smali",
+        "line_number": 282,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "80.5.1.7",
+        "source_file": "smali/bq2.smali",
+        "line_number": 295,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "80.5.1.8",
+        "source_file": "smali/bq2.smali",
+        "line_number": 308,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "80.5.1.9",
+        "source_file": "smali/bq2.smali",
+        "line_number": 321,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "80.8.1.1",
+        "source_file": "smali/no.smali",
+        "line_number": 2574,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "80.8.1.10",
+        "source_file": "smali/no.smali",
+        "line_number": 2704,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "80.8.1.11",
+        "source_file": "smali/no.smali",
+        "line_number": 2730,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "80.8.1.12",
+        "source_file": "smali/no.smali",
+        "line_number": 2743,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "80.8.1.13",
+        "source_file": "smali/no.smali",
+        "line_number": 2756,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "80.8.1.2",
+        "source_file": "smali/no.smali",
+        "line_number": 2587,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "80.8.1.3",
+        "source_file": "smali/no.smali",
+        "line_number": 2600,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "80.8.1.4",
+        "source_file": "smali/no.smali",
+        "line_number": 2613,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "80.8.1.5",
+        "source_file": "smali/no.smali",
+        "line_number": 2626,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "80.8.1.6",
+        "source_file": "smali/no.smali",
+        "line_number": 2652,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "80.8.1.7",
+        "source_file": "smali/no.smali",
+        "line_number": 2665,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "80.8.1.8",
+        "source_file": "smali/no.smali",
+        "line_number": 2678,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "80.8.1.9",
+        "source_file": "smali/no.smali",
+        "line_number": 2691,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "80.9.1.0",
+        "source_file": "smali/no.smali",
+        "line_number": 2769,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "80.9.1.0",
+        "source_file": "smali/yd2.smali",
+        "line_number": 786,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "80.9.1.1",
+        "source_file": "smali/no.smali",
+        "line_number": 2782,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "80.9.1.1",
+        "source_file": "smali/yd2.smali",
+        "line_number": 799,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "80.9.1.10",
+        "source_file": "smali/no.smali",
+        "line_number": 2899,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "80.9.1.10",
+        "source_file": "smali/yd2.smali",
+        "line_number": 916,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "80.9.1.11",
+        "source_file": "smali/no.smali",
+        "line_number": 2912,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "80.9.1.11",
+        "source_file": "smali/yd2.smali",
+        "line_number": 929,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "80.9.1.12",
+        "source_file": "smali/no.smali",
+        "line_number": 2925,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "80.9.1.12",
+        "source_file": "smali/yd2.smali",
+        "line_number": 942,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "80.9.1.13",
+        "source_file": "smali/no.smali",
+        "line_number": 2938,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "80.9.1.13",
+        "source_file": "smali/yd2.smali",
+        "line_number": 955,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "80.9.1.14",
+        "source_file": "smali/no.smali",
+        "line_number": 2951,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "80.9.1.14",
+        "source_file": "smali/yd2.smali",
+        "line_number": 968,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "80.9.1.15",
+        "source_file": "smali/no.smali",
+        "line_number": 2964,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "80.9.1.15",
+        "source_file": "smali/yd2.smali",
+        "line_number": 981,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "80.9.1.16",
+        "source_file": "smali/no.smali",
+        "line_number": 2977,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "80.9.1.16",
+        "source_file": "smali/yd2.smali",
+        "line_number": 994,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "80.9.1.17",
+        "source_file": "smali/no.smali",
+        "line_number": 2990,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "80.9.1.17",
+        "source_file": "smali/yd2.smali",
+        "line_number": 1007,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "80.9.1.2",
+        "source_file": "smali/no.smali",
+        "line_number": 2795,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "80.9.1.2",
+        "source_file": "smali/yd2.smali",
+        "line_number": 812,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "80.9.1.3",
+        "source_file": "smali/no.smali",
+        "line_number": 2808,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "80.9.1.3",
+        "source_file": "smali/yd2.smali",
+        "line_number": 825,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "80.9.1.4",
+        "source_file": "smali/no.smali",
+        "line_number": 2821,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "80.9.1.4",
+        "source_file": "smali/yd2.smali",
+        "line_number": 838,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "80.9.1.5",
+        "source_file": "smali/no.smali",
+        "line_number": 2834,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "80.9.1.5",
+        "source_file": "smali/yd2.smali",
+        "line_number": 851,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "80.9.1.6",
+        "source_file": "smali/no.smali",
+        "line_number": 2847,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "80.9.1.6",
+        "source_file": "smali/yd2.smali",
+        "line_number": 864,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "80.9.1.7",
+        "source_file": "smali/no.smali",
+        "line_number": 2860,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "80.9.1.7",
+        "source_file": "smali/yd2.smali",
+        "line_number": 877,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "80.9.1.8",
+        "source_file": "smali/no.smali",
+        "line_number": 2873,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "80.9.1.8",
+        "source_file": "smali/yd2.smali",
+        "line_number": 890,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "80.9.1.9",
+        "source_file": "smali/no.smali",
+        "line_number": 2886,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "ip_address",
+        "value": "80.9.1.9",
+        "source_file": "smali/yd2.smali",
+        "line_number": 903,
+        "source_apk": "base.apk"
+      }
+    ],
+    "path_candidates": [
+      {
+        "type": "path_candidate",
+        "value": "/CBC",
+        "source_file": "smali/jw.smali",
+        "line_number": 109,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "path_candidate",
+        "value": "/CCM",
+        "source_file": "smali/mw.smali",
+        "line_number": 1167,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "path_candidate",
+        "value": "/CCM",
+        "source_file": "smali/org/bouncycastle/jcajce/provider/symmetric/util/BaseBlockCipher.smali",
+        "line_number": 1676,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "path_candidate",
+        "value": "/CFB",
+        "source_file": "smali/rw.smali",
+        "line_number": 384,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "path_candidate",
+        "value": "/CFB",
+        "source_file": "smali/sw.smali",
+        "line_number": 310,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "path_candidate",
+        "value": "/EAX",
+        "source_file": "smali/iu0.smali",
+        "line_number": 874,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "path_candidate",
+        "value": "/ECB/NoPadding",
+        "source_file": "smali/i44.smali",
+        "line_number": 60,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "path_candidate",
+        "value": "/GCM",
+        "source_file": "smali/yk1.smali",
+        "line_number": 2037,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "path_candidate",
+        "value": "/GCTR",
+        "source_file": "smali/jl1.smali",
+        "line_number": 509,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "path_candidate",
+        "value": "/GOv0GOo1GO",
+        "source_file": "smali/oq4.smali",
+        "line_number": 1857,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "path_candidate",
+        "value": "/GPv0GPo1GP",
+        "source_file": "smali/oq4.smali",
+        "line_number": 1857,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "path_candidate",
+        "value": "/HMAC",
+        "source_file": "smali/mm2.smali",
+        "line_number": 156,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "path_candidate",
+        "value": "/HMAC",
+        "source_file": "smali/vo1.smali",
+        "line_number": 519,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "path_candidate",
+        "value": "/IPC",
+        "source_file": "smali/nk0.smali",
+        "line_number": 772,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "path_candidate",
+        "value": "/KCCM",
+        "source_file": "smali/gz1.smali",
+        "line_number": 1765,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "path_candidate",
+        "value": "/KCTR",
+        "source_file": "smali/hz1.smali",
+        "line_number": 258,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "path_candidate",
+        "value": "/KGCM",
+        "source_file": "smali/pz1.smali",
+        "line_number": 1100,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "path_candidate",
+        "value": "/NoPadding",
+        "source_file": "smali/ft.smali",
+        "line_number": 98,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "path_candidate",
+        "value": "/OCB",
+        "source_file": "smali/ol2.smali",
+        "line_number": 1277,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "path_candidate",
+        "value": "/OFB",
+        "source_file": "smali/sl2.smali",
+        "line_number": 281,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "path_candidate",
+        "value": "/OpenPGPCFB",
+        "source_file": "smali/tn2.smali",
+        "line_number": 81,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "path_candidate",
+        "value": "/PGPCFB",
+        "source_file": "smali/bp2.smali",
+        "line_number": 110,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "path_candidate",
+        "value": "/PGPCFBwithIV",
+        "source_file": "smali/bp2.smali",
+        "line_number": 93,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "path_candidate",
+        "value": "/PI",
+        "source_file": "smali/oq4.smali",
+        "line_number": 1857,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "path_candidate",
+        "value": "/RFC3211Wrap",
+        "source_file": "smali/zq0.smali",
+        "line_number": 820,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "path_candidate",
+        "value": "/RSA",
+        "source_file": "smali/org/bouncycastle/jcajce/provider/asymmetric/RSA$Mappings.smali",
+        "line_number": 69,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "path_candidate",
+        "value": "/SIC",
+        "source_file": "smali/cb3.smali",
+        "line_number": 594,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "path_candidate",
+        "value": "/authTokens",
+        "source_file": "smali/rd1.smali",
+        "line_number": 838,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "path_candidate",
+        "value": "/ftp.dat",
+        "source_file": "smali/jh3.smali",
+        "line_number": 137,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "path_candidate",
+        "value": "/hG",
+        "source_file": "smali/oq4.smali",
+        "line_number": 1857,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "path_candidate",
+        "value": "/installations",
+        "source_file": "smali/rd1.smali",
+        "line_number": 2697,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "path_candidate",
+        "value": "/installations/",
+        "source_file": "smali/rd1.smali",
+        "line_number": 824,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "path_candidate",
+        "value": "/lib/",
+        "source_file": "smali/com/google/firebase/crashlytics/ndk/JniNativeApi.smali",
+        "line_number": 831,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "path_candidate",
+        "value": "/settings",
+        "source_file": "smali/t7.smali",
+        "line_number": 3961,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "path_candidate",
+        "value": "/verified-splits",
+        "source_file": "smali/com/google/firebase/crashlytics/ndk/JniNativeApi.smali",
+        "line_number": 211,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "path_candidate",
+        "value": "/y--",
+        "source_file": "smali/oq4.smali",
+        "line_number": 1857,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "path_candidate",
+        "value": "/y--0x--",
+        "source_file": "smali/oq4.smali",
+        "line_number": 1857,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "path_candidate",
+        "value": "/y--0x--7y--8x--",
+        "source_file": "smali/oq4.smali",
+        "line_number": 1857,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "path_candidate",
+        "value": "/y--1x--",
+        "source_file": "smali/oq4.smali",
+        "line_number": 1857,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "path_candidate",
+        "value": "/ze-1",
+        "source_file": "smali/oq4.smali",
+        "line_number": 1857,
+        "source_apk": "base.apk"
+      }
+    ],
+    "local_file_urls": [
+      {
+        "type": "local_file_url",
+        "value": "file:///android_asset/",
+        "source_file": "smali/com/davemorrissey/labs/subscaleview/ImageSource.smali",
+        "line_number": 225,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "local_file_url",
+        "value": "file:///android_asset/",
+        "source_file": "smali/com/davemorrissey/labs/subscaleview/SubsamplingScaleImageView.smali",
+        "line_number": 4095,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "local_file_url",
+        "value": "file:///android_asset/",
+        "source_file": "smali/com/davemorrissey/labs/subscaleview/decoder/SkiaImageDecoder.smali",
+        "line_number": 347,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "local_file_url",
+        "value": "file:///android_asset/",
+        "source_file": "smali/com/davemorrissey/labs/subscaleview/decoder/SkiaImageRegionDecoder.smali",
+        "line_number": 538,
+        "source_apk": "base.apk"
+      },
+      {
+        "type": "local_file_url",
+        "value": "file:///android_asset/",
+        "source_file": "smali/com/davemorrissey/labs/subscaleview/decoder/SkiaPooledImageRegionDecoder.smali",
+        "line_number": 645,
+        "source_apk": "base.apk"
+      }
+    ],
+    "total_count": 666
+  },
+  "api_candidates": [],
+  "vulnerabilities": {
+    "risk_score": "HIGH",
+    "summary": {
+      "critical": 0,
+      "high": 1,
+      "medium": 2,
+      "low": 1,
+      "total": 4
+    },
+    "findings": [
+      {
+        "id": "SEC-NET-01",
+        "title": "Cleartext HTTP Traffic Permitted",
+        "severity": "HIGH",
+        "owasp_category": "M3: Insecure Communication",
+        "masvs_id": "MASVS-NETWORK-1",
+        "cwe_id": "CWE-319: Cleartext Transmission of Sensitive Information",
+        "description": "The application allows unencrypted HTTP network communication. Traffic sent over plaintext HTTP can be intercepted, read, or modified by adversaries via Man-in-the-Middle (MitM) attacks.",
+        "evidence": "31 unencrypted HTTP URLs discovered in code (e.g., http://apache.org/dav/propset/fs/1, http://apple.com/ns/ical/, http://calendarserver.org/ns/, http://calendarserver.org/ns/, http://calendarserver.org/ns/)",
+        "remediation": "Enforce HTTPS for all network endpoints. Configure Android Network Security Configuration (res/xml/network_security_config.xml) with cleartextTrafficPermitted=\"false\" and ensure TLS 1.2+ is required.",
+        "affected_items": [
+          "http://apache.org/dav/propset/fs/1",
+          "http://apple.com/ns/ical/",
+          "http://calendarserver.org/ns/",
+          "http://calendarserver.org/ns/",
+          "http://calendarserver.org/ns/",
+          "http://calendarserver.org/ns/",
+          "http://calendarserver.org/ns/",
+          "http://mozilla.org/MPL/1.1/.",
+          "http://mozilla.org/MPL/2.0/.",
+          "http://ns.adobe.com/xap/1.0/\\u0000",
+          "http://psdev.de/LicensesDialog",
+          "http://www.apache.org/licenses/",
+          "http://www.apache.org/licenses/",
+          "http://www.apache.org/licenses/",
+          "http://www.apache.org/licenses/",
+          "http://www.apache.org/licenses/",
+          "http://www.apache.org/licenses/LICENSE-2.0",
+          "http://www.apache.org/licenses/LICENSE-2.0",
+          "http://www.apache.org/licenses/LICENSE-2.0",
+          "http://www.apache.org/licenses/LICENSE-2.0"
+        ]
+      },
+      {
+        "id": "SEC-PERM-01",
+        "title": "High-Risk Sensitive Permissions Requested",
+        "severity": "MEDIUM",
+        "owasp_category": "M1: Improper Platform Usage",
+        "masvs_id": "MASVS-PLATFORM-1",
+        "cwe_id": "CWE-250: Execution with Unnecessary Privileges",
+        "description": "The application requests 1 sensitive high-risk permission(s). Overprivileged applications increase the attack surface and potential blast radius if the app is compromised.",
+        "evidence": "Dangerous permissions requested: android.permission.WRITE_EXTERNAL_STORAGE",
+        "remediation": "Apply the Principle of Least Privilege. Audit permission usage and remove unnecessary declarations. Use system framework pickers (such as Android Photo Picker or Storage Access Framework) to eliminate broad storage permissions.",
+        "affected_items": [
+          "android.permission.WRITE_EXTERNAL_STORAGE"
+        ]
+      },
+      {
+        "id": "SEC-NET-02",
+        "title": "Hardcoded Private / Internal Network IP Addresses",
+        "severity": "MEDIUM",
+        "owasp_category": "M9: Insecure Reverse Engineering",
+        "masvs_id": "MASVS-CODE-3",
+        "cwe_id": "CWE-200: Exposure of Sensitive Information to an Unauthorized Actor",
+        "description": "The application codebase contains hardcoded private RFC-1918 IP addresses (127.0.0.1). This indicates potential remnants of development/staging environments, exposing internal infrastructure topologies.",
+        "evidence": "Detected internal IP addresses: 127.0.0.1",
+        "remediation": "Remove hardcoded internal IP addresses before releasing to production. Use dynamically resolved domain names or environment configuration flags.",
+        "affected_items": [
+          "127.0.0.1"
+        ]
+      },
+      {
+        "id": "SEC-PLAT-02",
+        "title": "Insecure file:// Local URL Schemes Detected",
+        "severity": "LOW",
+        "owasp_category": "M1: Improper Platform Usage",
+        "masvs_id": "MASVS-PLATFORM-2",
+        "cwe_id": "CWE-749: Exposed Dangerous Method or Function",
+        "description": "The application references local 'file://' URI schemes (5 occurrences). If passed to WebViews with allowFileAccess enabled, this can lead to arbitrary local file disclosure and Cross-App Scripting.",
+        "evidence": "Detected file:// scheme references in code: file:///android_asset/, file:///android_asset/, file:///android_asset/, file:///android_asset/, file:///android_asset/",
+        "remediation": "Avoid using file:// schemes. Use content:// URIs with FileProvider or modern WebViewAssetLoader to restrict file system access securely.",
+        "affected_items": [
+          "file:///android_asset/",
+          "file:///android_asset/",
+          "file:///android_asset/",
+          "file:///android_asset/",
+          "file:///android_asset/"
+        ]
+      }
+    ]
+  },
+  "apk_components": [
+    {
+      "filename": "base.apk",
+      "role": "base",
+      "device_path": "/data/app/~~GIo0IEqZnSeWznBnah5vNw==/me.zhanghai.android.files-uoZp0hpqifoqyQRj02E52w==/base.apk",
+      "local_path": "downloads/package_set/apks/base.apk",
+      "size_bytes": 11213306,
+      "sha256": "f7abbb8afe79087794f9a418f185fc7972531c0e2b9e2633fdaba12b127de60c",
+      "is_valid_zip": true,
+      "has_android_manifest": true,
+      "has_dex": true,
+      "dex_count": 2,
+      "dex_files": [
+        "classes.dex",
+        "classes2.dex"
+      ],
+      "is_valid": true,
+      "raw_extract_status": "success",
+      "apktool_status": "success_with_warnings",
+      "jadx_status": "success_with_warnings",
+      "warnings": [
+        "Apktool decode warning in 'base.apk': W: Unresolved resource reference: ResReference{pkg=ResPackage{id=0x7f, name=me.zhanghai.android.files}, id=0x7f080034, type=ref}\nW: Unresolved resource reference: ResReference{pkg=ResPackage{id=0x7f, ",
+        "JADX exited with warnings (code 3) for 'base.apk'"
+      ],
+      "preprocessing": {
+        "raw_extract_status": "success",
+        "apktool_status": "success_with_warnings",
+        "jadx_status": "success_with_warnings",
+        "warnings": [
+          "Apktool decode warning in 'base.apk': W: Unresolved resource reference: ResReference{pkg=ResPackage{id=0x7f, name=me.zhanghai.android.files}, id=0x7f080034, type=ref}\nW: Unresolved resource reference: ResReference{pkg=ResPackage{id=0x7f, ",
+          "JADX exited with warnings (code 3) for 'base.apk'"
+        ]
+      }
+    },
+    {
+      "filename": "split_config.arm64_v8a.apk",
+      "role": "config_abi",
+      "device_path": "/data/app/~~GIo0IEqZnSeWznBnah5vNw==/me.zhanghai.android.files-uoZp0hpqifoqyQRj02E52w==/split_config.arm64_v8a.apk",
+      "local_path": "downloads/package_set/apks/split_config.arm64_v8a.apk",
+      "size_bytes": 1618796,
+      "sha256": "ce9007e0321aaff99ee940aaa709e047e75faf7e9d9a9ac898fa800c3ff617a6",
+      "is_valid_zip": true,
+      "has_android_manifest": true,
+      "has_dex": false,
+      "dex_count": 0,
+      "dex_files": [],
+      "is_valid": true,
+      "raw_extract_status": "success",
+      "apktool_status": "success",
+      "jadx_status": "skipped_no_dex",
+      "warnings": [],
+      "preprocessing": {
+        "raw_extract_status": "success",
+        "apktool_status": "success",
+        "jadx_status": "skipped_no_dex",
+        "warnings": []
+      }
+    },
+    {
+      "filename": "split_config.xxhdpi.apk",
+      "role": "config_density",
+      "device_path": "/data/app/~~GIo0IEqZnSeWznBnah5vNw==/me.zhanghai.android.files-uoZp0hpqifoqyQRj02E52w==/split_config.xxhdpi.apk",
+      "local_path": "downloads/package_set/apks/split_config.xxhdpi.apk",
+      "size_bytes": 49050,
+      "sha256": "c6a49731d2fb67713c4ea05ac0581ba57af78ca73a225638d20abe584b347635",
+      "is_valid_zip": true,
+      "has_android_manifest": true,
+      "has_dex": false,
+      "dex_count": 0,
+      "dex_files": [],
+      "is_valid": true,
+      "raw_extract_status": "success",
+      "apktool_status": "success_with_warnings",
+      "jadx_status": "skipped_no_dex",
+      "warnings": [
+        "Apktool decode warning in 'split_config.xxhdpi.apk': W: Unresolved resource reference: ResReference{pkg=ResPackage{id=0x7f, name=me.zhanghai.android.files}, id=0x7f0801b2, type=ref}"
+      ],
+      "preprocessing": {
+        "raw_extract_status": "success",
+        "apktool_status": "success_with_warnings",
+        "jadx_status": "skipped_no_dex",
+        "warnings": [
+          "Apktool decode warning in 'split_config.xxhdpi.apk': W: Unresolved resource reference: ResReference{pkg=ResPackage{id=0x7f, name=me.zhanghai.android.files}, id=0x7f0801b2, type=ref}"
+        ]
+      }
+    }
+  ],
+  "split_structure": [
+    {
+      "source_apk": "base.apk",
+      "role": "base",
+      "status": "success",
+      "dex_files": [
+        "classes.dex",
+        "classes2.dex"
+      ],
+      "dex_count": 2,
+      "is_multidex": true,
+      "native_libraries": [],
+      "has_native_code": false,
+      "assets": [
+        "assets/PublicSuffixDatabase.list",
+        "assets/dexopt/baseline.prof",
+        "assets/dexopt/baseline.profm",
+        "assets/main.jar"
+      ],
+      "smali_roots": [
+        "smali",
+        "smali_classes2"
+      ],
+      "has_kotlin_metadata": true
+    },
+    {
+      "source_apk": "split_config.arm64_v8a.apk",
+      "role": "config_abi",
+      "status": "success",
+      "dex_files": [],
+      "dex_count": 0,
+      "is_multidex": false,
+      "native_libraries": [
+        "lib/arm64-v8a/libarchive-jni.so",
+        "lib/arm64-v8a/libcrashlytics-common.so",
+        "lib/arm64-v8a/libcrashlytics-handler.so",
+        "lib/arm64-v8a/libcrashlytics-trampoline.so",
+        "lib/arm64-v8a/libcrashlytics.so",
+        "lib/arm64-v8a/libdatastore_shared_counter.so",
+        "lib/arm64-v8a/libhiddenapi.so",
+        "lib/arm64-v8a/libselinux-jni.so",
+        "lib/arm64-v8a/libsyscall.so"
+      ],
+      "has_native_code": true,
+      "assets": [],
+      "smali_roots": [],
+      "has_kotlin_metadata": false
+    },
+    {
+      "source_apk": "split_config.xxhdpi.apk",
+      "role": "config_density",
+      "status": "success",
+      "dex_files": [],
+      "dex_count": 0,
+      "is_multidex": false,
+      "native_libraries": [],
+      "has_native_code": false,
+      "assets": [],
+      "smali_roots": [],
+      "has_kotlin_metadata": false
+    }
+  ],
+  "manifest_evidence": [
+    {
+      "source_apk": "base.apk",
+      "role": "base",
+      "package_name": "me.zhanghai.android.files",
+      "launcher_activity": "me.zhanghai.android.files.filelist.FileListActivity",
+      "permissions": [
+        "android.permission.ACCESS_NETWORK_STATE",
+        "android.permission.ACCESS_WIFI_STATE",
+        "android.permission.FOREGROUND_SERVICE",
+        "android.permission.FOREGROUND_SERVICE_SPECIAL_USE",
+        "android.permission.INTERNET",
+        "android.permission.MANAGE_EXTERNAL_STORAGE",
+        "android.permission.POST_NOTIFICATIONS",
+        "android.permission.QUERY_ALL_PACKAGES",
+        "android.permission.REQUEST_INSTALL_PACKAGES",
+        "android.permission.WAKE_LOCK",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "com.android.launcher.permission.INSTALL_SHORTCUT",
+        "com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE",
+        "com.google.android.gms.permission.AD_ID",
+        "android.permission.ACCESS_ADSERVICES_ATTRIBUTION",
+        "android.permission.ACCESS_ADSERVICES_AD_ID",
+        "me.zhanghai.android.files.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION",
+        "moe.shizuku.manager.permission.API_V23"
+      ],
+      "activities": [
+        "me.zhanghai.android.files.filelist.FileListActivity",
+        "me.zhanghai.android.files.filelist.OpenFileActivity",
+        "me.zhanghai.android.files.filelist.EditFileActivity",
+        "me.zhanghai.android.files.filelist.OpenFileAsDialogActivity",
+        "me.zhanghai.android.files.storage.AddStorageDialogActivity",
+        "me.zhanghai.android.files.storage.EditDeviceStorageDialogActivity",
+        "me.zhanghai.android.files.storage.AddExternalStorageShortcutActivity",
+        "me.zhanghai.android.files.storage.EditExternalStorageShortcutDialogActivity",
+        "me.zhanghai.android.files.storage.AddDocumentTreeActivity",
+        "me.zhanghai.android.files.storage.EditDocumentTreeDialogActivity",
+        "me.zhanghai.android.files.storage.EditFtpServerActivity",
+        "me.zhanghai.android.files.storage.EditSftpServerActivity",
+        "me.zhanghai.android.files.storage.AddLanSmbServerActivity",
+        "me.zhanghai.android.files.storage.EditSmbServerActivity",
+        "me.zhanghai.android.files.storage.EditWebDavServerActivity",
+        "me.zhanghai.android.files.navigation.EditBookmarkDirectoryDialogActivity",
+        "me.zhanghai.android.files.ftpserver.FtpServerActivity",
+        "me.zhanghai.android.files.settings.SettingsActivity",
+        "me.zhanghai.android.files.storage.StorageListActivity",
+        "me.zhanghai.android.files.settings.StandardDirectoryListActivity",
+        "me.zhanghai.android.files.settings.BookmarkDirectoryListActivity",
+        "me.zhanghai.android.files.about.AboutActivity",
+        "me.zhanghai.android.files.fileaction.ArchivePasswordDialogActivity",
+        "me.zhanghai.android.files.filejob.FileJobErrorDialogActivity",
+        "me.zhanghai.android.files.filejob.FileJobConflictDialogActivity",
+        "me.zhanghai.android.files.viewer.saveas.SaveAsActivity",
+        "me.zhanghai.android.files.viewer.text.TextEditorActivity",
+        "me.zhanghai.android.files.viewer.image.ImageViewerActivity",
+        "com.google.android.gms.common.api.GoogleApiActivity"
+      ]
+    },
+    {
+      "source_apk": "split_config.arm64_v8a.apk",
+      "role": "config_abi",
+      "package_name": "me.zhanghai.android.files",
+      "launcher_activity": null,
+      "permissions": [],
+      "activities": []
+    },
+    {
+      "source_apk": "split_config.xxhdpi.apk",
+      "role": "config_density",
+      "package_name": "me.zhanghai.android.files",
+      "launcher_activity": null,
+      "permissions": [],
+      "activities": []
+    }
+  ],
+  "analysis_notes": [
+    "Split package analysis: only installed splits returned by pm path on the device were analyzed.",
+    "[base.apk] Apktool decode warning in 'base.apk': W: Unresolved resource reference: ResReference{pkg=ResPackage{id=0x7f, name=me.zhanghai.android.files}, id=0x7f080034, type=ref}\nW: Unresolved resource reference: ResReference{pkg=ResPackage{id=0x7f, ",
+    "[base.apk] JADX exited with warnings (code 3) for 'base.apk'",
+    "[split_config.xxhdpi.apk] Apktool decode warning in 'split_config.xxhdpi.apk': W: Unresolved resource reference: ResReference{pkg=ResPackage{id=0x7f, name=me.zhanghai.android.files}, id=0x7f0801b2, type=ref}",
+    "Static network indicators are extracted from application content and do not by themselves prove runtime network usage.",
+    "API candidates are static call-context candidates extracted from Smali register flows and do not represent confirmed runtime endpoints.",
+    "No API candidates were identified by the current call-context extractor.",
+    "Static network indicators may still exist. The current V1 API candidate extractor supports limited framework-specific call patterns. Zero candidates does not mean the application has no APIs.",
+    "No vulnerability exploitation was performed.",
+    "No security verdict was produced."
+  ],
+  "limitations": [
+    "Analysis is limited to static heuristics on decoded package contents without runtime execution.",
+    "V1 API candidate extractor only tracks specific call-context register patterns (e.g. Fuel).",
+    "Dynamic instrumentation, traffic interception (MITM/Burp), and deep UI exploration were not performed.",
+    "No security verdict, vulnerability score, or risk classification is provided.",
+    "Split package analysis is limited to installed splits returned by pm path. Dynamic feature modules or config splits not delivered to the device were not analyzed."
+  ]
+}

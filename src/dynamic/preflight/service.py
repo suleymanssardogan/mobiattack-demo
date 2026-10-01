@@ -2,8 +2,13 @@
 
 from __future__ import annotations
 
+import json
 import logging
-from typing import Any
+import os
+from pathlib import Path
+import re
+import tempfile
+from typing import Any, Tuple
 
 from src.dynamic.preflight.app_launcher import launch_application
 from src.dynamic.preflight.device_check import check_connected_device, find_adb_binary
@@ -153,9 +158,21 @@ class DynamicPreflightService:
             result.errors = errors
             return result
 
-        # 7. Runtime Baseline Health Check
+        # 7. Runtime Baseline Health Check (with Stabilization Loop)
+        def _relaunch_fallback() -> Tuple[bool, str | None]:
+            ok, act, _, _ = launch_application(
+                self.adb_bin,
+                serial,
+                package_name,
+                activity_name=activity_name or app_info.main_activity,
+            )
+            return ok, act
+
         baseline, is_foreground, health_err_code, health_err_msg = check_runtime_health(
-            self.adb_bin, serial, package_name
+            self.adb_bin,
+            serial,
+            package_name,
+            relaunch_fn=_relaunch_fallback,
         )
         result.runtime = baseline
         app_info.process_running = (baseline.pid is not None)
@@ -170,6 +187,11 @@ class DynamicPreflightService:
             result.warnings = warnings
             result.errors = errors
             return result
+
+        if not is_foreground:
+            warnings.append(
+                f"Application process is running (PID {baseline.pid}), but foreground window could not be verified within deadline."
+            )
 
         # 8. Compute Final Preflight Status
         if errors:
@@ -204,3 +226,45 @@ def run_dynamic_preflight(
         is_split_apk=is_split_apk,
     )
     return result.to_dict()
+
+
+def sanitize_preflight_dict(data: Any) -> Any:
+    """Recursively removes host filesystem paths while preserving device-side paths."""
+    if isinstance(data, dict):
+        return {k: sanitize_preflight_dict(v) for k, v in data.items()}
+    elif isinstance(data, list):
+        return [sanitize_preflight_dict(item) for item in data]
+    elif isinstance(data, str):
+        # Scrub local home/user paths and local workspace directories
+        cleaned = re.sub(r"/(?:Users|home)/[^/\s]+/[^\s'\"]*", "<host_path>", data)
+        cleaned = re.sub(r"/opt/homebrew/[^\s'\"]*", "adb", cleaned)
+        return cleaned
+    return data
+
+
+def save_preflight_result(
+    result: PreflightResult | dict[str, Any],
+    run_dir: str | Path,
+) -> Path:
+    """Atomically saves sanitized preflight_result.json to demo_runs/<run_id>/dynamic/."""
+    run_path = Path(run_dir).resolve()
+    target_dir = run_path / "dynamic"
+    target_dir.mkdir(parents=True, exist_ok=True)
+    target_file = target_dir / "preflight_result.json"
+
+    data = result.to_dict() if isinstance(result, PreflightResult) else dict(result)
+    sanitized_data = sanitize_preflight_dict(data)
+
+    fd, temp_path = tempfile.mkstemp(
+        dir=target_dir, prefix=".tmp_preflight_", suffix=".json"
+    )
+    try:
+        with open(fd, "w", encoding="utf-8") as f:
+            json.dump(sanitized_data, f, indent=2, ensure_ascii=False)
+        os.replace(temp_path, target_file)
+    except Exception:
+        if os.path.exists(temp_path):
+            os.remove(temp_path)
+        raise
+
+    return target_file

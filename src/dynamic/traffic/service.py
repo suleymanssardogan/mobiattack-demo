@@ -45,6 +45,7 @@ class DynamicTrafficService:
         self.proxy_mgr: DeviceProxyManager | None = None
         self.correlator: TrafficCorrelator | None = None
         self.captured_transactions: list[TrafficTransaction] = []
+        self.last_readiness: ProxyReadinessResult | None = None
 
     def check_readiness(
         self,
@@ -147,7 +148,46 @@ class DynamicTrafficService:
 
         result.warnings = warnings
         result.errors = errors
+        self.last_readiness = result
         return result
+
+    def get_visibility_metadata(self) -> dict[str, str]:
+        """Returns protocol visibility metadata based on active backend and readiness."""
+        backend_cls_name = self.backend.__class__.__name__
+        capture_available = self.active_capture is not None and self.active_capture.status == CaptureStatus.ACTIVE
+        is_backend_available = capture_available or self.backend.check_available()
+
+        if "Native" in backend_cls_name:
+            return {
+                "capture_available": str(capture_available).lower(),
+                "http_visibility": "available" if is_backend_available else "unavailable",
+                "https_visibility": "unavailable",
+                "https_reason": "cleartext_http_only_backend",
+            }
+
+        # Mitmproxy or other proxy backend
+        if self.last_readiness and self.last_readiness.https_interception:
+            hi = self.last_readiness.https_interception
+            if hi.ca_certificate_installed and not hi.certificate_trust_unknown:
+                https_vis = "available"
+                reason = "ca_trusted"
+            elif hi.certificate_trust_unknown:
+                https_vis = "unavailable"
+                reason = "certificate_trust_unknown"
+            else:
+                https_vis = "unavailable"
+                reason = "tls_interception_not_configured"
+        else:
+            https_vis = "unavailable"
+            reason = "certificate_trust_unknown"
+
+        http_vis = "available" if is_backend_available else "unavailable"
+        return {
+            "capture_available": str(capture_available).lower(),
+            "http_visibility": http_vis,
+            "https_visibility": https_vis,
+            "https_reason": reason,
+        }
 
     def start_capture(
         self,
@@ -245,6 +285,16 @@ class DynamicTrafficService:
         self._on_transaction_captured(norm_tx)
         return norm_tx
 
+    def get_current_marker(self) -> int:
+        """Returns current transaction count as an action correlation marker."""
+        return len(self.captured_transactions)
+
+    def get_transactions_since(self, marker: int) -> list[TrafficTransaction]:
+        """Returns incremental transactions captured since the marker."""
+        if marker < 0 or marker > len(self.captured_transactions):
+            return []
+        return self.captured_transactions[marker:]
+
     def stop_capture(self) -> CaptureSummary:
         """Stops backend, restores device proxy, generates capture summary, and persists artifacts."""
         if not self.active_capture:
@@ -302,6 +352,7 @@ class DynamicTrafficService:
             if tx.scope == "IN_SCOPE":
                 in_scope_count += 1
 
+        vis = self.get_visibility_metadata()
         summary = CaptureSummary(
             capture_id=self.active_capture.capture_id,
             session_id=self.active_capture.session_id,
@@ -312,6 +363,9 @@ class DynamicTrafficService:
             correlated_flow_count=correlated_count,
             in_scope_count=in_scope_count,
             proxy_restored=proxy_restored,
+            http_visibility=vis.get("http_visibility", "available"),
+            https_visibility=vis.get("https_visibility", "unavailable"),
+            https_visibility_reason=vis.get("https_reason", "certificate_trust_unknown"),
         )
 
         self.storage.save_capture_session(

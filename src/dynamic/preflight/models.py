@@ -61,6 +61,8 @@ class RuntimeBaseline:
     fatal_log_detected: bool = False
     pid: int | None = None
     fatal_log_snippets: list[str] = field(default_factory=list)
+    launch_attempts: int = 1
+    ready_after_attempt: int | None = None
 
 
 @dataclass
@@ -112,6 +114,8 @@ class PreflightResult:
                 "immediate_crash": self.runtime.immediate_crash,
                 "fatal_log_detected": self.runtime.fatal_log_detected,
                 "pid": self.runtime.pid,
+                "launch_attempts": self.runtime.launch_attempts,
+                "ready_after_attempt": self.runtime.ready_after_attempt,
             },
             "network": {
                 "internet_reachable": self.network.internet_reachable,

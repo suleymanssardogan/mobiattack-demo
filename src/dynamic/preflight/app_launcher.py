@@ -71,6 +71,16 @@ def launch_application(
         target_activity = resolve_launchable_activity(adb_bin, serial, package_name)
 
     if not target_activity:
+        # Fallback to monkey launch if activity cannot be resolved directly
+        code_mk, stdout_mk, _ = run_adb_cmd(
+            adb_bin,
+            ["shell", "monkey", "-p", package_name, "-c", "android.intent.category.LAUNCHER", "1"],
+            serial=serial,
+            timeout_seconds=timeout_seconds,
+        )
+        if code_mk == 0 and "Events injected: 1" in (stdout_mk or ""):
+            return True, None, None, None
+
         return (
             False,
             None,

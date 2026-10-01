@@ -77,6 +77,61 @@ class TrafficStorage:
                 f"Could not save capture metadata: {exc}",
             ) from exc
 
+    def save_traffic_json(
+        self,
+        target_path: str | os.PathLike,
+        session_id: str,
+        transactions: list[TrafficTransaction] | list[dict[str, Any]],
+        capture: CaptureSession | None = None,
+        summary: CaptureSummary | None = None,
+    ) -> str:
+        """Atomically saves dynamic/traffic.json with transaction records and session summary."""
+        target_str = str(target_path)
+        parent_dir = os.path.dirname(target_str)
+        if parent_dir:
+            os.makedirs(parent_dir, exist_ok=True)
+
+        http_vis = summary.http_visibility if summary else "available"
+        https_vis = summary.https_visibility if summary else "unavailable"
+        https_reason = summary.https_visibility_reason if summary else "certificate_trust_unknown"
+        backend_name = getattr(capture, "backend", getattr(capture, "backend_name", "unknown")) if capture else getattr(summary, "backend", "unknown")
+
+        payload: dict[str, Any] = {
+            "schema_version": "1.0",
+            "session_id": session_id,
+            "backend": backend_name,
+            "total_transactions": len(transactions),
+            "http_count": summary.http_count if summary else 0,
+            "https_count": summary.https_count if summary else 0,
+            "proxy_restored": summary.proxy_restored if summary else False,
+            "http_visibility": http_vis,
+            "https_visibility": https_vis,
+            "https_visibility_reason": https_reason,
+            "capture": capture.to_dict() if capture else None,
+            "summary": summary.to_dict() if summary else None,
+            "transactions": [
+                t.to_dict() if isinstance(t, TrafficTransaction) else t
+                for t in transactions
+            ],
+        }
+
+        try:
+            fd, tmp_path = tempfile.mkstemp(
+                dir=parent_dir or ".",
+                prefix=".tmp_traffic_",
+                suffix=".json",
+            )
+            with open(fd, "w", encoding="utf-8") as f:
+                json.dump(payload, f, indent=2, ensure_ascii=False)
+            os.replace(tmp_path, target_str)
+            return target_str
+        except Exception as exc:
+            logger.error(f"Failed to save traffic json to {target_str}: {exc}")
+            raise TrafficException(
+                TrafficErrorCode.TRAFFIC_STORAGE_FAILED,
+                f"Could not save traffic json: {exc}",
+            ) from exc
+
     def load_transactions(self, session_id: str) -> list[dict[str, Any]]:
         """Reads all transactions from transactions.jsonl."""
         jsonl_path = os.path.join(self.get_traffic_dir(session_id), "transactions.jsonl")

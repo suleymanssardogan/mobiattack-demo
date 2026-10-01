@@ -5,6 +5,9 @@ from __future__ import annotations
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
 from enum import Enum
+import json
+import os
+from pathlib import Path
 from typing import Any
 import uuid
 
@@ -222,6 +225,9 @@ class CaptureSummary:
     correlated_flow_count: int = 0
     in_scope_count: int = 0
     proxy_restored: bool = False
+    http_visibility: str = "available"
+    https_visibility: str = "unavailable"
+    https_visibility_reason: str = "certificate_trust_unknown"
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -234,4 +240,205 @@ class CaptureSummary:
             "correlated_flow_count": self.correlated_flow_count,
             "in_scope_count": self.in_scope_count,
             "proxy_restored": self.proxy_restored,
+            "http_visibility": self.http_visibility,
+            "https_visibility": self.https_visibility,
+            "https_visibility_reason": self.https_visibility_reason,
         }
+
+
+class CorrelationStatus(str, Enum):
+    AVAILABLE = "available"
+    PARTIAL = "partial"
+    UNAVAILABLE = "unavailable"
+
+
+@dataclass
+class ActionTrafficEvidence:
+    """Compact correlation evidence between a UI action and HTTP transactions observed during its window."""
+
+    action_id: str = ""
+    occurrence: int = 1
+    source_node_id: str = ""
+    target_node_id: str | None = None
+    correlation_status: str = CorrelationStatus.AVAILABLE.value
+    transaction_count: int = 0
+    transaction_ids: list[str] = field(default_factory=list)
+    methods: list[str] = field(default_factory=list)
+    hosts: list[str] = field(default_factory=list)
+    status_codes: list[int] = field(default_factory=list)
+    http_visibility: str = "available"
+    https_visibility: str = "unavailable"
+    https_visibility_reason: str = ""
+    correlation_note: str = "traffic observed during action window"
+    error: str | None = None
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "action_id": self.action_id,
+            "occurrence": self.occurrence,
+            "source_node_id": self.source_node_id,
+            "target_node_id": self.target_node_id,
+            "correlation_status": self.correlation_status,
+            "transaction_count": self.transaction_count,
+            "transaction_ids": self.transaction_ids,
+            "methods": self.methods,
+            "hosts": self.hosts,
+            "status_codes": self.status_codes,
+            "http_visibility": self.http_visibility,
+            "https_visibility": self.https_visibility,
+            "https_visibility_reason": self.https_visibility_reason,
+            "correlation_note": self.correlation_note,
+            "error": self.error,
+        }
+
+
+@dataclass
+class TrafficEvidenceArtifact:
+    """Internal correlation artifact schema for dynamic/traffic_evidence.json."""
+
+    schema_version: str = "1.0"
+    session_id: str = ""
+    created_at: str = field(default_factory=utc_now_iso)
+    updated_at: str = field(default_factory=utc_now_iso)
+    actions: list[ActionTrafficEvidence] = field(default_factory=list)
+
+    def record_action_evidence(self, evidence: ActionTrafficEvidence, file_path: Path | str) -> None:
+        """Appends or updates action traffic correlation record in-place and saves atomically."""
+        self.updated_at = utc_now_iso()
+        for idx, existing in enumerate(self.actions):
+            if existing.action_id == evidence.action_id and existing.occurrence == evidence.occurrence:
+                self.actions[idx] = evidence
+                self.save_atomic(file_path)
+                return
+
+        self.actions.append(evidence)
+        self.save_atomic(file_path)
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "schema_version": self.schema_version,
+            "session_id": self.session_id,
+            "created_at": self.created_at,
+            "updated_at": self.updated_at,
+            "actions": [a.to_dict() for a in self.actions],
+        }
+
+    def save_atomic(self, file_path: Path | str) -> None:
+        """Atomically persists the artifact to disk via a temporary file."""
+        target_path = Path(file_path)
+        target_path.parent.mkdir(parents=True, exist_ok=True)
+        tmp_path = target_path.with_suffix(f".tmp.{uuid.uuid4().hex[:8]}")
+        with open(tmp_path, "w", encoding="utf-8") as f:
+            json.dump(self.to_dict(), f, indent=2, ensure_ascii=False)
+        os.replace(tmp_path, target_path)
+
+    @classmethod
+    def load_or_create(cls, file_path: Path | str, session_id: str = "") -> TrafficEvidenceArtifact:
+        """Loads an existing traffic evidence file or creates a new empty artifact."""
+        target_path = Path(file_path)
+        if not target_path.is_file():
+            return cls(session_id=session_id)
+
+        try:
+            with open(target_path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+            actions = []
+            for a in data.get("actions", []):
+                actions.append(
+                    ActionTrafficEvidence(
+                        action_id=a.get("action_id", ""),
+                        occurrence=a.get("occurrence", 1),
+                        source_node_id=a.get("source_node_id", ""),
+                        target_node_id=a.get("target_node_id"),
+                        correlation_status=a.get("correlation_status", CorrelationStatus.AVAILABLE.value),
+                        transaction_count=a.get("transaction_count", 0),
+                        transaction_ids=a.get("transaction_ids", []),
+                        methods=a.get("methods", []),
+                        hosts=a.get("hosts", []),
+                        status_codes=a.get("status_codes", []),
+                        http_visibility=a.get("http_visibility", "available"),
+                        https_visibility=a.get("https_visibility", "unavailable"),
+                        https_visibility_reason=a.get("https_visibility_reason", ""),
+                        correlation_note=a.get("correlation_note", "traffic observed during action window"),
+                        error=a.get("error"),
+                    )
+                )
+            return cls(
+                schema_version=data.get("schema_version", "1.0"),
+                session_id=data.get("session_id", session_id),
+                created_at=data.get("created_at", utc_now_iso()),
+                updated_at=data.get("updated_at", utc_now_iso()),
+                actions=actions,
+            )
+        except Exception:
+            return cls(session_id=session_id)
+
+
+def create_action_traffic_evidence(
+    action_id: str,
+    source_node_id: str,
+    target_node_id: str | None = None,
+    occurrence: int = 1,
+    transactions: list[TrafficTransaction] | None = None,
+    correlation_status: str | None = None,
+    http_visibility: str = "available",
+    https_visibility: str = "unavailable",
+    https_visibility_reason: str = "",
+    error: str | None = None,
+) -> ActionTrafficEvidence:
+    """Builds a compact ActionTrafficEvidence record from a list of transactions taking visibility into account."""
+    tx_list = transactions or []
+    tx_ids: list[str] = []
+    methods: set[str] = set()
+    hosts: set[str] = set()
+    status_codes: list[int] = []
+
+    for tx in tx_list:
+        if tx.transaction_id:
+            tx_ids.append(tx.transaction_id)
+        if tx.request and tx.request.method:
+            methods.add(tx.request.method.upper())
+        if tx.request and tx.request.host:
+            hosts.add(tx.request.host)
+        if tx.response and tx.response.status_code:
+            status_codes.append(tx.response.status_code)
+
+    # Determine correlation status and honest visibility-aware correlation note
+    if error or correlation_status == CorrelationStatus.UNAVAILABLE.value:
+        status = CorrelationStatus.UNAVAILABLE.value if correlation_status is None else correlation_status
+        note = error or "Traffic capture unavailable"
+    elif tx_list:
+        # Transactions observed during window
+        status = correlation_status or (
+            CorrelationStatus.AVAILABLE.value if https_visibility == "available" else CorrelationStatus.PARTIAL.value
+        )
+        note = "traffic observed during action window"
+    else:
+        # Zero transactions observed
+        if https_visibility == "available":
+            status = correlation_status or CorrelationStatus.AVAILABLE.value
+            note = "No traffic was observed during the action window."
+        else:
+            status = correlation_status or CorrelationStatus.PARTIAL.value
+            note = "No visible HTTP transactions were captured during the action window; HTTPS visibility was unavailable."
+            if https_visibility_reason:
+                note += f" ({https_visibility_reason})"
+
+    return ActionTrafficEvidence(
+        action_id=action_id,
+        occurrence=occurrence,
+        source_node_id=source_node_id,
+        target_node_id=target_node_id,
+        correlation_status=status,
+        transaction_count=len(tx_list),
+        transaction_ids=tx_ids,
+        methods=sorted(list(methods)),
+        hosts=sorted(list(hosts)),
+        status_codes=status_codes,
+        http_visibility=http_visibility,
+        https_visibility=https_visibility,
+        https_visibility_reason=https_visibility_reason,
+        correlation_note=note,
+        error=error,
+    )
+

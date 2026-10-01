@@ -1,0 +1,1906 @@
+{
+  "report_type": "static_analysis",
+  "report_version": "1.0",
+  "run_id": "run_1790758052_05224d",
+  "status": "completed",
+  "platform": "ios",
+  "package_layout": "monolithic",
+  "split_count": 1,
+  "application": {
+    "platform": "ios",
+    "bundle_identifier": "sg.vp.MSTG.JWT",
+    "bundle_name": "MSTG-JWT",
+    "display_name": "MSTG-JWT",
+    "executable": "MSTG-JWT",
+    "version": "1.0",
+    "build": "1",
+    "minimum_os_version": "10.0",
+    "supported_platforms": [
+      "iPhoneOS"
+    ],
+    "device_family": [
+      "iPhone",
+      "iPad"
+    ],
+    "package_name": "sg.vp.MSTG.JWT",
+    "launcher_activity": "-",
+    "filename": "MSTG-JWT.ipa",
+    "sha256": "d25df71640dc4f5af3ae48c58f7cad1c7f6ba53a28334b5407f9a0a11291934c",
+    "size_bytes": 5853214,
+    "is_valid_ipa": true
+  },
+  "acquisition": {
+    "platform": "ios",
+    "source_type": "direct_ipa",
+    "filename": "MSTG-JWT.ipa",
+    "sha256": "d25df71640dc4f5af3ae48c58f7cad1c7f6ba53a28334b5407f9a0a11291934c",
+    "size_bytes": 5853214,
+    "validation": {
+      "is_valid_ipa": true,
+      "app_bundle": "Payload/MSTG-JWT.app",
+      "has_info_plist": true
+    },
+    "input_url": "https://github.com/OWASP/MASTG-Hacking-Playground/releases/download/1.0/MSTG-JWT.ipa",
+    "saved_path": "downloads/MSTG-JWT.ipa"
+  },
+  "preprocessing": {
+    "status": "success",
+    "platform": "ios",
+    "app_bundle": "Payload/MSTG-JWT.app",
+    "extracted_files": 63,
+    "total_files": 63,
+    "total_extracted_bytes": 15369890
+  },
+  "structure": {
+    "app_bundle_path": "Payload/MSTG-JWT.app",
+    "has_info_plist": true,
+    "executable_name": "MSTG-JWT",
+    "has_executable": true,
+    "executable_path": "Payload/MSTG-JWT.app/MSTG-JWT",
+    "frameworks": [
+      {
+        "name": "Alamofire.framework",
+        "relative_path": "Payload/MSTG-JWT.app/Frameworks/Alamofire.framework",
+        "type": "framework_bundle"
+      },
+      {
+        "name": "KeychainSwift.framework",
+        "relative_path": "Payload/MSTG-JWT.app/Frameworks/KeychainSwift.framework",
+        "type": "framework_bundle"
+      },
+      {
+        "name": "SwiftyJSON.framework",
+        "relative_path": "Payload/MSTG-JWT.app/Frameworks/SwiftyJSON.framework",
+        "type": "framework_bundle"
+      },
+      {
+        "name": "libswiftCore.dylib",
+        "relative_path": "Payload/MSTG-JWT.app/Frameworks/libswiftCore.dylib",
+        "type": "dynamic_library"
+      },
+      {
+        "name": "libswiftCoreData.dylib",
+        "relative_path": "Payload/MSTG-JWT.app/Frameworks/libswiftCoreData.dylib",
+        "type": "dynamic_library"
+      },
+      {
+        "name": "libswiftCoreFoundation.dylib",
+        "relative_path": "Payload/MSTG-JWT.app/Frameworks/libswiftCoreFoundation.dylib",
+        "type": "dynamic_library"
+      },
+      {
+        "name": "libswiftCoreGraphics.dylib",
+        "relative_path": "Payload/MSTG-JWT.app/Frameworks/libswiftCoreGraphics.dylib",
+        "type": "dynamic_library"
+      },
+      {
+        "name": "libswiftCoreImage.dylib",
+        "relative_path": "Payload/MSTG-JWT.app/Frameworks/libswiftCoreImage.dylib",
+        "type": "dynamic_library"
+      },
+      {
+        "name": "libswiftDarwin.dylib",
+        "relative_path": "Payload/MSTG-JWT.app/Frameworks/libswiftDarwin.dylib",
+        "type": "dynamic_library"
+      },
+      {
+        "name": "libswiftDispatch.dylib",
+        "relative_path": "Payload/MSTG-JWT.app/Frameworks/libswiftDispatch.dylib",
+        "type": "dynamic_library"
+      },
+      {
+        "name": "libswiftFoundation.dylib",
+        "relative_path": "Payload/MSTG-JWT.app/Frameworks/libswiftFoundation.dylib",
+        "type": "dynamic_library"
+      },
+      {
+        "name": "libswiftMetal.dylib",
+        "relative_path": "Payload/MSTG-JWT.app/Frameworks/libswiftMetal.dylib",
+        "type": "dynamic_library"
+      },
+      {
+        "name": "libswiftObjectiveC.dylib",
+        "relative_path": "Payload/MSTG-JWT.app/Frameworks/libswiftObjectiveC.dylib",
+        "type": "dynamic_library"
+      },
+      {
+        "name": "libswiftQuartzCore.dylib",
+        "relative_path": "Payload/MSTG-JWT.app/Frameworks/libswiftQuartzCore.dylib",
+        "type": "dynamic_library"
+      },
+      {
+        "name": "libswiftUIKit.dylib",
+        "relative_path": "Payload/MSTG-JWT.app/Frameworks/libswiftUIKit.dylib",
+        "type": "dynamic_library"
+      },
+      {
+        "name": "libswiftos.dylib",
+        "relative_path": "Payload/MSTG-JWT.app/Frameworks/libswiftos.dylib",
+        "type": "dynamic_library"
+      }
+    ],
+    "framework_count": 16,
+    "extensions": [],
+    "extension_count": 0,
+    "resources": {
+      "total_files_count": 49,
+      "plist_files": [
+        "MSTG-JWT.momd/VersionInfo.plist"
+      ],
+      "plist_count": 1,
+      "json_files": [],
+      "json_count": 0,
+      "asset_catalogs": [],
+      "localization_dirs": [
+        "Base.lproj"
+      ],
+      "storyboard_count": 17
+    },
+    "executable": {
+      "status": "success",
+      "is_macho": true,
+      "name": "MSTG-JWT",
+      "architectures": [
+        "armv7",
+        "arm64"
+      ],
+      "bitness": 64,
+      "file_type": "Mach-O universal binary",
+      "macho_type": "Mach-O universal binary",
+      "linked_libraries": [
+        "@rpath/Alamofire.framework/Alamofire",
+        "@rpath/KeychainSwift.framework/KeychainSwift",
+        "@rpath/SwiftyJSON.framework/SwiftyJSON",
+        "/System/Library/Frameworks/Foundation.framework/Foundation",
+        "/usr/lib/libobjc.A.dylib",
+        "/usr/lib/libSystem.B.dylib",
+        "/System/Library/Frameworks/CoreData.framework/CoreData",
+        "/System/Library/Frameworks/CoreFoundation.framework/CoreFoundation",
+        "/System/Library/Frameworks/UIKit.framework/UIKit",
+        "/System/Library/Frameworks/WebKit.framework/WebKit",
+        "@rpath/libswiftCore.dylib",
+        "@rpath/libswiftCoreData.dylib",
+        "@rpath/libswiftCoreFoundation.dylib",
+        "@rpath/libswiftCoreGraphics.dylib",
+        "@rpath/libswiftCoreImage.dylib",
+        "@rpath/libswiftDarwin.dylib",
+        "@rpath/libswiftDispatch.dylib",
+        "@rpath/libswiftFoundation.dylib",
+        "@rpath/libswiftMetal.dylib",
+        "@rpath/libswiftObjectiveC.dylib",
+        "@rpath/libswiftQuartzCore.dylib",
+        "@rpath/libswiftUIKit.dylib"
+      ],
+      "linked_library_count": 22,
+      "uuid": null,
+      "cryptid": null,
+      "encryption_state": "not_specified",
+      "encryption_info": null,
+      "tools_used": [
+        {
+          "tool": "native_python_struct",
+          "status": "success"
+        },
+        {
+          "tool": "otool",
+          "status": "success"
+        }
+      ]
+    },
+    "dex_count": 0
+  },
+  "permissions": [],
+  "activities": [],
+  "network_indicators": {
+    "network_urls": [
+      {
+        "value": "http://192.168.2.73:8181/test.html",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/MSTG-JWT",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 87616,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://192.168.2.73:8181/test.html",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/MSTG-JWT",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 249536,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://54.255.184.119:8181/auth/login",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/MSTG-JWT",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 87360,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://54.255.184.119:8181/auth/login",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/MSTG-JWT",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 249344,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://54.255.184.119:8181/signup",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/MSTG-JWT",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 88912,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://54.255.184.119:8181/signup",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/MSTG-JWT",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 250864,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://54.255.184.119:8181/todos",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/MSTG-JWT",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 88576,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://54.255.184.119:8181/todos",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/MSTG-JWT",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 250544,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://crl.apple.com/root.crl0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/Alamofire.framework/Alamofire",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 476194,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://crl.apple.com/root.crl0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/Alamofire.framework/Alamofire",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 1050258,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://crl.apple.com/root.crl0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/KeychainSwift.framework/KeychainSwift",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 99666,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://crl.apple.com/root.crl0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/KeychainSwift.framework/KeychainSwift",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 213810,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://crl.apple.com/root.crl0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/SwiftyJSON.framework/SwiftyJSON",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 232632,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://crl.apple.com/root.crl0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/SwiftyJSON.framework/SwiftyJSON",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 511432,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://crl.apple.com/root.crl0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftCoreData.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 82328,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://crl.apple.com/root.crl0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftCoreData.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 180696,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://crl.apple.com/root.crl0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftCoreFoundation.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 68844,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://crl.apple.com/root.crl0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftCoreFoundation.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 150796,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://crl.apple.com/root.crl0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftCoreGraphics.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 134824,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://crl.apple.com/root.crl0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftCoreGraphics.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 282024,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://crl.apple.com/root.crl0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftCoreImage.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 69262,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://crl.apple.com/root.crl0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftCoreImage.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 151246,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://crl.apple.com/root.crl0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftDarwin.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 98496,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://crl.apple.com/root.crl0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftDarwin.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 213008,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://crl.apple.com/root.crl0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftDispatch.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 174800,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://crl.apple.com/root.crl0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftDispatch.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 372048,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://crl.apple.com/root.crl0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftFoundation.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 1523964,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://crl.apple.com/root.crl0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftMetal.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 73606,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://crl.apple.com/root.crl0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftMetal.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 155654,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://crl.apple.com/root.crl0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftObjectiveC.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 72772,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://crl.apple.com/root.crl0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftObjectiveC.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 154932,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://crl.apple.com/root.crl0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftQuartzCore.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 70352,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://crl.apple.com/root.crl0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftQuartzCore.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 152464,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://crl.apple.com/root.crl0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftUIKit.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 103154,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://crl.apple.com/root.crl0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftUIKit.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 234450,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://crl.apple.com/root.crl0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftos.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 74588,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://crl.apple.com/root.crl0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftos.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 156604,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://crl.apple.com/root.crl0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/MSTG-JWT",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 141470,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://crl.apple.com/root.crl0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/MSTG-JWT",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 305902,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://ocsp.apple.com/ocsp03-wwdr010",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/Alamofire.framework/Alamofire",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 478493,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://ocsp.apple.com/ocsp03-wwdr010",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/Alamofire.framework/Alamofire",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 1052557,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://ocsp.apple.com/ocsp03-wwdr010",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/KeychainSwift.framework/KeychainSwift",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 101965,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://ocsp.apple.com/ocsp03-wwdr010",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/KeychainSwift.framework/KeychainSwift",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 216109,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://ocsp.apple.com/ocsp03-wwdr010",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/SwiftyJSON.framework/SwiftyJSON",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 234931,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://ocsp.apple.com/ocsp03-wwdr010",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/SwiftyJSON.framework/SwiftyJSON",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 513731,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://ocsp.apple.com/ocsp03-wwdr010",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftCoreData.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 84627,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://ocsp.apple.com/ocsp03-wwdr010",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftCoreData.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 182995,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://ocsp.apple.com/ocsp03-wwdr010",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftCoreFoundation.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 71143,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://ocsp.apple.com/ocsp03-wwdr010",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftCoreFoundation.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 153095,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://ocsp.apple.com/ocsp03-wwdr010",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftCoreGraphics.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 137123,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://ocsp.apple.com/ocsp03-wwdr010",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftCoreGraphics.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 284323,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://ocsp.apple.com/ocsp03-wwdr010",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftCoreImage.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 71561,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://ocsp.apple.com/ocsp03-wwdr010",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftCoreImage.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 153545,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://ocsp.apple.com/ocsp03-wwdr010",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftDarwin.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 100795,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://ocsp.apple.com/ocsp03-wwdr010",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftDarwin.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 215307,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://ocsp.apple.com/ocsp03-wwdr010",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftDispatch.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 177099,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://ocsp.apple.com/ocsp03-wwdr010",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftDispatch.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 374347,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://ocsp.apple.com/ocsp03-wwdr010",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftFoundation.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 1526263,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://ocsp.apple.com/ocsp03-wwdr010",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftMetal.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 75905,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://ocsp.apple.com/ocsp03-wwdr010",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftMetal.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 157953,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://ocsp.apple.com/ocsp03-wwdr010",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftObjectiveC.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 75071,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://ocsp.apple.com/ocsp03-wwdr010",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftObjectiveC.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 157231,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://ocsp.apple.com/ocsp03-wwdr010",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftQuartzCore.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 72651,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://ocsp.apple.com/ocsp03-wwdr010",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftQuartzCore.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 154763,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://ocsp.apple.com/ocsp03-wwdr010",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftUIKit.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 105453,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://ocsp.apple.com/ocsp03-wwdr010",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftUIKit.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 236749,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://ocsp.apple.com/ocsp03-wwdr010",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftos.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 76887,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://ocsp.apple.com/ocsp03-wwdr010",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftos.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 158903,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://ocsp.apple.com/ocsp03-wwdr010",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/MSTG-JWT",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 143769,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://ocsp.apple.com/ocsp03-wwdr010",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/MSTG-JWT",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 308201,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://www.apple.com/certificateauthority/0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/Alamofire.framework/Alamofire",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 478775,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://www.apple.com/certificateauthority/0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/Alamofire.framework/Alamofire",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 1052839,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://www.apple.com/certificateauthority/0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/KeychainSwift.framework/KeychainSwift",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 102247,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://www.apple.com/certificateauthority/0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/KeychainSwift.framework/KeychainSwift",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 216391,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://www.apple.com/certificateauthority/0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/SwiftyJSON.framework/SwiftyJSON",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 235213,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://www.apple.com/certificateauthority/0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/SwiftyJSON.framework/SwiftyJSON",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 514013,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://www.apple.com/certificateauthority/0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftCoreData.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 84909,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://www.apple.com/certificateauthority/0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftCoreData.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 183277,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://www.apple.com/certificateauthority/0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftCoreFoundation.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 71425,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://www.apple.com/certificateauthority/0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftCoreFoundation.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 153377,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://www.apple.com/certificateauthority/0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftCoreGraphics.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 137405,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://www.apple.com/certificateauthority/0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftCoreGraphics.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 284605,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://www.apple.com/certificateauthority/0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftCoreImage.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 71843,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://www.apple.com/certificateauthority/0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftCoreImage.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 153827,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://www.apple.com/certificateauthority/0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftDarwin.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 101077,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://www.apple.com/certificateauthority/0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftDarwin.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 215589,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://www.apple.com/certificateauthority/0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftDispatch.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 177381,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://www.apple.com/certificateauthority/0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftDispatch.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 374629,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://www.apple.com/certificateauthority/0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftFoundation.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 1526545,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://www.apple.com/certificateauthority/0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftMetal.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 76187,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://www.apple.com/certificateauthority/0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftMetal.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 158235,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://www.apple.com/certificateauthority/0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftObjectiveC.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 75353,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://www.apple.com/certificateauthority/0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftObjectiveC.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 157513,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://www.apple.com/certificateauthority/0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftQuartzCore.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 72933,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://www.apple.com/certificateauthority/0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftQuartzCore.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 155045,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://www.apple.com/certificateauthority/0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftUIKit.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 105735,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://www.apple.com/certificateauthority/0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftUIKit.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 237031,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://www.apple.com/certificateauthority/0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftos.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 77169,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://www.apple.com/certificateauthority/0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftos.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 159185,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://www.apple.com/certificateauthority/0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/MSTG-JWT",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 144051,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "http://www.apple.com/certificateauthority/0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/MSTG-JWT",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 308483,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "https://www.apple.com/appleca/0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/Alamofire.framework/Alamofire",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 477244,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "https://www.apple.com/appleca/0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/Alamofire.framework/Alamofire",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 1051308,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "https://www.apple.com/appleca/0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/KeychainSwift.framework/KeychainSwift",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 100716,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "https://www.apple.com/appleca/0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/KeychainSwift.framework/KeychainSwift",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 214860,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "https://www.apple.com/appleca/0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/SwiftyJSON.framework/SwiftyJSON",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 233682,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "https://www.apple.com/appleca/0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/SwiftyJSON.framework/SwiftyJSON",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 512482,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "https://www.apple.com/appleca/0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftCoreData.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 83378,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "https://www.apple.com/appleca/0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftCoreData.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 181746,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "https://www.apple.com/appleca/0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftCoreFoundation.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 69894,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "https://www.apple.com/appleca/0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftCoreFoundation.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 151846,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "https://www.apple.com/appleca/0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftCoreGraphics.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 135874,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "https://www.apple.com/appleca/0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftCoreGraphics.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 283074,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "https://www.apple.com/appleca/0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftCoreImage.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 70312,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "https://www.apple.com/appleca/0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftCoreImage.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 152296,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "https://www.apple.com/appleca/0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftDarwin.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 99546,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "https://www.apple.com/appleca/0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftDarwin.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 214058,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "https://www.apple.com/appleca/0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftDispatch.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 175850,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "https://www.apple.com/appleca/0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftDispatch.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 373098,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "https://www.apple.com/appleca/0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftFoundation.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 1525014,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "https://www.apple.com/appleca/0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftMetal.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 74656,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "https://www.apple.com/appleca/0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftMetal.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 156704,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "https://www.apple.com/appleca/0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftObjectiveC.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 73822,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "https://www.apple.com/appleca/0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftObjectiveC.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 155982,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "https://www.apple.com/appleca/0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftQuartzCore.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 71402,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "https://www.apple.com/appleca/0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftQuartzCore.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 153514,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "https://www.apple.com/appleca/0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftUIKit.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 104204,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "https://www.apple.com/appleca/0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftUIKit.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 235500,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "https://www.apple.com/appleca/0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftos.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 75638,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "https://www.apple.com/appleca/0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftos.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 157654,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "https://www.apple.com/appleca/0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/MSTG-JWT",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 142520,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "https://www.apple.com/appleca/0",
+        "type": "network_url",
+        "source_file": "Payload/MSTG-JWT.app/MSTG-JWT",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 306952,
+        "extraction_method": "binary_strings_scan"
+      }
+    ],
+    "domains": [
+      {
+        "value": "T.T.lv",
+        "type": "domain",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftFoundation.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 1468105,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "foo.org",
+        "type": "domain",
+        "source_file": "Payload/MSTG-JWT.app/MSTG-JWT",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 86936,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "subject.CN",
+        "type": "domain",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/Alamofire.framework/Alamofire",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 471291,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "subject.CN",
+        "type": "domain",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/Alamofire.framework/Alamofire",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 1044715,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "subject.CN",
+        "type": "domain",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/KeychainSwift.framework/KeychainSwift",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 97671,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "subject.CN",
+        "type": "domain",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/KeychainSwift.framework/KeychainSwift",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 211815,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "subject.CN",
+        "type": "domain",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/SwiftyJSON.framework/SwiftyJSON",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 229616,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "subject.CN",
+        "type": "domain",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/SwiftyJSON.framework/SwiftyJSON",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 508160,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "subject.CN",
+        "type": "domain",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftCoreData.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 80454,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "subject.CN",
+        "type": "domain",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftCoreData.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 178822,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "subject.CN",
+        "type": "domain",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftCoreFoundation.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 67060,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "subject.CN",
+        "type": "domain",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftCoreFoundation.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 149012,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "subject.CN",
+        "type": "domain",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftCoreGraphics.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 132530,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "subject.CN",
+        "type": "domain",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftCoreGraphics.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 279730,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "subject.CN",
+        "type": "domain",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftCoreImage.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 67483,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "subject.CN",
+        "type": "domain",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftCoreImage.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 149467,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "subject.CN",
+        "type": "domain",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftDarwin.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 96496,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "subject.CN",
+        "type": "domain",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftDarwin.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 211008,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "subject.CN",
+        "type": "domain",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftDispatch.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 172222,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "subject.CN",
+        "type": "domain",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftDispatch.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 369342,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "subject.CN",
+        "type": "domain",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftFoundation.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 1510952,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "subject.CN",
+        "type": "domain",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftMetal.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 71799,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "subject.CN",
+        "type": "domain",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftMetal.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 153847,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "subject.CN",
+        "type": "domain",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftObjectiveC.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 70960,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "subject.CN",
+        "type": "domain",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftObjectiveC.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 153120,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "subject.CN",
+        "type": "domain",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftQuartzCore.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 68572,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "subject.CN",
+        "type": "domain",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftQuartzCore.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 150684,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "subject.CN",
+        "type": "domain",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftUIKit.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 101123,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "subject.CN",
+        "type": "domain",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftUIKit.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 232291,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "subject.CN",
+        "type": "domain",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftos.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 72784,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "subject.CN",
+        "type": "domain",
+        "source_file": "Payload/MSTG-JWT.app/Frameworks/libswiftos.dylib",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 154800,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "subject.CN",
+        "type": "domain",
+        "source_file": "Payload/MSTG-JWT.app/MSTG-JWT",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 138870,
+        "extraction_method": "binary_strings_scan"
+      },
+      {
+        "value": "subject.CN",
+        "type": "domain",
+        "source_file": "Payload/MSTG-JWT.app/MSTG-JWT",
+        "source_type": "binary_strings",
+        "line_number": null,
+        "offset": 303174,
+        "extraction_method": "binary_strings_scan"
+      }
+    ],
+    "ip_addresses": [],
+    "path_candidates": [],
+    "local_file_urls": []
+  },
+  "api_candidates": [],
+  "vulnerabilities": {
+    "status": "evaluated_limited",
+    "risk_score": "HIGH",
+    "summary": {
+      "critical": 0,
+      "high": 1,
+      "medium": 0,
+      "low": 0,
+      "total": 1
+    },
+    "findings": [
+      {
+        "id": "IOS-CODE-01",
+        "title": "Debug entitlement in signed application",
+        "severity": "HIGH",
+        "owasp_category": "Insufficient Binary Protections",
+        "masvs_id": "MASVS-RESILIENCE-1",
+        "cwe_id": "CWE-489: Active Debug Code",
+        "description": "The signed app claims get-task-allow=true, which enables debugger attachment in development builds. This can be intentional for a test IPA; verify that release builds remove it.",
+        "evidence": "Payload/MSTG-JWT.app/_CodeSignature: signed get-task-allow=true",
+        "remediation": "Build and sign the distributed release without the get-task-allow entitlement.",
+        "affected_items": [
+          "Payload/MSTG-JWT.app/_CodeSignature: get-task-allow"
+        ]
+      }
+    ],
+    "message": "Limited IPA static checks: ATS exceptions and signed debug entitlement. No runtime behavior was tested.",
+    "limitations": [
+      "Only selected iOS configuration rules were evaluated; no findings does not establish that the app is secure."
+    ]
+  },
+  "apk_components": [],
+  "split_structure": [],
+  "manifest_evidence": [],
+  "analysis_notes": [
+    "Analysis is limited to static package analysis of the provided IPA archive.",
+    "Static network indicators prove only that the string constant exists in the package; they do not prove runtime use.",
+    "Declared usage descriptions indicate capability declarations in Info.plist; they do not prove runtime permission access.",
+    "Selected ATS and signed debug entitlement settings are checked against limited static risk rules.",
+    "No vulnerability exploitation was performed.",
+    "A finding severity is not a complete security verdict for the application.",
+    "No API candidates were identified by the current call-context extractor.",
+    "Static network indicators may still exist. The current V1 API candidate extractor supports limited framework-specific call patterns. Zero candidates does not mean the application has no APIs.",
+    "No vulnerability exploitation was performed.",
+    "No security verdict was produced."
+  ],
+  "limitations": [
+    "Analysis is limited to static heuristics on decoded package contents without runtime execution.",
+    "V1 API candidate extractor only tracks specific call-context register patterns (e.g. Fuel).",
+    "Dynamic instrumentation, traffic interception (MITM/Burp), and deep UI exploration were not performed.",
+    "No security verdict, vulnerability score, or risk classification is provided."
+  ],
+  "configuration": {
+    "usage_descriptions": [
+      {
+        "key": "NSFaceIDUsageDescription",
+        "value": "Face ID testing",
+        "classification": "declared_usage_description",
+        "evidence": {
+          "source_file": "Payload/MSTG-JWT.app/Info.plist",
+          "plist_key": "NSFaceIDUsageDescription",
+          "extraction_method": "plistlib"
+        }
+      }
+    ],
+    "url_schemes": [],
+    "queries_schemes": [],
+    "ats": {
+      "status": "not_found",
+      "allows_arbitrary_loads": false,
+      "allows_local_networking": false,
+      "allows_arbitrary_loads_in_web_content": false,
+      "allows_arbitrary_loads_for_media": false,
+      "exception_domains": [],
+      "configuration_facts": []
+    },
+    "entitlements": {
+      "status": "extracted",
+      "source_type": "embedded_mobileprovision",
+      "items": {
+        "keychain-access-groups": [
+          "6MMFRV23J5.*"
+        ],
+        "get-task-allow": true,
+        "application-identifier": "6MMFRV23J5.*",
+        "com.apple.developer.team-identifier": "6MMFRV23J5"
+      },
+      "entitlements": {
+        "keychain-access-groups": [
+          "6MMFRV23J5.*"
+        ],
+        "get-task-allow": true,
+        "application-identifier": "6MMFRV23J5.*",
+        "com.apple.developer.team-identifier": "6MMFRV23J5"
+      },
+      "item_count": 4,
+      "source": "Payload/MSTG-JWT.app/embedded.mobileprovision",
+      "extraction_method": "embedded_mobileprovision_plist",
+      "sources": {
+        "embedded_mobileprovision": {
+          "source_type": "embedded_mobileprovision",
+          "status": "extracted",
+          "items": {
+            "keychain-access-groups": [
+              "6MMFRV23J5.*"
+            ],
+            "get-task-allow": true,
+            "application-identifier": "6MMFRV23J5.*",
+            "com.apple.developer.team-identifier": "6MMFRV23J5"
+          },
+          "item_count": 4,
+          "source_file": "Payload/MSTG-JWT.app/embedded.mobileprovision",
+          "extraction_method": "embedded_mobileprovision_plist",
+          "note": "Provisioning profile capabilities represent developer/device authorization limits; they are not automatically equivalent to effective runtime behavior."
+        },
+        "codesign_entitlements": {
+          "source_type": "codesign_entitlements",
+          "status": "extracted",
+          "items": {
+            "application-identifier": "6MMFRV23J5.sg.vp.MSTG.JWT",
+            "com.apple.developer.team-identifier": "6MMFRV23J5",
+            "get-task-allow": true,
+            "keychain-access-groups": [
+              "6MMFRV23J5.sg.vp.MSTG.JWT"
+            ]
+          },
+          "item_count": 4,
+          "source_file": "Payload/MSTG-JWT.app/_CodeSignature",
+          "extraction_method": "codesign_cli",
+          "note": "Embedded signature entitlements extracted from Mach-O code signature metadata."
+        }
+      },
+      "records": [
+        {
+          "key": "keychain-access-groups",
+          "value": [
+            "6MMFRV23J5.*"
+          ],
+          "source_type": "embedded_mobileprovision",
+          "source_file": "Payload/MSTG-JWT.app/embedded.mobileprovision",
+          "extraction_method": "embedded_mobileprovision_plist"
+        },
+        {
+          "key": "get-task-allow",
+          "value": true,
+          "source_type": "embedded_mobileprovision",
+          "source_file": "Payload/MSTG-JWT.app/embedded.mobileprovision",
+          "extraction_method": "embedded_mobileprovision_plist"
+        },
+        {
+          "key": "application-identifier",
+          "value": "6MMFRV23J5.*",
+          "source_type": "embedded_mobileprovision",
+          "source_file": "Payload/MSTG-JWT.app/embedded.mobileprovision",
+          "extraction_method": "embedded_mobileprovision_plist"
+        },
+        {
+          "key": "com.apple.developer.team-identifier",
+          "value": "6MMFRV23J5",
+          "source_type": "embedded_mobileprovision",
+          "source_file": "Payload/MSTG-JWT.app/embedded.mobileprovision",
+          "extraction_method": "embedded_mobileprovision_plist"
+        },
+        {
+          "key": "application-identifier",
+          "value": "6MMFRV23J5.sg.vp.MSTG.JWT",
+          "source_type": "codesign_entitlements",
+          "source_file": "Payload/MSTG-JWT.app/_CodeSignature",
+          "extraction_method": "codesign_cli"
+        },
+        {
+          "key": "com.apple.developer.team-identifier",
+          "value": "6MMFRV23J5",
+          "source_type": "codesign_entitlements",
+          "source_file": "Payload/MSTG-JWT.app/_CodeSignature",
+          "extraction_method": "codesign_cli"
+        },
+        {
+          "key": "get-task-allow",
+          "value": true,
+          "source_type": "codesign_entitlements",
+          "source_file": "Payload/MSTG-JWT.app/_CodeSignature",
+          "extraction_method": "codesign_cli"
+        },
+        {
+          "key": "keychain-access-groups",
+          "value": [
+            "6MMFRV23J5.sg.vp.MSTG.JWT"
+          ],
+          "source_type": "codesign_entitlements",
+          "source_file": "Payload/MSTG-JWT.app/_CodeSignature",
+          "extraction_method": "codesign_cli"
+        }
+      ],
+      "runtime_note": "Provisioning profile entitlements represent developer/provisioning capability limits and are not automatically equivalent to effective runtime behavior."
+    }
+  }
+}

@@ -535,13 +535,15 @@
       border: 1px solid #bfdbfe;
     }
 
-    .badge-success {
+    .badge-success,
+    .badge-completed {
       background: var(--success-bg);
       color: var(--success);
       border: 1px solid #a7f3d0;
     }
 
-    .badge-warning {
+    .badge-warning,
+    .badge-partial {
       background: var(--warning-bg);
       color: var(--warning);
       border: 1px solid #fde68a;
@@ -553,7 +555,8 @@
       border: 1px solid #fecaca;
     }
 
-    .badge-skipped {
+    .badge-skipped,
+    .badge-not_available {
       background: #f1f5f9;
       color: #475569;
       border: 1px solid #cbd5e1;
@@ -1369,7 +1372,8 @@
       border-left-color: #16a34a;
     }
 
-    .stage-card.stage-skipped {
+    .stage-card.stage-skipped,
+    .stage-card.stage-not_available {
       background: #f8fafc;
       border-left-color: #94a3b8;
     }
@@ -1379,7 +1383,8 @@
       border-left-color: #dc2626;
     }
 
-    .stage-card.stage-warning {
+    .stage-card.stage-warning,
+    .stage-card.stage-partial {
       background: #fffbeb;
       border-left-color: #d97706;
     }
@@ -1740,6 +1745,89 @@
       overflow: auto;
       border: 1px solid #1e293b;
     }
+
+    /* ── ADVANCED OPTIONS ──────────────────────────────── */
+    .advanced-options-card {
+      border: 1px solid var(--border);
+      border-radius: var(--r-sm);
+      background: var(--surface-alt);
+      margin-top: 14px;
+      margin-bottom: 16px;
+      overflow: hidden;
+      transition: border-color 0.15s ease;
+    }
+
+    .advanced-options-summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-2);
+      cursor: pointer;
+      user-select: none;
+      list-style: none;
+    }
+
+    .advanced-options-summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .advanced-options-summary:hover {
+      color: var(--text);
+      background: #f1f5f9;
+    }
+
+    .advanced-options-summary-icon {
+      font-size: 11px;
+      color: var(--text-4);
+      transition: transform 0.15s ease;
+    }
+
+    .advanced-options-card[open] {
+      border-color: #cbd5e1;
+      background: var(--surface);
+    }
+
+    .advanced-options-card[open] .advanced-options-summary {
+      border-bottom: 1px solid var(--border);
+      background: var(--surface-alt);
+    }
+
+    .advanced-options-card[open] .advanced-options-summary-icon {
+      transform: rotate(90deg);
+    }
+
+    .advanced-options-content {
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      background: var(--surface);
+    }
+
+    .advanced-subgroup {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .advanced-subgroup-title {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-4);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 2px;
+    }
+
+    .advanced-hint {
+      font-size: 10.5px;
+      color: var(--text-4);
+      line-height: 1.35;
+      margin-top: 2px;
+    }
   </style>
 </head>
 
@@ -1768,7 +1856,12 @@
       <!-- ─── LEFT SIDEBAR: CONFIG ──────────────────── -->
       <div class="sidebar">
 
-        <div class="sidebar-section">
+        <div class="sidebar-section" style="margin-bottom:14px;">
+          <div class="sidebar-group-title" style="font-size:13px; font-weight:800; color:var(--text); letter-spacing:0.04em; margin-bottom:0; padding-bottom:6px;">New Scan</div>
+        </div>
+
+        <!-- Platform Selection (Hidden for Android-Only Milestone) -->
+        <div class="sidebar-section" id="platformSection" style="display:none;" aria-hidden="true">
           <div class="sidebar-group-title">Target</div>
           <div class="sidebar-label">Platform</div>
           <div class="segmented-group">
@@ -1793,13 +1886,13 @@
         </div>
 
         <div class="sidebar-section">
-          <label for="apkUrl" class="sidebar-label">Target URL (Direct APK or Google Play Store)</label>
-          <input type="text" id="apkUrl" placeholder="Paste APK, IPA, or Play Store URL..."
+          <label for="apkUrl" class="sidebar-label" style="font-weight:700;">Target Application</label>
+          <input type="text" id="apkUrl" placeholder="Paste APK or Play Store URL..."
             oninput="handleUrlInput()" />
           <div id="urlClassificationBadge"
             style="display:none; margin-top:6px; font-family:var(--mono); font-size:11px;"></div>
           <div class="quick-targets-panel">
-            <div class="quick-targets-heading">Quick Demos</div>
+            <div class="quick-targets-heading">Quick Targets</div>
             <div class="quick-targets-hint">Choose a sample to fill the target field.</div>
             <div class="preset-chips-grid" id="quickTargetsAndroid">
               <button type="button" class="preset-chip"
@@ -1823,44 +1916,73 @@
           </div>
         </div>
 
-        <div class="sidebar-section" id="androidAnalysisOptions">
-          <div class="sidebar-group-title">Analysis Options</div>
-          <div style="display:flex; flex-direction:column; gap:6px;">
-            <label class="checkbox-row">
-              <input type="checkbox" id="reinstall" checked /> Reinstall existing
-            </label>
-            <label class="checkbox-row">
-              <input type="checkbox" id="grantPermissions" /> Grant permissions
-            </label>
-          </div>
-        </div>
+        <!-- Advanced Options (Collapsed Technical Settings) -->
+        <details class="advanced-options-card" id="advancedOptions">
+          <summary class="advanced-options-summary">
+            <span>Advanced Options</span>
+            <span class="advanced-options-summary-icon">▸</span>
+          </summary>
+          <div class="advanced-options-content">
+            <!-- Install Mode -->
+            <div class="advanced-subgroup" id="installModeSection">
+              <div class="advanced-subgroup-title">Install Mode</div>
+              <div class="segmented-group">
+                <label class="radio-option">
+                  <input type="radio" name="installMode" value="manual" checked />
+                  Manual
+                </label>
+                <label class="radio-option radio-option-secondary">
+                  <input type="radio" name="installMode" value="ui_automation" />
+                  Auto
+                </label>
+              </div>
+            </div>
 
-        <div class="sidebar-section" id="adbTargetSection">
-          <div class="sidebar-group-title">Device / Runtime</div>
-          <div class="sidebar-label">ADB Target</div>
-          <input type="text" id="adbSerial" value="emulator-5554" readonly aria-readonly="true" />
-          <div style="font-size:11px; color:var(--text-4); margin-top:4px;">Fixed Android Studio emulator on this Mac
-            backend.</div>
-        </div>
+            <!-- Analysis Options -->
+            <div class="advanced-subgroup" id="androidAnalysisOptions">
+              <div class="advanced-subgroup-title">Analysis Options</div>
+              <div style="display:flex; flex-direction:column; gap:6px;">
+                <label class="checkbox-row">
+                  <input type="checkbox" id="reinstall" checked /> Reinstall existing
+                </label>
+                <label class="checkbox-row">
+                  <input type="checkbox" id="grantPermissions" /> Grant permissions
+                </label>
+              </div>
+            </div>
 
-        <div class="sidebar-section" id="installModeSection">
-          <div class="sidebar-label">Install Mode</div>
-          <div class="segmented-group">
-            <label class="radio-option">
-              <input type="radio" name="installMode" value="manual" checked />
-              Manual
-            </label>
-            <label class="radio-option radio-option-secondary">
-              <input type="radio" name="installMode" value="ui_automation" />
-              Auto
-            </label>
+            <!-- Runtime Device -->
+            <div class="advanced-subgroup" id="adbTargetSection">
+              <div class="advanced-subgroup-title">Runtime Device</div>
+              <input type="text" id="adbSerial" value="emulator-5554" readonly aria-readonly="true" />
+              <div class="advanced-hint">Fixed local Android emulator target (emulator-5554).</div>
+            </div>
+
+            <!-- Connectivity Diagnostics -->
+            <div class="advanced-subgroup" id="probeCard">
+              <div class="advanced-subgroup-title">Connectivity Diagnostics</div>
+              <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
+                <div>
+                  <div style="font-size:11.5px; font-weight:600; color:var(--text);">Connectivity Probe</div>
+                  <div class="advanced-hint">Verify emulator reverse socket reachability.</div>
+                </div>
+                <button type="button" class="btn btn-secondary" id="probeBtn" onclick="runProbe()"
+                  style="padding:4px 10px; font-size:11px; white-space:nowrap;">Test</button>
+              </div>
+              <div id="probeDetails" style="font-size:11px; display:none; margin-top:8px;">
+                <div class="kv-row"><span class="kv-key">Probe URL:</span><span class="kv-val" id="probeUrl">-</span></div>
+                <div class="kv-row"><span class="kv-key">Hit:</span><span class="kv-val" id="probeHit">-</span></div>
+                <div class="kv-row"><span class="kv-key">Hit Count:</span><span class="kv-val" id="probeHitCount">-</span></div>
+                <div class="kv-row"><span class="kv-key">Status:</span><span class="kv-val" id="probeStatus" style="color:var(--success);">-</span></div>
+              </div>
+              <div class="probe-disclaimer" style="font-size:10.5px; color:var(--text-4); margin-top:6px;">⚠️ Emulator connectivity only — not application navigation. Deterministic static analysis runs independently of ADB.</div>
+            </div>
           </div>
-        </div>
+        </details>
 
         <div class="sidebar-section">
-          <div class="sidebar-group-title">Action</div>
           <button class="btn btn-primary" id="startBtn" onclick="startDemo()" data-action="START DEMO"
-            title="START DEMO">▶ Start Analysis</button>
+            title="Start Scan">Start Scan</button>
           <button class="btn btn-secondary" id="resetBtn" onclick="resetDashboardToInitial()"
             style="margin-top:8px; width:100%; font-size:12px;">↺ Reset View</button>
           <button class="btn btn-stop" id="stopBtn" onclick="stopDemo()"
@@ -1944,7 +2066,7 @@
         </div>
 
         <div id="completedBanner" class="banner banner-success">
-          <div><strong>COMPLETED</strong> — Pipeline execution completed. Review skipped stages and analysis notes.
+          <div><strong>ANALYSIS COMPLETE</strong> — Static security analysis complete. Review findings and reports below.
           </div>
         </div>
 
@@ -1952,79 +2074,53 @@
           <div id="errorBannerText">An error occurred.</div>
         </div>
 
-        <!-- Pipeline Stages: Horizontal connected strip -->
-        <div class="stages-grid">
-          <div class="stage-card" id="card-acquisition">
+        <!-- Product-Level Analysis Progression -->
+        <div class="stages-grid" id="productStagesGrid">
+          <div class="stage-card" id="card-app_acquisition">
             <div class="stage-header">
-              <div class="stage-title">1. Acquisition</div>
-              <span class="badge badge-pending" id="badge-acquisition">pending</span>
+              <div class="stage-title">1. Application Acquisition</div>
+              <span class="badge badge-pending" id="badge-app_acquisition">Pending</span>
             </div>
-            <div class="stage-message" id="msg-acquisition">Waiting...</div>
-            <div class="stage-details" id="details-acquisition"></div>
-          </div>
-
-          <div class="stage-card" id="card-preprocessing">
-            <div class="stage-header">
-              <div class="stage-title">2. Preprocessing</div>
-              <span class="badge badge-pending" id="badge-preprocessing">pending</span>
-            </div>
-            <div class="stage-message" id="msg-preprocessing">Waiting...</div>
-            <div class="stage-details" id="details-preprocessing"></div>
+            <div class="stage-message" id="msg-app_acquisition">Waiting to start...</div>
+            <div class="stage-details" id="details-app_acquisition"></div>
           </div>
 
           <div class="stage-card" id="card-static_analysis">
             <div class="stage-header">
-              <div class="stage-title">3. Static Analysis</div>
-              <span class="badge badge-pending" id="badge-static_analysis">pending</span>
+              <div class="stage-title">2. Static Analysis</div>
+              <span class="badge badge-pending" id="badge-static_analysis">Pending</span>
             </div>
             <div class="stage-message" id="msg-static_analysis">Waiting...</div>
             <div class="stage-details" id="details-static_analysis"></div>
           </div>
 
-          <div class="stage-card" id="card-runtime">
+          <div class="stage-card" id="card-dynamic_analysis">
             <div class="stage-header">
-              <div class="stage-title">4. Runtime Launch Verification</div>
-              <span class="badge badge-pending" id="badge-runtime">pending</span>
+              <div class="stage-title">3. Dynamic Analysis</div>
+              <span class="badge badge-not_available" id="badge-dynamic_analysis">Not Available</span>
             </div>
-            <div class="stage-message" id="msg-runtime">Waiting...</div>
-            <div class="stage-details" id="details-runtime"></div>
+            <div class="stage-message" id="msg-dynamic_analysis">Scheduled for subsequent milestone</div>
+            <div class="stage-details" id="details-dynamic_analysis"></div>
+          </div>
+
+          <div class="stage-card" id="card-agent_analysis">
+            <div class="stage-header">
+              <div class="stage-title">4. Agent Analysis</div>
+              <span class="badge badge-not_available" id="badge-agent_analysis">Not Available</span>
+            </div>
+            <div class="stage-message" id="msg-agent_analysis">Scheduled for subsequent milestone</div>
+            <div class="stage-details" id="details-agent_analysis"></div>
+          </div>
+
+          <div class="stage-card" id="card-report_generation">
+            <div class="stage-header">
+              <div class="stage-title">5. Report Generation</div>
+              <span class="badge badge-pending" id="badge-report_generation">Pending</span>
+            </div>
+            <div class="stage-message" id="msg-report_generation">Pending analysis completion</div>
+            <div class="stage-details" id="details-report_generation"></div>
           </div>
         </div>
-
-        <!-- Connectivity Probe (Collapsible Secondary Utility) -->
-        <details class="probe-card" id="probeCard" style="margin-bottom:20px; cursor:default;">
-          <summary
-            style="display:flex; justify-content:space-between; align-items:center; cursor:pointer; list-style:none; user-select:none;">
-            <div style="display:flex; align-items:center; gap:8px;">
-              <span style="font-size:12.5px; font-weight:600; color:var(--text-2);">Device / Emulator Utilities</span>
-              <span class="tag" style="font-size:9.5px; padding:1px 6px;">Optional</span>
-            </div>
-            <span style="font-size:11.5px; color:var(--text-3); font-weight:500;">Reachability Probe ▾</span>
-          </summary>
-          <div style="margin-top:14px; padding-top:12px; border-top:1px solid var(--border);">
-            <div class="probe-header">
-              <div>
-                <div style="font-size:12.5px; font-weight:600; color:var(--text);">Connectivity Probe</div>
-                <div style="font-size:11.5px; color:var(--text-3);">Verify emulator reverse socket reachability
-                  (optional pre-flight)</div>
-              </div>
-              <button class="btn btn-secondary" id="probeBtn" onclick="runProbe()"
-                style="padding:4px 10px; font-size:11px;">Test Connectivity</button>
-            </div>
-            <div id="probeDetails" style="font-size:12px; display:none; margin-top:10px;">
-              <div class="kv-row"><span class="kv-key">Probe URL:</span><span class="kv-val" id="probeUrl">-</span>
-              </div>
-              <div class="kv-row"><span class="kv-key">Hit:</span><span class="kv-val" id="probeHit">-</span></div>
-              <div class="kv-row"><span class="kv-key">Hit Count:</span><span class="kv-val" id="probeHitCount">-</span>
-              </div>
-              <div class="kv-row"><span class="kv-key">Status:</span><span class="kv-val" id="probeStatus"
-                  style="color:var(--success);">-</span></div>
-            </div>
-            <div class="probe-disclaimer" style="font-size:11px; color:var(--text-4); margin-top:6px;">⚠️ Emulator
-              connectivity only — not application navigation. Deterministic static analysis runs independently of ADB.
-            </div>
-          </div>
-        </details>
 
         <!-- ANALYSIS RESULTS -->
         <div class="analysis-card" id="analysisSection" style="display:none;">
@@ -2397,19 +2493,148 @@
 
     function setBadge(stage, state) {
       const badge = document.getElementById("badge-" + stage);
+      const normalizedState = (state || "pending").toLowerCase().replace(/[-\s]/g, "_");
+      const labelMap = {
+        "pending": "Pending",
+        "running": "Running",
+        "completed": "Completed",
+        "success": "Completed",
+        "partial": "Partial",
+        "warning": "Partial",
+        "failed": "Failed",
+        "not_available": "Not Available",
+        "skipped": "Not Available"
+      };
+      const displayLabel = labelMap[normalizedState] || (state ? state.charAt(0).toUpperCase() + state.slice(1) : "Pending");
+      const cssState = (normalizedState === "success") ? "completed" :
+                       (normalizedState === "warning") ? "partial" :
+                       (normalizedState === "skipped") ? "not_available" : normalizedState;
+
       if (badge) {
-        badge.className = "badge badge-" + state;
-        badge.textContent = state;
+        badge.className = "badge badge-" + cssState;
+        badge.textContent = displayLabel;
       }
       const card = document.getElementById("card-" + stage);
       if (card) {
-        card.className = "stage-card stage-" + (state || "pending");
+        card.className = "stage-card stage-" + cssState;
       }
     }
 
     function setMessage(stage, msg) {
       const el = document.getElementById("msg-" + stage);
       if (el) el.textContent = msg || "";
+    }
+
+    function deriveProductStages(backendStages, statusData) {
+      backendStages = backendStages || {};
+      statusData = statusData || {};
+      const acq = backendStages.acquisition || { state: "pending", message: "" };
+      const pre = backendStages.preprocessing || { state: "pending", message: "" };
+      const sta = backendStages.static_analysis || { state: "pending", message: "" };
+      const rt = backendStages.runtime || { state: "pending", message: "" };
+
+      const product = {
+        app_acquisition: {
+          state: "pending",
+          message: acq.message || "Waiting to start...",
+          data: acq.data
+        },
+        static_analysis: {
+          state: "pending",
+          message: "Waiting for application acquisition...",
+          data: sta.data || pre.data
+        },
+        dynamic_analysis: {
+          state: "not_available",
+          message: "Full dynamic analysis scheduled for subsequent milestone",
+          data: rt.data
+        },
+        agent_analysis: {
+          state: "not_available",
+          message: "Scheduled for subsequent milestone (Day 8+)",
+          data: null
+        },
+        report_generation: {
+          state: "pending",
+          message: "Pending analysis completion",
+          data: statusData.report
+        }
+      };
+
+      // 1. Application Acquisition
+      if (acq.state === "failed") {
+        product.app_acquisition.state = "failed";
+      } else if (acq.state === "running" || acq.state === "waiting" || acq.state === "waiting_for_installation") {
+        product.app_acquisition.state = "running";
+      } else if (acq.state === "success" || acq.state === "completed") {
+        product.app_acquisition.state = "completed";
+      } else if (acq.state === "warning" || acq.state === "partial") {
+        product.app_acquisition.state = "partial";
+      } else {
+        product.app_acquisition.state = "pending";
+      }
+
+      // 2. Static Analysis (Preprocessing + Static Analysis)
+      if (pre.state === "failed") {
+        product.static_analysis.state = "failed";
+        product.static_analysis.message = pre.message || "Decompilation / extraction failed";
+      } else if (sta.state === "failed") {
+        product.static_analysis.state = "failed";
+        product.static_analysis.message = sta.message || "Static security analysis failed";
+      } else if (pre.state === "running") {
+        product.static_analysis.state = "running";
+        product.static_analysis.message = pre.message || "Decompiling Dalvik bytecode and decoding resources...";
+      } else if ((pre.state === "success" || pre.state === "completed") && (sta.state === "pending" || sta.state === "waiting" || !sta.state)) {
+        product.static_analysis.state = "running";
+        product.static_analysis.message = "Preparing decompiled artifacts for security extraction...";
+      } else if (sta.state === "running") {
+        product.static_analysis.state = "running";
+        product.static_analysis.message = sta.message || "Extracting security candidates & indicators...";
+      } else if (sta.state === "success" || sta.state === "completed") {
+        product.static_analysis.state = "completed";
+        product.static_analysis.message = sta.message || "Static security inventory generated.";
+      } else if (pre.state === "warning" || sta.state === "warning" || pre.state === "partial" || sta.state === "partial") {
+        product.static_analysis.state = "partial";
+        product.static_analysis.message = sta.message || pre.message || "Static analysis complete with warnings.";
+      } else {
+        product.static_analysis.state = "pending";
+        product.static_analysis.message = "Waiting for application acquisition...";
+      }
+
+      // 3. Dynamic Analysis (Critical Integrity Rule: Never mark completed in Phase 1)
+      if (rt.state === "running") {
+        product.dynamic_analysis.state = "running";
+        product.dynamic_analysis.message = "Runtime environment verification in progress...";
+      } else if (rt.state === "failed") {
+        product.dynamic_analysis.state = "failed";
+        product.dynamic_analysis.message = rt.message || "Runtime preflight failed.";
+      } else if (rt.state === "success" || rt.state === "completed") {
+        product.dynamic_analysis.state = "not_available";
+        product.dynamic_analysis.message = "Runtime preflight verified. Full dynamic analysis scheduled for Day 4+";
+      } else if (rt.state === "skipped") {
+        product.dynamic_analysis.state = "not_available";
+        product.dynamic_analysis.message = "Runtime analysis skipped for this platform/target.";
+      } else {
+        product.dynamic_analysis.state = "pending";
+        product.dynamic_analysis.message = "Full dynamic analysis scheduled for subsequent milestone";
+      }
+
+      // 4. Agent Analysis (Critical Integrity Rule: Never fake progress)
+      product.agent_analysis.state = "not_available";
+      product.agent_analysis.message = "Scheduled for subsequent milestone (Day 8+)";
+
+      // 5. Report Generation (Critical Integrity Rule: 3-report architecture not full, never fake completed)
+      const staticCompleted = product.static_analysis.state === "completed";
+      const hasReport = statusData.overall_status === "completed" || (statusData.report && (statusData.report.html_url || statusData.report.json_url));
+      if (staticCompleted || hasReport) {
+        product.report_generation.state = "partial";
+        product.report_generation.message = "Static analysis report available. Dynamic & Agent reports pending.";
+      } else {
+        product.report_generation.state = "pending";
+        product.report_generation.message = "Pending analysis execution.";
+      }
+
+      return product;
     }
 
     function escapeHtml(str) {
@@ -4219,8 +4444,8 @@
     }
 
     function getSelectedPlatform() {
-      const rad = document.querySelector('input[name="platformRadio"]:checked');
-      return rad ? rad.value : "android";
+      // Deterministically return 'android' for this milestone while preserving legacy fallback contract
+      return "android";
     }
 
     function handlePlatformChange() {
@@ -4256,7 +4481,7 @@
         const scopeCard = document.getElementById("iosScopeCard");
         if (scopeCard) scopeCard.style.display = "none";
         iosNotice.style.display = "none";
-        if (urlLabel) urlLabel.textContent = "Target URL (Direct APK or Google Play Store)";
+        if (urlLabel) urlLabel.textContent = "Target Application";
         if (urlInput) urlInput.placeholder = "https://play.google.com/store/apps/details?id=... or direct .apk URL";
         handleUrlInput();
       }
@@ -4369,31 +4594,32 @@
         const status = await resp.json();
 
         const stages = status.stages || {};
-        for (const [stage, info] of Object.entries(stages)) {
-          setBadge(stage, info.state);
-          setMessage(stage, info.message);
-          if (stage === 'acquisition') {
-            if (info.state === 'waiting_for_installation') {
-              const pkgName = (info.data && info.data.package_name) || "";
-              const remSec = (info.data && info.data.remaining_seconds !== undefined) ? ` (${info.data.remaining_seconds}s timeout)` : '';
-              document.getElementById("details-acquisition").innerHTML = `
-                <div class="notice-box" style="margin-top:8px;">
-                  <div style="font-weight:600; color:#38bdf8; margin-bottom:2px;">
-                    Waiting for installation${remSec}
-                  </div>
-                  <div style="font-size:12px; margin-bottom:4px;"><b>Package:</b> <code>${escapeHtml(pkgName)}</code></div>
-                  <div style="font-size:11.5px; color:var(--text-dim);">
-                    Install this application in the emulator's Google Play Store. MobiAttack will continue automatically when installation is detected.
-                  </div>
+        const productStages = deriveProductStages(stages, status);
+        for (const [stage, pInfo] of Object.entries(productStages)) {
+          setBadge(stage, pInfo.state);
+          setMessage(stage, pInfo.message);
+        }
+
+        const acqInfo = stages.acquisition || {};
+        const acqDetails = document.getElementById("details-app_acquisition");
+        if (acqDetails) {
+          if (acqInfo.state === 'waiting_for_installation') {
+            const pkgName = (acqInfo.data && acqInfo.data.package_name) || "";
+            const remSec = (acqInfo.data && acqInfo.data.remaining_seconds !== undefined) ? ` (${acqInfo.data.remaining_seconds}s timeout)` : '';
+            acqDetails.innerHTML = `
+              <div class="notice-box" style="margin-top:8px;">
+                <div style="font-weight:600; color:#38bdf8; margin-bottom:2px;">
+                  Waiting for installation${remSec}
                 </div>
-              `;
-            } else if (info.data) {
-              renderAcquisition(info.data);
-            }
+                <div style="font-size:12px; margin-bottom:4px;"><b>Package:</b> <code>${escapeHtml(pkgName)}</code></div>
+                <div style="font-size:11.5px; color:var(--text-dim);">
+                  Install this application in the emulator's Google Play Store. MobiAttack will continue automatically when installation is detected.
+                </div>
+              </div>
+            `;
+          } else {
+            acqDetails.innerHTML = "";
           }
-          if (stage === 'preprocessing' && info.data) renderPreprocessing(info.data);
-          if (stage === 'static_analysis' && info.data) renderStatic(info.data);
-          if (stage === 'runtime' && info.data) renderRuntime(info.data);
         }
 
         if (status.overall_status === "completed") {
@@ -4456,9 +4682,9 @@
           data = await resp.json();
         } catch (_) { }
         document.getElementById("startBtn").disabled = false;
-        ["acquisition", "preprocessing", "static_analysis", "runtime"].forEach(stage => {
+        ["app_acquisition", "static_analysis", "dynamic_analysis", "agent_analysis", "report_generation"].forEach(stage => {
           const b = document.getElementById("badge-" + stage);
-          if (b && (b.textContent === "running" || b.textContent === "waiting" || b.textContent === "waiting_for_installation")) {
+          if (b && (b.textContent === "Running" || b.textContent === "running")) {
             setBadge(stage, "failed");
             setMessage(stage, "Stopped by user.");
           }
@@ -4501,10 +4727,13 @@
       document.getElementById("completedBanner").style.display = "none";
       document.getElementById("errorBanner").style.display = "none";
       document.getElementById("analysisSection").style.display = "none";
-      ["acquisition", "preprocessing", "static_analysis", "runtime"].forEach(stage => {
-        setBadge(stage, "pending");
-        setMessage(stage, "Waiting to start...");
-        document.getElementById("details-" + stage).innerHTML = "";
+      ["app_acquisition", "static_analysis", "dynamic_analysis", "agent_analysis", "report_generation"].forEach(stage => {
+        setBadge(stage, (stage === "agent_analysis" || stage === "dynamic_analysis") ? "not_available" : "pending");
+        setMessage(stage, stage === "agent_analysis" ? "Scheduled for subsequent milestone" :
+                          stage === "dynamic_analysis" ? "Scheduled for subsequent milestone" :
+                          "Waiting to start...");
+        const detailsEl = document.getElementById("details-" + stage);
+        if (detailsEl) detailsEl.innerHTML = "";
       });
 
       document.getElementById("startBtn").disabled = true;
@@ -4573,6 +4802,8 @@
       if (reinstallEl) reinstallEl.checked = true;
       const permEl = document.getElementById("grantPermissions");
       if (permEl) permEl.checked = false;
+      const advEl = document.getElementById("advancedOptions");
+      if (advEl) advEl.open = false;
 
       // Hide banners and analysis section
       const compBanner = document.getElementById("completedBanner");
@@ -4582,10 +4813,12 @@
       const anaSection = document.getElementById("analysisSection");
       if (anaSection) anaSection.style.display = "none";
 
-      // Reset all 4 stages to clean initial pending state
-      ["acquisition", "preprocessing", "static_analysis", "runtime"].forEach(stage => {
-        setBadge(stage, "pending");
-        setMessage(stage, "Waiting...");
+      // Reset all 5 product stages to clean initial state
+      ["app_acquisition", "static_analysis", "dynamic_analysis", "agent_analysis", "report_generation"].forEach(stage => {
+        setBadge(stage, (stage === "agent_analysis" || stage === "dynamic_analysis") ? "not_available" : "pending");
+        setMessage(stage, stage === "agent_analysis" ? "Scheduled for subsequent milestone" :
+                          stage === "dynamic_analysis" ? "Scheduled for subsequent milestone" :
+                          "Waiting...");
         const detailsEl = document.getElementById("details-" + stage);
         if (detailsEl) detailsEl.innerHTML = "";
       });

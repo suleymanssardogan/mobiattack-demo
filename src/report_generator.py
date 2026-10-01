@@ -10,8 +10,14 @@ from __future__ import annotations
 
 import html
 import json
+import logging
+import os
 from pathlib import Path
+import re
 from typing import Any
+import warnings
+
+logger = logging.getLogger(__name__)
 
 
 def build_report_dict(
@@ -238,6 +244,462 @@ def build_report_dict(
         report["failure_reason"] = error or "Stage execution failed."
 
     return report
+
+
+FORBIDDEN_HOST_PREFIXES: tuple[str, ...] = (
+    "/Users/",
+    "/home/",
+    "/opt/homebrew/",
+    "/opt/local/",
+    "/private/",
+    "/tmp/",
+)
+
+
+def is_forbidden_host_path(path: str) -> bool:
+    """Checks whether a string represents an absolute scanner/host filesystem path."""
+    if not isinstance(path, str):
+        return False
+    # Check Unix-style forbidden host prefixes
+    if any(path.startswith(prefix) for prefix in FORBIDDEN_HOST_PREFIXES):
+        return True
+    # Check Windows drive letter absolute paths (e.g. C:\Users\... or C:/...)
+    if re.match(r"^[a-zA-Z]:[/\\]", path):
+        return True
+    return False
+
+
+def sanitize_evidence_path(path: str) -> str:
+    """Converts a host filesystem path to an application-relative evidence path if needed.
+
+    Preserves application-relative paths, URLs, and device inspection paths unchanged.
+    """
+    if not isinstance(path, str):
+        return path
+    if not is_forbidden_host_path(path):
+        return path
+
+    normalized = path.replace("\\", "/")
+    # Check standard package relative markers
+    for marker in ("smali/", "smali_classes", "res/", "assets/", "Payload/"):
+        idx = normalized.find(marker)
+        if idx != -1:
+            return normalized[idx:]
+
+    if "AndroidManifest.xml" in normalized:
+        return "AndroidManifest.xml"
+    if "Info.plist" in normalized:
+        return "Info.plist"
+
+    return os.path.basename(normalized) or path
+
+
+def sanitize_text_host_paths(text: str | None) -> str | None:
+    """Sanitizes host paths embedded within diagnostic strings, notes, or error messages."""
+    if not text or not isinstance(text, str):
+        return text
+
+    def _replace_path(match: re.Match[str]) -> str:
+        raw = match.group(0)
+        return sanitize_evidence_path(raw)
+
+    pattern = r"(?:/Users/|/home/|/opt/homebrew/|/opt/local/|/private/|/tmp/)[^\s\"\'\(\):]+"
+    return re.sub(pattern, _replace_path, text)
+
+
+def sanitize_acquisition_for_canonical_report(acq: dict[str, Any] | None) -> dict[str, Any]:
+    """Sanitizes acquisition metadata for user-facing canonical static report."""
+    if not isinstance(acq, dict):
+        return {}
+    clean = dict(acq)
+
+    # 1. Sanitize saved_path to product-safe representation (e.g. downloads/MSTG-Android-Kotlin.apk)
+    saved_path = clean.get("saved_path")
+    if saved_path:
+        fn = clean.get("filename") or os.path.basename(str(saved_path))
+        if fn and fn != "unknown":
+            clean["saved_path"] = f"downloads/{fn}"
+        else:
+            clean["saved_path"] = "downloads/application.apk"
+
+    # 2. Sanitize ipa_path if present (iOS)
+    if "ipa_path" in clean:
+        ipa_p = clean.pop("ipa_path")
+        if "saved_path" not in clean or not clean["saved_path"]:
+            fn = clean.get("filename") or os.path.basename(str(ipa_p))
+            clean["saved_path"] = f"downloads/{fn}" if (fn and fn != "unknown") else "downloads/application.ipa"
+
+    # 3. Sanitize package_set_path if present (split APK)
+    if "package_set_path" in clean:
+        clean["package_set_path"] = "downloads/package_set/package_set.json"
+
+    # 4. Sanitize package_set.components and components local_path
+    if "package_set" in clean and isinstance(clean["package_set"], dict):
+        pkg_set = dict(clean["package_set"])
+        if "components" in pkg_set and isinstance(pkg_set["components"], list):
+            clean_comps = []
+            for comp in pkg_set["components"]:
+                if isinstance(comp, dict):
+                    c = dict(comp)
+                    if "local_path" in c:
+                        cfn = c.get("filename") or os.path.basename(str(c["local_path"]))
+                        c["local_path"] = f"downloads/package_set/apks/{cfn}"
+                    clean_comps.append(c)
+                else:
+                    clean_comps.append(comp)
+            pkg_set["components"] = clean_comps
+        clean["package_set"] = pkg_set
+
+    if "components" in clean and isinstance(clean["components"], list):
+        clean_comps = []
+        for comp in clean["components"]:
+            if isinstance(comp, dict):
+                c = dict(comp)
+                if "local_path" in c:
+                    cfn = c.get("filename") or os.path.basename(str(c["local_path"]))
+                    c["local_path"] = f"downloads/package_set/apks/{cfn}"
+                clean_comps.append(c)
+            else:
+                clean_comps.append(comp)
+        clean["components"] = clean_comps
+
+    return clean
+
+
+def sanitize_preprocessing_for_canonical_report(prep: dict[str, Any] | None) -> dict[str, Any]:
+    """Sanitizes preprocessing metadata by removing host directories and executable paths."""
+    if not isinstance(prep, dict):
+        return {}
+    clean: dict[str, Any] = {}
+
+    if "status" in prep:
+        clean["status"] = prep["status"]
+    if "platform" in prep:
+        clean["platform"] = prep["platform"]
+
+    # raw_apk: keep success, file_count, warnings; strip output_dir
+    if "raw_apk" in prep and isinstance(prep["raw_apk"], dict):
+        raw = prep["raw_apk"]
+        clean_raw: dict[str, Any] = {
+            "success": raw.get("success", True),
+        }
+        if "file_count" in raw:
+            clean_raw["file_count"] = raw["file_count"]
+        if "warnings" in raw and isinstance(raw["warnings"], list):
+            clean_raw["warnings"] = [sanitize_text_host_paths(w) for w in raw["warnings"]]
+        clean["raw_apk"] = clean_raw
+
+    # apktool: keep status, returncode, warnings; strip executable and output_dir
+    if "apktool" in prep and isinstance(prep["apktool"], dict):
+        apktool = prep["apktool"]
+        clean_apktool: dict[str, Any] = {}
+        if "status" in apktool:
+            clean_apktool["status"] = apktool["status"]
+        if "returncode" in apktool:
+            clean_apktool["returncode"] = apktool["returncode"]
+        if "warnings" in apktool and isinstance(apktool["warnings"], list):
+            clean_apktool["warnings"] = [sanitize_text_host_paths(w) for w in apktool["warnings"]]
+        clean["apktool"] = clean_apktool
+
+    # jadx: keep status, returncode, warnings; strip executable and output_dir
+    if "jadx" in prep and isinstance(prep["jadx"], dict):
+        jadx = prep["jadx"]
+        clean_jadx: dict[str, Any] = {}
+        if "status" in jadx:
+            clean_jadx["status"] = jadx["status"]
+        if "returncode" in jadx:
+            clean_jadx["returncode"] = jadx["returncode"]
+        if "warnings" in jadx and isinstance(jadx["warnings"], list):
+            clean_jadx["warnings"] = [sanitize_text_host_paths(w) for w in jadx["warnings"]]
+        clean["jadx"] = clean_jadx
+
+    # Split APK components in preprocessing: strip workspace, raw_apk_dir, apktool_dir, jadx_dir
+    if "components" in prep and isinstance(prep["components"], list):
+        clean_comps = []
+        for comp in prep["components"]:
+            if isinstance(comp, dict):
+                c: dict[str, Any] = {
+                    "filename": comp.get("filename"),
+                    "role": comp.get("role"),
+                }
+                for k in ("raw_extract_status", "apktool_status", "jadx_status", "status", "returncode", "file_count"):
+                    if k in comp:
+                        c[k] = comp[k]
+                if "warnings" in comp and isinstance(comp["warnings"], list):
+                    c["warnings"] = [sanitize_text_host_paths(w) for w in comp["warnings"]]
+                clean_comps.append(c)
+        clean["components"] = clean_comps
+
+    # iOS preprocessing fields: strip app_bundle_dir and host workspace
+    if "app_bundle" in prep:
+        clean["app_bundle"] = prep["app_bundle"]
+    for k in ("extracted_files", "total_files", "total_extracted_bytes"):
+        if k in prep:
+            clean[k] = prep[k]
+    if "warnings" in prep and isinstance(prep["warnings"], list):
+        clean["warnings"] = [sanitize_text_host_paths(w) for w in prep["warnings"]]
+
+    return clean
+
+
+def sanitize_apk_components_for_canonical_report(apk_components: list[Any] | None) -> list[dict[str, Any]]:
+    """Sanitizes top-level apk_components list by removing host paths and workspaces."""
+    if not isinstance(apk_components, list):
+        return []
+    clean_list = []
+    for comp in apk_components:
+        if not isinstance(comp, dict):
+            continue
+        c = dict(comp)
+        # Strip host directory keys
+        for host_key in ("workspace", "raw_apk_dir", "apktool_dir", "jadx_dir"):
+            c.pop(host_key, None)
+        if "local_path" in c:
+            cfn = c.get("filename") or os.path.basename(str(c["local_path"]))
+            c["local_path"] = f"downloads/package_set/apks/{cfn}"
+        if "warnings" in c and isinstance(c["warnings"], list):
+            c["warnings"] = [sanitize_text_host_paths(w) for w in c["warnings"]]
+        if "preprocessing" in c and isinstance(c["preprocessing"], dict):
+            c_prep = dict(c["preprocessing"])
+            for host_key in ("workspace", "raw_apk_dir", "apktool_dir", "jadx_dir", "executable", "output_dir"):
+                c_prep.pop(host_key, None)
+            if "warnings" in c_prep and isinstance(c_prep["warnings"], list):
+                c_prep["warnings"] = [sanitize_text_host_paths(w) for w in c_prep["warnings"]]
+            c["preprocessing"] = c_prep
+        clean_list.append(c)
+    return clean_list
+
+
+def sanitize_structure_for_canonical_report(struct: dict[str, Any] | None) -> dict[str, Any]:
+    """Sanitizes structure metadata, ensuring linked libraries do not leak scanner host paths."""
+    if not isinstance(struct, dict):
+        return {}
+    clean = dict(struct)
+    for macho_key in ("executable", "macho_analysis"):
+        if macho_key in clean and isinstance(clean[macho_key], dict):
+            macho = dict(clean[macho_key])
+            if "linked_libraries" in macho and isinstance(macho["linked_libraries"], list):
+                clean_libs = []
+                for lib in macho["linked_libraries"]:
+                    lib_str = str(lib).strip()
+                    if is_forbidden_host_path(lib_str):
+                        continue
+                    clean_libs.append(lib)
+                macho["linked_libraries"] = clean_libs
+                macho["linked_library_count"] = len(clean_libs)
+            clean[macho_key] = macho
+    return clean
+
+
+
+def sanitize_network_indicators_for_canonical_report(net: dict[str, Any] | None) -> dict[str, Any]:
+    """Sanitizes network indicators ensuring source_file paths are application-relative."""
+    if not isinstance(net, dict):
+        return {}
+    clean = dict(net)
+    for cat in ("network_urls", "domains", "ip_addresses", "path_candidates", "local_file_urls"):
+        if cat in clean and isinstance(clean[cat], list):
+            clean_items = []
+            for item in clean[cat]:
+                if isinstance(item, dict):
+                    clean_item = dict(item)
+                    if "source_file" in clean_item and clean_item["source_file"]:
+                        clean_item["source_file"] = sanitize_evidence_path(str(clean_item["source_file"]))
+                    clean_items.append(clean_item)
+                else:
+                    clean_items.append(item)
+            clean[cat] = clean_items
+    return clean
+
+
+def sanitize_api_candidates_for_canonical_report(candidates: list[Any] | None) -> list[dict[str, Any]]:
+    """Sanitizes API candidates ensuring source_file paths are application-relative."""
+    if not isinstance(candidates, list):
+        return []
+    clean_candidates = []
+    for cand in candidates:
+        if isinstance(cand, dict):
+            clean_cand = dict(cand)
+            if "source_file" in clean_cand and clean_cand["source_file"]:
+                clean_cand["source_file"] = sanitize_evidence_path(str(clean_cand["source_file"]))
+            clean_candidates.append(clean_cand)
+        else:
+            clean_candidates.append(cand)
+    return clean_candidates
+
+
+def sanitize_vulnerabilities_for_canonical_report(vulns: dict[str, Any] | None) -> dict[str, Any]:
+    """Sanitizes findings ensuring affected_items and evidence do not leak scanner host paths."""
+    if not isinstance(vulns, dict):
+        return {}
+    clean_vulns = dict(vulns)
+    if "findings" in clean_vulns and isinstance(clean_vulns["findings"], list):
+        clean_findings = []
+        for finding in clean_vulns["findings"]:
+            if isinstance(finding, dict):
+                clean_f = dict(finding)
+                if "affected_items" in clean_f and isinstance(clean_f["affected_items"], list):
+                    clean_f["affected_items"] = [
+                        sanitize_evidence_path(str(item)) if is_forbidden_host_path(str(item)) else item
+                        for item in clean_f["affected_items"]
+                    ]
+                if "evidence" in clean_f and isinstance(clean_f["evidence"], str):
+                    clean_f["evidence"] = sanitize_text_host_paths(clean_f["evidence"])
+                clean_findings.append(clean_f)
+            else:
+                clean_findings.append(finding)
+        clean_vulns["findings"] = clean_findings
+    return clean_vulns
+
+
+def build_static_analysis_report(
+    run_id: str,
+    pipeline_result: dict[str, Any] | None = None,
+    report_dict: dict[str, Any] | None = None,
+    error: str | None = None,
+    current_stage: str | None = None,
+) -> dict[str, Any]:
+    """Projects canonical static analysis data into static_analysis_report.json schema.
+
+    Reuses the canonical report data model and enforces strict static analysis boundaries:
+    includes acquisition, preprocessing, structure, indicators, API candidates, and static
+    vulnerabilities while explicitly excluding runtime execution facts and connectivity probe artifacts.
+    Sanitizes host-specific environment details (executables, local absolute paths, workspaces)
+    while preserving application-relative evidence (smali, assets, manifest) and network endpoints.
+    """
+    base_report = report_dict or build_report_dict(
+        run_id=run_id,
+        pipeline_result=pipeline_result,
+        error=error,
+        current_stage=current_stage,
+    )
+    res = pipeline_result or {}
+
+    # Determine static execution status
+    failed_stage = base_report.get("failed_stage") or (current_stage if error else None)
+    failure_reason = base_report.get("failure_reason") or error
+
+    app_data = base_report.get("application", {})
+    has_static_data = bool(
+        (app_data.get("package_name") and app_data.get("package_name") != "unknown")
+        or base_report.get("permissions")
+        or base_report.get("activities")
+        or base_report.get("structure", {}).get("dex_files")
+    )
+
+    demo3_scan = res.get("demo3_scan") or {}
+    scan_status = demo3_scan.get("status")
+    prep = base_report.get("preprocessing") or {}
+    jadx_status = prep.get("jadx", {}).get("status")
+
+    if failed_stage in ("acquisition", "preprocessing") and not has_static_data:
+        status = "failed"
+    elif failed_stage == "static_analysis":
+        status = "partial" if has_static_data else "failed"
+    elif failed_stage and failed_stage not in ("acquisition", "preprocessing", "static_analysis"):
+        # Pipeline failed in later stage (runtime/probe), but static analysis succeeded
+        status = "partial" if (scan_status == "partial" or jadx_status == "success_with_warnings") else "completed"
+    elif base_report.get("demo_status") == "completed":
+        status = "partial" if (scan_status == "partial" or jadx_status == "success_with_warnings") else "completed"
+    elif base_report.get("demo_status") == "failed":
+        status = "partial" if has_static_data else "failed"
+    else:
+        status = "completed"
+
+    # Filter out runtime/connectivity/process-observation specific notes
+    runtime_note_markers = (
+        "runtime execution",
+        "runtime launch",
+        "runtime verification",
+        "process was observed",
+        "connectivity probe",
+        "foreground",
+    )
+    static_notes = [
+        sanitize_text_host_paths(note) for note in base_report.get("analysis_notes", [])
+        if not any(marker in str(note).lower() for marker in runtime_note_markers)
+    ]
+
+    # Clean up limitations for static domain:
+    # 1. Strip references to emulator connectivity
+    # 2. Rephrase process/activity foreground observation to pure static heuristics
+    raw_limitations = base_report.get("limitations", [])
+    static_limitations: list[str] = []
+    for lim in raw_limitations:
+        lim_str = str(lim).strip()
+        lim_lower = lim_str.lower()
+        if "emulator connectivity" in lim_lower or "connectivity verification" in lim_lower:
+            continue
+        if "runtime launch verification" in lim_lower and "process monitoring" in lim_lower:
+            static_limitations.append("Dynamic instrumentation, runtime process monitoring, and traffic interception were not performed.")
+            continue
+        if "process/activity" in lim_lower or "foreground observation" in lim_lower:
+            static_limitations.append("Analysis is limited to static heuristics on decoded package contents without runtime execution.")
+            continue
+        static_limitations.append(sanitize_text_host_paths(lim_str))
+
+    # Ensure vulnerabilities block is present
+    vulns = base_report.get("vulnerabilities")
+    if not vulns:
+        try:
+            from src.vulnerability_evaluator import evaluate_vulnerabilities
+            vulns = evaluate_vulnerabilities(base_report)
+        except Exception:
+            vulns = {
+                "risk_score": "CLEAN",
+                "summary": {"critical": 0, "high": 0, "medium": 0, "low": 0, "total": 0},
+                "findings": [],
+            }
+
+    if failure_reason:
+        failure_reason = sanitize_text_host_paths(failure_reason)
+
+    static_report: dict[str, Any] = {
+        "report_type": "static_analysis",
+        "report_version": base_report.get("report_version", "1.0"),
+        "run_id": run_id,
+        "status": status,
+        "platform": base_report.get("platform", "android"),
+        "package_layout": base_report.get("package_layout", "monolithic"),
+        "split_count": base_report.get("split_count", 1),
+        "application": app_data,
+        "acquisition": sanitize_acquisition_for_canonical_report(base_report.get("acquisition")),
+        "preprocessing": sanitize_preprocessing_for_canonical_report(prep),
+        "structure": sanitize_structure_for_canonical_report(base_report.get("structure")),
+        "permissions": base_report.get("permissions", []),
+        "activities": base_report.get("activities", []),
+        "network_indicators": sanitize_network_indicators_for_canonical_report(base_report.get("network_indicators")),
+        "api_candidates": sanitize_api_candidates_for_canonical_report(base_report.get("api_candidates")),
+        "vulnerabilities": sanitize_vulnerabilities_for_canonical_report(vulns),
+        "apk_components": sanitize_apk_components_for_canonical_report(base_report.get("apk_components")),
+        "split_structure": base_report.get("split_structure", []),
+        "manifest_evidence": base_report.get("manifest_evidence", []),
+        "analysis_notes": static_notes,
+        "limitations": static_limitations,
+    }
+
+    if str(base_report.get("platform", "")).lower() == "ios" and base_report.get("configuration"):
+        static_report["configuration"] = base_report["configuration"]
+
+    if status in ("failed", "partial") and failed_stage:
+        static_report["failed_stage"] = failed_stage
+        if failure_reason:
+            static_report["failure_reason"] = failure_reason
+
+    return static_report
+
+
+def save_static_analysis_report(
+    run_dir: str | Path,
+    static_report_dict: dict[str, Any],
+) -> Path:
+    """Serializes and persists static_analysis_report.json to run_dir."""
+    dest_dir = Path(run_dir)
+    dest_dir.mkdir(parents=True, exist_ok=True)
+    out_file = dest_dir / "static_analysis_report.json"
+    with open(out_file, "w", encoding="utf-8") as f:
+        json.dump(static_report_dict, f, indent=2)
+    return out_file
 
 
 def _render_ios_html_report(report: dict[str, Any]) -> str:
@@ -1303,6 +1765,29 @@ def generate_reports(
     html_content = render_html_report(report_dict)
     with open(html_path, "w", encoding="utf-8") as f:
         f.write(html_content)
+
+    # Task 2.1: Generate and persist canonical static_analysis_report.json
+    try:
+        static_report_dict = build_static_analysis_report(
+            run_id=run_id,
+            pipeline_result=pipeline_result,
+            report_dict=report_dict,
+            error=error,
+            current_stage=current_stage,
+        )
+        save_static_analysis_report(run_dir, static_report_dict)
+    except Exception as exc:
+        logger.error(
+            "Failed to generate canonical static_analysis_report.json for run '%s': %s",
+            run_id,
+            exc,
+            exc_info=True,
+        )
+        warnings.warn(
+            f"Failed to generate canonical static_analysis_report.json for run '{run_id}': {exc}",
+            category=RuntimeWarning,
+            stacklevel=2,
+        )
 
     # Demo 3: Generate and validate baseline_report.json against JSON Schema
     try:

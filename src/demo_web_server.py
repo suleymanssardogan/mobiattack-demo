@@ -31,6 +31,7 @@ from src.html_probe_server import (
     trigger_device_browser,
 )
 from src.report_generator import build_report_dict, generate_reports
+from src.scan_state import ScanStateCheckpointer, recover_scan_state
 from src.url_classifier import classify_input_url
 from src.play_store_acquirer import open_play_store_on_device
 from src.vulnerability_evaluator import evaluate_vulnerabilities
@@ -165,6 +166,18 @@ class _DemoRequestHandler(BaseHTTPRequestHandler):
                 "application/json; charset=utf-8", server.get_run_dir,
                 disposition_filename=f"baseline_report_{rid}.json",
                 label="Baseline report",
+            )
+            return
+
+        # GET /reports/<run_id>/static_analysis_report.json
+        static_json_match = re.match(r"^/reports/([a-zA-Z0-9_\-]+)/static_analysis_report\.json$", path)
+        if static_json_match:
+            rid = static_json_match.group(1)
+            serve_run_file(
+                self, rid, "static_analysis_report.json",
+                "application/json; charset=utf-8", server.get_run_dir,
+                disposition_filename=f"static_analysis_report_{rid}.json",
+                label="Static analysis report",
             )
             return
 
@@ -541,7 +554,7 @@ class DemoWebServer:
             run_dir = self.runs_root / run_id
             try:
                 run_dir.mkdir(parents=True, exist_ok=True)
-                for fname in ("report.json", "baseline_report.json", "report.html", "security_findings.json"):
+                for fname in ("report.json", "baseline_report.json", "report.html", "security_findings.json", "static_analysis_report.json"):
                     src_f = preset_dir / fname
                     if src_f.exists():
                         shutil.copy2(src_f, run_dir / fname)
@@ -571,6 +584,7 @@ class DemoWebServer:
                     "json_url": f"/reports/{run_id}/report.json",
                     "html_url": f"/reports/{run_id}/report.html",
                     "baseline_json_url": f"/reports/{run_id}/baseline_report.json",
+                    "static_json_url": f"/reports/{run_id}/static_analysis_report.json",
                     "api_url": f"/api/report/{run_id}",
                 },
                 "error": None,
@@ -672,7 +686,16 @@ class DemoWebServer:
         run_dir = self.runs_root / run_id
         run_dir.mkdir(parents=True, exist_ok=True)
 
+        checkpointer = ScanStateCheckpointer(
+            run_dir=run_dir,
+            scan_id=run_id,
+            target_url=url,
+            platform=platform,
+        )
+        checkpointer.init_state()
+
         def callback(stage: str, state: str, message: str, data: dict | None = None) -> None:
+            checkpointer.on_pipeline_progress(stage, state, message, data)
             with self._lock:
                 run = self._runs.get(run_id)
                 if not run:
@@ -730,6 +753,8 @@ class DemoWebServer:
                 pipeline_result=res,
                 connectivity_probe=probe_data,
             )
+            checkpointer.on_reports_generated()
+            checkpointer.on_demo_completed()
             with self._lock:
                 run = self._runs.get(run_id)
                 if run:
@@ -737,14 +762,27 @@ class DemoWebServer:
                         "json_url": f"/reports/{run_id}/report.json",
                         "html_url": f"/reports/{run_id}/report.html",
                         "baseline_json_url": f"/reports/{run_id}/baseline_report.json",
+                        "static_json_url": f"/reports/{run_id}/static_analysis_report.json",
                         "api_url": f"/api/report/{run_id}",
                     }
         except Exception as exc:
             err_str = str(exc).lower()
             if "not found on system path" in err_str or "required executable" in err_str or "no connected android devices" in err_str:
                 self._fallback_to_presentation_run(run_id, url, platform, run_dir, callback)
+                checkpointer.on_reports_generated()
+                checkpointer.on_demo_completed()
             else:
-                self._handle_run_failure(run_id, url, platform, adb_serial, reinstall, grant_permissions, run_dir, exc)
+                self._handle_run_failure(
+                    run_id=run_id,
+                    url=url,
+                    platform=platform,
+                    adb_serial=adb_serial,
+                    reinstall=reinstall,
+                    grant_permissions=grant_permissions,
+                    run_dir=run_dir,
+                    exc=exc,
+                    checkpointer=checkpointer,
+                )
 
     def _handle_run_failure(
         self,
@@ -756,6 +794,7 @@ class DemoWebServer:
         grant_permissions: bool,
         run_dir: Path,
         exc: Exception,
+        checkpointer: ScanStateCheckpointer | None = None,
     ) -> None:
         """Handles pipeline execution failure — updates state and generates partial report."""
         with self._lock:
@@ -796,10 +835,22 @@ class DemoWebServer:
                     run["report"] = {
                         "json_url": f"/reports/{run_id}/report.json",
                         "html_url": f"/reports/{run_id}/report.html",
+                        "baseline_json_url": f"/reports/{run_id}/baseline_report.json",
+                        "static_json_url": f"/reports/{run_id}/static_analysis_report.json",
                         "api_url": f"/api/report/{run_id}",
                     }
                 except Exception:
                     pass
+
+                if checkpointer is None:
+                    checkpointer = ScanStateCheckpointer(
+                        run_dir=run_dir,
+                        scan_id=run_id,
+                        target_url=url,
+                        platform=platform,
+                    )
+                checkpointer.on_reports_generated()
+                checkpointer.on_failure(stage=stage, error=str(exc))
 
     def stop_active_run(self) -> dict:
         """Stops the current active demo run and clears the lock."""
@@ -827,11 +878,13 @@ class DemoWebServer:
         bundled = (repo_runs_root / run_id).resolve()
         if bundled.is_relative_to(repo_runs_root) and bundled.is_dir():
             return bundled
-        # Fallback to preset if in cloud serverless environment
-        for preset in ("preset_android_monolithic", "preset_android_split", "preset_ios_ipa", "run_sample_flashlight"):
-            p_dir = repo_runs_root / preset
-            if p_dir.is_dir() and (p_dir / "report.json").exists():
-                return p_dir
+        # Fallback to preset ONLY if in cloud serverless environment
+        is_vercel = bool(os.environ.get("VERCEL") or os.environ.get("VERCEL_ENV"))
+        if is_vercel:
+            for preset in ("preset_android_monolithic", "preset_android_split", "preset_ios_ipa", "run_sample_flashlight"):
+                p_dir = repo_runs_root / preset
+                if p_dir.is_dir() and (p_dir / "report.json").exists():
+                    return p_dir
         return None
 
     def get_run_status(self, run_id: str) -> dict | None:
@@ -842,11 +895,103 @@ class DemoWebServer:
             return self._build_status_response(run)
 
     def _load_status_from_disk(self, run_id: str) -> dict | None:
-        """Loads run status from persisted report.json on disk."""
+        """Loads run status from persistent scan_state.json or report.json on disk."""
         run_dir = self.get_run_dir(run_id)
         if not run_dir:
             return None
 
+        # 1. Product-level Persistent Scan State Recovery (Task 3.3)
+        live_ids = set(self._runs.keys())
+        try:
+            rec_state = recover_scan_state(run_dir, live_run_ids=live_ids)
+        except Exception:
+            rec_state = None
+
+        if rec_state is not None:
+            # Load result/findings from existing reports if available
+            res_data: dict[str, Any] = {}
+            for fname in ("report.json", "static_analysis_report.json"):
+                fpath = run_dir / fname
+                if fpath.is_file():
+                    try:
+                        with open(fpath, "r", encoding="utf-8") as f:
+                            res_data = json.load(f)
+                            break
+                    except Exception:
+                        pass
+
+            vuln_file = run_dir / "security_findings.json"
+            if vuln_file.is_file():
+                try:
+                    with open(vuln_file, "r", encoding="utf-8") as vf:
+                        res_data["vulnerabilities"] = json.load(vf)
+                except Exception:
+                    pass
+            elif res_data and "vulnerabilities" not in res_data:
+                try:
+                    ensure_vulnerabilities(res_data)
+                except Exception:
+                    pass
+
+            p_stages = rec_state.get("stages", {})
+            acq_st = p_stages.get("app_acquisition", {})
+            sta_st = p_stages.get("static_analysis", {})
+
+            acq_status = acq_st.get("status", "pending")
+            sta_status = sta_st.get("status", "pending")
+
+            stages_dict = {
+                # Canonical product stages
+                "app_acquisition": acq_st,
+                "static_analysis": sta_st,
+                "dynamic_analysis": p_stages.get("dynamic_analysis", {"status": "not_available"}),
+                "agent_analysis": p_stages.get("agent_analysis", {"status": "not_available"}),
+                "report_generation": p_stages.get("report_generation", {"status": "pending"}),
+                # Backend stage compatibility for frontend deriveProductStages
+                "acquisition": {
+                    "state": "success" if acq_status == "completed" else acq_status,
+                    "message": acq_st.get("message", ""),
+                    "data": res_data.get("acquisition"),
+                },
+                "preprocessing": {
+                    "state": "success" if sta_status in ("completed", "partial") else ("failed" if sta_status == "failed" else "pending"),
+                    "message": "Preprocessing completed." if sta_status in ("completed", "partial") else "",
+                    "data": res_data.get("preprocessing"),
+                },
+                "static_analysis": {
+                    "state": "success" if sta_status == "completed" else sta_status,
+                    "message": sta_st.get("message", ""),
+                    "data": res_data.get("static_analysis"),
+                },
+                "runtime": {
+                    "state": "skipped",
+                    "message": "Dynamic runtime analysis not available in this milestone.",
+                    "data": res_data.get("runtime"),
+                },
+            }
+
+            return {
+                "run_id": run_id,
+                "overall_status": rec_state.get("overall_status", "interrupted"),
+                "current_stage": rec_state.get("current_stage"),
+                "error": rec_state.get("error"),
+                "recovered": True,
+                "state_source": "disk",
+                "scan_state": rec_state,
+                "target": rec_state.get("target"),
+                "timestamps": rec_state.get("timestamps"),
+                "result": res_data if res_data else None,
+                "report": {
+                    "json_url": f"/reports/{run_id}/report.json",
+                    "html_url": f"/reports/{run_id}/report.html",
+                    "baseline_json_url": f"/reports/{run_id}/baseline_report.json",
+                    "static_json_url": f"/reports/{run_id}/static_analysis_report.json",
+                    "api_url": f"/api/report/{run_id}",
+                },
+                "stages": stages_dict,
+            }
+
+        # 2. Legacy fallback to report.json if present
         report_file = run_dir / "report.json"
         if not report_file.exists():
             return None
@@ -881,6 +1026,7 @@ class DemoWebServer:
                     "json_url": f"/reports/{run_id}/report.json",
                     "html_url": f"/reports/{run_id}/report.html",
                     "baseline_json_url": f"/reports/{run_id}/baseline_report.json",
+                    "static_json_url": f"/reports/{run_id}/static_analysis_report.json",
                     "api_url": f"/api/report/{run_id}",
                 },
                 "stages": {
