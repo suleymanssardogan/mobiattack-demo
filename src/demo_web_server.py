@@ -9,6 +9,7 @@ from __future__ import annotations
 
 from http.server import BaseHTTPRequestHandler, HTTPServer, ThreadingHTTPServer
 import json
+import logging
 import os
 from pathlib import Path
 import re
@@ -178,6 +179,19 @@ class _DemoRequestHandler(BaseHTTPRequestHandler):
                 "application/json; charset=utf-8", server.get_run_dir,
                 disposition_filename=f"static_analysis_report_{rid}.json",
                 label="Static analysis report",
+            )
+            return
+
+        # GET /reports/<run_id>/dynamic_analysis_report.json (canonical read-only artifact)
+        dynamic_json_match = re.match(r"^/reports/([a-zA-Z0-9_\-]+)/dynamic_analysis_report\.json$", path)
+        if dynamic_json_match:
+            rid = dynamic_json_match.group(1)
+            from src.dynamic.report.models import load_dynamic_analysis_report
+            serve_run_file(
+                self, rid, "dynamic_analysis_report.json",
+                "application/json; charset=utf-8", server.get_run_dir,
+                label="Dynamic analysis report",
+                validated_json_loader=load_dynamic_analysis_report,
             )
             return
 
@@ -1115,6 +1129,16 @@ class DemoWebServer:
                 "message": st_info.get("message"),
                 "data": light_data,
             }
+        # Supply the same canonical stage state to live and recovered status responses.
+        run_dir = self.get_run_dir(run.get("run_id"))
+        if run_dir is not None:
+            try:
+                from src.scan_state import load_scan_state
+                canonical_state = load_scan_state(run_dir)
+                if canonical_state is not None:
+                    status_copy["scan_state"] = canonical_state
+            except Exception as exc:
+                logging.getLogger(__name__).debug("Canonical state unavailable for live status: %s", exc)
         return status_copy
 
     @staticmethod

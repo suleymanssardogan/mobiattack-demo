@@ -1,0 +1,42 @@
+{
+  "attempted_evidence_ref": "dynamic/traffic.json#transaction_id=tx_hallucinated",
+  "result": {
+    "attempts": 2,
+    "catalog_test_ids_available": [
+      "OBJECT_AUTHORIZATION"
+    ],
+    "coverage_gaps": [],
+    "created_at": "2026-10-01T12:00:00Z",
+    "endpoint_context_id": "ctx_1",
+    "hypothesis_ids_considered": [
+      "hyp_1ad7e29c097995e9",
+      "hyp_396e4245df4bbbc5",
+      "hyp_a8614516340d7633",
+      "hyp_b340472dd30c50a6",
+      "hyp_f4052047b2150e3f"
+    ],
+    "input_evidence_refs": [
+      "dynamic/api_correlation.json#correlation_id=corr_1",
+      "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_1",
+      "dynamic/runtime_evidence.json#action_id=act_1",
+      "dynamic/traffic.json#transaction_id=tx_1",
+      "dynamic/traffic_evidence.json#action_id=act_1",
+      "static_analysis_report.json#candidate_id=cand_1"
+    ],
+    "model_metadata": {
+      "model": "unspecified",
+      "provider": "unspecified"
+    },
+    "planning_id": "planning_c18447d16b00aa88",
+    "planning_notes": [],
+    "prompt_version": "test_planner_v1",
+    "proposal_count": 0,
+    "proposals": [],
+    "schema_version": "1.0",
+    "status": "invalid_output",
+    "validation_errors": [
+      "EVIDENCE_REF_NOT_SUPPLIED",
+      "EVIDENCE_REF_NOT_SUPPLIED"
+    ]
+  }
+}

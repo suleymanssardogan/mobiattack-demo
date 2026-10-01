@@ -1802,3 +1802,9 @@ def generate_reports(
         pass
 
     return json_path, html_path
+
+
+def generate_dynamic_analysis_report(run_dir: str | Path, target: dict[str, Any] | None = None) -> dict[str, Any]:
+    """Task 8.1: canonical dynamic report facade; finalized artifacts only."""
+    from src.dynamic.report import generate_dynamic_analysis_report as generate
+    return generate(run_dir, target)

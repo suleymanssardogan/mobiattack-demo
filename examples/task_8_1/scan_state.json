@@ -1,0 +1,63 @@
+{
+  "schema_version": "1.0",
+  "scan_id": "run_synthetic_8_1",
+  "target": {
+    "url": "https://example.com/app.apk",
+    "platform": "android",
+    "package_name": "com.example.app"
+  },
+  "overall_status": "completed",
+  "current_stage": "completed",
+  "timestamps": {
+    "created_at": "2026-10-01T12:00:00Z",
+    "updated_at": "2026-10-01T12:02:00Z",
+    "completed_at": "2026-10-01T12:02:00Z"
+  },
+  "stages": {
+    "app_acquisition": {
+      "status": "completed",
+      "message": "Acquiring package and verifying structure...",
+      "started_at": "2026-10-01T12:00:00Z",
+      "completed_at": null
+    },
+    "static_analysis": {
+      "status": "completed",
+      "message": "Waiting for package acquisition...",
+      "started_at": null,
+      "completed_at": null
+    },
+    "dynamic_analysis": {
+      "status": "completed",
+      "message": "Canonical dynamic report generated and validated; coverage is described in the report.",
+      "started_at": null,
+      "completed_at": "2026-10-01T12:02:00Z"
+    },
+    "agent_analysis": {
+      "status": "not_available",
+      "message": "Scheduled for subsequent milestone",
+      "started_at": null,
+      "completed_at": null
+    },
+    "report_generation": {
+      "status": "partial",
+      "message": "Canonical dynamic report available; additional analysis reports pending.",
+      "started_at": null,
+      "completed_at": null
+    }
+  },
+  "artifacts": {
+    "static_analysis_report": {
+      "available": true,
+      "relative_path": "static_analysis_report.json"
+    },
+    "dynamic_analysis_report": {
+      "available": true,
+      "relative_path": "dynamic_analysis_report.json"
+    },
+    "agent_report": {
+      "available": false,
+      "relative_path": null
+    }
+  },
+  "error": null
+}

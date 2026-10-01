@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.0",
+  "benchmark_version": "agent_benchmark_v1",
+  "cases": [
+    "case_001.json",
+    "case_002.json",
+    "case_003.json",
+    "case_004.json",
+    "case_005.json",
+    "case_006.json",
+    "case_007.json",
+    "case_008.json",
+    "case_009.json",
+    "case_010.json",
+    "case_011.json",
+    "case_012.json",
+    "case_013.json",
+    "case_014.json",
+    "case_015.json",
+    "case_016.json",
+    "case_017.json",
+    "case_018.json",
+    "case_019.json",
+    "case_020.json",
+    "case_021.json",
+    "case_022.json",
+    "case_023.json",
+    "case_024.json",
+    "case_025.json"
+  ]
+}

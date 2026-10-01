@@ -90,6 +90,27 @@ class TestDemoWebServer(unittest.TestCase):
             body = json.loads(err.read().decode("utf-8"))
             return err.code, body
 
+    def test_canonical_report_routes(self):
+        from src.dynamic.report.models import save_dynamic_analysis_report
+        from tests.test_dynamic_analysis_report import sources, report
+
+        run_id = "run_test"
+        run_dir = self.runs_root / run_id
+        run_dir.mkdir()
+        static = {"report_type": "static_analysis", "scan_id": run_id}
+        (run_dir / "static_analysis_report.json").write_text(json.dumps(static))
+        status, body = self._get_json(f"/reports/{run_id}/static_analysis_report.json")
+        self.assertEqual((status, body), (200, static))
+        path = f"/reports/{run_id}/dynamic_analysis_report.json"
+        self.assertEqual(self._get_json(path)[0], 404)
+        dynamic = report(sources.__wrapped__())
+        save_dynamic_analysis_report(run_dir, dynamic)
+        self.assertEqual(self._get_json(path), (200, dynamic))
+        (run_dir / "dynamic_analysis_report.json").write_text("{corrupt")
+        self.assertEqual(self._get_json(path)[0], 404)
+        (run_dir / "dynamic_analysis_report.json").write_text(json.dumps({"scan_id": run_id}))
+        self.assertEqual(self._get_json(path)[0], 404)
+
     def test_index_page_returns_200_and_contains_dashboard_elements(self):
         status, body, headers = self._get("/")
         self.assertEqual(status, 200)
@@ -97,12 +118,14 @@ class TestDemoWebServer(unittest.TestCase):
         html = body.decode("utf-8")
         # Pipeline controls & stages
         self.assertIn("Analysis workspace", html)
-        self.assertIn("Target URL (Direct APK or Google Play Store)", html)
+        self.assertIn("Target Application", html)
         self.assertIn("START DEMO", html)
-        self.assertIn("1. Acquisition", html)
-        self.assertIn("2. Preprocessing", html)
-        self.assertIn("3. Static Analysis", html)
-        self.assertIn("4. Runtime", html)
+        self.assertIn("1. Application Acquisition", html)
+        self.assertIn("2. Static Analysis", html)
+        self.assertIn("3. Dynamic Analysis", html)
+        self.assertIn("4. Agent Analysis", html)
+        self.assertIn("5. Report Generation", html)
+        self.assertIn('id="msg-agent_analysis">Not available in this scan', html)
         self.assertIn("Connectivity Probe", html)
         self.assertIn("Emulator connectivity only — not application navigation.", html)
         self.assertIn("Grant permissions", html)
@@ -341,7 +364,7 @@ class TestDemoWebServer(unittest.TestCase):
         self.assertIn("platform-ios", html)
         self.assertIn("iOS static analysis accepts direct or local IPA artifacts.", html)
         self.assertIn("urlClassificationBadge", html)
-        self.assertIn("Target URL (Direct APK or Google Play Store)", html)
+        self.assertIn("Target Application", html)
 
     def test_api_classify_direct_apk(self):
         status, body = self._post("/api/classify", {

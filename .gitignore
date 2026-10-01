@@ -43,3 +43,6 @@ artifacts/
 env/
 venv/
 ENV/
+
+# Development-only Agent benchmark outputs
+benchmark_results/

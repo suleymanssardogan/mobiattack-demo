@@ -959,8 +959,8 @@ class TestDynamicTrafficCorrelation(unittest.TestCase):
         self.assertNotIn("api_inventory", content.lower())
         self.assertNotIn("merge_endpoints", content.lower())
 
-    # 40. dynamic_analysis never completed
-    def test_40_dynamic_analysis_never_completed(self):
+    # 40. dynamic completion requires a validated canonical report
+    def test_40_dynamic_analysis_completed_with_canonical_report(self):
         from src.demo_orchestrator import _wire_dynamic_exploration
         from src.scan_state import create_initial_scan_state, load_scan_state, save_scan_state
 
@@ -992,9 +992,13 @@ class TestDynamicTrafficCorrelation(unittest.TestCase):
             _wire_dynamic_exploration(self.base_dir, package_name=self.pkg, limits=ExplorationLimits(max_steps=1))
 
         final_st = load_scan_state(self.base_dir)
-        self.assertEqual(final_st.get("stages", {}).get("dynamic_analysis", {}).get("status"), "partial")
+        self.assertEqual(final_st.get("stages", {}).get("dynamic_analysis", {}).get("status"), "completed")
+
+        from src.dynamic.report import load_dynamic_analysis_report
+        load_dynamic_analysis_report(self.base_dir)
 
     # 41. no dynamic_analysis_report.json created
+
     def test_41_no_dynamic_analysis_report_json_created(self):
         report_file = self.base_dir / "dynamic" / "dynamic_analysis_report.json"
         self.assertFalse(report_file.is_file())
@@ -1396,7 +1400,7 @@ class TestDynamicTrafficCorrelation(unittest.TestCase):
         self.assertEqual(res.actions_succeeded, 1)
 
     # 60. dynamic_analysis remains partial, never completed
-    def test_60_dynamic_analysis_remains_partial_never_completed(self):
+    def test_60_dynamic_analysis_completed_with_canonical_report(self):
         from src.demo_orchestrator import _wire_dynamic_exploration
         from src.scan_state import create_initial_scan_state, load_scan_state, save_scan_state
 
@@ -1429,10 +1433,14 @@ class TestDynamicTrafficCorrelation(unittest.TestCase):
 
         final_st = load_scan_state(self.base_dir)
         stage_status = final_st.get("stages", {}).get("dynamic_analysis", {}).get("status")
-        self.assertEqual(stage_status, "partial")
-        self.assertNotEqual(stage_status, "completed")
+        self.assertEqual(stage_status, "completed")
+        self.assertTrue((self.base_dir / "dynamic_analysis_report.json").is_file())
+
+        from src.dynamic.report import load_dynamic_analysis_report
+        load_dynamic_analysis_report(self.base_dir)
 
     # 61. request/response body persistence remains bounded and sanitized
+
     def test_61_request_response_body_persistence_remains_bounded_and_sanitized(self):
         from src.dynamic.traffic.normalizer import MAX_CAPTURE_BODY_BYTES, process_body_content
 

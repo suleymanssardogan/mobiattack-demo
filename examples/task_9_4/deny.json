@@ -1,0 +1,12 @@
+{
+  "decision": "deny",
+  "decision_id": "policy_a512475aef32c1e5",
+  "endpoint_context_id": "ctx_1",
+  "hypothesis_id": "hyp_b340472dd30c50a6",
+  "policy_version": "policy_v1",
+  "proposal_id": "proposal_4fb74b68a1632705",
+  "reason": "Risk is inconsistent with the catalog or blocked by V1 policy.",
+  "reason_code": "RISK_NOT_ALLOWED",
+  "test_id": "OBJECT_AUTHORIZATION",
+  "validated_evidence_refs": []
+}

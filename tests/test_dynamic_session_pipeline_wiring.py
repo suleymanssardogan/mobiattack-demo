@@ -13,8 +13,8 @@ Verifies that:
 10. Play Store path initializes session once where preflight evidence exists.
 11. session init failure preserves static report.
 12. session init failure preserves preflight_result.json.
-13. no dynamic_analysis_report.json created.
-14. scan_state dynamic_analysis remains not_available.
+13. accepted Dynamic Report is created at its canonical run-root location.
+14. scan_state references the Dynamic Report while Agent Analysis stays unavailable.
 """
 
 from __future__ import annotations
@@ -493,13 +493,13 @@ class TestDynamicSessionPipelineWiring(unittest.TestCase):
         self.assertEqual(pf["stage"], "dynamic_preflight")
         self.assertEqual(pf["application"]["package_name"], "com.example.app")
 
-    # 13. No dynamic_analysis_report.json created
+    # 13. Canonical Dynamic Report created after the accepted report milestone
     @patch("src.dynamic.ui.observer.observe_screen")
     @patch("src.demo_orchestrator.launch_android_app")
     @patch("src.demo_orchestrator.build_static_context")
     @patch("src.demo_orchestrator.preprocess_apk")
     @patch("src.demo_orchestrator.acquire_apk")
-    def test_13_no_dynamic_analysis_report_json_created(
+    def test_13_canonical_dynamic_analysis_report_created(
         self, mock_acq, mock_prep, mock_static, mock_runtime, mock_obs
     ):
         mock_obs.return_value = _create_mock_screen_observation()
@@ -507,18 +507,23 @@ class TestDynamicSessionPipelineWiring(unittest.TestCase):
 
         run_demo("http://example.com/app.apk", self.output_root)
 
-        # dynamic_analysis_report.json must NOT exist anywhere in run dir
-        self.assertFalse((self.output_root / "dynamic_analysis_report.json").exists())
+        # The accepted report milestone writes one canonical artifact; no duplicates.
+        report_path = self.output_root / "dynamic_analysis_report.json"
+        self.assertTrue(report_path.is_file())
+        report = json.loads(report_path.read_text(encoding="utf-8"))
+        self.assertIn("schema_version", report)
+        self.assertIn("coverage", report)
+        self.assertFalse((self.output_root / "agent_report.json").exists())
         self.assertFalse((self.output_root / "dynamic" / "dynamic_analysis_report.json").exists())
         self.assertFalse((self.output_root / "reports" / "dynamic_analysis_report.json").exists())
 
-    # 14. Scan_state dynamic_analysis remains not_available
+    # 14. Report generation completes its stage; Agent Analysis remains unavailable
     @patch("src.dynamic.ui.observer.observe_screen")
     @patch("src.demo_orchestrator.launch_android_app")
     @patch("src.demo_orchestrator.build_static_context")
     @patch("src.demo_orchestrator.preprocess_apk")
     @patch("src.demo_orchestrator.acquire_apk")
-    def test_14_scan_state_dynamic_analysis_remains_not_available(
+    def test_14_scan_state_dynamic_report_available_agent_unavailable(
         self, mock_acq, mock_prep, mock_static, mock_runtime, mock_obs
     ):
         mock_obs.return_value = _create_mock_screen_observation()
@@ -541,11 +546,8 @@ class TestDynamicSessionPipelineWiring(unittest.TestCase):
         state = load_scan_state(self.output_root)
         self.assertIsNotNone(state)
         dynamic_stage = state["stages"]["dynamic_analysis"]
-        self.assertIn(
-            dynamic_stage["status"],
-            ("not_available", "partial"),
-            "dynamic_analysis stage must remain 'not_available' or 'partial' (never completed)",
-        )
+        self.assertEqual(dynamic_stage["status"], "completed")
+        self.assertEqual(state["stages"]["agent_analysis"]["status"], "not_available")
         dynamic_art = state["artifacts"]["dynamic_analysis_report"]
-        self.assertFalse(dynamic_art["available"])
-        self.assertIsNone(dynamic_art["relative_path"])
+        self.assertTrue(dynamic_art["available"])
+        self.assertEqual(dynamic_art["relative_path"], "dynamic_analysis_report.json")

@@ -1,0 +1,174 @@
+{
+  "session_id": "session-123",
+  "schema_version": "1.0",
+  "summary": {
+    "endpoint_context_count": 1,
+    "runtime_observed_count": 1,
+    "static_only_count": 0,
+    "dynamic_only_count": 0
+  },
+  "endpoints": [
+    {
+      "endpoint_context_id": "ctx_db7d8210be83bad8",
+      "host": "api.example.com",
+      "path": "/login",
+      "scheme": "https",
+      "methods": [
+        "POST"
+      ],
+      "static": {
+        "static_candidate_id": "cand_login",
+        "match_type": "exact",
+        "confidence": "high",
+        "static_method": "POST",
+        "source_file": "smali/Login.smali",
+        "request_line": 42,
+        "framework": "Fuel",
+        "static_candidate_id_origin": "source_report",
+        "static_candidate_id_source_field": "id",
+        "extraction_provenance_keys": [
+          "base_url_value",
+          "password"
+        ]
+      },
+      "dynamic": {
+        "observed": true,
+        "transaction_ids": [
+          "tx_1"
+        ],
+        "observation_count": 1,
+        "available_transaction_count": 1,
+        "missing_transaction_ids": [],
+        "first_observed_at": "2026-10-01T12:00:00Z",
+        "last_observed_at": "2026-10-01T12:00:00Z",
+        "observed_methods": [
+          "POST"
+        ],
+        "observed_status_codes": [
+          200
+        ],
+        "schemes": [
+          "https"
+        ]
+      },
+      "request": {
+        "content_types": [
+          "application/json"
+        ],
+        "header_names": [
+          "authorization",
+          "content-type",
+          "cookie",
+          "x-api-key"
+        ],
+        "body_present": true,
+        "body_types": [
+          "json"
+        ],
+        "body_keys": [
+          "password",
+          "username"
+        ],
+        "body_shapes": [
+          {
+            "password": "string",
+            "username": "string"
+          }
+        ],
+        "body_sizes": [
+          80
+        ],
+        "methods": [
+          "POST"
+        ],
+        "query_keys": [
+          "page",
+          "q"
+        ]
+      },
+      "response": {
+        "content_types": [
+          "application/json"
+        ],
+        "header_names": [
+          "content-type",
+          "set-cookie"
+        ],
+        "body_present": true,
+        "body_types": [
+          "json"
+        ],
+        "body_keys": [
+          "token",
+          "user_id"
+        ],
+        "body_shapes": [
+          {
+            "token": "string",
+            "user_id": "number"
+          }
+        ],
+        "body_sizes": [
+          40
+        ],
+        "observed_status_codes": [
+          200
+        ],
+        "status_code_counts": {
+          "200": 1
+        }
+      },
+      "auth": {
+        "authorization_header_present": true,
+        "bearer_token_present": true,
+        "cookie_present": true,
+        "session_cookie_present": true,
+        "api_key_header_present": true
+      },
+      "action_context": [
+        {
+          "action_id": "act_login",
+          "source_node_id": "screen_login",
+          "target_node_id": "screen_home"
+        }
+      ],
+      "route_context": [
+        {
+          "action_id": "act_login",
+          "source_node_id": "screen_login",
+          "target_node_id": "screen_home"
+        }
+      ],
+      "runtime_context": {
+        "pid_changed_observed": true,
+        "process_death_observed": true,
+        "activity_changes_observed": true,
+        "fatal_observed": true,
+        "crash_observed": true,
+        "evidence_available": true
+      },
+      "visibility": {
+        "http_visibility": "available",
+        "https_visibility": "partial",
+        "https_visibility_reason": "pinning_suspected"
+      },
+      "evidence_refs": {
+        "static_candidate_ids": [
+          "cand_login"
+        ],
+        "correlation_ids": [
+          "corr_e56af5540a4797a0"
+        ],
+        "transaction_ids": [
+          "tx_1"
+        ],
+        "action_ids": [
+          "act_login"
+        ],
+        "runtime_action_ids": [
+          "act_login"
+        ]
+      }
+    }
+  ]
+}

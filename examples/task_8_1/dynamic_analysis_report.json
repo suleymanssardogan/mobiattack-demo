@@ -1,0 +1,343 @@
+{
+  "schema_version": "1.0",
+  "report_type": "dynamic_analysis",
+  "scan_id": "run_synthetic_8_1",
+  "generated_at": "2026-10-01T12:02:00Z",
+  "report_status": "completed",
+  "analysis_coverage": "partial",
+  "target": {
+    "package_name": "com.example.app",
+    "platform": "android",
+    "source_type": "apk"
+  },
+  "coverage": {
+    "ui_exploration": "partial",
+    "runtime_observation": "partial",
+    "http_visibility": "available",
+    "https_visibility": "partial",
+    "api_correlation": "available",
+    "endpoint_contexts": "available"
+  },
+  "preflight": {
+    "status": "WARN",
+    "launch_success": true,
+    "process_running": true,
+    "diagnostic_codes": [
+      "NETWORK_UNAVAILABLE"
+    ]
+  },
+  "session": {
+    "session_id": "session-test",
+    "status": "COMPLETED",
+    "started_at": "2026-10-01T12:00:00Z",
+    "ended_at": "2026-10-01T12:01:00Z"
+  },
+  "exploration": {
+    "status": "partial",
+    "stop_reason": "max_steps",
+    "steps_attempted": 10,
+    "actions_succeeded": 8,
+    "actions_failed": 2,
+    "screens_observed": 4,
+    "transitions_recorded": 8,
+    "duration_seconds": 60.0
+  },
+  "routes": {
+    "node_count": 3,
+    "edge_count": 2,
+    "root_node_id": "node_1",
+    "current_node_id": "node_2",
+    "action_count": 1,
+    "self_loop_count": 1,
+    "system_boundary_count": 1,
+    "external_boundary_count": 1
+  },
+  "runtime": {
+    "action_evidence_count": 3,
+    "correlated_action_count": 2,
+    "pid_change_count": 1,
+    "process_death_count": 1,
+    "activity_change_count": 2,
+    "fatal_count": 1,
+    "crash_count": 1
+  },
+  "traffic": {
+    "backend": "mitmproxy",
+    "total_transactions": 3,
+    "http_count": 1,
+    "https_count": 2,
+    "hosts": [
+      "admin.example.com",
+      "api.example.com"
+    ],
+    "hosts_count": 2,
+    "http_visibility": "available",
+    "https_visibility": "partial",
+    "https_visibility_reason": "pinning_suspected",
+    "proxy_restored": true,
+    "visibility_note": "Traffic visibility is incomplete; unobserved requests may exist."
+  },
+  "traffic_correlation": {
+    "actions_with_evidence": 3,
+    "transaction_correlated_action_count": 1,
+    "partial_correlation_count": 1,
+    "unavailable_correlation_count": 1
+  },
+  "api_correlation": {
+    "static_candidate_count": 4,
+    "dynamic_endpoint_count": 4,
+    "correlated_count": 3,
+    "static_only_count": 1,
+    "dynamic_only_count": 1,
+    "exact_count": 1,
+    "template_count": 1,
+    "method_mismatch_count": 1,
+    "visibility_note": "HTTPS visibility is partial."
+  },
+  "endpoint_context_summary": {
+    "endpoint_context_count": 5,
+    "runtime_observed_count": 4,
+    "static_only_count": 1,
+    "dynamic_only_count": 1
+  },
+  "endpoint_contexts": [
+    {
+      "endpoint_context_id": "ctx_0",
+      "host": "api.example.com",
+      "path": "/path/0",
+      "static_method": "GET",
+      "observed_methods": [
+        "GET"
+      ],
+      "match_type": "exact",
+      "confidence": "high",
+      "observation_count": 1,
+      "observed_status_codes": [
+        200,
+        500
+      ],
+      "auth": {
+        "authorization_header_present": true,
+        "bearer_token_present": null,
+        "cookie_present": true,
+        "session_cookie_present": null,
+        "api_key_header_present": true
+      },
+      "evidence_refs": {
+        "action_ids": [
+          "act_1",
+          "act_2"
+        ],
+        "correlation_ids": [
+          "corr_0"
+        ],
+        "runtime_action_ids": [
+          "act_1"
+        ],
+        "static_candidate_ids": [
+          "cand_0"
+        ],
+        "transaction_ids": [
+          "tx0"
+        ]
+      },
+      "action_ids": [
+        "act_1",
+        "act_2"
+      ]
+    },
+    {
+      "endpoint_context_id": "ctx_1",
+      "host": "api.example.com",
+      "path": "/path/1",
+      "static_method": "GET",
+      "observed_methods": [
+        "GET"
+      ],
+      "match_type": "template",
+      "confidence": "medium",
+      "observation_count": 1,
+      "observed_status_codes": [
+        200,
+        500
+      ],
+      "auth": {
+        "authorization_header_present": true,
+        "bearer_token_present": null,
+        "cookie_present": true,
+        "session_cookie_present": null,
+        "api_key_header_present": true
+      },
+      "evidence_refs": {
+        "action_ids": [
+          "act_1",
+          "act_2"
+        ],
+        "correlation_ids": [
+          "corr_1"
+        ],
+        "runtime_action_ids": [
+          "act_1"
+        ],
+        "static_candidate_ids": [
+          "cand_1"
+        ],
+        "transaction_ids": [
+          "tx1"
+        ]
+      },
+      "action_ids": [
+        "act_1",
+        "act_2"
+      ]
+    },
+    {
+      "endpoint_context_id": "ctx_2",
+      "host": "api.example.com",
+      "path": "/path/2",
+      "static_method": "GET",
+      "observed_methods": [],
+      "match_type": "static_only",
+      "confidence": "medium",
+      "observation_count": 0,
+      "observed_status_codes": [],
+      "auth": {
+        "authorization_header_present": true,
+        "bearer_token_present": null,
+        "cookie_present": true,
+        "session_cookie_present": null,
+        "api_key_header_present": true
+      },
+      "evidence_refs": {
+        "action_ids": [
+          "act_1",
+          "act_2"
+        ],
+        "correlation_ids": [
+          "corr_2"
+        ],
+        "runtime_action_ids": [
+          "act_1"
+        ],
+        "static_candidate_ids": [
+          "cand_2"
+        ],
+        "transaction_ids": []
+      },
+      "action_ids": [
+        "act_1",
+        "act_2"
+      ]
+    },
+    {
+      "endpoint_context_id": "ctx_3",
+      "host": "api.example.com",
+      "path": "/path/3",
+      "static_method": "GET",
+      "observed_methods": [
+        "GET"
+      ],
+      "match_type": "dynamic_only",
+      "confidence": "medium",
+      "observation_count": 1,
+      "observed_status_codes": [
+        200,
+        500
+      ],
+      "auth": {
+        "authorization_header_present": true,
+        "bearer_token_present": null,
+        "cookie_present": true,
+        "session_cookie_present": null,
+        "api_key_header_present": true
+      },
+      "evidence_refs": {
+        "action_ids": [
+          "act_1",
+          "act_2"
+        ],
+        "correlation_ids": [
+          "corr_3"
+        ],
+        "runtime_action_ids": [
+          "act_1"
+        ],
+        "static_candidate_ids": [],
+        "transaction_ids": [
+          "tx3"
+        ]
+      },
+      "action_ids": [
+        "act_1",
+        "act_2"
+      ]
+    },
+    {
+      "endpoint_context_id": "ctx_4",
+      "host": "api.example.com",
+      "path": "/path/4",
+      "static_method": "GET",
+      "observed_methods": [
+        "POST"
+      ],
+      "match_type": "method_mismatch",
+      "confidence": "medium",
+      "observation_count": 1,
+      "observed_status_codes": [
+        200,
+        500
+      ],
+      "auth": {
+        "authorization_header_present": true,
+        "bearer_token_present": null,
+        "cookie_present": true,
+        "session_cookie_present": null,
+        "api_key_header_present": true
+      },
+      "evidence_refs": {
+        "action_ids": [
+          "act_1",
+          "act_2"
+        ],
+        "correlation_ids": [
+          "corr_4"
+        ],
+        "runtime_action_ids": [
+          "act_1"
+        ],
+        "static_candidate_ids": [
+          "cand_4"
+        ],
+        "transaction_ids": [
+          "tx4"
+        ]
+      },
+      "action_ids": [
+        "act_1",
+        "act_2"
+      ]
+    }
+  ],
+  "evidence": {
+    "api_correlation": "dynamic/api_correlation.json",
+    "endpoint_contexts": "dynamic/endpoint_contexts.json",
+    "exploration": "dynamic/exploration_result.json",
+    "preflight": "dynamic/preflight_result.json",
+    "routes": "dynamic/route_graph.json",
+    "runtime": "dynamic/runtime_evidence.json",
+    "session": "dynamic/session.json",
+    "traffic": "dynamic/traffic.json",
+    "traffic_correlation": "dynamic/traffic_evidence.json"
+  },
+  "evidence_status": {
+    "api_correlation": "available",
+    "endpoint_contexts": "available",
+    "exploration": "available",
+    "preflight": "available",
+    "routes": "available",
+    "runtime": "available",
+    "session": "available",
+    "traffic": "available",
+    "traffic_correlation": "available"
+  }
+}

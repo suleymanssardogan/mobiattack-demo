@@ -83,6 +83,7 @@ def serve_run_file(
     *,
     disposition_filename: str | None = None,
     label: str | None = None,
+    validated_json_loader=None,
 ) -> None:
     """Locates a run file and serves it, or responds with 404.
 
@@ -99,6 +100,7 @@ def serve_run_file(
         get_run_dir: Callable that resolves run_id → Path | None.
         disposition_filename: Optional attachment filename for downloads.
         label: Human-readable label for 404 error messages.
+        validated_json_loader: Canonical loader (run directory, run ID); rejects invalid evidence.
     """
     display_label = label or filename
     target_dir = get_run_dir(run_id)
@@ -115,6 +117,15 @@ def serve_run_file(
             "status": "error",
             "message": f"{display_label} for run '{run_id}' not found.",
         })
+        return
+
+    if validated_json_loader is not None:
+        try:
+            report = validated_json_loader(target_dir, run_id)
+        except (ValueError, OSError):
+            send_json(handler, 404, {"status": "error", "message": f"{display_label} unavailable."})
+            return
+        send_json(handler, 200, report)
         return
 
     try:

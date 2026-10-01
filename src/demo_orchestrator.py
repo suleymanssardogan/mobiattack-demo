@@ -329,13 +329,19 @@ def _update_scan_state_dynamic_stage(
             mark_artifact_available,
             save_scan_state,
             update_stage_status,
+            sync_dynamic_report_artifact,
         )
-        st = load_scan_state(root_path)
+        st = load_scan_state(root_path, validate_artifacts=False)
         if not st:
             return
 
         # Product integrity: dynamic_analysis cannot be completed without canonical dynamic_analysis_report
-        actual_stat = "partial" if status in ("partial", "completed") else status
+        was_registered = st["artifacts"]["dynamic_analysis_report"].get("available", False)
+        available = sync_dynamic_report_artifact(st, root_path, complete_stage=False)
+        if available and not was_registered:
+            save_scan_state(root_path, st)
+        sync_dynamic_report_artifact(st, root_path)
+        actual_stat = ("completed" if available else "partial") if status in ("partial", "completed") else status
         update_stage_status(st, "dynamic_analysis", actual_stat, message)
         if current_stage:
             st["current_stage"] = current_stage
@@ -410,7 +416,7 @@ def _wire_dynamic_exploration(
     6. Appends exploration events to the existing dynamic/timeline.json.
     7. Runs bounded exploration.
     8. Persists dynamic/exploration_result.json atomically.
-    9. Updates scan_state: dynamic_analysis -> 'partial' (if evidence) or 'failed'.
+    9. Generates canonical dynamic report; completes only after validated artifact registration.
     10. Failure isolation: never raises or corrupts static report, preflight, or session artifacts.
     """
     try:
@@ -611,6 +617,12 @@ def _wire_dynamic_exploration(
                 )
             except Exception as corr_exc:
                 logger.error("Static <-> Dynamic API correlation failed (isolated): %s", corr_exc)
+
+            # Task 8.1: project finalized evidence into the root canonical product report.
+            report = _wire_dynamic_analysis_report(root_path)
+            if report is not None:
+                final_status = "completed"
+                final_msg = "Canonical dynamic report generated and validated; runtime coverage may be partial."
         else:
             final_status = "failed"
             final_msg = f"Dynamic exploration failed: {res.error or 'No UI evidence observed.'}"
@@ -747,9 +759,76 @@ def _wire_api_correlation(
             except Exception as exc:
                 logger.warning("Could not record API_CORRELATION_COMPLETED event: %s", exc)
 
+        _wire_endpoint_contexts(root_path, transactions, traffic_evidence, timeline_recorder)
+
         return corr_result
     except Exception as exc:
         logger.error("Static <-> Dynamic API correlation failed (isolated): %s", exc, exc_info=True)
+        return None
+
+
+
+def _wire_endpoint_contexts(
+    root_path: Path,
+    transactions: list[Any] | None = None,
+    traffic_evidence: Any | None = None,
+    timeline_recorder: Any | None = None,
+) -> Any:
+    """Task 7.2: build passive context only after canonical correlation exists."""
+    try:
+        import json
+        from src.dynamic.context import build_endpoint_contexts
+        from src.dynamic.correlation.models import ApiCorrelationResult
+        from src.dynamic.runtime.models import RuntimeEvidenceArtifact
+        from src.dynamic.traffic.models import TrafficEvidenceArtifact
+
+        dynamic_dir = root_path / "dynamic"
+        corr_file = dynamic_dir / "api_correlation.json"
+        if not corr_file.is_file():
+            return None
+        correlation = ApiCorrelationResult.load(corr_file)
+        if transactions is None:
+            traffic_file = dynamic_dir / "traffic.json"
+            transactions = json.loads(traffic_file.read_text()).get("transactions", []) if traffic_file.is_file() else []
+        if traffic_evidence is None and (dynamic_dir / "traffic_evidence.json").is_file():
+            traffic_evidence = TrafficEvidenceArtifact.load_or_create(dynamic_dir / "traffic_evidence.json", correlation.session_id)
+        runtime_file = dynamic_dir / "runtime_evidence.json"
+        runtime_evidence = None
+        if runtime_file.is_file():
+            try:
+                runtime_evidence = RuntimeEvidenceArtifact.from_dict(json.loads(runtime_file.read_text()))
+            except Exception as exc:
+                logger.warning("Could not read runtime evidence for endpoint contexts: %s", exc)
+        result = build_endpoint_contexts(correlation, transactions, traffic_evidence, runtime_evidence)
+        result.save_atomic(dynamic_dir / "endpoint_contexts.json")
+        if timeline_recorder and hasattr(timeline_recorder, "_record_system_event"):
+            try:
+                timeline_recorder._record_system_event("ENDPOINT_CONTEXTS_BUILT", dict(result.summary))
+            except Exception as exc:
+                logger.warning("Could not record ENDPOINT_CONTEXTS_BUILT: %s", exc)
+        return result
+    except Exception as exc:
+        logger.error("Endpoint context builder failed (isolated): %s", exc, exc_info=True)
+        return None
+
+
+
+def _wire_dynamic_analysis_report(root_path: Path) -> Any | None:
+    """Report-only generation; persistence and validation precede state registration."""
+    try:
+        from src.report_generator import generate_dynamic_analysis_report
+        from src.scan_state import load_scan_state, save_scan_state, sync_dynamic_report_artifact
+        state = load_scan_state(root_path, validate_artifacts=False)
+        report = generate_dynamic_analysis_report(root_path, state.get("target", {}) if state else {})
+        if state:
+            # Checkpoint availability first. Completion is a subsequent persisted transition.
+            state["artifacts"]["dynamic_analysis_report"] = {"available": True, "relative_path": "dynamic_analysis_report.json"}
+            save_scan_state(root_path, state)
+            sync_dynamic_report_artifact(state, root_path)
+            save_scan_state(root_path, state)
+        return report
+    except Exception as exc:
+        logger.warning("Canonical dynamic report generation failed (isolated): %s", exc)
         return None
 
 

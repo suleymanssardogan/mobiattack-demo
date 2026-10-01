@@ -1,0 +1,117 @@
+{
+  "case_id": "case_010",
+  "category": "query_filters",
+  "coverage_metadata": {},
+  "description": "Synthetic query filters boundary scenario.",
+  "endpoint_context": {
+    "action_context": [],
+    "auth": {
+      "api_key_header_present": false,
+      "authorization_header_present": false,
+      "bearer_token_present": false,
+      "cookie_present": false,
+      "session_cookie_present": false
+    },
+    "dynamic": {
+      "available_transaction_count": 1,
+      "missing_transaction_ids": [],
+      "observed": true,
+      "observed_methods": [
+        "GET"
+      ]
+    },
+    "endpoint_context_id": "ctx_case_010",
+    "evidence_refs": {
+      "action_ids": [
+        "act_case_010"
+      ],
+      "correlation_ids": [
+        "corr_case_010"
+      ],
+      "runtime_action_ids": [
+        "act_case_010"
+      ],
+      "static_candidate_ids": [
+        "cand_case_010"
+      ],
+      "transaction_ids": [
+        "tx_case_010"
+      ]
+    },
+    "host": "api.example.com",
+    "methods": [
+      "GET"
+    ],
+    "path": "/search",
+    "request": {
+      "body_keys": [],
+      "body_present": null,
+      "body_shapes": [],
+      "header_names": [],
+      "query_keys": [
+        "sort",
+        "limit"
+      ]
+    },
+    "response": {},
+    "route_context": [],
+    "runtime_context": {
+      "activity_changes_observed": false,
+      "evidence_available": true
+    },
+    "scheme": null,
+    "static": {
+      "confidence": "high",
+      "match_type": "exact",
+      "static_candidate_id": "cand_case_010",
+      "static_candidate_id_origin": "source_report",
+      "static_method": "GET"
+    },
+    "visibility": {
+      "http_visibility": "available",
+      "https_visibility": "available"
+    }
+  },
+  "expected": {
+    "allowed_hypothesis_types": [
+      "authentication_behavior_candidate",
+      "input_validation_candidate",
+      "parameter_consistency_candidate"
+    ],
+    "expected_coverage_gaps": [],
+    "expected_endpoint_role": "unknown",
+    "expected_hypothesis_types": [
+      "authentication_behavior_candidate",
+      "input_validation_candidate",
+      "parameter_consistency_candidate"
+    ],
+    "expected_policy_outcomes": {
+      "AUTHENTICATION_PRESENCE": "allow",
+      "PARAMETER_CONSISTENCY": "needs_evidence"
+    },
+    "expected_test_ids": [
+      "AUTHENTICATION_PRESENCE",
+      "PARAMETER_CONSISTENCY"
+    ],
+    "forbidden_hypothesis_types": [
+      "coverage_limitation",
+      "function_authorization_candidate",
+      "object_authorization_candidate",
+      "session_behavior_candidate"
+    ],
+    "forbidden_test_ids": [
+      "FUNCTION_AUTHORIZATION",
+      "INPUT_VALIDATION",
+      "OBJECT_AUTHORIZATION",
+      "SESSION_HANDLING"
+    ],
+    "must_not_emit_finding": true,
+    "unknown_fields": []
+  },
+  "precondition_names": [
+    "Expected authentication behavior",
+    "Comparable runtime observations",
+    "Expected input behavior",
+    "Comparable input observations"
+  ]
+}

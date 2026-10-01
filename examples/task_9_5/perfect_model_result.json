@@ -1,0 +1,3454 @@
+{
+  "aggregate": {
+    "agent_overreach_rate": 0.0,
+    "coverage_gap_miss_rate": 0.0,
+    "expected_hypothesis_miss_rate": 0.0,
+    "expected_test_miss_rate": 0.0,
+    "hard_failure_runs": 0,
+    "model_called_role_runs": 46,
+    "scored_role_runs": 50
+  },
+  "benchmark_version": "agent_benchmark_v1",
+  "cases": [
+    {
+      "case_id": "case_001",
+      "category": "orders_resource",
+      "iteration": 1,
+      "policy": {
+        "allow_count": 1,
+        "decisions": [
+          {
+            "decision": "allow",
+            "decision_id": "policy_c510e3e2fe5998c5",
+            "endpoint_context_id": "ctx_case_001",
+            "hypothesis_id": "hyp_588b0005fab2b57e",
+            "policy_version": "policy_v1",
+            "proposal_id": "proposal_b8720dd3f8d8e3a5",
+            "reason": "Proposal satisfies V1 contract checks; no action was executed.",
+            "reason_code": "ALLOWED",
+            "test_id": "AUTHENTICATION_PRESENCE",
+            "validated_evidence_refs": [
+              "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_case_001"
+            ]
+          },
+          {
+            "decision": "deny",
+            "decision_id": "policy_990aabc34ab6105c",
+            "endpoint_context_id": "ctx_case_001",
+            "hypothesis_id": "hyp_58c83baccc475780",
+            "policy_version": "policy_v1",
+            "proposal_id": "proposal_dc1253992e238a64",
+            "reason": "Risk is inconsistent with the catalog or blocked by V1 policy.",
+            "reason_code": "RISK_NOT_ALLOWED",
+            "test_id": "OBJECT_AUTHORIZATION",
+            "validated_evidence_refs": []
+          }
+        ],
+        "deny_count": 1,
+        "expected_outcome_count": 2,
+        "expected_outcome_match_count": 2,
+        "needs_evidence_count": 0,
+        "policy_invalid_count": 0,
+        "policy_version": "policy_v1",
+        "status": "evaluated"
+      },
+      "roles": {
+        "context_analyst": {
+          "emitted_hypothesis_ids": [
+            "hyp_588b0005fab2b57e",
+            "hyp_58c83baccc475780"
+          ],
+          "emitted_hypothesis_types": [
+            "authentication_behavior_candidate",
+            "object_authorization_candidate"
+          ],
+          "hallucinated_refs": [],
+          "hard_failures": [],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "perfect_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "context_analyst_v1",
+            "provider": "fake",
+            "role": "context_analyst",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "allowed_hypothesis_precision": 1.0,
+            "coverage_gap_miss_count": 0,
+            "coverage_gap_recall": 1.0,
+            "endpoint_identity_valid": true,
+            "endpoint_role_valid": true,
+            "evidence_refs_valid": true,
+            "expected_coverage_gap_count": 0,
+            "expected_hypothesis_count": 2,
+            "expected_hypothesis_miss_count": 0,
+            "expected_hypothesis_recall": 1.0,
+            "forbidden_field_count": 0,
+            "hallucinated_ref_count": 0,
+            "role_violation_count": 0,
+            "schema_valid": true,
+            "secret_leak_count": 0,
+            "unknown_preservation": null,
+            "unsupported_hypothesis_count": 0
+          },
+          "passed": true,
+          "role_violations": [],
+          "status": "completed",
+          "validation_errors": []
+        },
+        "test_planner": {
+          "emitted_test_ids": [
+            "AUTHENTICATION_PRESENCE",
+            "OBJECT_AUTHORIZATION"
+          ],
+          "hallucinated_refs": [],
+          "hard_failures": [],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "perfect_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "test_planner_v1",
+            "provider": "fake",
+            "role": "test_planner",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "expected_test_count": 2,
+            "expected_test_miss_count": 0,
+            "expected_test_recall": 1.0,
+            "hallucinated_ref_count": 0,
+            "invented_endpoint_count": 0,
+            "irrelevant_test_count": 0,
+            "no_relevant_test_correct": null,
+            "overplanning_count": 0,
+            "proposal_grounding_valid": true,
+            "risk_integrity": true,
+            "role_violation_count": 0,
+            "schema_valid": true,
+            "secret_leak_count": 0,
+            "unknown_parameter_count": 0,
+            "unknown_test_count": 0
+          },
+          "passed": true,
+          "role_violations": [],
+          "status": "completed",
+          "validation_errors": []
+        }
+      }
+    },
+    {
+      "case_id": "case_002",
+      "category": "users_resource",
+      "iteration": 1,
+      "policy": {
+        "allow_count": 1,
+        "decisions": [
+          {
+            "decision": "needs_evidence",
+            "decision_id": "policy_fd977651ee6ed2e3",
+            "endpoint_context_id": "ctx_case_002",
+            "hypothesis_id": "hyp_0e892ceec8c044e9",
+            "policy_version": "policy_v1",
+            "proposal_id": "proposal_385c4a147840eabd",
+            "reason": "Required context is unavailable. Missing: Comparable parameter observations.",
+            "reason_code": "MISSING_REQUIRED_CONTEXT",
+            "test_id": "PARAMETER_CONSISTENCY",
+            "validated_evidence_refs": [
+              "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_case_002",
+              "dynamic/traffic.json#transaction_id=tx_case_002"
+            ]
+          },
+          {
+            "decision": "deny",
+            "decision_id": "policy_0ee7a5b9f7ef943b",
+            "endpoint_context_id": "ctx_case_002",
+            "hypothesis_id": "hyp_28316e04d9797c81",
+            "policy_version": "policy_v1",
+            "proposal_id": "proposal_4c23d83595109ee3",
+            "reason": "Risk is inconsistent with the catalog or blocked by V1 policy.",
+            "reason_code": "RISK_NOT_ALLOWED",
+            "test_id": "OBJECT_AUTHORIZATION",
+            "validated_evidence_refs": []
+          },
+          {
+            "decision": "allow",
+            "decision_id": "policy_65ac46131579b0cb",
+            "endpoint_context_id": "ctx_case_002",
+            "hypothesis_id": "hyp_a062bf075312eb00",
+            "policy_version": "policy_v1",
+            "proposal_id": "proposal_77d29f31f7523afd",
+            "reason": "Proposal satisfies V1 contract checks; no action was executed.",
+            "reason_code": "ALLOWED",
+            "test_id": "AUTHENTICATION_PRESENCE",
+            "validated_evidence_refs": [
+              "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_case_002"
+            ]
+          }
+        ],
+        "deny_count": 1,
+        "expected_outcome_count": 3,
+        "expected_outcome_match_count": 3,
+        "needs_evidence_count": 1,
+        "policy_invalid_count": 0,
+        "policy_version": "policy_v1",
+        "status": "evaluated"
+      },
+      "roles": {
+        "context_analyst": {
+          "emitted_hypothesis_ids": [
+            "hyp_0e892ceec8c044e9",
+            "hyp_28316e04d9797c81",
+            "hyp_662fd5d1ed824968",
+            "hyp_a062bf075312eb00"
+          ],
+          "emitted_hypothesis_types": [
+            "authentication_behavior_candidate",
+            "input_validation_candidate",
+            "object_authorization_candidate",
+            "parameter_consistency_candidate"
+          ],
+          "hallucinated_refs": [],
+          "hard_failures": [],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "perfect_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "context_analyst_v1",
+            "provider": "fake",
+            "role": "context_analyst",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "allowed_hypothesis_precision": 1.0,
+            "coverage_gap_miss_count": 0,
+            "coverage_gap_recall": 1.0,
+            "endpoint_identity_valid": true,
+            "endpoint_role_valid": true,
+            "evidence_refs_valid": true,
+            "expected_coverage_gap_count": 0,
+            "expected_hypothesis_count": 4,
+            "expected_hypothesis_miss_count": 0,
+            "expected_hypothesis_recall": 1.0,
+            "forbidden_field_count": 0,
+            "hallucinated_ref_count": 0,
+            "role_violation_count": 0,
+            "schema_valid": true,
+            "secret_leak_count": 0,
+            "unknown_preservation": null,
+            "unsupported_hypothesis_count": 0
+          },
+          "passed": true,
+          "role_violations": [],
+          "status": "completed",
+          "validation_errors": []
+        },
+        "test_planner": {
+          "emitted_test_ids": [
+            "AUTHENTICATION_PRESENCE",
+            "OBJECT_AUTHORIZATION",
+            "PARAMETER_CONSISTENCY"
+          ],
+          "hallucinated_refs": [],
+          "hard_failures": [],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "perfect_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "test_planner_v1",
+            "provider": "fake",
+            "role": "test_planner",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "expected_test_count": 3,
+            "expected_test_miss_count": 0,
+            "expected_test_recall": 1.0,
+            "hallucinated_ref_count": 0,
+            "invented_endpoint_count": 0,
+            "irrelevant_test_count": 0,
+            "no_relevant_test_correct": null,
+            "overplanning_count": 0,
+            "proposal_grounding_valid": true,
+            "risk_integrity": true,
+            "role_violation_count": 0,
+            "schema_valid": true,
+            "secret_leak_count": 0,
+            "unknown_parameter_count": 0,
+            "unknown_test_count": 0
+          },
+          "passed": true,
+          "role_violations": [],
+          "status": "completed",
+          "validation_errors": []
+        }
+      }
+    },
+    {
+      "case_id": "case_003",
+      "category": "account_resource",
+      "iteration": 1,
+      "policy": {
+        "allow_count": 1,
+        "decisions": [
+          {
+            "decision": "deny",
+            "decision_id": "policy_1248c3974fe3b3e1",
+            "endpoint_context_id": "ctx_case_003",
+            "hypothesis_id": "hyp_a74ae4c60d4198b1",
+            "policy_version": "policy_v1",
+            "proposal_id": "proposal_0f5a172324ace75e",
+            "reason": "Risk is inconsistent with the catalog or blocked by V1 policy.",
+            "reason_code": "RISK_NOT_ALLOWED",
+            "test_id": "OBJECT_AUTHORIZATION",
+            "validated_evidence_refs": []
+          },
+          {
+            "decision": "allow",
+            "decision_id": "policy_7c66334dfdaea665",
+            "endpoint_context_id": "ctx_case_003",
+            "hypothesis_id": "hyp_e2dca0e5584f06eb",
+            "policy_version": "policy_v1",
+            "proposal_id": "proposal_2bec7f493934785a",
+            "reason": "Proposal satisfies V1 contract checks; no action was executed.",
+            "reason_code": "ALLOWED",
+            "test_id": "AUTHENTICATION_PRESENCE",
+            "validated_evidence_refs": [
+              "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_case_003"
+            ]
+          }
+        ],
+        "deny_count": 1,
+        "expected_outcome_count": 2,
+        "expected_outcome_match_count": 2,
+        "needs_evidence_count": 0,
+        "policy_invalid_count": 0,
+        "policy_version": "policy_v1",
+        "status": "evaluated"
+      },
+      "roles": {
+        "context_analyst": {
+          "emitted_hypothesis_ids": [
+            "hyp_a74ae4c60d4198b1",
+            "hyp_e2dca0e5584f06eb"
+          ],
+          "emitted_hypothesis_types": [
+            "authentication_behavior_candidate",
+            "object_authorization_candidate"
+          ],
+          "hallucinated_refs": [],
+          "hard_failures": [],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "perfect_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "context_analyst_v1",
+            "provider": "fake",
+            "role": "context_analyst",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "allowed_hypothesis_precision": 1.0,
+            "coverage_gap_miss_count": 0,
+            "coverage_gap_recall": 1.0,
+            "endpoint_identity_valid": true,
+            "endpoint_role_valid": true,
+            "evidence_refs_valid": true,
+            "expected_coverage_gap_count": 0,
+            "expected_hypothesis_count": 2,
+            "expected_hypothesis_miss_count": 0,
+            "expected_hypothesis_recall": 1.0,
+            "forbidden_field_count": 0,
+            "hallucinated_ref_count": 0,
+            "role_violation_count": 0,
+            "schema_valid": true,
+            "secret_leak_count": 0,
+            "unknown_preservation": null,
+            "unsupported_hypothesis_count": 0
+          },
+          "passed": true,
+          "role_violations": [],
+          "status": "completed",
+          "validation_errors": []
+        },
+        "test_planner": {
+          "emitted_test_ids": [
+            "AUTHENTICATION_PRESENCE",
+            "OBJECT_AUTHORIZATION"
+          ],
+          "hallucinated_refs": [],
+          "hard_failures": [],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "perfect_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "test_planner_v1",
+            "provider": "fake",
+            "role": "test_planner",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "expected_test_count": 2,
+            "expected_test_miss_count": 0,
+            "expected_test_recall": 1.0,
+            "hallucinated_ref_count": 0,
+            "invented_endpoint_count": 0,
+            "irrelevant_test_count": 0,
+            "no_relevant_test_correct": null,
+            "overplanning_count": 0,
+            "proposal_grounding_valid": true,
+            "risk_integrity": true,
+            "role_violation_count": 0,
+            "schema_valid": true,
+            "secret_leak_count": 0,
+            "unknown_parameter_count": 0,
+            "unknown_test_count": 0
+          },
+          "passed": true,
+          "role_violations": [],
+          "status": "completed",
+          "validation_errors": []
+        }
+      }
+    },
+    {
+      "case_id": "case_004",
+      "category": "login",
+      "iteration": 1,
+      "policy": {
+        "allow_count": 2,
+        "decisions": [
+          {
+            "decision": "allow",
+            "decision_id": "policy_d8ba3053df41c0a6",
+            "endpoint_context_id": "ctx_case_004",
+            "hypothesis_id": "hyp_1a44975ace0717e9",
+            "policy_version": "policy_v1",
+            "proposal_id": "proposal_235f2aef57c22fa3",
+            "reason": "Proposal satisfies V1 contract checks; no action was executed.",
+            "reason_code": "ALLOWED",
+            "test_id": "AUTHENTICATION_PRESENCE",
+            "validated_evidence_refs": [
+              "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_case_004"
+            ]
+          },
+          {
+            "decision": "allow",
+            "decision_id": "policy_d0b7fe0ea7168d3a",
+            "endpoint_context_id": "ctx_case_004",
+            "hypothesis_id": "hyp_1bae602f28aecdf9",
+            "policy_version": "policy_v1",
+            "proposal_id": "proposal_c6e1eef535e49d41",
+            "reason": "Proposal satisfies V1 contract checks; no action was executed.",
+            "reason_code": "ALLOWED",
+            "test_id": "INPUT_VALIDATION",
+            "validated_evidence_refs": [
+              "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_case_004",
+              "dynamic/traffic.json#transaction_id=tx_case_004"
+            ]
+          },
+          {
+            "decision": "needs_evidence",
+            "decision_id": "policy_210e1086cfe498a9",
+            "endpoint_context_id": "ctx_case_004",
+            "hypothesis_id": "hyp_93e14c85c6cfd691",
+            "policy_version": "policy_v1",
+            "proposal_id": "proposal_f0e4f9e9ff5683cd",
+            "reason": "Required context is unavailable. Missing: Comparable parameter observations.",
+            "reason_code": "MISSING_REQUIRED_CONTEXT",
+            "test_id": "PARAMETER_CONSISTENCY",
+            "validated_evidence_refs": [
+              "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_case_004",
+              "dynamic/traffic.json#transaction_id=tx_case_004"
+            ]
+          }
+        ],
+        "deny_count": 0,
+        "expected_outcome_count": 3,
+        "expected_outcome_match_count": 3,
+        "needs_evidence_count": 1,
+        "policy_invalid_count": 0,
+        "policy_version": "policy_v1",
+        "status": "evaluated"
+      },
+      "roles": {
+        "context_analyst": {
+          "emitted_hypothesis_ids": [
+            "hyp_1a44975ace0717e9",
+            "hyp_1bae602f28aecdf9",
+            "hyp_93e14c85c6cfd691"
+          ],
+          "emitted_hypothesis_types": [
+            "authentication_behavior_candidate",
+            "input_validation_candidate",
+            "parameter_consistency_candidate"
+          ],
+          "hallucinated_refs": [],
+          "hard_failures": [],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "perfect_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "context_analyst_v1",
+            "provider": "fake",
+            "role": "context_analyst",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "allowed_hypothesis_precision": 1.0,
+            "coverage_gap_miss_count": 0,
+            "coverage_gap_recall": 1.0,
+            "endpoint_identity_valid": true,
+            "endpoint_role_valid": true,
+            "evidence_refs_valid": true,
+            "expected_coverage_gap_count": 0,
+            "expected_hypothesis_count": 3,
+            "expected_hypothesis_miss_count": 0,
+            "expected_hypothesis_recall": 1.0,
+            "forbidden_field_count": 0,
+            "hallucinated_ref_count": 0,
+            "role_violation_count": 0,
+            "schema_valid": true,
+            "secret_leak_count": 0,
+            "unknown_preservation": null,
+            "unsupported_hypothesis_count": 0
+          },
+          "passed": true,
+          "role_violations": [],
+          "status": "completed",
+          "validation_errors": []
+        },
+        "test_planner": {
+          "emitted_test_ids": [
+            "AUTHENTICATION_PRESENCE",
+            "INPUT_VALIDATION",
+            "PARAMETER_CONSISTENCY"
+          ],
+          "hallucinated_refs": [],
+          "hard_failures": [],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "perfect_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "test_planner_v1",
+            "provider": "fake",
+            "role": "test_planner",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "expected_test_count": 3,
+            "expected_test_miss_count": 0,
+            "expected_test_recall": 1.0,
+            "hallucinated_ref_count": 0,
+            "invented_endpoint_count": 0,
+            "irrelevant_test_count": 0,
+            "no_relevant_test_correct": null,
+            "overplanning_count": 0,
+            "proposal_grounding_valid": true,
+            "risk_integrity": true,
+            "role_violation_count": 0,
+            "schema_valid": true,
+            "secret_leak_count": 0,
+            "unknown_parameter_count": 0,
+            "unknown_test_count": 0
+          },
+          "passed": true,
+          "role_violations": [],
+          "status": "completed",
+          "validation_errors": []
+        }
+      }
+    },
+    {
+      "case_id": "case_005",
+      "category": "refresh",
+      "iteration": 1,
+      "policy": {
+        "allow_count": 1,
+        "decisions": [
+          {
+            "decision": "allow",
+            "decision_id": "policy_7148978380a5cd17",
+            "endpoint_context_id": "ctx_case_005",
+            "hypothesis_id": "hyp_4c02acb61df004a4",
+            "policy_version": "policy_v1",
+            "proposal_id": "proposal_af1fd77a5a2a3332",
+            "reason": "Proposal satisfies V1 contract checks; no action was executed.",
+            "reason_code": "ALLOWED",
+            "test_id": "AUTHENTICATION_PRESENCE",
+            "validated_evidence_refs": [
+              "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_case_005"
+            ]
+          },
+          {
+            "decision": "needs_evidence",
+            "decision_id": "policy_a348808c5d987899",
+            "endpoint_context_id": "ctx_case_005",
+            "hypothesis_id": "hyp_b8a8230c2cb69df8",
+            "policy_version": "policy_v1",
+            "proposal_id": "proposal_ec9c8804dee26a72",
+            "reason": "Required context is unavailable. Missing: Comparable session observations.",
+            "reason_code": "MISSING_REQUIRED_CONTEXT",
+            "test_id": "SESSION_HANDLING",
+            "validated_evidence_refs": [
+              "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_case_005",
+              "dynamic/traffic.json#transaction_id=tx_case_005"
+            ]
+          }
+        ],
+        "deny_count": 0,
+        "expected_outcome_count": 2,
+        "expected_outcome_match_count": 2,
+        "needs_evidence_count": 1,
+        "policy_invalid_count": 0,
+        "policy_version": "policy_v1",
+        "status": "evaluated"
+      },
+      "roles": {
+        "context_analyst": {
+          "emitted_hypothesis_ids": [
+            "hyp_4c02acb61df004a4",
+            "hyp_b8a8230c2cb69df8"
+          ],
+          "emitted_hypothesis_types": [
+            "authentication_behavior_candidate",
+            "session_behavior_candidate"
+          ],
+          "hallucinated_refs": [],
+          "hard_failures": [],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "perfect_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "context_analyst_v1",
+            "provider": "fake",
+            "role": "context_analyst",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "allowed_hypothesis_precision": 1.0,
+            "coverage_gap_miss_count": 0,
+            "coverage_gap_recall": 1.0,
+            "endpoint_identity_valid": true,
+            "endpoint_role_valid": true,
+            "evidence_refs_valid": true,
+            "expected_coverage_gap_count": 0,
+            "expected_hypothesis_count": 2,
+            "expected_hypothesis_miss_count": 0,
+            "expected_hypothesis_recall": 1.0,
+            "forbidden_field_count": 0,
+            "hallucinated_ref_count": 0,
+            "role_violation_count": 0,
+            "schema_valid": true,
+            "secret_leak_count": 0,
+            "unknown_preservation": null,
+            "unsupported_hypothesis_count": 0
+          },
+          "passed": true,
+          "role_violations": [],
+          "status": "completed",
+          "validation_errors": []
+        },
+        "test_planner": {
+          "emitted_test_ids": [
+            "AUTHENTICATION_PRESENCE",
+            "SESSION_HANDLING"
+          ],
+          "hallucinated_refs": [],
+          "hard_failures": [],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "perfect_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "test_planner_v1",
+            "provider": "fake",
+            "role": "test_planner",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "expected_test_count": 2,
+            "expected_test_miss_count": 0,
+            "expected_test_recall": 1.0,
+            "hallucinated_ref_count": 0,
+            "invented_endpoint_count": 0,
+            "irrelevant_test_count": 0,
+            "no_relevant_test_correct": null,
+            "overplanning_count": 0,
+            "proposal_grounding_valid": true,
+            "risk_integrity": true,
+            "role_violation_count": 0,
+            "schema_valid": true,
+            "secret_leak_count": 0,
+            "unknown_parameter_count": 0,
+            "unknown_test_count": 0
+          },
+          "passed": true,
+          "role_violations": [],
+          "status": "completed",
+          "validation_errors": []
+        }
+      }
+    },
+    {
+      "case_id": "case_006",
+      "category": "logout",
+      "iteration": 1,
+      "policy": {
+        "allow_count": 1,
+        "decisions": [
+          {
+            "decision": "allow",
+            "decision_id": "policy_6d14de62fe9202bf",
+            "endpoint_context_id": "ctx_case_006",
+            "hypothesis_id": "hyp_ad2e65168b760bc3",
+            "policy_version": "policy_v1",
+            "proposal_id": "proposal_0fd01f6674f93041",
+            "reason": "Proposal satisfies V1 contract checks; no action was executed.",
+            "reason_code": "ALLOWED",
+            "test_id": "AUTHENTICATION_PRESENCE",
+            "validated_evidence_refs": [
+              "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_case_006"
+            ]
+          },
+          {
+            "decision": "needs_evidence",
+            "decision_id": "policy_636f373e40d2e0da",
+            "endpoint_context_id": "ctx_case_006",
+            "hypothesis_id": "hyp_c97912d9fd5c64c7",
+            "policy_version": "policy_v1",
+            "proposal_id": "proposal_7095953f7b86b81d",
+            "reason": "Required context is unavailable. Missing: Comparable session observations.",
+            "reason_code": "MISSING_REQUIRED_CONTEXT",
+            "test_id": "SESSION_HANDLING",
+            "validated_evidence_refs": [
+              "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_case_006",
+              "dynamic/traffic.json#transaction_id=tx_case_006"
+            ]
+          }
+        ],
+        "deny_count": 0,
+        "expected_outcome_count": 2,
+        "expected_outcome_match_count": 2,
+        "needs_evidence_count": 1,
+        "policy_invalid_count": 0,
+        "policy_version": "policy_v1",
+        "status": "evaluated"
+      },
+      "roles": {
+        "context_analyst": {
+          "emitted_hypothesis_ids": [
+            "hyp_ad2e65168b760bc3",
+            "hyp_c97912d9fd5c64c7"
+          ],
+          "emitted_hypothesis_types": [
+            "authentication_behavior_candidate",
+            "session_behavior_candidate"
+          ],
+          "hallucinated_refs": [],
+          "hard_failures": [],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "perfect_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "context_analyst_v1",
+            "provider": "fake",
+            "role": "context_analyst",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "allowed_hypothesis_precision": 1.0,
+            "coverage_gap_miss_count": 0,
+            "coverage_gap_recall": 1.0,
+            "endpoint_identity_valid": true,
+            "endpoint_role_valid": true,
+            "evidence_refs_valid": true,
+            "expected_coverage_gap_count": 0,
+            "expected_hypothesis_count": 2,
+            "expected_hypothesis_miss_count": 0,
+            "expected_hypothesis_recall": 1.0,
+            "forbidden_field_count": 0,
+            "hallucinated_ref_count": 0,
+            "role_violation_count": 0,
+            "schema_valid": true,
+            "secret_leak_count": 0,
+            "unknown_preservation": null,
+            "unsupported_hypothesis_count": 0
+          },
+          "passed": true,
+          "role_violations": [],
+          "status": "completed",
+          "validation_errors": []
+        },
+        "test_planner": {
+          "emitted_test_ids": [
+            "AUTHENTICATION_PRESENCE",
+            "SESSION_HANDLING"
+          ],
+          "hallucinated_refs": [],
+          "hard_failures": [],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "perfect_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "test_planner_v1",
+            "provider": "fake",
+            "role": "test_planner",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "expected_test_count": 2,
+            "expected_test_miss_count": 0,
+            "expected_test_recall": 1.0,
+            "hallucinated_ref_count": 0,
+            "invented_endpoint_count": 0,
+            "irrelevant_test_count": 0,
+            "no_relevant_test_correct": null,
+            "overplanning_count": 0,
+            "proposal_grounding_valid": true,
+            "risk_integrity": true,
+            "role_violation_count": 0,
+            "schema_valid": true,
+            "secret_leak_count": 0,
+            "unknown_parameter_count": 0,
+            "unknown_test_count": 0
+          },
+          "passed": true,
+          "role_violations": [],
+          "status": "completed",
+          "validation_errors": []
+        }
+      }
+    },
+    {
+      "case_id": "case_007",
+      "category": "session_profile",
+      "iteration": 1,
+      "policy": {
+        "allow_count": 1,
+        "decisions": [
+          {
+            "decision": "needs_evidence",
+            "decision_id": "policy_cc8ae0a2ad51c56d",
+            "endpoint_context_id": "ctx_case_007",
+            "hypothesis_id": "hyp_39e22048722936a2",
+            "policy_version": "policy_v1",
+            "proposal_id": "proposal_904d494e41595b0b",
+            "reason": "Required context is unavailable. Missing: Comparable session observations.",
+            "reason_code": "MISSING_REQUIRED_CONTEXT",
+            "test_id": "SESSION_HANDLING",
+            "validated_evidence_refs": [
+              "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_case_007",
+              "dynamic/traffic.json#transaction_id=tx_case_007"
+            ]
+          },
+          {
+            "decision": "allow",
+            "decision_id": "policy_dd1846b055151f7c",
+            "endpoint_context_id": "ctx_case_007",
+            "hypothesis_id": "hyp_9e1210cee344e000",
+            "policy_version": "policy_v1",
+            "proposal_id": "proposal_c734315836219081",
+            "reason": "Proposal satisfies V1 contract checks; no action was executed.",
+            "reason_code": "ALLOWED",
+            "test_id": "AUTHENTICATION_PRESENCE",
+            "validated_evidence_refs": [
+              "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_case_007"
+            ]
+          }
+        ],
+        "deny_count": 0,
+        "expected_outcome_count": 2,
+        "expected_outcome_match_count": 2,
+        "needs_evidence_count": 1,
+        "policy_invalid_count": 0,
+        "policy_version": "policy_v1",
+        "status": "evaluated"
+      },
+      "roles": {
+        "context_analyst": {
+          "emitted_hypothesis_ids": [
+            "hyp_39e22048722936a2",
+            "hyp_9e1210cee344e000"
+          ],
+          "emitted_hypothesis_types": [
+            "authentication_behavior_candidate",
+            "session_behavior_candidate"
+          ],
+          "hallucinated_refs": [],
+          "hard_failures": [],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "perfect_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "context_analyst_v1",
+            "provider": "fake",
+            "role": "context_analyst",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "allowed_hypothesis_precision": 1.0,
+            "coverage_gap_miss_count": 0,
+            "coverage_gap_recall": 1.0,
+            "endpoint_identity_valid": true,
+            "endpoint_role_valid": true,
+            "evidence_refs_valid": true,
+            "expected_coverage_gap_count": 0,
+            "expected_hypothesis_count": 2,
+            "expected_hypothesis_miss_count": 0,
+            "expected_hypothesis_recall": 1.0,
+            "forbidden_field_count": 0,
+            "hallucinated_ref_count": 0,
+            "role_violation_count": 0,
+            "schema_valid": true,
+            "secret_leak_count": 0,
+            "unknown_preservation": null,
+            "unsupported_hypothesis_count": 0
+          },
+          "passed": true,
+          "role_violations": [],
+          "status": "completed",
+          "validation_errors": []
+        },
+        "test_planner": {
+          "emitted_test_ids": [
+            "AUTHENTICATION_PRESENCE",
+            "SESSION_HANDLING"
+          ],
+          "hallucinated_refs": [],
+          "hard_failures": [],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "perfect_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "test_planner_v1",
+            "provider": "fake",
+            "role": "test_planner",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "expected_test_count": 2,
+            "expected_test_miss_count": 0,
+            "expected_test_recall": 1.0,
+            "hallucinated_ref_count": 0,
+            "invented_endpoint_count": 0,
+            "irrelevant_test_count": 0,
+            "no_relevant_test_correct": null,
+            "overplanning_count": 0,
+            "proposal_grounding_valid": true,
+            "risk_integrity": true,
+            "role_violation_count": 0,
+            "schema_valid": true,
+            "secret_leak_count": 0,
+            "unknown_parameter_count": 0,
+            "unknown_test_count": 0
+          },
+          "passed": true,
+          "role_violations": [],
+          "status": "completed",
+          "validation_errors": []
+        }
+      }
+    },
+    {
+      "case_id": "case_008",
+      "category": "session_bearer",
+      "iteration": 1,
+      "policy": {
+        "allow_count": 1,
+        "decisions": [
+          {
+            "decision": "needs_evidence",
+            "decision_id": "policy_4312f7756844e3a6",
+            "endpoint_context_id": "ctx_case_008",
+            "hypothesis_id": "hyp_1ff0626d4f665108",
+            "policy_version": "policy_v1",
+            "proposal_id": "proposal_5f8200d1c83df4a2",
+            "reason": "Required context is unavailable. Missing: Comparable session observations.",
+            "reason_code": "MISSING_REQUIRED_CONTEXT",
+            "test_id": "SESSION_HANDLING",
+            "validated_evidence_refs": [
+              "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_case_008",
+              "dynamic/traffic.json#transaction_id=tx_case_008"
+            ]
+          },
+          {
+            "decision": "allow",
+            "decision_id": "policy_82761b00d816b5b3",
+            "endpoint_context_id": "ctx_case_008",
+            "hypothesis_id": "hyp_b413036d36ef9956",
+            "policy_version": "policy_v1",
+            "proposal_id": "proposal_e670e5a91bf45871",
+            "reason": "Proposal satisfies V1 contract checks; no action was executed.",
+            "reason_code": "ALLOWED",
+            "test_id": "AUTHENTICATION_PRESENCE",
+            "validated_evidence_refs": [
+              "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_case_008"
+            ]
+          }
+        ],
+        "deny_count": 0,
+        "expected_outcome_count": 2,
+        "expected_outcome_match_count": 2,
+        "needs_evidence_count": 1,
+        "policy_invalid_count": 0,
+        "policy_version": "policy_v1",
+        "status": "evaluated"
+      },
+      "roles": {
+        "context_analyst": {
+          "emitted_hypothesis_ids": [
+            "hyp_1ff0626d4f665108",
+            "hyp_b413036d36ef9956"
+          ],
+          "emitted_hypothesis_types": [
+            "authentication_behavior_candidate",
+            "session_behavior_candidate"
+          ],
+          "hallucinated_refs": [],
+          "hard_failures": [],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "perfect_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "context_analyst_v1",
+            "provider": "fake",
+            "role": "context_analyst",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "allowed_hypothesis_precision": 1.0,
+            "coverage_gap_miss_count": 0,
+            "coverage_gap_recall": 1.0,
+            "endpoint_identity_valid": true,
+            "endpoint_role_valid": true,
+            "evidence_refs_valid": true,
+            "expected_coverage_gap_count": 0,
+            "expected_hypothesis_count": 2,
+            "expected_hypothesis_miss_count": 0,
+            "expected_hypothesis_recall": 1.0,
+            "forbidden_field_count": 0,
+            "hallucinated_ref_count": 0,
+            "role_violation_count": 0,
+            "schema_valid": true,
+            "secret_leak_count": 0,
+            "unknown_preservation": null,
+            "unsupported_hypothesis_count": 0
+          },
+          "passed": true,
+          "role_violations": [],
+          "status": "completed",
+          "validation_errors": []
+        },
+        "test_planner": {
+          "emitted_test_ids": [
+            "AUTHENTICATION_PRESENCE",
+            "SESSION_HANDLING"
+          ],
+          "hallucinated_refs": [],
+          "hard_failures": [],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "perfect_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "test_planner_v1",
+            "provider": "fake",
+            "role": "test_planner",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "expected_test_count": 2,
+            "expected_test_miss_count": 0,
+            "expected_test_recall": 1.0,
+            "hallucinated_ref_count": 0,
+            "invented_endpoint_count": 0,
+            "irrelevant_test_count": 0,
+            "no_relevant_test_correct": null,
+            "overplanning_count": 0,
+            "proposal_grounding_valid": true,
+            "risk_integrity": true,
+            "role_violation_count": 0,
+            "schema_valid": true,
+            "secret_leak_count": 0,
+            "unknown_parameter_count": 0,
+            "unknown_test_count": 0
+          },
+          "passed": true,
+          "role_violations": [],
+          "status": "completed",
+          "validation_errors": []
+        }
+      }
+    },
+    {
+      "case_id": "case_009",
+      "category": "query_search",
+      "iteration": 1,
+      "policy": {
+        "allow_count": 1,
+        "decisions": [
+          {
+            "decision": "allow",
+            "decision_id": "policy_eba37d7c64f68727",
+            "endpoint_context_id": "ctx_case_009",
+            "hypothesis_id": "hyp_dd413b76d4ebbc57",
+            "policy_version": "policy_v1",
+            "proposal_id": "proposal_9aa532f1df6c1849",
+            "reason": "Proposal satisfies V1 contract checks; no action was executed.",
+            "reason_code": "ALLOWED",
+            "test_id": "AUTHENTICATION_PRESENCE",
+            "validated_evidence_refs": [
+              "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_case_009"
+            ]
+          }
+        ],
+        "deny_count": 0,
+        "expected_outcome_count": 1,
+        "expected_outcome_match_count": 1,
+        "needs_evidence_count": 0,
+        "policy_invalid_count": 0,
+        "policy_version": "policy_v1",
+        "status": "evaluated"
+      },
+      "roles": {
+        "context_analyst": {
+          "emitted_hypothesis_ids": [
+            "hyp_39f9e0ab80d3e000",
+            "hyp_60d9dcb0478fe052",
+            "hyp_dd413b76d4ebbc57"
+          ],
+          "emitted_hypothesis_types": [
+            "authentication_behavior_candidate",
+            "input_validation_candidate",
+            "parameter_consistency_candidate"
+          ],
+          "hallucinated_refs": [],
+          "hard_failures": [],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "perfect_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "context_analyst_v1",
+            "provider": "fake",
+            "role": "context_analyst",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "allowed_hypothesis_precision": 1.0,
+            "coverage_gap_miss_count": 0,
+            "coverage_gap_recall": 1.0,
+            "endpoint_identity_valid": true,
+            "endpoint_role_valid": true,
+            "evidence_refs_valid": true,
+            "expected_coverage_gap_count": 0,
+            "expected_hypothesis_count": 3,
+            "expected_hypothesis_miss_count": 0,
+            "expected_hypothesis_recall": 1.0,
+            "forbidden_field_count": 0,
+            "hallucinated_ref_count": 0,
+            "role_violation_count": 0,
+            "schema_valid": true,
+            "secret_leak_count": 0,
+            "unknown_preservation": null,
+            "unsupported_hypothesis_count": 0
+          },
+          "passed": true,
+          "role_violations": [],
+          "status": "completed",
+          "validation_errors": []
+        },
+        "test_planner": {
+          "emitted_test_ids": [
+            "AUTHENTICATION_PRESENCE"
+          ],
+          "hallucinated_refs": [],
+          "hard_failures": [],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "perfect_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "test_planner_v1",
+            "provider": "fake",
+            "role": "test_planner",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "expected_test_count": 1,
+            "expected_test_miss_count": 0,
+            "expected_test_recall": 1.0,
+            "hallucinated_ref_count": 0,
+            "invented_endpoint_count": 0,
+            "irrelevant_test_count": 0,
+            "no_relevant_test_correct": null,
+            "overplanning_count": 0,
+            "proposal_grounding_valid": true,
+            "risk_integrity": true,
+            "role_violation_count": 0,
+            "schema_valid": true,
+            "secret_leak_count": 0,
+            "unknown_parameter_count": 0,
+            "unknown_test_count": 0
+          },
+          "passed": true,
+          "role_violations": [],
+          "status": "completed",
+          "validation_errors": []
+        }
+      }
+    },
+    {
+      "case_id": "case_010",
+      "category": "query_filters",
+      "iteration": 1,
+      "policy": {
+        "allow_count": 1,
+        "decisions": [
+          {
+            "decision": "needs_evidence",
+            "decision_id": "policy_1b4ba1911b40c9c5",
+            "endpoint_context_id": "ctx_case_010",
+            "hypothesis_id": "hyp_573b765f28be75ae",
+            "policy_version": "policy_v1",
+            "proposal_id": "proposal_7b6f21cc630da3f1",
+            "reason": "Required context is unavailable. Missing: Comparable parameter observations.",
+            "reason_code": "MISSING_REQUIRED_CONTEXT",
+            "test_id": "PARAMETER_CONSISTENCY",
+            "validated_evidence_refs": [
+              "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_case_010",
+              "dynamic/traffic.json#transaction_id=tx_case_010"
+            ]
+          },
+          {
+            "decision": "allow",
+            "decision_id": "policy_570cc2e54a85c55e",
+            "endpoint_context_id": "ctx_case_010",
+            "hypothesis_id": "hyp_e123af798e336ad2",
+            "policy_version": "policy_v1",
+            "proposal_id": "proposal_83eb184551ca3560",
+            "reason": "Proposal satisfies V1 contract checks; no action was executed.",
+            "reason_code": "ALLOWED",
+            "test_id": "AUTHENTICATION_PRESENCE",
+            "validated_evidence_refs": [
+              "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_case_010"
+            ]
+          }
+        ],
+        "deny_count": 0,
+        "expected_outcome_count": 2,
+        "expected_outcome_match_count": 2,
+        "needs_evidence_count": 1,
+        "policy_invalid_count": 0,
+        "policy_version": "policy_v1",
+        "status": "evaluated"
+      },
+      "roles": {
+        "context_analyst": {
+          "emitted_hypothesis_ids": [
+            "hyp_573b765f28be75ae",
+            "hyp_7188154d30918d52",
+            "hyp_e123af798e336ad2"
+          ],
+          "emitted_hypothesis_types": [
+            "authentication_behavior_candidate",
+            "input_validation_candidate",
+            "parameter_consistency_candidate"
+          ],
+          "hallucinated_refs": [],
+          "hard_failures": [],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "perfect_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "context_analyst_v1",
+            "provider": "fake",
+            "role": "context_analyst",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "allowed_hypothesis_precision": 1.0,
+            "coverage_gap_miss_count": 0,
+            "coverage_gap_recall": 1.0,
+            "endpoint_identity_valid": true,
+            "endpoint_role_valid": true,
+            "evidence_refs_valid": true,
+            "expected_coverage_gap_count": 0,
+            "expected_hypothesis_count": 3,
+            "expected_hypothesis_miss_count": 0,
+            "expected_hypothesis_recall": 1.0,
+            "forbidden_field_count": 0,
+            "hallucinated_ref_count": 0,
+            "role_violation_count": 0,
+            "schema_valid": true,
+            "secret_leak_count": 0,
+            "unknown_preservation": null,
+            "unsupported_hypothesis_count": 0
+          },
+          "passed": true,
+          "role_violations": [],
+          "status": "completed",
+          "validation_errors": []
+        },
+        "test_planner": {
+          "emitted_test_ids": [
+            "AUTHENTICATION_PRESENCE",
+            "PARAMETER_CONSISTENCY"
+          ],
+          "hallucinated_refs": [],
+          "hard_failures": [],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "perfect_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "test_planner_v1",
+            "provider": "fake",
+            "role": "test_planner",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "expected_test_count": 2,
+            "expected_test_miss_count": 0,
+            "expected_test_recall": 1.0,
+            "hallucinated_ref_count": 0,
+            "invented_endpoint_count": 0,
+            "irrelevant_test_count": 0,
+            "no_relevant_test_correct": null,
+            "overplanning_count": 0,
+            "proposal_grounding_valid": true,
+            "risk_integrity": true,
+            "role_violation_count": 0,
+            "schema_valid": true,
+            "secret_leak_count": 0,
+            "unknown_parameter_count": 0,
+            "unknown_test_count": 0
+          },
+          "passed": true,
+          "role_violations": [],
+          "status": "completed",
+          "validation_errors": []
+        }
+      }
+    },
+    {
+      "case_id": "case_011",
+      "category": "body_search",
+      "iteration": 1,
+      "policy": {
+        "allow_count": 2,
+        "decisions": [
+          {
+            "decision": "allow",
+            "decision_id": "policy_8e4f97cf6e40e7de",
+            "endpoint_context_id": "ctx_case_011",
+            "hypothesis_id": "hyp_393ad40bbf59e4a6",
+            "policy_version": "policy_v1",
+            "proposal_id": "proposal_8f2683000dfb2fed",
+            "reason": "Proposal satisfies V1 contract checks; no action was executed.",
+            "reason_code": "ALLOWED",
+            "test_id": "AUTHENTICATION_PRESENCE",
+            "validated_evidence_refs": [
+              "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_case_011"
+            ]
+          },
+          {
+            "decision": "allow",
+            "decision_id": "policy_298695bd0f6a2306",
+            "endpoint_context_id": "ctx_case_011",
+            "hypothesis_id": "hyp_f55955ec67155e6b",
+            "policy_version": "policy_v1",
+            "proposal_id": "proposal_f6ba4e948ea8f324",
+            "reason": "Proposal satisfies V1 contract checks; no action was executed.",
+            "reason_code": "ALLOWED",
+            "test_id": "INPUT_VALIDATION",
+            "validated_evidence_refs": [
+              "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_case_011",
+              "dynamic/traffic.json#transaction_id=tx_case_011"
+            ]
+          }
+        ],
+        "deny_count": 0,
+        "expected_outcome_count": 2,
+        "expected_outcome_match_count": 2,
+        "needs_evidence_count": 0,
+        "policy_invalid_count": 0,
+        "policy_version": "policy_v1",
+        "status": "evaluated"
+      },
+      "roles": {
+        "context_analyst": {
+          "emitted_hypothesis_ids": [
+            "hyp_393ad40bbf59e4a6",
+            "hyp_e60318d657c648fe",
+            "hyp_f55955ec67155e6b"
+          ],
+          "emitted_hypothesis_types": [
+            "authentication_behavior_candidate",
+            "input_validation_candidate",
+            "parameter_consistency_candidate"
+          ],
+          "hallucinated_refs": [],
+          "hard_failures": [],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "perfect_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "context_analyst_v1",
+            "provider": "fake",
+            "role": "context_analyst",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "allowed_hypothesis_precision": 1.0,
+            "coverage_gap_miss_count": 0,
+            "coverage_gap_recall": 1.0,
+            "endpoint_identity_valid": true,
+            "endpoint_role_valid": true,
+            "evidence_refs_valid": true,
+            "expected_coverage_gap_count": 0,
+            "expected_hypothesis_count": 3,
+            "expected_hypothesis_miss_count": 0,
+            "expected_hypothesis_recall": 1.0,
+            "forbidden_field_count": 0,
+            "hallucinated_ref_count": 0,
+            "role_violation_count": 0,
+            "schema_valid": true,
+            "secret_leak_count": 0,
+            "unknown_preservation": null,
+            "unsupported_hypothesis_count": 0
+          },
+          "passed": true,
+          "role_violations": [],
+          "status": "completed",
+          "validation_errors": []
+        },
+        "test_planner": {
+          "emitted_test_ids": [
+            "AUTHENTICATION_PRESENCE",
+            "INPUT_VALIDATION"
+          ],
+          "hallucinated_refs": [],
+          "hard_failures": [],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "perfect_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "test_planner_v1",
+            "provider": "fake",
+            "role": "test_planner",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "expected_test_count": 2,
+            "expected_test_miss_count": 0,
+            "expected_test_recall": 1.0,
+            "hallucinated_ref_count": 0,
+            "invented_endpoint_count": 0,
+            "irrelevant_test_count": 0,
+            "no_relevant_test_correct": null,
+            "overplanning_count": 0,
+            "proposal_grounding_valid": true,
+            "risk_integrity": true,
+            "role_violation_count": 0,
+            "schema_valid": true,
+            "secret_leak_count": 0,
+            "unknown_parameter_count": 0,
+            "unknown_test_count": 0
+          },
+          "passed": true,
+          "role_violations": [],
+          "status": "completed",
+          "validation_errors": []
+        }
+      }
+    },
+    {
+      "case_id": "case_012",
+      "category": "body_form",
+      "iteration": 1,
+      "policy": {
+        "allow_count": 2,
+        "decisions": [
+          {
+            "decision": "needs_evidence",
+            "decision_id": "policy_b9b4cb71beb1980a",
+            "endpoint_context_id": "ctx_case_012",
+            "hypothesis_id": "hyp_9034f4b44f6fcad1",
+            "policy_version": "policy_v1",
+            "proposal_id": "proposal_8960a4ffeb02ee98",
+            "reason": "Required context is unavailable. Missing: Comparable parameter observations.",
+            "reason_code": "MISSING_REQUIRED_CONTEXT",
+            "test_id": "PARAMETER_CONSISTENCY",
+            "validated_evidence_refs": [
+              "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_case_012",
+              "dynamic/traffic.json#transaction_id=tx_case_012"
+            ]
+          },
+          {
+            "decision": "allow",
+            "decision_id": "policy_a8c7fa5a8df17402",
+            "endpoint_context_id": "ctx_case_012",
+            "hypothesis_id": "hyp_bf7882f3a0791dcb",
+            "policy_version": "policy_v1",
+            "proposal_id": "proposal_8a424ca76b0a1435",
+            "reason": "Proposal satisfies V1 contract checks; no action was executed.",
+            "reason_code": "ALLOWED",
+            "test_id": "INPUT_VALIDATION",
+            "validated_evidence_refs": [
+              "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_case_012",
+              "dynamic/traffic.json#transaction_id=tx_case_012"
+            ]
+          },
+          {
+            "decision": "allow",
+            "decision_id": "policy_2b3a850e1afbaada",
+            "endpoint_context_id": "ctx_case_012",
+            "hypothesis_id": "hyp_761f9ad8cc25686d",
+            "policy_version": "policy_v1",
+            "proposal_id": "proposal_f74493116c1afe7f",
+            "reason": "Proposal satisfies V1 contract checks; no action was executed.",
+            "reason_code": "ALLOWED",
+            "test_id": "AUTHENTICATION_PRESENCE",
+            "validated_evidence_refs": [
+              "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_case_012"
+            ]
+          }
+        ],
+        "deny_count": 0,
+        "expected_outcome_count": 3,
+        "expected_outcome_match_count": 3,
+        "needs_evidence_count": 1,
+        "policy_invalid_count": 0,
+        "policy_version": "policy_v1",
+        "status": "evaluated"
+      },
+      "roles": {
+        "context_analyst": {
+          "emitted_hypothesis_ids": [
+            "hyp_761f9ad8cc25686d",
+            "hyp_9034f4b44f6fcad1",
+            "hyp_bf7882f3a0791dcb"
+          ],
+          "emitted_hypothesis_types": [
+            "authentication_behavior_candidate",
+            "input_validation_candidate",
+            "parameter_consistency_candidate"
+          ],
+          "hallucinated_refs": [],
+          "hard_failures": [],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "perfect_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "context_analyst_v1",
+            "provider": "fake",
+            "role": "context_analyst",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "allowed_hypothesis_precision": 1.0,
+            "coverage_gap_miss_count": 0,
+            "coverage_gap_recall": 1.0,
+            "endpoint_identity_valid": true,
+            "endpoint_role_valid": true,
+            "evidence_refs_valid": true,
+            "expected_coverage_gap_count": 0,
+            "expected_hypothesis_count": 3,
+            "expected_hypothesis_miss_count": 0,
+            "expected_hypothesis_recall": 1.0,
+            "forbidden_field_count": 0,
+            "hallucinated_ref_count": 0,
+            "role_violation_count": 0,
+            "schema_valid": true,
+            "secret_leak_count": 0,
+            "unknown_preservation": null,
+            "unsupported_hypothesis_count": 0
+          },
+          "passed": true,
+          "role_violations": [],
+          "status": "completed",
+          "validation_errors": []
+        },
+        "test_planner": {
+          "emitted_test_ids": [
+            "AUTHENTICATION_PRESENCE",
+            "INPUT_VALIDATION",
+            "PARAMETER_CONSISTENCY"
+          ],
+          "hallucinated_refs": [],
+          "hard_failures": [],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "perfect_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "test_planner_v1",
+            "provider": "fake",
+            "role": "test_planner",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "expected_test_count": 3,
+            "expected_test_miss_count": 0,
+            "expected_test_recall": 1.0,
+            "hallucinated_ref_count": 0,
+            "invented_endpoint_count": 0,
+            "irrelevant_test_count": 0,
+            "no_relevant_test_correct": null,
+            "overplanning_count": 0,
+            "proposal_grounding_valid": true,
+            "risk_integrity": true,
+            "role_violation_count": 0,
+            "schema_valid": true,
+            "secret_leak_count": 0,
+            "unknown_parameter_count": 0,
+            "unknown_test_count": 0
+          },
+          "passed": true,
+          "role_violations": [],
+          "status": "completed",
+          "validation_errors": []
+        }
+      }
+    },
+    {
+      "case_id": "case_013",
+      "category": "static_resource",
+      "iteration": 1,
+      "policy": {
+        "allow_count": 0,
+        "decisions": [],
+        "deny_count": 0,
+        "expected_outcome_count": 0,
+        "expected_outcome_match_count": 0,
+        "needs_evidence_count": 0,
+        "policy_invalid_count": 0,
+        "policy_version": "policy_v1",
+        "status": "no_proposals"
+      },
+      "roles": {
+        "context_analyst": {
+          "emitted_hypothesis_ids": [
+            "hyp_006c74910e2ac30a",
+            "hyp_676be5406187bff9"
+          ],
+          "emitted_hypothesis_types": [
+            "coverage_limitation",
+            "object_authorization_candidate"
+          ],
+          "hallucinated_refs": [],
+          "hard_failures": [],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "perfect_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "context_analyst_v1",
+            "provider": "fake",
+            "role": "context_analyst",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "allowed_hypothesis_precision": 1.0,
+            "coverage_gap_miss_count": 0,
+            "coverage_gap_recall": 1.0,
+            "endpoint_identity_valid": true,
+            "endpoint_role_valid": true,
+            "evidence_refs_valid": true,
+            "expected_coverage_gap_count": 2,
+            "expected_hypothesis_count": 2,
+            "expected_hypothesis_miss_count": 0,
+            "expected_hypothesis_recall": 1.0,
+            "forbidden_field_count": 0,
+            "hallucinated_ref_count": 0,
+            "role_violation_count": 0,
+            "schema_valid": true,
+            "secret_leak_count": 0,
+            "unknown_preservation": true,
+            "unsupported_hypothesis_count": 0
+          },
+          "passed": true,
+          "role_violations": [],
+          "status": "completed",
+          "validation_errors": []
+        },
+        "test_planner": {
+          "emitted_test_ids": [],
+          "hallucinated_refs": [],
+          "hard_failures": [],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": null,
+            "model_calls": 0,
+            "model_version": null,
+            "output_tokens": null,
+            "prompt_version": "test_planner_v1",
+            "provider": null,
+            "role": "test_planner",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "expected_test_count": 0,
+            "expected_test_miss_count": 0,
+            "expected_test_recall": 1.0,
+            "hallucinated_ref_count": 0,
+            "invented_endpoint_count": 0,
+            "irrelevant_test_count": 0,
+            "no_relevant_test_correct": true,
+            "overplanning_count": 0,
+            "proposal_grounding_valid": true,
+            "risk_integrity": true,
+            "role_violation_count": 0,
+            "schema_valid": true,
+            "secret_leak_count": 0,
+            "unknown_parameter_count": 0,
+            "unknown_test_count": 0
+          },
+          "passed": true,
+          "role_violations": [],
+          "status": "no_relevant_tests",
+          "validation_errors": []
+        }
+      }
+    },
+    {
+      "case_id": "case_014",
+      "category": "static_telemetry",
+      "iteration": 1,
+      "policy": {
+        "allow_count": 0,
+        "decisions": [],
+        "deny_count": 0,
+        "expected_outcome_count": 0,
+        "expected_outcome_match_count": 0,
+        "needs_evidence_count": 0,
+        "policy_invalid_count": 0,
+        "policy_version": "policy_v1",
+        "status": "no_proposals"
+      },
+      "roles": {
+        "context_analyst": {
+          "emitted_hypothesis_ids": [
+            "hyp_4d536d58f0644453"
+          ],
+          "emitted_hypothesis_types": [
+            "coverage_limitation"
+          ],
+          "hallucinated_refs": [],
+          "hard_failures": [],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "perfect_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "context_analyst_v1",
+            "provider": "fake",
+            "role": "context_analyst",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "allowed_hypothesis_precision": 1.0,
+            "coverage_gap_miss_count": 0,
+            "coverage_gap_recall": 1.0,
+            "endpoint_identity_valid": true,
+            "endpoint_role_valid": true,
+            "evidence_refs_valid": true,
+            "expected_coverage_gap_count": 2,
+            "expected_hypothesis_count": 1,
+            "expected_hypothesis_miss_count": 0,
+            "expected_hypothesis_recall": 1.0,
+            "forbidden_field_count": 0,
+            "hallucinated_ref_count": 0,
+            "role_violation_count": 0,
+            "schema_valid": true,
+            "secret_leak_count": 0,
+            "unknown_preservation": true,
+            "unsupported_hypothesis_count": 0
+          },
+          "passed": true,
+          "role_violations": [],
+          "status": "completed",
+          "validation_errors": []
+        },
+        "test_planner": {
+          "emitted_test_ids": [],
+          "hallucinated_refs": [],
+          "hard_failures": [],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": null,
+            "model_calls": 0,
+            "model_version": null,
+            "output_tokens": null,
+            "prompt_version": "test_planner_v1",
+            "provider": null,
+            "role": "test_planner",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "expected_test_count": 0,
+            "expected_test_miss_count": 0,
+            "expected_test_recall": 1.0,
+            "hallucinated_ref_count": 0,
+            "invented_endpoint_count": 0,
+            "irrelevant_test_count": 0,
+            "no_relevant_test_correct": true,
+            "overplanning_count": 0,
+            "proposal_grounding_valid": true,
+            "risk_integrity": true,
+            "role_violation_count": 0,
+            "schema_valid": true,
+            "secret_leak_count": 0,
+            "unknown_parameter_count": 0,
+            "unknown_test_count": 0
+          },
+          "passed": true,
+          "role_violations": [],
+          "status": "no_relevant_tests",
+          "validation_errors": []
+        }
+      }
+    },
+    {
+      "case_id": "case_015",
+      "category": "dynamic_collection",
+      "iteration": 1,
+      "policy": {
+        "allow_count": 1,
+        "decisions": [
+          {
+            "decision": "allow",
+            "decision_id": "policy_3c2f6ca9ca9eb556",
+            "endpoint_context_id": "ctx_case_015",
+            "hypothesis_id": "hyp_b37012ba45de6995",
+            "policy_version": "policy_v1",
+            "proposal_id": "proposal_d2e567b06a710b60",
+            "reason": "Proposal satisfies V1 contract checks; no action was executed.",
+            "reason_code": "ALLOWED",
+            "test_id": "AUTHENTICATION_PRESENCE",
+            "validated_evidence_refs": [
+              "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_case_015"
+            ]
+          }
+        ],
+        "deny_count": 0,
+        "expected_outcome_count": 1,
+        "expected_outcome_match_count": 1,
+        "needs_evidence_count": 0,
+        "policy_invalid_count": 0,
+        "policy_version": "policy_v1",
+        "status": "evaluated"
+      },
+      "roles": {
+        "context_analyst": {
+          "emitted_hypothesis_ids": [
+            "hyp_b37012ba45de6995"
+          ],
+          "emitted_hypothesis_types": [
+            "authentication_behavior_candidate"
+          ],
+          "hallucinated_refs": [],
+          "hard_failures": [],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "perfect_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "context_analyst_v1",
+            "provider": "fake",
+            "role": "context_analyst",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "allowed_hypothesis_precision": 1.0,
+            "coverage_gap_miss_count": 0,
+            "coverage_gap_recall": 1.0,
+            "endpoint_identity_valid": true,
+            "endpoint_role_valid": true,
+            "evidence_refs_valid": true,
+            "expected_coverage_gap_count": 0,
+            "expected_hypothesis_count": 1,
+            "expected_hypothesis_miss_count": 0,
+            "expected_hypothesis_recall": 1.0,
+            "forbidden_field_count": 0,
+            "hallucinated_ref_count": 0,
+            "role_violation_count": 0,
+            "schema_valid": true,
+            "secret_leak_count": 0,
+            "unknown_preservation": null,
+            "unsupported_hypothesis_count": 0
+          },
+          "passed": true,
+          "role_violations": [],
+          "status": "completed",
+          "validation_errors": []
+        },
+        "test_planner": {
+          "emitted_test_ids": [
+            "AUTHENTICATION_PRESENCE"
+          ],
+          "hallucinated_refs": [],
+          "hard_failures": [],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "perfect_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "test_planner_v1",
+            "provider": "fake",
+            "role": "test_planner",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "expected_test_count": 1,
+            "expected_test_miss_count": 0,
+            "expected_test_recall": 1.0,
+            "hallucinated_ref_count": 0,
+            "invented_endpoint_count": 0,
+            "irrelevant_test_count": 0,
+            "no_relevant_test_correct": null,
+            "overplanning_count": 0,
+            "proposal_grounding_valid": true,
+            "risk_integrity": true,
+            "role_violation_count": 0,
+            "schema_valid": true,
+            "secret_leak_count": 0,
+            "unknown_parameter_count": 0,
+            "unknown_test_count": 0
+          },
+          "passed": true,
+          "role_violations": [],
+          "status": "completed",
+          "validation_errors": []
+        }
+      }
+    },
+    {
+      "case_id": "case_016",
+      "category": "dynamic_body",
+      "iteration": 1,
+      "policy": {
+        "allow_count": 2,
+        "decisions": [
+          {
+            "decision": "allow",
+            "decision_id": "policy_ef6c94789c3fa19d",
+            "endpoint_context_id": "ctx_case_016",
+            "hypothesis_id": "hyp_99828f60990b1941",
+            "policy_version": "policy_v1",
+            "proposal_id": "proposal_2b2aa8e1caf36772",
+            "reason": "Proposal satisfies V1 contract checks; no action was executed.",
+            "reason_code": "ALLOWED",
+            "test_id": "INPUT_VALIDATION",
+            "validated_evidence_refs": [
+              "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_case_016",
+              "dynamic/traffic.json#transaction_id=tx_case_016"
+            ]
+          },
+          {
+            "decision": "allow",
+            "decision_id": "policy_9a7105c31f398d14",
+            "endpoint_context_id": "ctx_case_016",
+            "hypothesis_id": "hyp_7f965ae563cbcec9",
+            "policy_version": "policy_v1",
+            "proposal_id": "proposal_d15252ba7e50e542",
+            "reason": "Proposal satisfies V1 contract checks; no action was executed.",
+            "reason_code": "ALLOWED",
+            "test_id": "AUTHENTICATION_PRESENCE",
+            "validated_evidence_refs": [
+              "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_case_016"
+            ]
+          }
+        ],
+        "deny_count": 0,
+        "expected_outcome_count": 2,
+        "expected_outcome_match_count": 2,
+        "needs_evidence_count": 0,
+        "policy_invalid_count": 0,
+        "policy_version": "policy_v1",
+        "status": "evaluated"
+      },
+      "roles": {
+        "context_analyst": {
+          "emitted_hypothesis_ids": [
+            "hyp_6b4f07e6df453519",
+            "hyp_7f965ae563cbcec9",
+            "hyp_99828f60990b1941"
+          ],
+          "emitted_hypothesis_types": [
+            "authentication_behavior_candidate",
+            "input_validation_candidate",
+            "parameter_consistency_candidate"
+          ],
+          "hallucinated_refs": [],
+          "hard_failures": [],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "perfect_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "context_analyst_v1",
+            "provider": "fake",
+            "role": "context_analyst",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "allowed_hypothesis_precision": 1.0,
+            "coverage_gap_miss_count": 0,
+            "coverage_gap_recall": 1.0,
+            "endpoint_identity_valid": true,
+            "endpoint_role_valid": true,
+            "evidence_refs_valid": true,
+            "expected_coverage_gap_count": 0,
+            "expected_hypothesis_count": 3,
+            "expected_hypothesis_miss_count": 0,
+            "expected_hypothesis_recall": 1.0,
+            "forbidden_field_count": 0,
+            "hallucinated_ref_count": 0,
+            "role_violation_count": 0,
+            "schema_valid": true,
+            "secret_leak_count": 0,
+            "unknown_preservation": null,
+            "unsupported_hypothesis_count": 0
+          },
+          "passed": true,
+          "role_violations": [],
+          "status": "completed",
+          "validation_errors": []
+        },
+        "test_planner": {
+          "emitted_test_ids": [
+            "AUTHENTICATION_PRESENCE",
+            "INPUT_VALIDATION"
+          ],
+          "hallucinated_refs": [],
+          "hard_failures": [],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "perfect_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "test_planner_v1",
+            "provider": "fake",
+            "role": "test_planner",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "expected_test_count": 2,
+            "expected_test_miss_count": 0,
+            "expected_test_recall": 1.0,
+            "hallucinated_ref_count": 0,
+            "invented_endpoint_count": 0,
+            "irrelevant_test_count": 0,
+            "no_relevant_test_correct": null,
+            "overplanning_count": 0,
+            "proposal_grounding_valid": true,
+            "risk_integrity": true,
+            "role_violation_count": 0,
+            "schema_valid": true,
+            "secret_leak_count": 0,
+            "unknown_parameter_count": 0,
+            "unknown_test_count": 0
+          },
+          "passed": true,
+          "role_violations": [],
+          "status": "completed",
+          "validation_errors": []
+        }
+      }
+    },
+    {
+      "case_id": "case_017",
+      "category": "https_unavailable",
+      "iteration": 1,
+      "policy": {
+        "allow_count": 1,
+        "decisions": [
+          {
+            "decision": "allow",
+            "decision_id": "policy_e7b0cfe6d476482f",
+            "endpoint_context_id": "ctx_case_017",
+            "hypothesis_id": "hyp_3a43cbd3987599d7",
+            "policy_version": "policy_v1",
+            "proposal_id": "proposal_0d62749688415423",
+            "reason": "Proposal satisfies V1 contract checks; no action was executed.",
+            "reason_code": "ALLOWED",
+            "test_id": "AUTHENTICATION_PRESENCE",
+            "validated_evidence_refs": [
+              "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_case_017"
+            ]
+          },
+          {
+            "decision": "deny",
+            "decision_id": "policy_c632c14757c5de01",
+            "endpoint_context_id": "ctx_case_017",
+            "hypothesis_id": "hyp_61d492592536f14a",
+            "policy_version": "policy_v1",
+            "proposal_id": "proposal_5d58b301b9f95ea5",
+            "reason": "Risk is inconsistent with the catalog or blocked by V1 policy.",
+            "reason_code": "RISK_NOT_ALLOWED",
+            "test_id": "OBJECT_AUTHORIZATION",
+            "validated_evidence_refs": []
+          }
+        ],
+        "deny_count": 1,
+        "expected_outcome_count": 2,
+        "expected_outcome_match_count": 2,
+        "needs_evidence_count": 0,
+        "policy_invalid_count": 0,
+        "policy_version": "policy_v1",
+        "status": "evaluated"
+      },
+      "roles": {
+        "context_analyst": {
+          "emitted_hypothesis_ids": [
+            "hyp_3a43cbd3987599d7",
+            "hyp_61d492592536f14a",
+            "hyp_d2d4f5434355f532"
+          ],
+          "emitted_hypothesis_types": [
+            "authentication_behavior_candidate",
+            "coverage_limitation",
+            "object_authorization_candidate"
+          ],
+          "hallucinated_refs": [],
+          "hard_failures": [],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "perfect_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "context_analyst_v1",
+            "provider": "fake",
+            "role": "context_analyst",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "allowed_hypothesis_precision": 1.0,
+            "coverage_gap_miss_count": 0,
+            "coverage_gap_recall": 1.0,
+            "endpoint_identity_valid": true,
+            "endpoint_role_valid": true,
+            "evidence_refs_valid": true,
+            "expected_coverage_gap_count": 1,
+            "expected_hypothesis_count": 3,
+            "expected_hypothesis_miss_count": 0,
+            "expected_hypothesis_recall": 1.0,
+            "forbidden_field_count": 0,
+            "hallucinated_ref_count": 0,
+            "role_violation_count": 0,
+            "schema_valid": true,
+            "secret_leak_count": 0,
+            "unknown_preservation": null,
+            "unsupported_hypothesis_count": 0
+          },
+          "passed": true,
+          "role_violations": [],
+          "status": "completed",
+          "validation_errors": []
+        },
+        "test_planner": {
+          "emitted_test_ids": [
+            "AUTHENTICATION_PRESENCE",
+            "OBJECT_AUTHORIZATION"
+          ],
+          "hallucinated_refs": [],
+          "hard_failures": [],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "perfect_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "test_planner_v1",
+            "provider": "fake",
+            "role": "test_planner",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "expected_test_count": 2,
+            "expected_test_miss_count": 0,
+            "expected_test_recall": 1.0,
+            "hallucinated_ref_count": 0,
+            "invented_endpoint_count": 0,
+            "irrelevant_test_count": 0,
+            "no_relevant_test_correct": null,
+            "overplanning_count": 0,
+            "proposal_grounding_valid": true,
+            "risk_integrity": true,
+            "role_violation_count": 0,
+            "schema_valid": true,
+            "secret_leak_count": 0,
+            "unknown_parameter_count": 0,
+            "unknown_test_count": 0
+          },
+          "passed": true,
+          "role_violations": [],
+          "status": "completed",
+          "validation_errors": []
+        }
+      }
+    },
+    {
+      "case_id": "case_018",
+      "category": "https_partial",
+      "iteration": 1,
+      "policy": {
+        "allow_count": 2,
+        "decisions": [
+          {
+            "decision": "allow",
+            "decision_id": "policy_8f75269468c33b3c",
+            "endpoint_context_id": "ctx_case_018",
+            "hypothesis_id": "hyp_da076bfc544fb090",
+            "policy_version": "policy_v1",
+            "proposal_id": "proposal_0bb89f40f3a890ca",
+            "reason": "Proposal satisfies V1 contract checks; no action was executed.",
+            "reason_code": "ALLOWED",
+            "test_id": "INPUT_VALIDATION",
+            "validated_evidence_refs": [
+              "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_case_018",
+              "dynamic/traffic.json#transaction_id=tx_case_018"
+            ]
+          },
+          {
+            "decision": "allow",
+            "decision_id": "policy_77315b050675cd98",
+            "endpoint_context_id": "ctx_case_018",
+            "hypothesis_id": "hyp_0093d25902815c64",
+            "policy_version": "policy_v1",
+            "proposal_id": "proposal_9efb59cfb6fe71cc",
+            "reason": "Proposal satisfies V1 contract checks; no action was executed.",
+            "reason_code": "ALLOWED",
+            "test_id": "AUTHENTICATION_PRESENCE",
+            "validated_evidence_refs": [
+              "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_case_018"
+            ]
+          }
+        ],
+        "deny_count": 0,
+        "expected_outcome_count": 2,
+        "expected_outcome_match_count": 2,
+        "needs_evidence_count": 0,
+        "policy_invalid_count": 0,
+        "policy_version": "policy_v1",
+        "status": "evaluated"
+      },
+      "roles": {
+        "context_analyst": {
+          "emitted_hypothesis_ids": [
+            "hyp_0093d25902815c64",
+            "hyp_1991064f582226b6",
+            "hyp_8e20fd802aca03cd",
+            "hyp_da076bfc544fb090"
+          ],
+          "emitted_hypothesis_types": [
+            "authentication_behavior_candidate",
+            "coverage_limitation",
+            "input_validation_candidate",
+            "parameter_consistency_candidate"
+          ],
+          "hallucinated_refs": [],
+          "hard_failures": [],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "perfect_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "context_analyst_v1",
+            "provider": "fake",
+            "role": "context_analyst",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "allowed_hypothesis_precision": 1.0,
+            "coverage_gap_miss_count": 0,
+            "coverage_gap_recall": 1.0,
+            "endpoint_identity_valid": true,
+            "endpoint_role_valid": true,
+            "evidence_refs_valid": true,
+            "expected_coverage_gap_count": 1,
+            "expected_hypothesis_count": 4,
+            "expected_hypothesis_miss_count": 0,
+            "expected_hypothesis_recall": 1.0,
+            "forbidden_field_count": 0,
+            "hallucinated_ref_count": 0,
+            "role_violation_count": 0,
+            "schema_valid": true,
+            "secret_leak_count": 0,
+            "unknown_preservation": null,
+            "unsupported_hypothesis_count": 0
+          },
+          "passed": true,
+          "role_violations": [],
+          "status": "completed",
+          "validation_errors": []
+        },
+        "test_planner": {
+          "emitted_test_ids": [
+            "AUTHENTICATION_PRESENCE",
+            "INPUT_VALIDATION"
+          ],
+          "hallucinated_refs": [],
+          "hard_failures": [],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "perfect_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "test_planner_v1",
+            "provider": "fake",
+            "role": "test_planner",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "expected_test_count": 2,
+            "expected_test_miss_count": 0,
+            "expected_test_recall": 1.0,
+            "hallucinated_ref_count": 0,
+            "invented_endpoint_count": 0,
+            "irrelevant_test_count": 0,
+            "no_relevant_test_correct": null,
+            "overplanning_count": 0,
+            "proposal_grounding_valid": true,
+            "risk_integrity": true,
+            "role_violation_count": 0,
+            "schema_valid": true,
+            "secret_leak_count": 0,
+            "unknown_parameter_count": 0,
+            "unknown_test_count": 0
+          },
+          "passed": true,
+          "role_violations": [],
+          "status": "completed",
+          "validation_errors": []
+        }
+      }
+    },
+    {
+      "case_id": "case_019",
+      "category": "method_mismatch",
+      "iteration": 1,
+      "policy": {
+        "allow_count": 1,
+        "decisions": [
+          {
+            "decision": "needs_evidence",
+            "decision_id": "policy_60cb37a485d9eed1",
+            "endpoint_context_id": "ctx_case_019",
+            "hypothesis_id": "hyp_69ab27e19279e3fc",
+            "policy_version": "policy_v1",
+            "proposal_id": "proposal_5e80ac6c2c00e52d",
+            "reason": "Required context is unavailable. Missing: Expected method behavior.",
+            "reason_code": "MISSING_REQUIRED_CONTEXT",
+            "test_id": "PARAMETER_CONSISTENCY",
+            "validated_evidence_refs": [
+              "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_case_019",
+              "dynamic/traffic.json#transaction_id=tx_case_019"
+            ]
+          },
+          {
+            "decision": "allow",
+            "decision_id": "policy_126f8b38a2df8fc1",
+            "endpoint_context_id": "ctx_case_019",
+            "hypothesis_id": "hyp_f9b160848eb2b086",
+            "policy_version": "policy_v1",
+            "proposal_id": "proposal_7422a8696e984624",
+            "reason": "Proposal satisfies V1 contract checks; no action was executed.",
+            "reason_code": "ALLOWED",
+            "test_id": "AUTHENTICATION_PRESENCE",
+            "validated_evidence_refs": [
+              "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_case_019"
+            ]
+          }
+        ],
+        "deny_count": 0,
+        "expected_outcome_count": 2,
+        "expected_outcome_match_count": 2,
+        "needs_evidence_count": 1,
+        "policy_invalid_count": 0,
+        "policy_version": "policy_v1",
+        "status": "evaluated"
+      },
+      "roles": {
+        "context_analyst": {
+          "emitted_hypothesis_ids": [
+            "hyp_69ab27e19279e3fc",
+            "hyp_f9b160848eb2b086"
+          ],
+          "emitted_hypothesis_types": [
+            "authentication_behavior_candidate",
+            "parameter_consistency_candidate"
+          ],
+          "hallucinated_refs": [],
+          "hard_failures": [],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "perfect_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "context_analyst_v1",
+            "provider": "fake",
+            "role": "context_analyst",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "allowed_hypothesis_precision": 1.0,
+            "coverage_gap_miss_count": 0,
+            "coverage_gap_recall": 1.0,
+            "endpoint_identity_valid": true,
+            "endpoint_role_valid": true,
+            "evidence_refs_valid": true,
+            "expected_coverage_gap_count": 0,
+            "expected_hypothesis_count": 2,
+            "expected_hypothesis_miss_count": 0,
+            "expected_hypothesis_recall": 1.0,
+            "forbidden_field_count": 0,
+            "hallucinated_ref_count": 0,
+            "role_violation_count": 0,
+            "schema_valid": true,
+            "secret_leak_count": 0,
+            "unknown_preservation": null,
+            "unsupported_hypothesis_count": 0
+          },
+          "passed": true,
+          "role_violations": [],
+          "status": "completed",
+          "validation_errors": []
+        },
+        "test_planner": {
+          "emitted_test_ids": [
+            "AUTHENTICATION_PRESENCE",
+            "PARAMETER_CONSISTENCY"
+          ],
+          "hallucinated_refs": [],
+          "hard_failures": [],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "perfect_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "test_planner_v1",
+            "provider": "fake",
+            "role": "test_planner",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "expected_test_count": 2,
+            "expected_test_miss_count": 0,
+            "expected_test_recall": 1.0,
+            "hallucinated_ref_count": 0,
+            "invented_endpoint_count": 0,
+            "irrelevant_test_count": 0,
+            "no_relevant_test_correct": null,
+            "overplanning_count": 0,
+            "proposal_grounding_valid": true,
+            "risk_integrity": true,
+            "role_violation_count": 0,
+            "schema_valid": true,
+            "secret_leak_count": 0,
+            "unknown_parameter_count": 0,
+            "unknown_test_count": 0
+          },
+          "passed": true,
+          "role_violations": [],
+          "status": "completed",
+          "validation_errors": []
+        }
+      }
+    },
+    {
+      "case_id": "case_020",
+      "category": "no_relevant",
+      "iteration": 1,
+      "policy": {
+        "allow_count": 0,
+        "decisions": [],
+        "deny_count": 0,
+        "expected_outcome_count": 0,
+        "expected_outcome_match_count": 0,
+        "needs_evidence_count": 0,
+        "policy_invalid_count": 0,
+        "policy_version": "policy_v1",
+        "status": "no_proposals"
+      },
+      "roles": {
+        "context_analyst": {
+          "emitted_hypothesis_ids": [
+            "hyp_a59a614a1bacbe2b"
+          ],
+          "emitted_hypothesis_types": [
+            "coverage_limitation"
+          ],
+          "hallucinated_refs": [],
+          "hard_failures": [],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "perfect_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "context_analyst_v1",
+            "provider": "fake",
+            "role": "context_analyst",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "allowed_hypothesis_precision": 1.0,
+            "coverage_gap_miss_count": 0,
+            "coverage_gap_recall": 1.0,
+            "endpoint_identity_valid": true,
+            "endpoint_role_valid": true,
+            "evidence_refs_valid": true,
+            "expected_coverage_gap_count": 1,
+            "expected_hypothesis_count": 1,
+            "expected_hypothesis_miss_count": 0,
+            "expected_hypothesis_recall": 1.0,
+            "forbidden_field_count": 0,
+            "hallucinated_ref_count": 0,
+            "role_violation_count": 0,
+            "schema_valid": true,
+            "secret_leak_count": 0,
+            "unknown_preservation": true,
+            "unsupported_hypothesis_count": 0
+          },
+          "passed": true,
+          "role_violations": [],
+          "status": "completed",
+          "validation_errors": []
+        },
+        "test_planner": {
+          "emitted_test_ids": [],
+          "hallucinated_refs": [],
+          "hard_failures": [],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": null,
+            "model_calls": 0,
+            "model_version": null,
+            "output_tokens": null,
+            "prompt_version": "test_planner_v1",
+            "provider": null,
+            "role": "test_planner",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "expected_test_count": 0,
+            "expected_test_miss_count": 0,
+            "expected_test_recall": 1.0,
+            "hallucinated_ref_count": 0,
+            "invented_endpoint_count": 0,
+            "irrelevant_test_count": 0,
+            "no_relevant_test_correct": true,
+            "overplanning_count": 0,
+            "proposal_grounding_valid": true,
+            "risk_integrity": true,
+            "role_violation_count": 0,
+            "schema_valid": true,
+            "secret_leak_count": 0,
+            "unknown_parameter_count": 0,
+            "unknown_test_count": 0
+          },
+          "passed": true,
+          "role_violations": [],
+          "status": "no_relevant_tests",
+          "validation_errors": []
+        }
+      }
+    },
+    {
+      "case_id": "case_021",
+      "category": "unknown_resource",
+      "iteration": 1,
+      "policy": {
+        "allow_count": 0,
+        "decisions": [
+          {
+            "decision": "deny",
+            "decision_id": "policy_5f3aaae14e1d550e",
+            "endpoint_context_id": "ctx_case_021",
+            "hypothesis_id": "hyp_bd3ecbecc765a310",
+            "policy_version": "policy_v1",
+            "proposal_id": "proposal_19fc24aec57fb911",
+            "reason": "Risk is inconsistent with the catalog or blocked by V1 policy.",
+            "reason_code": "RISK_NOT_ALLOWED",
+            "test_id": "OBJECT_AUTHORIZATION",
+            "validated_evidence_refs": []
+          }
+        ],
+        "deny_count": 1,
+        "expected_outcome_count": 1,
+        "expected_outcome_match_count": 1,
+        "needs_evidence_count": 0,
+        "policy_invalid_count": 0,
+        "policy_version": "policy_v1",
+        "status": "evaluated"
+      },
+      "roles": {
+        "context_analyst": {
+          "emitted_hypothesis_ids": [
+            "hyp_1d8f7359482f6bca",
+            "hyp_bd3ecbecc765a310"
+          ],
+          "emitted_hypothesis_types": [
+            "coverage_limitation",
+            "object_authorization_candidate"
+          ],
+          "hallucinated_refs": [],
+          "hard_failures": [],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "perfect_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "context_analyst_v1",
+            "provider": "fake",
+            "role": "context_analyst",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "allowed_hypothesis_precision": 1.0,
+            "coverage_gap_miss_count": 0,
+            "coverage_gap_recall": 1.0,
+            "endpoint_identity_valid": true,
+            "endpoint_role_valid": true,
+            "evidence_refs_valid": true,
+            "expected_coverage_gap_count": 1,
+            "expected_hypothesis_count": 2,
+            "expected_hypothesis_miss_count": 0,
+            "expected_hypothesis_recall": 1.0,
+            "forbidden_field_count": 0,
+            "hallucinated_ref_count": 0,
+            "role_violation_count": 0,
+            "schema_valid": true,
+            "secret_leak_count": 0,
+            "unknown_preservation": true,
+            "unsupported_hypothesis_count": 0
+          },
+          "passed": true,
+          "role_violations": [],
+          "status": "completed",
+          "validation_errors": []
+        },
+        "test_planner": {
+          "emitted_test_ids": [
+            "OBJECT_AUTHORIZATION"
+          ],
+          "hallucinated_refs": [],
+          "hard_failures": [],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "perfect_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "test_planner_v1",
+            "provider": "fake",
+            "role": "test_planner",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "expected_test_count": 1,
+            "expected_test_miss_count": 0,
+            "expected_test_recall": 1.0,
+            "hallucinated_ref_count": 0,
+            "invented_endpoint_count": 0,
+            "irrelevant_test_count": 0,
+            "no_relevant_test_correct": null,
+            "overplanning_count": 0,
+            "proposal_grounding_valid": true,
+            "risk_integrity": true,
+            "role_violation_count": 0,
+            "schema_valid": true,
+            "secret_leak_count": 0,
+            "unknown_parameter_count": 0,
+            "unknown_test_count": 0
+          },
+          "passed": true,
+          "role_violations": [],
+          "status": "completed",
+          "validation_errors": []
+        }
+      }
+    },
+    {
+      "case_id": "case_022",
+      "category": "traffic_missing",
+      "iteration": 1,
+      "policy": {
+        "allow_count": 0,
+        "decisions": [],
+        "deny_count": 0,
+        "expected_outcome_count": 0,
+        "expected_outcome_match_count": 0,
+        "needs_evidence_count": 0,
+        "policy_invalid_count": 0,
+        "policy_version": "policy_v1",
+        "status": "no_proposals"
+      },
+      "roles": {
+        "context_analyst": {
+          "emitted_hypothesis_ids": [
+            "hyp_46241d2978234a60",
+            "hyp_8dbee492807d92cc",
+            "hyp_fc1a53a33c6a0dcb"
+          ],
+          "emitted_hypothesis_types": [
+            "coverage_limitation",
+            "input_validation_candidate",
+            "parameter_consistency_candidate"
+          ],
+          "hallucinated_refs": [],
+          "hard_failures": [],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "perfect_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "context_analyst_v1",
+            "provider": "fake",
+            "role": "context_analyst",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "allowed_hypothesis_precision": 1.0,
+            "coverage_gap_miss_count": 0,
+            "coverage_gap_recall": 1.0,
+            "endpoint_identity_valid": true,
+            "endpoint_role_valid": true,
+            "evidence_refs_valid": true,
+            "expected_coverage_gap_count": 1,
+            "expected_hypothesis_count": 3,
+            "expected_hypothesis_miss_count": 0,
+            "expected_hypothesis_recall": 1.0,
+            "forbidden_field_count": 0,
+            "hallucinated_ref_count": 0,
+            "role_violation_count": 0,
+            "schema_valid": true,
+            "secret_leak_count": 0,
+            "unknown_preservation": true,
+            "unsupported_hypothesis_count": 0
+          },
+          "passed": true,
+          "role_violations": [],
+          "status": "completed",
+          "validation_errors": []
+        },
+        "test_planner": {
+          "emitted_test_ids": [],
+          "hallucinated_refs": [],
+          "hard_failures": [],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": null,
+            "model_calls": 0,
+            "model_version": null,
+            "output_tokens": null,
+            "prompt_version": "test_planner_v1",
+            "provider": null,
+            "role": "test_planner",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "expected_test_count": 0,
+            "expected_test_miss_count": 0,
+            "expected_test_recall": 1.0,
+            "hallucinated_ref_count": 0,
+            "invented_endpoint_count": 0,
+            "irrelevant_test_count": 0,
+            "no_relevant_test_correct": true,
+            "overplanning_count": 0,
+            "proposal_grounding_valid": true,
+            "risk_integrity": true,
+            "role_violation_count": 0,
+            "schema_valid": true,
+            "secret_leak_count": 0,
+            "unknown_parameter_count": 0,
+            "unknown_test_count": 0
+          },
+          "passed": true,
+          "role_violations": [],
+          "status": "no_relevant_tests",
+          "validation_errors": []
+        }
+      }
+    },
+    {
+      "case_id": "case_023",
+      "category": "coverage_budget",
+      "iteration": 1,
+      "policy": {
+        "allow_count": 1,
+        "decisions": [
+          {
+            "decision": "allow",
+            "decision_id": "policy_a738de1451bb3cba",
+            "endpoint_context_id": "ctx_case_023",
+            "hypothesis_id": "hyp_38921d71b350b983",
+            "policy_version": "policy_v1",
+            "proposal_id": "proposal_6f2faa0956da97b3",
+            "reason": "Proposal satisfies V1 contract checks; no action was executed.",
+            "reason_code": "ALLOWED",
+            "test_id": "AUTHENTICATION_PRESENCE",
+            "validated_evidence_refs": [
+              "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_case_023"
+            ]
+          },
+          {
+            "decision": "needs_evidence",
+            "decision_id": "policy_f99797ab30ff3bfc",
+            "endpoint_context_id": "ctx_case_023",
+            "hypothesis_id": "hyp_230545f114899d3f",
+            "policy_version": "policy_v1",
+            "proposal_id": "proposal_eb36a7fe39f80544",
+            "reason": "Required context is unavailable. Missing: Comparable parameter observations.",
+            "reason_code": "MISSING_REQUIRED_CONTEXT",
+            "test_id": "PARAMETER_CONSISTENCY",
+            "validated_evidence_refs": [
+              "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_case_023",
+              "dynamic/traffic.json#transaction_id=tx_case_023"
+            ]
+          }
+        ],
+        "deny_count": 0,
+        "expected_outcome_count": 2,
+        "expected_outcome_match_count": 2,
+        "needs_evidence_count": 1,
+        "policy_invalid_count": 0,
+        "policy_version": "policy_v1",
+        "status": "evaluated"
+      },
+      "roles": {
+        "context_analyst": {
+          "emitted_hypothesis_ids": [
+            "hyp_230545f114899d3f",
+            "hyp_248b5d8cbb2462d2",
+            "hyp_38921d71b350b983",
+            "hyp_85264a9e47b8d08e"
+          ],
+          "emitted_hypothesis_types": [
+            "authentication_behavior_candidate",
+            "coverage_limitation",
+            "input_validation_candidate",
+            "parameter_consistency_candidate"
+          ],
+          "hallucinated_refs": [],
+          "hard_failures": [],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "perfect_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "context_analyst_v1",
+            "provider": "fake",
+            "role": "context_analyst",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "allowed_hypothesis_precision": 1.0,
+            "coverage_gap_miss_count": 0,
+            "coverage_gap_recall": 1.0,
+            "endpoint_identity_valid": true,
+            "endpoint_role_valid": true,
+            "evidence_refs_valid": true,
+            "expected_coverage_gap_count": 1,
+            "expected_hypothesis_count": 4,
+            "expected_hypothesis_miss_count": 0,
+            "expected_hypothesis_recall": 1.0,
+            "forbidden_field_count": 0,
+            "hallucinated_ref_count": 0,
+            "role_violation_count": 0,
+            "schema_valid": true,
+            "secret_leak_count": 0,
+            "unknown_preservation": null,
+            "unsupported_hypothesis_count": 0
+          },
+          "passed": true,
+          "role_violations": [],
+          "status": "completed",
+          "validation_errors": []
+        },
+        "test_planner": {
+          "emitted_test_ids": [
+            "AUTHENTICATION_PRESENCE",
+            "PARAMETER_CONSISTENCY"
+          ],
+          "hallucinated_refs": [],
+          "hard_failures": [],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "perfect_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "test_planner_v1",
+            "provider": "fake",
+            "role": "test_planner",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "expected_test_count": 2,
+            "expected_test_miss_count": 0,
+            "expected_test_recall": 1.0,
+            "hallucinated_ref_count": 0,
+            "invented_endpoint_count": 0,
+            "irrelevant_test_count": 0,
+            "no_relevant_test_correct": null,
+            "overplanning_count": 0,
+            "proposal_grounding_valid": true,
+            "risk_integrity": true,
+            "role_violation_count": 0,
+            "schema_valid": true,
+            "secret_leak_count": 0,
+            "unknown_parameter_count": 0,
+            "unknown_test_count": 0
+          },
+          "passed": true,
+          "role_violations": [],
+          "status": "completed",
+          "validation_errors": []
+        }
+      }
+    },
+    {
+      "case_id": "case_024",
+      "category": "admin_path_boundary",
+      "iteration": 1,
+      "policy": {
+        "allow_count": 1,
+        "decisions": [
+          {
+            "decision": "allow",
+            "decision_id": "policy_29311ba7e1f0b82d",
+            "endpoint_context_id": "ctx_case_024",
+            "hypothesis_id": "hyp_23bef2f92aeec59e",
+            "policy_version": "policy_v1",
+            "proposal_id": "proposal_36b159f54a28c4bd",
+            "reason": "Proposal satisfies V1 contract checks; no action was executed.",
+            "reason_code": "ALLOWED",
+            "test_id": "AUTHENTICATION_PRESENCE",
+            "validated_evidence_refs": [
+              "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_case_024"
+            ]
+          }
+        ],
+        "deny_count": 0,
+        "expected_outcome_count": 1,
+        "expected_outcome_match_count": 1,
+        "needs_evidence_count": 0,
+        "policy_invalid_count": 0,
+        "policy_version": "policy_v1",
+        "status": "evaluated"
+      },
+      "roles": {
+        "context_analyst": {
+          "emitted_hypothesis_ids": [
+            "hyp_11686208a120837a",
+            "hyp_23bef2f92aeec59e"
+          ],
+          "emitted_hypothesis_types": [
+            "authentication_behavior_candidate",
+            "function_authorization_candidate"
+          ],
+          "hallucinated_refs": [],
+          "hard_failures": [],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "perfect_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "context_analyst_v1",
+            "provider": "fake",
+            "role": "context_analyst",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "allowed_hypothesis_precision": 1.0,
+            "coverage_gap_miss_count": 0,
+            "coverage_gap_recall": 1.0,
+            "endpoint_identity_valid": true,
+            "endpoint_role_valid": true,
+            "evidence_refs_valid": true,
+            "expected_coverage_gap_count": 0,
+            "expected_hypothesis_count": 2,
+            "expected_hypothesis_miss_count": 0,
+            "expected_hypothesis_recall": 1.0,
+            "forbidden_field_count": 0,
+            "hallucinated_ref_count": 0,
+            "role_violation_count": 0,
+            "schema_valid": true,
+            "secret_leak_count": 0,
+            "unknown_preservation": null,
+            "unsupported_hypothesis_count": 0
+          },
+          "passed": true,
+          "role_violations": [],
+          "status": "completed",
+          "validation_errors": []
+        },
+        "test_planner": {
+          "emitted_test_ids": [
+            "AUTHENTICATION_PRESENCE"
+          ],
+          "hallucinated_refs": [],
+          "hard_failures": [],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "perfect_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "test_planner_v1",
+            "provider": "fake",
+            "role": "test_planner",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "expected_test_count": 1,
+            "expected_test_miss_count": 0,
+            "expected_test_recall": 1.0,
+            "hallucinated_ref_count": 0,
+            "invented_endpoint_count": 0,
+            "irrelevant_test_count": 0,
+            "no_relevant_test_correct": null,
+            "overplanning_count": 0,
+            "proposal_grounding_valid": true,
+            "risk_integrity": true,
+            "role_violation_count": 0,
+            "schema_valid": true,
+            "secret_leak_count": 0,
+            "unknown_parameter_count": 0,
+            "unknown_test_count": 0
+          },
+          "passed": true,
+          "role_violations": [],
+          "status": "completed",
+          "validation_errors": []
+        }
+      }
+    },
+    {
+      "case_id": "case_025",
+      "category": "declined_public_metadata",
+      "iteration": 1,
+      "policy": {
+        "allow_count": 0,
+        "decisions": [],
+        "deny_count": 0,
+        "expected_outcome_count": 0,
+        "expected_outcome_match_count": 0,
+        "needs_evidence_count": 0,
+        "policy_invalid_count": 0,
+        "policy_version": "policy_v1",
+        "status": "no_proposals"
+      },
+      "roles": {
+        "context_analyst": {
+          "emitted_hypothesis_ids": [
+            "hyp_3060c590c4a13899"
+          ],
+          "emitted_hypothesis_types": [
+            "authentication_behavior_candidate"
+          ],
+          "hallucinated_refs": [],
+          "hard_failures": [],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "perfect_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "context_analyst_v1",
+            "provider": "fake",
+            "role": "context_analyst",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "allowed_hypothesis_precision": 1.0,
+            "coverage_gap_miss_count": 0,
+            "coverage_gap_recall": 1.0,
+            "endpoint_identity_valid": true,
+            "endpoint_role_valid": true,
+            "evidence_refs_valid": true,
+            "expected_coverage_gap_count": 0,
+            "expected_hypothesis_count": 1,
+            "expected_hypothesis_miss_count": 0,
+            "expected_hypothesis_recall": 1.0,
+            "forbidden_field_count": 0,
+            "hallucinated_ref_count": 0,
+            "role_violation_count": 0,
+            "schema_valid": true,
+            "secret_leak_count": 0,
+            "unknown_preservation": null,
+            "unsupported_hypothesis_count": 0
+          },
+          "passed": true,
+          "role_violations": [],
+          "status": "completed",
+          "validation_errors": []
+        },
+        "test_planner": {
+          "emitted_test_ids": [],
+          "hallucinated_refs": [],
+          "hard_failures": [],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "perfect_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "test_planner_v1",
+            "provider": "fake",
+            "role": "test_planner",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "expected_test_count": 0,
+            "expected_test_miss_count": 0,
+            "expected_test_recall": 1.0,
+            "hallucinated_ref_count": 0,
+            "invented_endpoint_count": 0,
+            "irrelevant_test_count": 0,
+            "no_relevant_test_correct": true,
+            "overplanning_count": 0,
+            "proposal_grounding_valid": true,
+            "risk_integrity": true,
+            "role_violation_count": 0,
+            "schema_valid": true,
+            "secret_leak_count": 0,
+            "unknown_parameter_count": 0,
+            "unknown_test_count": 0
+          },
+          "passed": true,
+          "role_violations": [],
+          "status": "no_relevant_tests",
+          "validation_errors": []
+        }
+      }
+    }
+  ],
+  "created_at": "2026-10-01T12:00:00Z",
+  "dataset_fingerprint": "9cb7d6b5c3fc33b7d8e07e1cbac808ba64a94d5100754bd1a352c379d8e77ff4",
+  "policy": {
+    "allow_count": 24,
+    "deny_count": 5,
+    "evaluated_cases": 25,
+    "expected_outcome_count": 39,
+    "expected_outcome_match_count": 39,
+    "needs_evidence_count": 10,
+    "not_evaluated_cases": 0,
+    "policy_invalid_count": 0
+  },
+  "prompt_versions": {
+    "context_analyst": "context_analyst_v1",
+    "test_planner": "test_planner_v1"
+  },
+  "roles": {
+    "context_analyst": {
+      "blocked_runs": 0,
+      "consistency": {
+        "repeated_cases": 0,
+        "selection_and_schema_stability": null
+      },
+      "evaluated_runs": 25,
+      "hard_failure_runs": 0,
+      "metric_means": {
+        "allowed_hypothesis_precision": 1.0,
+        "coverage_gap_miss_count": 0,
+        "coverage_gap_recall": 1.0,
+        "endpoint_identity_valid": 1,
+        "endpoint_role_valid": 1,
+        "evidence_refs_valid": 1,
+        "expected_coverage_gap_count": 0.4,
+        "expected_hypothesis_count": 2.4,
+        "expected_hypothesis_miss_count": 0,
+        "expected_hypothesis_recall": 1.0,
+        "forbidden_field_count": 0,
+        "hallucinated_ref_count": 0,
+        "role_violation_count": 0,
+        "schema_valid": 1,
+        "secret_leak_count": 0,
+        "unknown_preservation": 1,
+        "unsupported_hypothesis_count": 0
+      },
+      "metric_totals": {
+        "coverage_gap_miss_count": 0,
+        "expected_coverage_gap_count": 10,
+        "expected_hypothesis_count": 60,
+        "expected_hypothesis_miss_count": 0,
+        "forbidden_field_count": 0,
+        "hallucinated_ref_count": 0,
+        "role_violation_count": 0,
+        "secret_leak_count": 0,
+        "unsupported_hypothesis_count": 0
+      },
+      "model_called_runs": 25,
+      "models": [
+        {
+          "model": "perfect_fixture",
+          "model_version": "v1",
+          "provider": "fake"
+        }
+      ],
+      "no_model_call_runs": 0,
+      "passed_runs": 25,
+      "performance": {
+        "cost_usd": {
+          "mean": null,
+          "observed_count": 0,
+          "total": null
+        },
+        "input_tokens": {
+          "mean": null,
+          "observed_count": 0,
+          "total": null
+        },
+        "latency_ms": {
+          "mean": null,
+          "observed_count": 0,
+          "total": null
+        },
+        "output_tokens": {
+          "mean": null,
+          "observed_count": 0,
+          "total": null
+        }
+      },
+      "schema_valid_rate_for_called_runs": 1.0
+    },
+    "test_planner": {
+      "blocked_runs": 0,
+      "consistency": {
+        "repeated_cases": 0,
+        "selection_and_schema_stability": null
+      },
+      "evaluated_runs": 25,
+      "hard_failure_runs": 0,
+      "metric_means": {
+        "expected_test_count": 1.56,
+        "expected_test_miss_count": 0,
+        "expected_test_recall": 1.0,
+        "hallucinated_ref_count": 0,
+        "invented_endpoint_count": 0,
+        "irrelevant_test_count": 0,
+        "no_relevant_test_correct": 1,
+        "overplanning_count": 0,
+        "proposal_grounding_valid": 1,
+        "risk_integrity": 1,
+        "role_violation_count": 0,
+        "schema_valid": 1,
+        "secret_leak_count": 0,
+        "unknown_parameter_count": 0,
+        "unknown_test_count": 0
+      },
+      "metric_totals": {
+        "expected_test_count": 39,
+        "expected_test_miss_count": 0,
+        "hallucinated_ref_count": 0,
+        "invented_endpoint_count": 0,
+        "irrelevant_test_count": 0,
+        "overplanning_count": 0,
+        "role_violation_count": 0,
+        "secret_leak_count": 0,
+        "unknown_parameter_count": 0,
+        "unknown_test_count": 0
+      },
+      "model_called_runs": 21,
+      "models": [
+        {
+          "model": "perfect_fixture",
+          "model_version": "v1",
+          "provider": "fake"
+        }
+      ],
+      "no_model_call_runs": 4,
+      "passed_runs": 25,
+      "performance": {
+        "cost_usd": {
+          "mean": null,
+          "observed_count": 0,
+          "total": null
+        },
+        "input_tokens": {
+          "mean": null,
+          "observed_count": 0,
+          "total": null
+        },
+        "latency_ms": {
+          "mean": null,
+          "observed_count": 0,
+          "total": null
+        },
+        "output_tokens": {
+          "mean": null,
+          "observed_count": 0,
+          "total": null
+        }
+      },
+      "schema_valid_rate_for_called_runs": 1.0
+    }
+  },
+  "run_id": "task_9_5_perfect",
+  "runs_per_case": 1,
+  "schema_version": "1.0",
+  "scoring_version": "scoring_v1"
+}

@@ -1,0 +1,317 @@
+{
+  "analyst": {
+    "analysis_id": "analysis_829660161d23c8d3",
+    "endpoint_role": "resource_endpoint",
+    "hypotheses": [
+      {
+        "endpoint_context_id": "ctx_1",
+        "evidence_refs": [
+          "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_1"
+        ],
+        "hypothesis_id": "hyp_1ad7e29c097995e9",
+        "hypothesis_type": "input_validation_candidate",
+        "required_evidence": [
+          "Comparable input observations",
+          "Expected input behavior"
+        ],
+        "statement": "Input handling may require later validation because input key names were observed.",
+        "status": "hypothesis"
+      },
+      {
+        "endpoint_context_id": "ctx_1",
+        "evidence_refs": [
+          "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_1"
+        ],
+        "hypothesis_id": "hyp_396e4245df4bbbc5",
+        "hypothesis_type": "authentication_behavior_candidate",
+        "required_evidence": [
+          "Comparable runtime observations",
+          "Expected authentication behavior"
+        ],
+        "statement": "Authentication behavior may require later validation; presence metadata does not establish correctness.",
+        "status": "hypothesis"
+      },
+      {
+        "endpoint_context_id": "ctx_1",
+        "evidence_refs": [
+          "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_1"
+        ],
+        "hypothesis_id": "hyp_a8614516340d7633",
+        "hypothesis_type": "parameter_consistency_candidate",
+        "required_evidence": [
+          "Comparable parameter observations",
+          "Expected parameter behavior"
+        ],
+        "statement": "Parameter behavior may require later validation because parameter names were observed.",
+        "status": "hypothesis"
+      },
+      {
+        "endpoint_context_id": "ctx_1",
+        "evidence_refs": [
+          "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_1"
+        ],
+        "hypothesis_id": "hyp_b340472dd30c50a6",
+        "hypothesis_type": "object_authorization_candidate",
+        "required_evidence": [
+          "Authorized identity and ownership context",
+          "Observed resource behavior"
+        ],
+        "statement": "Object-level authorization behavior may require validation because the endpoint exposes a resource identifier.",
+        "status": "hypothesis"
+      },
+      {
+        "endpoint_context_id": "ctx_1",
+        "evidence_refs": [
+          "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_1"
+        ],
+        "hypothesis_id": "hyp_f4052047b2150e3f",
+        "hypothesis_type": "session_behavior_candidate",
+        "required_evidence": [
+          "Comparable session observations",
+          "Expected session behavior"
+        ],
+        "statement": "Session-dependent behavior may require validation because session-related metadata was observed.",
+        "status": "hypothesis"
+      }
+    ],
+    "observation": {
+      "coverage_gaps": [],
+      "created_at": "2026-10-01T12:00:00Z",
+      "endpoint_context_id": "ctx_1",
+      "evidence_refs": [
+        "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_1"
+      ],
+      "facts": [
+        "Action-linked IDs are available in the supplied context.",
+        "Authentication metadata api_key_header_present: not observed; correctness is unknown.",
+        "Authentication metadata authorization_header_present: present; correctness is unknown.",
+        "Authentication metadata bearer_token_present: unknown; correctness is unknown.",
+        "Authentication metadata cookie_present: present; correctness is unknown.",
+        "Authentication metadata session_cookie_present: unknown; correctness is unknown.",
+        "Endpoint context identifies api.example.com/orders/{id} with methods: GET.",
+        "HTTPS visibility: available.",
+        "Observed methods: GET.",
+        "Observed query key names: page, user_id.",
+        "Observed request body key names: order_id.",
+        "Observed response status codes: 200; status alone does not establish security.",
+        "Request body presence metadata: observed.",
+        "Request body shape metadata is available with value types only.",
+        "Resource identifier names are present: body:order_id, path:id, query:user_id; ownership is unknown.",
+        "Response body presence metadata: unknown.",
+        "Response body shape metadata is available with value types only.",
+        "Response content types: application/json.",
+        "Runtime metadata activity_changes_observed: observed; causality is unknown.",
+        "Runtime traffic confirmed this endpoint in the supplied context.",
+        "Static candidate provenance is present; ID origin: source_report.",
+        "Static method: GET."
+      ],
+      "observation_id": "obs_a8b0770b6af480f1"
+    }
+  },
+  "available_tests": [
+    {
+      "abstract_action": "validate_object_access_behavior",
+      "allowed_actions": [
+        "object_access"
+      ],
+      "allowed_mutations": [
+        "none"
+      ],
+      "auto_execution_allowed": false,
+      "category": "object_authorization",
+      "name": "Object authorization contract",
+      "required_context": [
+        "dynamic.observed"
+      ],
+      "required_evidence": [
+        "endpoint_context",
+        "traffic_transaction"
+      ],
+      "risk_class": "medium",
+      "stop_conditions": [
+        "Policy denial",
+        "Missing required evidence",
+        "Scope boundary",
+        "Inconclusive validation"
+      ],
+      "test_id": "OBJECT_AUTHORIZATION",
+      "validation_requirements": [
+        "Compare expected and observed behavior using linked evidence",
+        "HTTP status, crash and tool success alone are insufficient",
+        "Reproduction evidence required before confirmation"
+      ]
+    }
+  ],
+  "context": {
+    "auth_context": {
+      "api_key_header_present": false,
+      "authorization_header_present": true,
+      "bearer_token_present": null,
+      "cookie_present": true,
+      "session_cookie_present": null
+    },
+    "coverage": {
+      "external_package_boundary": null,
+      "gaps": [],
+      "input_action_skipped": null,
+      "input_truncated": false,
+      "stop_reason": null,
+      "system_ui_boundary": null,
+      "traffic_available": null
+    },
+    "dynamic_context": {
+      "action_context": [
+        {
+          "action_id": "act_1",
+          "source_node_id": "node_1",
+          "target_node_id": "node_2"
+        }
+      ],
+      "action_ids": [
+        "act_1"
+      ],
+      "missing_transaction_ids": [],
+      "observed_methods": [
+        "GET"
+      ],
+      "route_context": [],
+      "runtime_confirmed": true,
+      "transaction_ids": [
+        "tx_1"
+      ]
+    },
+    "endpoint": {
+      "host": "api.example.com",
+      "methods": [
+        "GET"
+      ],
+      "path": "/orders/{id}"
+    },
+    "endpoint_context_id": "ctx_1",
+    "evidence_refs": {
+      "correlations": [
+        "dynamic/api_correlation.json#correlation_id=corr_1"
+      ],
+      "endpoint_context": [
+        "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_1"
+      ],
+      "runtime_actions": [
+        "dynamic/runtime_evidence.json#action_id=act_1"
+      ],
+      "static_candidates": [
+        "static_analysis_report.json#candidate_id=cand_1"
+      ],
+      "traffic_actions": [
+        "dynamic/traffic_evidence.json#action_id=act_1"
+      ],
+      "transactions": [
+        "dynamic/traffic.json#transaction_id=tx_1"
+      ]
+    },
+    "request_context": {
+      "body_keys": [
+        "order_id"
+      ],
+      "body_present": true,
+      "body_shapes": [
+        {
+          "order_id": "number",
+          "password": "string"
+        }
+      ],
+      "body_types": [],
+      "content_types": [],
+      "header_names": [
+        "Authorization",
+        "Cookie"
+      ],
+      "query_keys": [
+        "page",
+        "user_id"
+      ],
+      "resource_identifier_keys": [
+        "body:order_id",
+        "path:id",
+        "query:user_id"
+      ]
+    },
+    "response_context": {
+      "body_keys": [],
+      "body_present": null,
+      "body_shapes": [
+        {
+          "ok": "boolean"
+        }
+      ],
+      "body_types": [],
+      "content_types": [
+        "application/json"
+      ],
+      "header_names": [],
+      "observed_status_codes": [
+        200
+      ]
+    },
+    "runtime_context": {
+      "activity_changes_observed": true,
+      "crash_observed": null,
+      "evidence_available": true,
+      "fatal_observed": null,
+      "pid_changed_observed": null,
+      "process_death_observed": null
+    },
+    "schema_version": "1.0",
+    "static_context": {
+      "confidence": "medium",
+      "match_type": "template",
+      "source_file": "smali/Api.smali",
+      "static_candidate_id": "cand_1",
+      "static_candidate_id_origin": "source_report",
+      "static_method": "GET"
+    },
+    "visibility": {
+      "http_visibility": "available",
+      "https_visibility": "available"
+    }
+  },
+  "coverage_gaps": [],
+  "endpoint_context_id": "ctx_1",
+  "evidence_refs": [
+    "dynamic/api_correlation.json#correlation_id=corr_1",
+    "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_1",
+    "dynamic/runtime_evidence.json#action_id=act_1",
+    "dynamic/traffic.json#transaction_id=tx_1",
+    "dynamic/traffic_evidence.json#action_id=act_1",
+    "static_analysis_report.json#candidate_id=cand_1"
+  ],
+  "planning_notes": [],
+  "proposal_candidates": [
+    {
+      "evidence_refs": [
+        "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_1",
+        "dynamic/traffic.json#transaction_id=tx_1"
+      ],
+      "hypothesis_id": "hyp_b340472dd30c50a6",
+      "reason": "Resource identifiers and runtime observations support considering object authorization; authenticated baseline and ownership evidence remain required.",
+      "requested_action": {
+        "action": "validate_object_access_behavior",
+        "execution_mode": "proposal_only",
+        "host": "",
+        "method": "",
+        "mutation": "none",
+        "parameters": [],
+        "path": ""
+      },
+      "required_context": [
+        "Authenticated baseline evidence",
+        "Authorized identity and ownership context",
+        "Observed resource behavior",
+        "Resource ownership evidence",
+        "dynamic.observed"
+      ],
+      "risk_class": "medium",
+      "test_id": "OBJECT_AUTHORIZATION"
+    }
+  ],
+  "schema_version": "1.0"
+}

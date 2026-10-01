@@ -2108,7 +2108,7 @@
               <div class="stage-title">4. Agent Analysis</div>
               <span class="badge badge-not_available" id="badge-agent_analysis">Not Available</span>
             </div>
-            <div class="stage-message" id="msg-agent_analysis">Scheduled for subsequent milestone</div>
+            <div class="stage-message" id="msg-agent_analysis">Not available in this scan</div>
             <div class="stage-details" id="details-agent_analysis"></div>
           </div>
 
@@ -2551,7 +2551,7 @@
         },
         agent_analysis: {
           state: "not_available",
-          message: "Scheduled for subsequent milestone (Day 8+)",
+          message: "Not available in this scan",
           data: null
         },
         report_generation: {
@@ -2621,7 +2621,7 @@
 
       // 4. Agent Analysis (Critical Integrity Rule: Never fake progress)
       product.agent_analysis.state = "not_available";
-      product.agent_analysis.message = "Scheduled for subsequent milestone (Day 8+)";
+      product.agent_analysis.message = "Not available in this scan";
 
       // 5. Report Generation (Critical Integrity Rule: 3-report architecture not full, never fake completed)
       const staticCompleted = product.static_analysis.state === "completed";
@@ -2632,6 +2632,18 @@
       } else {
         product.report_generation.state = "pending";
         product.report_generation.message = "Pending analysis execution.";
+      }
+
+      // Canonical product state is authoritative after report persistence/integrity validation.
+      const canonicalState = statusData.scan_state;
+      const canonicalDynamic = canonicalState && canonicalState.stages && canonicalState.stages.dynamic_analysis;
+      const dynamicArtifact = canonicalState && canonicalState.artifacts && canonicalState.artifacts.dynamic_analysis_report;
+      const hasDynamicReport = dynamicArtifact && dynamicArtifact.available === true &&
+                               dynamicArtifact.relative_path === "dynamic_analysis_report.json";
+      if (canonicalDynamic) {
+        product.dynamic_analysis.state = canonicalDynamic.status === "completed" && !hasDynamicReport ?
+                                         "partial" : canonicalDynamic.status;
+        product.dynamic_analysis.message = canonicalDynamic.message || "Dynamic evidence coverage is described in the canonical report.";
       }
 
       return product;
@@ -4729,7 +4741,7 @@
       document.getElementById("analysisSection").style.display = "none";
       ["app_acquisition", "static_analysis", "dynamic_analysis", "agent_analysis", "report_generation"].forEach(stage => {
         setBadge(stage, (stage === "agent_analysis" || stage === "dynamic_analysis") ? "not_available" : "pending");
-        setMessage(stage, stage === "agent_analysis" ? "Scheduled for subsequent milestone" :
+        setMessage(stage, stage === "agent_analysis" ? "Not available in this scan" :
                           stage === "dynamic_analysis" ? "Scheduled for subsequent milestone" :
                           "Waiting to start...");
         const detailsEl = document.getElementById("details-" + stage);
@@ -4816,7 +4828,7 @@
       // Reset all 5 product stages to clean initial state
       ["app_acquisition", "static_analysis", "dynamic_analysis", "agent_analysis", "report_generation"].forEach(stage => {
         setBadge(stage, (stage === "agent_analysis" || stage === "dynamic_analysis") ? "not_available" : "pending");
-        setMessage(stage, stage === "agent_analysis" ? "Scheduled for subsequent milestone" :
+        setMessage(stage, stage === "agent_analysis" ? "Not available in this scan" :
                           stage === "dynamic_analysis" ? "Scheduled for subsequent milestone" :
                           "Waiting...");
         const detailsEl = document.getElementById("details-" + stage);

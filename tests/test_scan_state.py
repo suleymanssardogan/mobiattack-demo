@@ -94,10 +94,10 @@ class TestScanStateModel(unittest.TestCase):
         self.assertIn("subsequent milestone", state["stages"]["dynamic_analysis"]["message"])
 
     def test_08_agent_analysis_is_not_available(self):
-        """8. Initial stage agent_analysis status is not_available (scheduled for subsequent milestone)."""
+        """8. Initial stage agent_analysis status is not_available with product-safe wording."""
         state = create_initial_scan_state(self.sample_scan_id, self.sample_url)
         self.assertEqual(state["stages"]["agent_analysis"]["status"], "not_available")
-        self.assertIn("subsequent milestone", state["stages"]["agent_analysis"]["message"])
+        self.assertEqual(state["stages"]["agent_analysis"]["message"], "Not available in this scan")
 
     def test_09_report_generation_is_pending(self):
         """9. Initial stage report_generation status is pending."""

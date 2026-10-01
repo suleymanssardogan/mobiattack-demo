@@ -1,0 +1,15 @@
+{
+  "decision": "allow",
+  "decision_id": "policy_f3f9cc99d43d7b8d",
+  "endpoint_context_id": "ctx_1",
+  "hypothesis_id": "hyp_1ad7e29c097995e9",
+  "policy_version": "policy_v1",
+  "proposal_id": "proposal_1490edf344f599d8",
+  "reason": "Proposal satisfies V1 contract checks; no action was executed.",
+  "reason_code": "ALLOWED",
+  "test_id": "INPUT_VALIDATION",
+  "validated_evidence_refs": [
+    "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_1",
+    "dynamic/traffic.json#transaction_id=tx_1"
+  ]
+}

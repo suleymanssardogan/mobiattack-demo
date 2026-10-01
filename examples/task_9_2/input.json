@@ -1,0 +1,322 @@
+{
+  "auth_context": {
+    "api_key_header_present": false,
+    "authorization_header_present": true,
+    "bearer_token_present": null,
+    "cookie_present": true,
+    "session_cookie_present": null
+  },
+  "coverage": {
+    "external_package_boundary": null,
+    "gaps": [],
+    "input_action_skipped": null,
+    "input_truncated": false,
+    "stop_reason": null,
+    "system_ui_boundary": null,
+    "traffic_available": null
+  },
+  "dynamic_context": {
+    "action_context": [
+      {
+        "action_id": "act_1",
+        "source_node_id": "node_1",
+        "target_node_id": "node_2"
+      }
+    ],
+    "action_ids": [
+      "act_1"
+    ],
+    "missing_transaction_ids": [],
+    "observed_methods": [
+      "GET"
+    ],
+    "route_context": [],
+    "runtime_confirmed": true,
+    "transaction_ids": [
+      "tx_1"
+    ]
+  },
+  "endpoint": {
+    "host": "api.example.com",
+    "methods": [
+      "GET"
+    ],
+    "path": "/orders/{id}"
+  },
+  "endpoint_context_id": "ctx_1",
+  "evidence_refs": {
+    "correlations": [
+      "dynamic/api_correlation.json#correlation_id=corr_1"
+    ],
+    "endpoint_context": [
+      "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_1"
+    ],
+    "runtime_actions": [
+      "dynamic/runtime_evidence.json#action_id=act_1"
+    ],
+    "static_candidates": [
+      "static_analysis_report.json#candidate_id=cand_1"
+    ],
+    "traffic_actions": [
+      "dynamic/traffic_evidence.json#action_id=act_1"
+    ],
+    "transactions": [
+      "dynamic/traffic.json#transaction_id=tx_1"
+    ]
+  },
+  "fact_catalog": [
+    {
+      "evidence_refs": [
+        "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_1"
+      ],
+      "statement": "Action-linked IDs are available in the supplied context."
+    },
+    {
+      "evidence_refs": [
+        "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_1"
+      ],
+      "statement": "Authentication metadata api_key_header_present: not observed; correctness is unknown."
+    },
+    {
+      "evidence_refs": [
+        "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_1"
+      ],
+      "statement": "Authentication metadata authorization_header_present: present; correctness is unknown."
+    },
+    {
+      "evidence_refs": [
+        "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_1"
+      ],
+      "statement": "Authentication metadata bearer_token_present: unknown; correctness is unknown."
+    },
+    {
+      "evidence_refs": [
+        "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_1"
+      ],
+      "statement": "Authentication metadata cookie_present: present; correctness is unknown."
+    },
+    {
+      "evidence_refs": [
+        "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_1"
+      ],
+      "statement": "Authentication metadata session_cookie_present: unknown; correctness is unknown."
+    },
+    {
+      "evidence_refs": [
+        "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_1"
+      ],
+      "statement": "Endpoint context identifies api.example.com/orders/{id} with methods: GET."
+    },
+    {
+      "evidence_refs": [
+        "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_1"
+      ],
+      "statement": "HTTPS visibility: available."
+    },
+    {
+      "evidence_refs": [
+        "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_1"
+      ],
+      "statement": "Observed methods: GET."
+    },
+    {
+      "evidence_refs": [
+        "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_1"
+      ],
+      "statement": "Observed query key names: page, user_id."
+    },
+    {
+      "evidence_refs": [
+        "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_1"
+      ],
+      "statement": "Observed request body key names: order_id."
+    },
+    {
+      "evidence_refs": [
+        "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_1"
+      ],
+      "statement": "Observed response status codes: 200; status alone does not establish security."
+    },
+    {
+      "evidence_refs": [
+        "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_1"
+      ],
+      "statement": "Request body presence metadata: observed."
+    },
+    {
+      "evidence_refs": [
+        "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_1"
+      ],
+      "statement": "Request body shape metadata is available with value types only."
+    },
+    {
+      "evidence_refs": [
+        "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_1"
+      ],
+      "statement": "Resource identifier names are present: body:order_id, path:id, query:user_id; ownership is unknown."
+    },
+    {
+      "evidence_refs": [
+        "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_1"
+      ],
+      "statement": "Response body presence metadata: unknown."
+    },
+    {
+      "evidence_refs": [
+        "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_1"
+      ],
+      "statement": "Response body shape metadata is available with value types only."
+    },
+    {
+      "evidence_refs": [
+        "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_1"
+      ],
+      "statement": "Response content types: application/json."
+    },
+    {
+      "evidence_refs": [
+        "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_1"
+      ],
+      "statement": "Runtime metadata activity_changes_observed: observed; causality is unknown."
+    },
+    {
+      "evidence_refs": [
+        "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_1"
+      ],
+      "statement": "Runtime traffic confirmed this endpoint in the supplied context."
+    },
+    {
+      "evidence_refs": [
+        "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_1"
+      ],
+      "statement": "Static candidate provenance is present; ID origin: source_report."
+    },
+    {
+      "evidence_refs": [
+        "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_1"
+      ],
+      "statement": "Static method: GET."
+    }
+  ],
+  "hypothesis_catalog": {
+    "authentication_behavior_candidate": {
+      "evidence_refs": [
+        "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_1"
+      ],
+      "required_evidence": [
+        "Expected authentication behavior",
+        "Comparable runtime observations"
+      ],
+      "statement": "Authentication behavior may require later validation; presence metadata does not establish correctness."
+    },
+    "input_validation_candidate": {
+      "evidence_refs": [
+        "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_1"
+      ],
+      "required_evidence": [
+        "Expected input behavior",
+        "Comparable input observations"
+      ],
+      "statement": "Input handling may require later validation because input key names were observed."
+    },
+    "object_authorization_candidate": {
+      "evidence_refs": [
+        "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_1"
+      ],
+      "required_evidence": [
+        "Observed resource behavior",
+        "Authorized identity and ownership context"
+      ],
+      "statement": "Object-level authorization behavior may require validation because the endpoint exposes a resource identifier."
+    },
+    "parameter_consistency_candidate": {
+      "evidence_refs": [
+        "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_1"
+      ],
+      "required_evidence": [
+        "Expected parameter behavior",
+        "Comparable parameter observations"
+      ],
+      "statement": "Parameter behavior may require later validation because parameter names were observed."
+    },
+    "session_behavior_candidate": {
+      "evidence_refs": [
+        "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_1"
+      ],
+      "required_evidence": [
+        "Expected session behavior",
+        "Comparable session observations"
+      ],
+      "statement": "Session-dependent behavior may require validation because session-related metadata was observed."
+    }
+  },
+  "request_context": {
+    "body_keys": [
+      "order_id"
+    ],
+    "body_present": true,
+    "body_shapes": [
+      {
+        "order_id": "number",
+        "password": "string"
+      }
+    ],
+    "body_types": [],
+    "content_types": [],
+    "header_names": [
+      "Authorization",
+      "Cookie"
+    ],
+    "query_keys": [
+      "page",
+      "user_id"
+    ],
+    "resource_identifier_keys": [
+      "body:order_id",
+      "path:id",
+      "query:user_id"
+    ]
+  },
+  "response_context": {
+    "body_keys": [],
+    "body_present": null,
+    "body_shapes": [
+      {
+        "ok": "boolean"
+      }
+    ],
+    "body_types": [],
+    "content_types": [
+      "application/json"
+    ],
+    "header_names": [],
+    "observed_status_codes": [
+      200
+    ]
+  },
+  "runtime_context": {
+    "activity_changes_observed": true,
+    "crash_observed": null,
+    "evidence_available": true,
+    "fatal_observed": null,
+    "pid_changed_observed": null,
+    "process_death_observed": null
+  },
+  "schema_version": "1.0",
+  "static_context": {
+    "confidence": "medium",
+    "match_type": "template",
+    "source_file": "smali/Api.smali",
+    "static_candidate_id": "cand_1",
+    "static_candidate_id_origin": "source_report",
+    "static_method": "GET"
+  },
+  "supported_roles": [
+    "resource_endpoint",
+    "unknown"
+  ],
+  "visibility": {
+    "http_visibility": "available",
+    "https_visibility": "available"
+  }
+}

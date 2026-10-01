@@ -115,7 +115,7 @@ def create_initial_scan_state(
     - app_acquisition: running
     - static_analysis: pending
     - dynamic_analysis: not_available (scheduled for subsequent milestone)
-    - agent_analysis: not_available (scheduled for subsequent milestone)
+    - agent_analysis: not_available (not available in this scan)
     - report_generation: pending
     - all artifacts: available=False, relative_path=None
     """
@@ -166,7 +166,7 @@ def create_initial_scan_state(
             },
             "agent_analysis": {
                 "status": "not_available",
-                "message": "Scheduled for subsequent milestone",
+                "message": "Not available in this scan",
                 "started_at": None,
                 "completed_at": None,
             },
@@ -189,7 +189,7 @@ def create_initial_scan_state(
     return state
 
 
-def validate_scan_state(state: dict[str, Any]) -> None:
+def validate_scan_state(state: dict[str, Any], run_dir: str | Path | None = None) -> None:
     """Validates structural schema, stage vocabulary, artifact safety, and product integrity rules."""
     if not isinstance(state, dict):
         raise ScanStateValidationError("Scan state must be a dictionary.")
@@ -261,6 +261,16 @@ def validate_scan_state(state: dict[str, Any]) -> None:
         raise ScanStateValidationError(
             "Integrity Rule #1 Violation: dynamic_analysis cannot be 'completed' without available dynamic_analysis_report."
         )
+
+    if dyn_art.get("available"):
+        if dyn_art.get("relative_path") != "dynamic_analysis_report.json":
+            raise ScanStateValidationError("Dynamic report must reference the root canonical filename.")
+        if run_dir is not None:
+            from src.dynamic.report.models import DynamicReportError, load_dynamic_analysis_report
+            try:
+                load_dynamic_analysis_report(run_dir, state["scan_id"])
+            except DynamicReportError as exc:
+                raise ScanStateValidationError("Dynamic report availability requires a valid canonical file.") from exc
 
     # Rule 2: full report_generation cannot be completed if only static report is available
     rep_status = stages.get("report_generation", {}).get("status")
@@ -359,9 +369,9 @@ def save_scan_state(run_dir: str | Path, state: dict[str, Any]) -> Path:
     Validates state before write, writes to temporary file in run_dir,
     and replaces target destination via os.replace to guarantee atomic persistence.
     """
-    validate_scan_state(state)
-
     dest_dir = Path(run_dir).resolve()
+    validate_scan_state(state, dest_dir)
+
     dest_dir.mkdir(parents=True, exist_ok=True)
     target_file = dest_dir / STATE_FILENAME
 
@@ -383,7 +393,7 @@ def save_scan_state(run_dir: str | Path, state: dict[str, Any]) -> Path:
     return target_file
 
 
-def load_scan_state(run_dir: str | Path) -> dict[str, Any] | None:
+def load_scan_state(run_dir: str | Path, *, validate_artifacts: bool = True) -> dict[str, Any] | None:
     """Loads and validates scan_state.json from run_dir.
 
     Returns:
@@ -411,8 +421,34 @@ def load_scan_state(run_dir: str | Path) -> dict[str, Any] | None:
     except OSError as err:
         raise ScanStateCorruptionError(f"Failed to read scan_state.json at '{state_file}': {err}") from err
 
-    validate_scan_state(data)
+    validate_scan_state(data, dest_dir if validate_artifacts else None)
     return data
+
+
+def sync_dynamic_report_artifact(state: dict[str, Any], run_dir: str | Path, *, complete_stage: bool = True) -> bool:
+    """Reconcile physical integrity before registering or completing the dynamic stage."""
+    from src.dynamic.report.models import DynamicReportError, load_dynamic_analysis_report
+    try:
+        load_dynamic_analysis_report(run_dir, state["scan_id"])
+        available = True
+    except DynamicReportError:
+        available = False
+    state["artifacts"]["dynamic_analysis_report"] = {
+        "available": available, "relative_path": "dynamic_analysis_report.json" if available else None,
+    }
+    stage = state["stages"]["dynamic_analysis"]
+    if available and complete_stage:
+        stage["status"] = "completed"
+        stage["completed_at"] = stage.get("completed_at") or _utc_now_iso()
+        stage["message"] = "Canonical dynamic report generated and validated; coverage is described in the report."
+        state["stages"]["report_generation"]["status"] = "partial"
+        state["stages"]["report_generation"]["message"] = "Canonical dynamic report available; additional analysis reports pending."
+    elif not available and stage.get("status") == "completed":
+        stage["status"] = "partial"
+        stage["message"] = "Canonical dynamic report is missing or invalid; completion is unavailable."
+        if state["stages"]["report_generation"].get("status") == "completed":
+            state["stages"]["report_generation"]["status"] = "partial"
+    return available
 
 
 class ScanStateCheckpointer:
@@ -562,11 +598,11 @@ class ScanStateCheckpointer:
                     update_stage_status(st, "dynamic_analysis", "running", safe_msg)
                     st["current_stage"] = "dynamic_analysis"
                 elif state in ("partial", "completed"):
-                    # Dynamic analysis cannot be completed without canonical dynamic_analysis_report.json
-                    update_stage_status(st, "dynamic_analysis", "partial", safe_msg)
+                    self._sync_artifacts()
+                    completed = st["stages"]["dynamic_analysis"]["status"] == "completed"
+                    update_stage_status(st, "dynamic_analysis", "completed" if completed else "partial", safe_msg)
                     if st.get("current_stage") == "dynamic_analysis":
                         st["current_stage"] = "report_generation"
-                    self._sync_artifacts()
                 elif state == "failed":
                     update_stage_status(st, "dynamic_analysis", "failed", safe_msg)
                     if st.get("current_stage") == "dynamic_analysis":
@@ -614,11 +650,12 @@ class ScanStateCheckpointer:
         with self._lock:
             st = self._ensure_state()
             clean_msg = self._clean_message(message)
-            actual_stat = "partial" if status in ("partial", "completed") else status
+            self._sync_artifacts()
+            completed = st["stages"]["dynamic_analysis"]["status"] == "completed"
+            actual_stat = ("completed" if completed else "partial") if status in ("partial", "completed") else status
             update_stage_status(st, "dynamic_analysis", actual_stat, clean_msg)
             if st.get("current_stage") == "dynamic_analysis":
                 st["current_stage"] = "report_generation"
-            self._sync_artifacts()
             self._safe_save()
 
     def on_failure(self, stage: str, error: str) -> None:
@@ -658,6 +695,18 @@ class ScanStateCheckpointer:
         if self._state is None:
             return
         st = self._state
+        try:
+            checkpointed = load_scan_state(self.run_dir)
+            was_registered = bool(checkpointed and checkpointed["artifacts"]["dynamic_analysis_report"].get("available"))
+        except (ScanStateValidationError, ScanStateCorruptionError):
+            was_registered = False
+        available = sync_dynamic_report_artifact(st, self.run_dir, complete_stage=False)
+        if available and not was_registered:
+            # Persist availability before upgrading the product stage.
+            self._safe_save()
+            if self.last_save_error is not None:
+                return
+        sync_dynamic_report_artifact(st, self.run_dir)
         static_report_path = self.run_dir / "static_analysis_report.json"
 
         if static_report_path.is_file():
@@ -728,7 +777,7 @@ def recover_scan_state(
     5. In crash edge cases where scan_state.json is corrupted or missing, but
        static_analysis_report.json exists on disk, reconstructs minimal product-safe state.
     6. Does not turn terminal completed/failed/partial scans into interrupted.
-    7. Keeps dynamic_analysis and agent_analysis strictly 'not_available'.
+    7. Reconciles dynamic completion against validated reports; agent remains unavailable.
     8. Atomically persists recovered updates to prevent repeated reconciliation.
     """
     dest_dir = Path(run_dir).resolve()
@@ -742,7 +791,7 @@ def recover_scan_state(
     # 1. Attempt to load existing scan_state.json
     if state_file.is_file():
         try:
-            state = load_scan_state(dest_dir)
+            state = load_scan_state(dest_dir, validate_artifacts=False)
         except ScanStateCorruptionError:
             is_corrupted = True
             logger.warning("Corrupted scan_state.json in '%s', checking for recoverable artifacts", dest_dir)
@@ -750,12 +799,19 @@ def recover_scan_state(
             is_corrupted = True
             logger.warning("Failed loading scan_state.json in '%s': %s", dest_dir, exc)
 
-    # 2. Reconstruction fallback if scan_state.json was missing or corrupted, but static report exists
+    # 2. Reconstruct from existing canonical evidence after state loss/corruption.
     if state is None:
-        if static_report_file.is_file():
+        recovered_dynamic = None
+        from src.dynamic.report.models import DynamicReportError, load_dynamic_analysis_report
+        try:
+            recovered_dynamic = load_dynamic_analysis_report(dest_dir, dest_dir.name)
+        except DynamicReportError:
+            if (dest_dir / "dynamic_analysis_report.json").is_file():
+                logger.warning("Invalid canonical dynamic report cannot support recovery")
+        if static_report_file.is_file() or recovered_dynamic is not None:
             rep_status = "completed"
             target_url = "https://unknown.target/app.apk"
-            package_name = None
+            package_name = (recovered_dynamic or {}).get("target", {}).get("package_name")
             try:
                 with open(static_report_file, "r", encoding="utf-8") as rf:
                     sdata = json.load(rf)
@@ -768,6 +824,7 @@ def recover_scan_state(
                     package_name = (
                         sdata.get("application", {}).get("package_name")
                         or sdata.get("package_name")
+                        or package_name
                     )
             except Exception:
                 pass
@@ -775,12 +832,12 @@ def recover_scan_state(
             state = create_initial_scan_state(
                 scan_id=dest_dir.name,
                 target_url=target_url,
-                platform="android",
+                platform=(recovered_dynamic or {}).get("target", {}).get("platform", "android"),
                 package_name=package_name,
             )
             state["overall_status"] = "interrupted"
             state["current_stage"] = "interrupted"
-            state["error"] = "Scan state recovered from static analysis artifact after interruption."
+            state["error"] = "Scan state recovered from canonical analysis artifacts after interruption."
             now = _utc_now_iso()
             state["timestamps"]["updated_at"] = now
             state["timestamps"]["completed_at"] = now
@@ -790,14 +847,19 @@ def recover_scan_state(
             state["stages"]["static_analysis"]["status"] = rep_status
             state["stages"]["static_analysis"]["message"] = "Static analysis recovered from disk artifact."
 
-            mark_artifact_available(state, "static_analysis_report", "static_analysis_report.json")
+            if static_report_file.is_file():
+                mark_artifact_available(state, "static_analysis_report", "static_analysis_report.json")
+            else:
+                state["stages"]["static_analysis"]["status"] = "not_available"
+                state["stages"]["static_analysis"]["message"] = "Static report unavailable during recovery."
+            sync_dynamic_report_artifact(state, dest_dir)
             if not state["stages"]["report_generation"].get("started_at"):
                 state["stages"]["report_generation"]["started_at"] = now
             update_stage_status(
                 state,
                 "report_generation",
                 "partial",
-                "Static analysis report available; additional analysis reports pending.",
+                "Canonical analysis reports available; additional analysis reports pending.",
             )
             try:
                 save_scan_state(dest_dir, state)
@@ -873,14 +935,15 @@ def recover_scan_state(
                 state["stages"]["report_generation"]["status"] = "pending" if state["overall_status"] != "interrupted" else "interrupted"
             needs_save = True
 
-    # Reconcile dynamic and agent: must be not_available
-    state["artifacts"]["dynamic_analysis_report"]["available"] = False
-    state["artifacts"]["dynamic_analysis_report"]["relative_path"] = None
-    state["stages"]["dynamic_analysis"]["status"] = "not_available"
-
+    # Recover dynamic availability from canonical integrity, never from execution status alone.
+    before_dynamic = json.dumps({"artifacts": state["artifacts"], "stages": state["stages"]}, sort_keys=True)
+    sync_dynamic_report_artifact(state, dest_dir)
     state["artifacts"]["agent_report"]["available"] = False
     state["artifacts"]["agent_report"]["relative_path"] = None
     state["stages"]["agent_analysis"]["status"] = "not_available"
+    state["stages"]["agent_analysis"]["message"] = "Not available in this scan"
+    if before_dynamic != json.dumps({"artifacts": state["artifacts"], "stages": state["stages"]}, sort_keys=True):
+        needs_save = True
 
     if needs_save:
         try:

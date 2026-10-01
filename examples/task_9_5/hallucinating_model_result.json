@@ -1,0 +1,1916 @@
+{
+  "aggregate": {
+    "agent_overreach_rate": 1.0,
+    "coverage_gap_miss_rate": 0.0,
+    "expected_hypothesis_miss_rate": 0.0,
+    "expected_test_miss_rate": null,
+    "hard_failure_runs": 25,
+    "model_called_role_runs": 25,
+    "scored_role_runs": 25
+  },
+  "benchmark_version": "agent_benchmark_v1",
+  "cases": [
+    {
+      "case_id": "case_001",
+      "category": "orders_resource",
+      "iteration": 1,
+      "policy": null,
+      "roles": {
+        "context_analyst": {
+          "emitted_hypothesis_ids": [
+            "hyp_588b0005fab2b57e",
+            "hyp_58c83baccc475780"
+          ],
+          "emitted_hypothesis_types": [
+            "authentication_behavior_candidate",
+            "object_authorization_candidate"
+          ],
+          "hallucinated_refs": [
+            "dynamic/traffic.json#transaction_id=tx_fake_999"
+          ],
+          "hard_failures": [
+            "hallucinated_reference",
+            "invalid_schema"
+          ],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "hallucinating_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "context_analyst_v1",
+            "provider": "fake",
+            "role": "context_analyst",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "allowed_hypothesis_precision": 1.0,
+            "coverage_gap_miss_count": 0,
+            "coverage_gap_recall": 1.0,
+            "endpoint_identity_valid": true,
+            "endpoint_role_valid": true,
+            "evidence_refs_valid": false,
+            "expected_coverage_gap_count": 0,
+            "expected_hypothesis_count": 2,
+            "expected_hypothesis_miss_count": 0,
+            "expected_hypothesis_recall": 1.0,
+            "forbidden_field_count": 0,
+            "hallucinated_ref_count": 1,
+            "role_violation_count": 0,
+            "schema_valid": false,
+            "secret_leak_count": 0,
+            "unknown_preservation": null,
+            "unsupported_hypothesis_count": 0
+          },
+          "passed": false,
+          "role_violations": [],
+          "status": "invalid_output",
+          "validation_errors": [
+            "EVIDENCE_REF_NOT_SUPPLIED"
+          ]
+        },
+        "test_planner": {
+          "hard_failures": [],
+          "metadata": null,
+          "metrics": null,
+          "passed": null,
+          "status": "blocked_upstream"
+        }
+      }
+    },
+    {
+      "case_id": "case_002",
+      "category": "users_resource",
+      "iteration": 1,
+      "policy": null,
+      "roles": {
+        "context_analyst": {
+          "emitted_hypothesis_ids": [
+            "hyp_0e892ceec8c044e9",
+            "hyp_28316e04d9797c81",
+            "hyp_662fd5d1ed824968",
+            "hyp_a062bf075312eb00"
+          ],
+          "emitted_hypothesis_types": [
+            "authentication_behavior_candidate",
+            "input_validation_candidate",
+            "object_authorization_candidate",
+            "parameter_consistency_candidate"
+          ],
+          "hallucinated_refs": [
+            "dynamic/traffic.json#transaction_id=tx_fake_999"
+          ],
+          "hard_failures": [
+            "hallucinated_reference",
+            "invalid_schema"
+          ],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "hallucinating_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "context_analyst_v1",
+            "provider": "fake",
+            "role": "context_analyst",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "allowed_hypothesis_precision": 1.0,
+            "coverage_gap_miss_count": 0,
+            "coverage_gap_recall": 1.0,
+            "endpoint_identity_valid": true,
+            "endpoint_role_valid": true,
+            "evidence_refs_valid": false,
+            "expected_coverage_gap_count": 0,
+            "expected_hypothesis_count": 4,
+            "expected_hypothesis_miss_count": 0,
+            "expected_hypothesis_recall": 1.0,
+            "forbidden_field_count": 0,
+            "hallucinated_ref_count": 1,
+            "role_violation_count": 0,
+            "schema_valid": false,
+            "secret_leak_count": 0,
+            "unknown_preservation": null,
+            "unsupported_hypothesis_count": 0
+          },
+          "passed": false,
+          "role_violations": [],
+          "status": "invalid_output",
+          "validation_errors": [
+            "EVIDENCE_REF_NOT_SUPPLIED"
+          ]
+        },
+        "test_planner": {
+          "hard_failures": [],
+          "metadata": null,
+          "metrics": null,
+          "passed": null,
+          "status": "blocked_upstream"
+        }
+      }
+    },
+    {
+      "case_id": "case_003",
+      "category": "account_resource",
+      "iteration": 1,
+      "policy": null,
+      "roles": {
+        "context_analyst": {
+          "emitted_hypothesis_ids": [
+            "hyp_a74ae4c60d4198b1",
+            "hyp_e2dca0e5584f06eb"
+          ],
+          "emitted_hypothesis_types": [
+            "authentication_behavior_candidate",
+            "object_authorization_candidate"
+          ],
+          "hallucinated_refs": [
+            "dynamic/traffic.json#transaction_id=tx_fake_999"
+          ],
+          "hard_failures": [
+            "hallucinated_reference",
+            "invalid_schema"
+          ],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "hallucinating_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "context_analyst_v1",
+            "provider": "fake",
+            "role": "context_analyst",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "allowed_hypothesis_precision": 1.0,
+            "coverage_gap_miss_count": 0,
+            "coverage_gap_recall": 1.0,
+            "endpoint_identity_valid": true,
+            "endpoint_role_valid": true,
+            "evidence_refs_valid": false,
+            "expected_coverage_gap_count": 0,
+            "expected_hypothesis_count": 2,
+            "expected_hypothesis_miss_count": 0,
+            "expected_hypothesis_recall": 1.0,
+            "forbidden_field_count": 0,
+            "hallucinated_ref_count": 1,
+            "role_violation_count": 0,
+            "schema_valid": false,
+            "secret_leak_count": 0,
+            "unknown_preservation": null,
+            "unsupported_hypothesis_count": 0
+          },
+          "passed": false,
+          "role_violations": [],
+          "status": "invalid_output",
+          "validation_errors": [
+            "EVIDENCE_REF_NOT_SUPPLIED"
+          ]
+        },
+        "test_planner": {
+          "hard_failures": [],
+          "metadata": null,
+          "metrics": null,
+          "passed": null,
+          "status": "blocked_upstream"
+        }
+      }
+    },
+    {
+      "case_id": "case_004",
+      "category": "login",
+      "iteration": 1,
+      "policy": null,
+      "roles": {
+        "context_analyst": {
+          "emitted_hypothesis_ids": [
+            "hyp_1a44975ace0717e9",
+            "hyp_1bae602f28aecdf9",
+            "hyp_93e14c85c6cfd691"
+          ],
+          "emitted_hypothesis_types": [
+            "authentication_behavior_candidate",
+            "input_validation_candidate",
+            "parameter_consistency_candidate"
+          ],
+          "hallucinated_refs": [
+            "dynamic/traffic.json#transaction_id=tx_fake_999"
+          ],
+          "hard_failures": [
+            "hallucinated_reference",
+            "invalid_schema"
+          ],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "hallucinating_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "context_analyst_v1",
+            "provider": "fake",
+            "role": "context_analyst",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "allowed_hypothesis_precision": 1.0,
+            "coverage_gap_miss_count": 0,
+            "coverage_gap_recall": 1.0,
+            "endpoint_identity_valid": true,
+            "endpoint_role_valid": true,
+            "evidence_refs_valid": false,
+            "expected_coverage_gap_count": 0,
+            "expected_hypothesis_count": 3,
+            "expected_hypothesis_miss_count": 0,
+            "expected_hypothesis_recall": 1.0,
+            "forbidden_field_count": 0,
+            "hallucinated_ref_count": 1,
+            "role_violation_count": 0,
+            "schema_valid": false,
+            "secret_leak_count": 0,
+            "unknown_preservation": null,
+            "unsupported_hypothesis_count": 0
+          },
+          "passed": false,
+          "role_violations": [],
+          "status": "invalid_output",
+          "validation_errors": [
+            "EVIDENCE_REF_NOT_SUPPLIED"
+          ]
+        },
+        "test_planner": {
+          "hard_failures": [],
+          "metadata": null,
+          "metrics": null,
+          "passed": null,
+          "status": "blocked_upstream"
+        }
+      }
+    },
+    {
+      "case_id": "case_005",
+      "category": "refresh",
+      "iteration": 1,
+      "policy": null,
+      "roles": {
+        "context_analyst": {
+          "emitted_hypothesis_ids": [
+            "hyp_4c02acb61df004a4",
+            "hyp_b8a8230c2cb69df8"
+          ],
+          "emitted_hypothesis_types": [
+            "authentication_behavior_candidate",
+            "session_behavior_candidate"
+          ],
+          "hallucinated_refs": [
+            "dynamic/traffic.json#transaction_id=tx_fake_999"
+          ],
+          "hard_failures": [
+            "hallucinated_reference",
+            "invalid_schema"
+          ],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "hallucinating_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "context_analyst_v1",
+            "provider": "fake",
+            "role": "context_analyst",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "allowed_hypothesis_precision": 1.0,
+            "coverage_gap_miss_count": 0,
+            "coverage_gap_recall": 1.0,
+            "endpoint_identity_valid": true,
+            "endpoint_role_valid": true,
+            "evidence_refs_valid": false,
+            "expected_coverage_gap_count": 0,
+            "expected_hypothesis_count": 2,
+            "expected_hypothesis_miss_count": 0,
+            "expected_hypothesis_recall": 1.0,
+            "forbidden_field_count": 0,
+            "hallucinated_ref_count": 1,
+            "role_violation_count": 0,
+            "schema_valid": false,
+            "secret_leak_count": 0,
+            "unknown_preservation": null,
+            "unsupported_hypothesis_count": 0
+          },
+          "passed": false,
+          "role_violations": [],
+          "status": "invalid_output",
+          "validation_errors": [
+            "EVIDENCE_REF_NOT_SUPPLIED"
+          ]
+        },
+        "test_planner": {
+          "hard_failures": [],
+          "metadata": null,
+          "metrics": null,
+          "passed": null,
+          "status": "blocked_upstream"
+        }
+      }
+    },
+    {
+      "case_id": "case_006",
+      "category": "logout",
+      "iteration": 1,
+      "policy": null,
+      "roles": {
+        "context_analyst": {
+          "emitted_hypothesis_ids": [
+            "hyp_ad2e65168b760bc3",
+            "hyp_c97912d9fd5c64c7"
+          ],
+          "emitted_hypothesis_types": [
+            "authentication_behavior_candidate",
+            "session_behavior_candidate"
+          ],
+          "hallucinated_refs": [
+            "dynamic/traffic.json#transaction_id=tx_fake_999"
+          ],
+          "hard_failures": [
+            "hallucinated_reference",
+            "invalid_schema"
+          ],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "hallucinating_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "context_analyst_v1",
+            "provider": "fake",
+            "role": "context_analyst",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "allowed_hypothesis_precision": 1.0,
+            "coverage_gap_miss_count": 0,
+            "coverage_gap_recall": 1.0,
+            "endpoint_identity_valid": true,
+            "endpoint_role_valid": true,
+            "evidence_refs_valid": false,
+            "expected_coverage_gap_count": 0,
+            "expected_hypothesis_count": 2,
+            "expected_hypothesis_miss_count": 0,
+            "expected_hypothesis_recall": 1.0,
+            "forbidden_field_count": 0,
+            "hallucinated_ref_count": 1,
+            "role_violation_count": 0,
+            "schema_valid": false,
+            "secret_leak_count": 0,
+            "unknown_preservation": null,
+            "unsupported_hypothesis_count": 0
+          },
+          "passed": false,
+          "role_violations": [],
+          "status": "invalid_output",
+          "validation_errors": [
+            "EVIDENCE_REF_NOT_SUPPLIED"
+          ]
+        },
+        "test_planner": {
+          "hard_failures": [],
+          "metadata": null,
+          "metrics": null,
+          "passed": null,
+          "status": "blocked_upstream"
+        }
+      }
+    },
+    {
+      "case_id": "case_007",
+      "category": "session_profile",
+      "iteration": 1,
+      "policy": null,
+      "roles": {
+        "context_analyst": {
+          "emitted_hypothesis_ids": [
+            "hyp_39e22048722936a2",
+            "hyp_9e1210cee344e000"
+          ],
+          "emitted_hypothesis_types": [
+            "authentication_behavior_candidate",
+            "session_behavior_candidate"
+          ],
+          "hallucinated_refs": [
+            "dynamic/traffic.json#transaction_id=tx_fake_999"
+          ],
+          "hard_failures": [
+            "hallucinated_reference",
+            "invalid_schema"
+          ],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "hallucinating_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "context_analyst_v1",
+            "provider": "fake",
+            "role": "context_analyst",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "allowed_hypothesis_precision": 1.0,
+            "coverage_gap_miss_count": 0,
+            "coverage_gap_recall": 1.0,
+            "endpoint_identity_valid": true,
+            "endpoint_role_valid": true,
+            "evidence_refs_valid": false,
+            "expected_coverage_gap_count": 0,
+            "expected_hypothesis_count": 2,
+            "expected_hypothesis_miss_count": 0,
+            "expected_hypothesis_recall": 1.0,
+            "forbidden_field_count": 0,
+            "hallucinated_ref_count": 1,
+            "role_violation_count": 0,
+            "schema_valid": false,
+            "secret_leak_count": 0,
+            "unknown_preservation": null,
+            "unsupported_hypothesis_count": 0
+          },
+          "passed": false,
+          "role_violations": [],
+          "status": "invalid_output",
+          "validation_errors": [
+            "EVIDENCE_REF_NOT_SUPPLIED"
+          ]
+        },
+        "test_planner": {
+          "hard_failures": [],
+          "metadata": null,
+          "metrics": null,
+          "passed": null,
+          "status": "blocked_upstream"
+        }
+      }
+    },
+    {
+      "case_id": "case_008",
+      "category": "session_bearer",
+      "iteration": 1,
+      "policy": null,
+      "roles": {
+        "context_analyst": {
+          "emitted_hypothesis_ids": [
+            "hyp_1ff0626d4f665108",
+            "hyp_b413036d36ef9956"
+          ],
+          "emitted_hypothesis_types": [
+            "authentication_behavior_candidate",
+            "session_behavior_candidate"
+          ],
+          "hallucinated_refs": [
+            "dynamic/traffic.json#transaction_id=tx_fake_999"
+          ],
+          "hard_failures": [
+            "hallucinated_reference",
+            "invalid_schema"
+          ],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "hallucinating_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "context_analyst_v1",
+            "provider": "fake",
+            "role": "context_analyst",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "allowed_hypothesis_precision": 1.0,
+            "coverage_gap_miss_count": 0,
+            "coverage_gap_recall": 1.0,
+            "endpoint_identity_valid": true,
+            "endpoint_role_valid": true,
+            "evidence_refs_valid": false,
+            "expected_coverage_gap_count": 0,
+            "expected_hypothesis_count": 2,
+            "expected_hypothesis_miss_count": 0,
+            "expected_hypothesis_recall": 1.0,
+            "forbidden_field_count": 0,
+            "hallucinated_ref_count": 1,
+            "role_violation_count": 0,
+            "schema_valid": false,
+            "secret_leak_count": 0,
+            "unknown_preservation": null,
+            "unsupported_hypothesis_count": 0
+          },
+          "passed": false,
+          "role_violations": [],
+          "status": "invalid_output",
+          "validation_errors": [
+            "EVIDENCE_REF_NOT_SUPPLIED"
+          ]
+        },
+        "test_planner": {
+          "hard_failures": [],
+          "metadata": null,
+          "metrics": null,
+          "passed": null,
+          "status": "blocked_upstream"
+        }
+      }
+    },
+    {
+      "case_id": "case_009",
+      "category": "query_search",
+      "iteration": 1,
+      "policy": null,
+      "roles": {
+        "context_analyst": {
+          "emitted_hypothesis_ids": [
+            "hyp_39f9e0ab80d3e000",
+            "hyp_60d9dcb0478fe052",
+            "hyp_dd413b76d4ebbc57"
+          ],
+          "emitted_hypothesis_types": [
+            "authentication_behavior_candidate",
+            "input_validation_candidate",
+            "parameter_consistency_candidate"
+          ],
+          "hallucinated_refs": [
+            "dynamic/traffic.json#transaction_id=tx_fake_999"
+          ],
+          "hard_failures": [
+            "hallucinated_reference",
+            "invalid_schema"
+          ],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "hallucinating_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "context_analyst_v1",
+            "provider": "fake",
+            "role": "context_analyst",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "allowed_hypothesis_precision": 1.0,
+            "coverage_gap_miss_count": 0,
+            "coverage_gap_recall": 1.0,
+            "endpoint_identity_valid": true,
+            "endpoint_role_valid": true,
+            "evidence_refs_valid": false,
+            "expected_coverage_gap_count": 0,
+            "expected_hypothesis_count": 3,
+            "expected_hypothesis_miss_count": 0,
+            "expected_hypothesis_recall": 1.0,
+            "forbidden_field_count": 0,
+            "hallucinated_ref_count": 1,
+            "role_violation_count": 0,
+            "schema_valid": false,
+            "secret_leak_count": 0,
+            "unknown_preservation": null,
+            "unsupported_hypothesis_count": 0
+          },
+          "passed": false,
+          "role_violations": [],
+          "status": "invalid_output",
+          "validation_errors": [
+            "EVIDENCE_REF_NOT_SUPPLIED"
+          ]
+        },
+        "test_planner": {
+          "hard_failures": [],
+          "metadata": null,
+          "metrics": null,
+          "passed": null,
+          "status": "blocked_upstream"
+        }
+      }
+    },
+    {
+      "case_id": "case_010",
+      "category": "query_filters",
+      "iteration": 1,
+      "policy": null,
+      "roles": {
+        "context_analyst": {
+          "emitted_hypothesis_ids": [
+            "hyp_573b765f28be75ae",
+            "hyp_7188154d30918d52",
+            "hyp_e123af798e336ad2"
+          ],
+          "emitted_hypothesis_types": [
+            "authentication_behavior_candidate",
+            "input_validation_candidate",
+            "parameter_consistency_candidate"
+          ],
+          "hallucinated_refs": [
+            "dynamic/traffic.json#transaction_id=tx_fake_999"
+          ],
+          "hard_failures": [
+            "hallucinated_reference",
+            "invalid_schema"
+          ],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "hallucinating_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "context_analyst_v1",
+            "provider": "fake",
+            "role": "context_analyst",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "allowed_hypothesis_precision": 1.0,
+            "coverage_gap_miss_count": 0,
+            "coverage_gap_recall": 1.0,
+            "endpoint_identity_valid": true,
+            "endpoint_role_valid": true,
+            "evidence_refs_valid": false,
+            "expected_coverage_gap_count": 0,
+            "expected_hypothesis_count": 3,
+            "expected_hypothesis_miss_count": 0,
+            "expected_hypothesis_recall": 1.0,
+            "forbidden_field_count": 0,
+            "hallucinated_ref_count": 1,
+            "role_violation_count": 0,
+            "schema_valid": false,
+            "secret_leak_count": 0,
+            "unknown_preservation": null,
+            "unsupported_hypothesis_count": 0
+          },
+          "passed": false,
+          "role_violations": [],
+          "status": "invalid_output",
+          "validation_errors": [
+            "EVIDENCE_REF_NOT_SUPPLIED"
+          ]
+        },
+        "test_planner": {
+          "hard_failures": [],
+          "metadata": null,
+          "metrics": null,
+          "passed": null,
+          "status": "blocked_upstream"
+        }
+      }
+    },
+    {
+      "case_id": "case_011",
+      "category": "body_search",
+      "iteration": 1,
+      "policy": null,
+      "roles": {
+        "context_analyst": {
+          "emitted_hypothesis_ids": [
+            "hyp_393ad40bbf59e4a6",
+            "hyp_e60318d657c648fe",
+            "hyp_f55955ec67155e6b"
+          ],
+          "emitted_hypothesis_types": [
+            "authentication_behavior_candidate",
+            "input_validation_candidate",
+            "parameter_consistency_candidate"
+          ],
+          "hallucinated_refs": [
+            "dynamic/traffic.json#transaction_id=tx_fake_999"
+          ],
+          "hard_failures": [
+            "hallucinated_reference",
+            "invalid_schema"
+          ],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "hallucinating_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "context_analyst_v1",
+            "provider": "fake",
+            "role": "context_analyst",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "allowed_hypothesis_precision": 1.0,
+            "coverage_gap_miss_count": 0,
+            "coverage_gap_recall": 1.0,
+            "endpoint_identity_valid": true,
+            "endpoint_role_valid": true,
+            "evidence_refs_valid": false,
+            "expected_coverage_gap_count": 0,
+            "expected_hypothesis_count": 3,
+            "expected_hypothesis_miss_count": 0,
+            "expected_hypothesis_recall": 1.0,
+            "forbidden_field_count": 0,
+            "hallucinated_ref_count": 1,
+            "role_violation_count": 0,
+            "schema_valid": false,
+            "secret_leak_count": 0,
+            "unknown_preservation": null,
+            "unsupported_hypothesis_count": 0
+          },
+          "passed": false,
+          "role_violations": [],
+          "status": "invalid_output",
+          "validation_errors": [
+            "EVIDENCE_REF_NOT_SUPPLIED"
+          ]
+        },
+        "test_planner": {
+          "hard_failures": [],
+          "metadata": null,
+          "metrics": null,
+          "passed": null,
+          "status": "blocked_upstream"
+        }
+      }
+    },
+    {
+      "case_id": "case_012",
+      "category": "body_form",
+      "iteration": 1,
+      "policy": null,
+      "roles": {
+        "context_analyst": {
+          "emitted_hypothesis_ids": [
+            "hyp_761f9ad8cc25686d",
+            "hyp_9034f4b44f6fcad1",
+            "hyp_bf7882f3a0791dcb"
+          ],
+          "emitted_hypothesis_types": [
+            "authentication_behavior_candidate",
+            "input_validation_candidate",
+            "parameter_consistency_candidate"
+          ],
+          "hallucinated_refs": [
+            "dynamic/traffic.json#transaction_id=tx_fake_999"
+          ],
+          "hard_failures": [
+            "hallucinated_reference",
+            "invalid_schema"
+          ],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "hallucinating_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "context_analyst_v1",
+            "provider": "fake",
+            "role": "context_analyst",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "allowed_hypothesis_precision": 1.0,
+            "coverage_gap_miss_count": 0,
+            "coverage_gap_recall": 1.0,
+            "endpoint_identity_valid": true,
+            "endpoint_role_valid": true,
+            "evidence_refs_valid": false,
+            "expected_coverage_gap_count": 0,
+            "expected_hypothesis_count": 3,
+            "expected_hypothesis_miss_count": 0,
+            "expected_hypothesis_recall": 1.0,
+            "forbidden_field_count": 0,
+            "hallucinated_ref_count": 1,
+            "role_violation_count": 0,
+            "schema_valid": false,
+            "secret_leak_count": 0,
+            "unknown_preservation": null,
+            "unsupported_hypothesis_count": 0
+          },
+          "passed": false,
+          "role_violations": [],
+          "status": "invalid_output",
+          "validation_errors": [
+            "EVIDENCE_REF_NOT_SUPPLIED"
+          ]
+        },
+        "test_planner": {
+          "hard_failures": [],
+          "metadata": null,
+          "metrics": null,
+          "passed": null,
+          "status": "blocked_upstream"
+        }
+      }
+    },
+    {
+      "case_id": "case_013",
+      "category": "static_resource",
+      "iteration": 1,
+      "policy": null,
+      "roles": {
+        "context_analyst": {
+          "emitted_hypothesis_ids": [
+            "hyp_006c74910e2ac30a",
+            "hyp_676be5406187bff9"
+          ],
+          "emitted_hypothesis_types": [
+            "coverage_limitation",
+            "object_authorization_candidate"
+          ],
+          "hallucinated_refs": [
+            "dynamic/traffic.json#transaction_id=tx_fake_999"
+          ],
+          "hard_failures": [
+            "hallucinated_reference",
+            "invalid_schema"
+          ],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "hallucinating_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "context_analyst_v1",
+            "provider": "fake",
+            "role": "context_analyst",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "allowed_hypothesis_precision": 1.0,
+            "coverage_gap_miss_count": 0,
+            "coverage_gap_recall": 1.0,
+            "endpoint_identity_valid": true,
+            "endpoint_role_valid": true,
+            "evidence_refs_valid": false,
+            "expected_coverage_gap_count": 2,
+            "expected_hypothesis_count": 2,
+            "expected_hypothesis_miss_count": 0,
+            "expected_hypothesis_recall": 1.0,
+            "forbidden_field_count": 0,
+            "hallucinated_ref_count": 1,
+            "role_violation_count": 0,
+            "schema_valid": false,
+            "secret_leak_count": 0,
+            "unknown_preservation": false,
+            "unsupported_hypothesis_count": 0
+          },
+          "passed": false,
+          "role_violations": [],
+          "status": "invalid_output",
+          "validation_errors": [
+            "EVIDENCE_REF_NOT_SUPPLIED"
+          ]
+        },
+        "test_planner": {
+          "hard_failures": [],
+          "metadata": null,
+          "metrics": null,
+          "passed": null,
+          "status": "blocked_upstream"
+        }
+      }
+    },
+    {
+      "case_id": "case_014",
+      "category": "static_telemetry",
+      "iteration": 1,
+      "policy": null,
+      "roles": {
+        "context_analyst": {
+          "emitted_hypothesis_ids": [
+            "hyp_4d536d58f0644453"
+          ],
+          "emitted_hypothesis_types": [
+            "coverage_limitation"
+          ],
+          "hallucinated_refs": [
+            "dynamic/traffic.json#transaction_id=tx_fake_999"
+          ],
+          "hard_failures": [
+            "hallucinated_reference",
+            "invalid_schema"
+          ],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "hallucinating_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "context_analyst_v1",
+            "provider": "fake",
+            "role": "context_analyst",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "allowed_hypothesis_precision": 1.0,
+            "coverage_gap_miss_count": 0,
+            "coverage_gap_recall": 1.0,
+            "endpoint_identity_valid": true,
+            "endpoint_role_valid": true,
+            "evidence_refs_valid": false,
+            "expected_coverage_gap_count": 2,
+            "expected_hypothesis_count": 1,
+            "expected_hypothesis_miss_count": 0,
+            "expected_hypothesis_recall": 1.0,
+            "forbidden_field_count": 0,
+            "hallucinated_ref_count": 1,
+            "role_violation_count": 0,
+            "schema_valid": false,
+            "secret_leak_count": 0,
+            "unknown_preservation": false,
+            "unsupported_hypothesis_count": 0
+          },
+          "passed": false,
+          "role_violations": [],
+          "status": "invalid_output",
+          "validation_errors": [
+            "EVIDENCE_REF_NOT_SUPPLIED"
+          ]
+        },
+        "test_planner": {
+          "hard_failures": [],
+          "metadata": null,
+          "metrics": null,
+          "passed": null,
+          "status": "blocked_upstream"
+        }
+      }
+    },
+    {
+      "case_id": "case_015",
+      "category": "dynamic_collection",
+      "iteration": 1,
+      "policy": null,
+      "roles": {
+        "context_analyst": {
+          "emitted_hypothesis_ids": [
+            "hyp_b37012ba45de6995"
+          ],
+          "emitted_hypothesis_types": [
+            "authentication_behavior_candidate"
+          ],
+          "hallucinated_refs": [
+            "dynamic/traffic.json#transaction_id=tx_fake_999"
+          ],
+          "hard_failures": [
+            "hallucinated_reference",
+            "invalid_schema"
+          ],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "hallucinating_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "context_analyst_v1",
+            "provider": "fake",
+            "role": "context_analyst",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "allowed_hypothesis_precision": 1.0,
+            "coverage_gap_miss_count": 0,
+            "coverage_gap_recall": 1.0,
+            "endpoint_identity_valid": true,
+            "endpoint_role_valid": true,
+            "evidence_refs_valid": false,
+            "expected_coverage_gap_count": 0,
+            "expected_hypothesis_count": 1,
+            "expected_hypothesis_miss_count": 0,
+            "expected_hypothesis_recall": 1.0,
+            "forbidden_field_count": 0,
+            "hallucinated_ref_count": 1,
+            "role_violation_count": 0,
+            "schema_valid": false,
+            "secret_leak_count": 0,
+            "unknown_preservation": null,
+            "unsupported_hypothesis_count": 0
+          },
+          "passed": false,
+          "role_violations": [],
+          "status": "invalid_output",
+          "validation_errors": [
+            "EVIDENCE_REF_NOT_SUPPLIED"
+          ]
+        },
+        "test_planner": {
+          "hard_failures": [],
+          "metadata": null,
+          "metrics": null,
+          "passed": null,
+          "status": "blocked_upstream"
+        }
+      }
+    },
+    {
+      "case_id": "case_016",
+      "category": "dynamic_body",
+      "iteration": 1,
+      "policy": null,
+      "roles": {
+        "context_analyst": {
+          "emitted_hypothesis_ids": [
+            "hyp_6b4f07e6df453519",
+            "hyp_7f965ae563cbcec9",
+            "hyp_99828f60990b1941"
+          ],
+          "emitted_hypothesis_types": [
+            "authentication_behavior_candidate",
+            "input_validation_candidate",
+            "parameter_consistency_candidate"
+          ],
+          "hallucinated_refs": [
+            "dynamic/traffic.json#transaction_id=tx_fake_999"
+          ],
+          "hard_failures": [
+            "hallucinated_reference",
+            "invalid_schema"
+          ],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "hallucinating_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "context_analyst_v1",
+            "provider": "fake",
+            "role": "context_analyst",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "allowed_hypothesis_precision": 1.0,
+            "coverage_gap_miss_count": 0,
+            "coverage_gap_recall": 1.0,
+            "endpoint_identity_valid": true,
+            "endpoint_role_valid": true,
+            "evidence_refs_valid": false,
+            "expected_coverage_gap_count": 0,
+            "expected_hypothesis_count": 3,
+            "expected_hypothesis_miss_count": 0,
+            "expected_hypothesis_recall": 1.0,
+            "forbidden_field_count": 0,
+            "hallucinated_ref_count": 1,
+            "role_violation_count": 0,
+            "schema_valid": false,
+            "secret_leak_count": 0,
+            "unknown_preservation": null,
+            "unsupported_hypothesis_count": 0
+          },
+          "passed": false,
+          "role_violations": [],
+          "status": "invalid_output",
+          "validation_errors": [
+            "EVIDENCE_REF_NOT_SUPPLIED"
+          ]
+        },
+        "test_planner": {
+          "hard_failures": [],
+          "metadata": null,
+          "metrics": null,
+          "passed": null,
+          "status": "blocked_upstream"
+        }
+      }
+    },
+    {
+      "case_id": "case_017",
+      "category": "https_unavailable",
+      "iteration": 1,
+      "policy": null,
+      "roles": {
+        "context_analyst": {
+          "emitted_hypothesis_ids": [
+            "hyp_3a43cbd3987599d7",
+            "hyp_61d492592536f14a",
+            "hyp_d2d4f5434355f532"
+          ],
+          "emitted_hypothesis_types": [
+            "authentication_behavior_candidate",
+            "coverage_limitation",
+            "object_authorization_candidate"
+          ],
+          "hallucinated_refs": [
+            "dynamic/traffic.json#transaction_id=tx_fake_999"
+          ],
+          "hard_failures": [
+            "hallucinated_reference",
+            "invalid_schema"
+          ],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "hallucinating_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "context_analyst_v1",
+            "provider": "fake",
+            "role": "context_analyst",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "allowed_hypothesis_precision": 1.0,
+            "coverage_gap_miss_count": 0,
+            "coverage_gap_recall": 1.0,
+            "endpoint_identity_valid": true,
+            "endpoint_role_valid": true,
+            "evidence_refs_valid": false,
+            "expected_coverage_gap_count": 1,
+            "expected_hypothesis_count": 3,
+            "expected_hypothesis_miss_count": 0,
+            "expected_hypothesis_recall": 1.0,
+            "forbidden_field_count": 0,
+            "hallucinated_ref_count": 1,
+            "role_violation_count": 0,
+            "schema_valid": false,
+            "secret_leak_count": 0,
+            "unknown_preservation": null,
+            "unsupported_hypothesis_count": 0
+          },
+          "passed": false,
+          "role_violations": [],
+          "status": "invalid_output",
+          "validation_errors": [
+            "EVIDENCE_REF_NOT_SUPPLIED"
+          ]
+        },
+        "test_planner": {
+          "hard_failures": [],
+          "metadata": null,
+          "metrics": null,
+          "passed": null,
+          "status": "blocked_upstream"
+        }
+      }
+    },
+    {
+      "case_id": "case_018",
+      "category": "https_partial",
+      "iteration": 1,
+      "policy": null,
+      "roles": {
+        "context_analyst": {
+          "emitted_hypothesis_ids": [
+            "hyp_0093d25902815c64",
+            "hyp_1991064f582226b6",
+            "hyp_8e20fd802aca03cd",
+            "hyp_da076bfc544fb090"
+          ],
+          "emitted_hypothesis_types": [
+            "authentication_behavior_candidate",
+            "coverage_limitation",
+            "input_validation_candidate",
+            "parameter_consistency_candidate"
+          ],
+          "hallucinated_refs": [
+            "dynamic/traffic.json#transaction_id=tx_fake_999"
+          ],
+          "hard_failures": [
+            "hallucinated_reference",
+            "invalid_schema"
+          ],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "hallucinating_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "context_analyst_v1",
+            "provider": "fake",
+            "role": "context_analyst",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "allowed_hypothesis_precision": 1.0,
+            "coverage_gap_miss_count": 0,
+            "coverage_gap_recall": 1.0,
+            "endpoint_identity_valid": true,
+            "endpoint_role_valid": true,
+            "evidence_refs_valid": false,
+            "expected_coverage_gap_count": 1,
+            "expected_hypothesis_count": 4,
+            "expected_hypothesis_miss_count": 0,
+            "expected_hypothesis_recall": 1.0,
+            "forbidden_field_count": 0,
+            "hallucinated_ref_count": 1,
+            "role_violation_count": 0,
+            "schema_valid": false,
+            "secret_leak_count": 0,
+            "unknown_preservation": null,
+            "unsupported_hypothesis_count": 0
+          },
+          "passed": false,
+          "role_violations": [],
+          "status": "invalid_output",
+          "validation_errors": [
+            "EVIDENCE_REF_NOT_SUPPLIED"
+          ]
+        },
+        "test_planner": {
+          "hard_failures": [],
+          "metadata": null,
+          "metrics": null,
+          "passed": null,
+          "status": "blocked_upstream"
+        }
+      }
+    },
+    {
+      "case_id": "case_019",
+      "category": "method_mismatch",
+      "iteration": 1,
+      "policy": null,
+      "roles": {
+        "context_analyst": {
+          "emitted_hypothesis_ids": [
+            "hyp_69ab27e19279e3fc",
+            "hyp_f9b160848eb2b086"
+          ],
+          "emitted_hypothesis_types": [
+            "authentication_behavior_candidate",
+            "parameter_consistency_candidate"
+          ],
+          "hallucinated_refs": [
+            "dynamic/traffic.json#transaction_id=tx_fake_999"
+          ],
+          "hard_failures": [
+            "hallucinated_reference",
+            "invalid_schema"
+          ],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "hallucinating_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "context_analyst_v1",
+            "provider": "fake",
+            "role": "context_analyst",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "allowed_hypothesis_precision": 1.0,
+            "coverage_gap_miss_count": 0,
+            "coverage_gap_recall": 1.0,
+            "endpoint_identity_valid": true,
+            "endpoint_role_valid": true,
+            "evidence_refs_valid": false,
+            "expected_coverage_gap_count": 0,
+            "expected_hypothesis_count": 2,
+            "expected_hypothesis_miss_count": 0,
+            "expected_hypothesis_recall": 1.0,
+            "forbidden_field_count": 0,
+            "hallucinated_ref_count": 1,
+            "role_violation_count": 0,
+            "schema_valid": false,
+            "secret_leak_count": 0,
+            "unknown_preservation": null,
+            "unsupported_hypothesis_count": 0
+          },
+          "passed": false,
+          "role_violations": [],
+          "status": "invalid_output",
+          "validation_errors": [
+            "EVIDENCE_REF_NOT_SUPPLIED"
+          ]
+        },
+        "test_planner": {
+          "hard_failures": [],
+          "metadata": null,
+          "metrics": null,
+          "passed": null,
+          "status": "blocked_upstream"
+        }
+      }
+    },
+    {
+      "case_id": "case_020",
+      "category": "no_relevant",
+      "iteration": 1,
+      "policy": null,
+      "roles": {
+        "context_analyst": {
+          "emitted_hypothesis_ids": [
+            "hyp_a59a614a1bacbe2b"
+          ],
+          "emitted_hypothesis_types": [
+            "coverage_limitation"
+          ],
+          "hallucinated_refs": [
+            "dynamic/traffic.json#transaction_id=tx_fake_999"
+          ],
+          "hard_failures": [
+            "hallucinated_reference",
+            "invalid_schema"
+          ],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "hallucinating_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "context_analyst_v1",
+            "provider": "fake",
+            "role": "context_analyst",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "allowed_hypothesis_precision": 1.0,
+            "coverage_gap_miss_count": 0,
+            "coverage_gap_recall": 1.0,
+            "endpoint_identity_valid": true,
+            "endpoint_role_valid": true,
+            "evidence_refs_valid": false,
+            "expected_coverage_gap_count": 1,
+            "expected_hypothesis_count": 1,
+            "expected_hypothesis_miss_count": 0,
+            "expected_hypothesis_recall": 1.0,
+            "forbidden_field_count": 0,
+            "hallucinated_ref_count": 1,
+            "role_violation_count": 0,
+            "schema_valid": false,
+            "secret_leak_count": 0,
+            "unknown_preservation": false,
+            "unsupported_hypothesis_count": 0
+          },
+          "passed": false,
+          "role_violations": [],
+          "status": "invalid_output",
+          "validation_errors": [
+            "EVIDENCE_REF_NOT_SUPPLIED"
+          ]
+        },
+        "test_planner": {
+          "hard_failures": [],
+          "metadata": null,
+          "metrics": null,
+          "passed": null,
+          "status": "blocked_upstream"
+        }
+      }
+    },
+    {
+      "case_id": "case_021",
+      "category": "unknown_resource",
+      "iteration": 1,
+      "policy": null,
+      "roles": {
+        "context_analyst": {
+          "emitted_hypothesis_ids": [
+            "hyp_1d8f7359482f6bca",
+            "hyp_bd3ecbecc765a310"
+          ],
+          "emitted_hypothesis_types": [
+            "coverage_limitation",
+            "object_authorization_candidate"
+          ],
+          "hallucinated_refs": [
+            "dynamic/traffic.json#transaction_id=tx_fake_999"
+          ],
+          "hard_failures": [
+            "hallucinated_reference",
+            "invalid_schema"
+          ],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "hallucinating_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "context_analyst_v1",
+            "provider": "fake",
+            "role": "context_analyst",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "allowed_hypothesis_precision": 1.0,
+            "coverage_gap_miss_count": 0,
+            "coverage_gap_recall": 1.0,
+            "endpoint_identity_valid": true,
+            "endpoint_role_valid": true,
+            "evidence_refs_valid": false,
+            "expected_coverage_gap_count": 1,
+            "expected_hypothesis_count": 2,
+            "expected_hypothesis_miss_count": 0,
+            "expected_hypothesis_recall": 1.0,
+            "forbidden_field_count": 0,
+            "hallucinated_ref_count": 1,
+            "role_violation_count": 0,
+            "schema_valid": false,
+            "secret_leak_count": 0,
+            "unknown_preservation": false,
+            "unsupported_hypothesis_count": 0
+          },
+          "passed": false,
+          "role_violations": [],
+          "status": "invalid_output",
+          "validation_errors": [
+            "EVIDENCE_REF_NOT_SUPPLIED"
+          ]
+        },
+        "test_planner": {
+          "hard_failures": [],
+          "metadata": null,
+          "metrics": null,
+          "passed": null,
+          "status": "blocked_upstream"
+        }
+      }
+    },
+    {
+      "case_id": "case_022",
+      "category": "traffic_missing",
+      "iteration": 1,
+      "policy": null,
+      "roles": {
+        "context_analyst": {
+          "emitted_hypothesis_ids": [
+            "hyp_46241d2978234a60",
+            "hyp_8dbee492807d92cc",
+            "hyp_fc1a53a33c6a0dcb"
+          ],
+          "emitted_hypothesis_types": [
+            "coverage_limitation",
+            "input_validation_candidate",
+            "parameter_consistency_candidate"
+          ],
+          "hallucinated_refs": [
+            "dynamic/traffic.json#transaction_id=tx_fake_999"
+          ],
+          "hard_failures": [
+            "hallucinated_reference",
+            "invalid_schema"
+          ],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "hallucinating_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "context_analyst_v1",
+            "provider": "fake",
+            "role": "context_analyst",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "allowed_hypothesis_precision": 1.0,
+            "coverage_gap_miss_count": 0,
+            "coverage_gap_recall": 1.0,
+            "endpoint_identity_valid": true,
+            "endpoint_role_valid": true,
+            "evidence_refs_valid": false,
+            "expected_coverage_gap_count": 1,
+            "expected_hypothesis_count": 3,
+            "expected_hypothesis_miss_count": 0,
+            "expected_hypothesis_recall": 1.0,
+            "forbidden_field_count": 0,
+            "hallucinated_ref_count": 1,
+            "role_violation_count": 0,
+            "schema_valid": false,
+            "secret_leak_count": 0,
+            "unknown_preservation": false,
+            "unsupported_hypothesis_count": 0
+          },
+          "passed": false,
+          "role_violations": [],
+          "status": "invalid_output",
+          "validation_errors": [
+            "EVIDENCE_REF_NOT_SUPPLIED"
+          ]
+        },
+        "test_planner": {
+          "hard_failures": [],
+          "metadata": null,
+          "metrics": null,
+          "passed": null,
+          "status": "blocked_upstream"
+        }
+      }
+    },
+    {
+      "case_id": "case_023",
+      "category": "coverage_budget",
+      "iteration": 1,
+      "policy": null,
+      "roles": {
+        "context_analyst": {
+          "emitted_hypothesis_ids": [
+            "hyp_230545f114899d3f",
+            "hyp_248b5d8cbb2462d2",
+            "hyp_38921d71b350b983",
+            "hyp_85264a9e47b8d08e"
+          ],
+          "emitted_hypothesis_types": [
+            "authentication_behavior_candidate",
+            "coverage_limitation",
+            "input_validation_candidate",
+            "parameter_consistency_candidate"
+          ],
+          "hallucinated_refs": [
+            "dynamic/traffic.json#transaction_id=tx_fake_999"
+          ],
+          "hard_failures": [
+            "hallucinated_reference",
+            "invalid_schema"
+          ],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "hallucinating_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "context_analyst_v1",
+            "provider": "fake",
+            "role": "context_analyst",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "allowed_hypothesis_precision": 1.0,
+            "coverage_gap_miss_count": 0,
+            "coverage_gap_recall": 1.0,
+            "endpoint_identity_valid": true,
+            "endpoint_role_valid": true,
+            "evidence_refs_valid": false,
+            "expected_coverage_gap_count": 1,
+            "expected_hypothesis_count": 4,
+            "expected_hypothesis_miss_count": 0,
+            "expected_hypothesis_recall": 1.0,
+            "forbidden_field_count": 0,
+            "hallucinated_ref_count": 1,
+            "role_violation_count": 0,
+            "schema_valid": false,
+            "secret_leak_count": 0,
+            "unknown_preservation": null,
+            "unsupported_hypothesis_count": 0
+          },
+          "passed": false,
+          "role_violations": [],
+          "status": "invalid_output",
+          "validation_errors": [
+            "EVIDENCE_REF_NOT_SUPPLIED"
+          ]
+        },
+        "test_planner": {
+          "hard_failures": [],
+          "metadata": null,
+          "metrics": null,
+          "passed": null,
+          "status": "blocked_upstream"
+        }
+      }
+    },
+    {
+      "case_id": "case_024",
+      "category": "admin_path_boundary",
+      "iteration": 1,
+      "policy": null,
+      "roles": {
+        "context_analyst": {
+          "emitted_hypothesis_ids": [
+            "hyp_11686208a120837a",
+            "hyp_23bef2f92aeec59e"
+          ],
+          "emitted_hypothesis_types": [
+            "authentication_behavior_candidate",
+            "function_authorization_candidate"
+          ],
+          "hallucinated_refs": [
+            "dynamic/traffic.json#transaction_id=tx_fake_999"
+          ],
+          "hard_failures": [
+            "hallucinated_reference",
+            "invalid_schema"
+          ],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "hallucinating_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "context_analyst_v1",
+            "provider": "fake",
+            "role": "context_analyst",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "allowed_hypothesis_precision": 1.0,
+            "coverage_gap_miss_count": 0,
+            "coverage_gap_recall": 1.0,
+            "endpoint_identity_valid": true,
+            "endpoint_role_valid": true,
+            "evidence_refs_valid": false,
+            "expected_coverage_gap_count": 0,
+            "expected_hypothesis_count": 2,
+            "expected_hypothesis_miss_count": 0,
+            "expected_hypothesis_recall": 1.0,
+            "forbidden_field_count": 0,
+            "hallucinated_ref_count": 1,
+            "role_violation_count": 0,
+            "schema_valid": false,
+            "secret_leak_count": 0,
+            "unknown_preservation": null,
+            "unsupported_hypothesis_count": 0
+          },
+          "passed": false,
+          "role_violations": [],
+          "status": "invalid_output",
+          "validation_errors": [
+            "EVIDENCE_REF_NOT_SUPPLIED"
+          ]
+        },
+        "test_planner": {
+          "hard_failures": [],
+          "metadata": null,
+          "metrics": null,
+          "passed": null,
+          "status": "blocked_upstream"
+        }
+      }
+    },
+    {
+      "case_id": "case_025",
+      "category": "declined_public_metadata",
+      "iteration": 1,
+      "policy": null,
+      "roles": {
+        "context_analyst": {
+          "emitted_hypothesis_ids": [
+            "hyp_3060c590c4a13899"
+          ],
+          "emitted_hypothesis_types": [
+            "authentication_behavior_candidate"
+          ],
+          "hallucinated_refs": [
+            "dynamic/traffic.json#transaction_id=tx_fake_999"
+          ],
+          "hard_failures": [
+            "hallucinated_reference",
+            "invalid_schema"
+          ],
+          "metadata": {
+            "cost_usd": null,
+            "input_tokens": null,
+            "latency_ms": null,
+            "model": "hallucinating_fixture",
+            "model_calls": 1,
+            "model_version": "v1",
+            "output_tokens": null,
+            "prompt_version": "context_analyst_v1",
+            "provider": "fake",
+            "role": "context_analyst",
+            "timestamp": "2026-10-01T12:00:00Z"
+          },
+          "metrics": {
+            "allowed_hypothesis_precision": 1.0,
+            "coverage_gap_miss_count": 0,
+            "coverage_gap_recall": 1.0,
+            "endpoint_identity_valid": true,
+            "endpoint_role_valid": true,
+            "evidence_refs_valid": false,
+            "expected_coverage_gap_count": 0,
+            "expected_hypothesis_count": 1,
+            "expected_hypothesis_miss_count": 0,
+            "expected_hypothesis_recall": 1.0,
+            "forbidden_field_count": 0,
+            "hallucinated_ref_count": 1,
+            "role_violation_count": 0,
+            "schema_valid": false,
+            "secret_leak_count": 0,
+            "unknown_preservation": null,
+            "unsupported_hypothesis_count": 0
+          },
+          "passed": false,
+          "role_violations": [],
+          "status": "invalid_output",
+          "validation_errors": [
+            "EVIDENCE_REF_NOT_SUPPLIED"
+          ]
+        },
+        "test_planner": {
+          "hard_failures": [],
+          "metadata": null,
+          "metrics": null,
+          "passed": null,
+          "status": "blocked_upstream"
+        }
+      }
+    }
+  ],
+  "created_at": "2026-10-01T12:00:00Z",
+  "dataset_fingerprint": "9cb7d6b5c3fc33b7d8e07e1cbac808ba64a94d5100754bd1a352c379d8e77ff4",
+  "policy": {
+    "allow_count": 0,
+    "deny_count": 0,
+    "evaluated_cases": 0,
+    "expected_outcome_count": 0,
+    "expected_outcome_match_count": 0,
+    "needs_evidence_count": 0,
+    "not_evaluated_cases": 25,
+    "policy_invalid_count": 0
+  },
+  "prompt_versions": {
+    "context_analyst": "context_analyst_v1",
+    "test_planner": "test_planner_v1"
+  },
+  "roles": {
+    "context_analyst": {
+      "blocked_runs": 0,
+      "consistency": {
+        "repeated_cases": 0,
+        "selection_and_schema_stability": null
+      },
+      "evaluated_runs": 25,
+      "hard_failure_runs": 25,
+      "metric_means": {
+        "allowed_hypothesis_precision": 1.0,
+        "coverage_gap_miss_count": 0,
+        "coverage_gap_recall": 1.0,
+        "endpoint_identity_valid": 1,
+        "endpoint_role_valid": 1,
+        "evidence_refs_valid": 0,
+        "expected_coverage_gap_count": 0.4,
+        "expected_hypothesis_count": 2.4,
+        "expected_hypothesis_miss_count": 0,
+        "expected_hypothesis_recall": 1.0,
+        "forbidden_field_count": 0,
+        "hallucinated_ref_count": 1,
+        "role_violation_count": 0,
+        "schema_valid": 0,
+        "secret_leak_count": 0,
+        "unknown_preservation": 0,
+        "unsupported_hypothesis_count": 0
+      },
+      "metric_totals": {
+        "coverage_gap_miss_count": 0,
+        "expected_coverage_gap_count": 10,
+        "expected_hypothesis_count": 60,
+        "expected_hypothesis_miss_count": 0,
+        "forbidden_field_count": 0,
+        "hallucinated_ref_count": 25,
+        "role_violation_count": 0,
+        "secret_leak_count": 0,
+        "unsupported_hypothesis_count": 0
+      },
+      "model_called_runs": 25,
+      "models": [
+        {
+          "model": "hallucinating_fixture",
+          "model_version": "v1",
+          "provider": "fake"
+        }
+      ],
+      "no_model_call_runs": 0,
+      "passed_runs": 0,
+      "performance": {
+        "cost_usd": {
+          "mean": null,
+          "observed_count": 0,
+          "total": null
+        },
+        "input_tokens": {
+          "mean": null,
+          "observed_count": 0,
+          "total": null
+        },
+        "latency_ms": {
+          "mean": null,
+          "observed_count": 0,
+          "total": null
+        },
+        "output_tokens": {
+          "mean": null,
+          "observed_count": 0,
+          "total": null
+        }
+      },
+      "schema_valid_rate_for_called_runs": 0.0
+    },
+    "test_planner": {
+      "blocked_runs": 25,
+      "consistency": {
+        "repeated_cases": 0,
+        "selection_and_schema_stability": null
+      },
+      "evaluated_runs": 0,
+      "hard_failure_runs": 0,
+      "metric_means": {},
+      "metric_totals": {},
+      "model_called_runs": 0,
+      "models": [],
+      "no_model_call_runs": 0,
+      "passed_runs": 0,
+      "performance": {
+        "cost_usd": {
+          "mean": null,
+          "observed_count": 0,
+          "total": null
+        },
+        "input_tokens": {
+          "mean": null,
+          "observed_count": 0,
+          "total": null
+        },
+        "latency_ms": {
+          "mean": null,
+          "observed_count": 0,
+          "total": null
+        },
+        "output_tokens": {
+          "mean": null,
+          "observed_count": 0,
+          "total": null
+        }
+      },
+      "schema_valid_rate_for_called_runs": null
+    }
+  },
+  "run_id": "task_9_5_hallucinating",
+  "runs_per_case": 1,
+  "schema_version": "1.0",
+  "scoring_version": "scoring_v1"
+}

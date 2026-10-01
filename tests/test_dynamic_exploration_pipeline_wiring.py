@@ -12,11 +12,11 @@ Verifies that:
 9. route_graph.json written under run dynamic dir.
 10. exploration_result.json written.
 11. dynamic stage changes not_available → running when exploration starts.
-12. exploration with evidence ends dynamic stage as partial.
+12. exploration evidence permits completion after canonical report persistence.
 13. exploration no-evidence fatal failure can mark dynamic failed.
-14. dynamic stage never becomes completed.
-15. no dynamic_analysis_report.json created.
-16. dynamic report artifact remains unavailable.
+14. dynamic stage completes only with a canonical report.
+15. canonical dynamic report is created at run root.
+16. dynamic report artifact is registered after persistence.
 17. report_generation remains partial.
 18. static artifact preserved on exploration failure.
 19. preflight/session/timeline preserved on exploration failure.
@@ -515,7 +515,7 @@ class TestDynamicExplorationPipelineWiring(unittest.TestCase):
     @patch("src.demo_orchestrator.build_static_context")
     @patch("src.demo_orchestrator.preprocess_apk")
     @patch("src.demo_orchestrator.acquire_apk")
-    def test_12_exploration_with_evidence_ends_dynamic_stage_as_partial(
+    def test_12_exploration_with_evidence_persists_report_before_completion(
         self, mock_acq, mock_prep, mock_static, mock_runtime, mock_obs
     ):
         mock_obs.return_value = _make_screen_observation()
@@ -532,7 +532,7 @@ class TestDynamicExplorationPipelineWiring(unittest.TestCase):
         run_demo("http://example.com/app.apk", self.output_root, progress_callback=checkpointer.on_pipeline_progress)
 
         st = load_scan_state(self.output_root)
-        self.assertEqual(st["stages"]["dynamic_analysis"]["status"], "partial")
+        self.assertEqual(st["stages"]["dynamic_analysis"]["status"], "completed")
 
     # 13. exploration no-evidence fatal failure can mark dynamic failed
     def test_13_exploration_no_evidence_fatal_failure_can_mark_dynamic_failed(self):
@@ -568,7 +568,7 @@ class TestDynamicExplorationPipelineWiring(unittest.TestCase):
     @patch("src.demo_orchestrator.build_static_context")
     @patch("src.demo_orchestrator.preprocess_apk")
     @patch("src.demo_orchestrator.acquire_apk")
-    def test_14_dynamic_stage_never_becomes_completed(
+    def test_14_dynamic_stage_completes_with_canonical_report(
         self, mock_acq, mock_prep, mock_static, mock_runtime, mock_obs
     ):
         mock_obs.return_value = _make_screen_observation()
@@ -585,8 +585,8 @@ class TestDynamicExplorationPipelineWiring(unittest.TestCase):
         run_demo("http://example.com/app.apk", self.output_root, progress_callback=checkpointer.on_pipeline_progress)
 
         st = load_scan_state(self.output_root)
-        self.assertNotEqual(st["stages"]["dynamic_analysis"]["status"], "completed")
-        self.assertEqual(st["stages"]["dynamic_analysis"]["status"], "partial")
+        self.assertTrue((self.output_root / "dynamic_analysis_report.json").is_file())
+        self.assertEqual(st["stages"]["dynamic_analysis"]["status"], "completed")
 
     # 15. no dynamic_analysis_report.json created
     @patch("src.dynamic.ui.observer.observe_screen")
@@ -594,7 +594,7 @@ class TestDynamicExplorationPipelineWiring(unittest.TestCase):
     @patch("src.demo_orchestrator.build_static_context")
     @patch("src.demo_orchestrator.preprocess_apk")
     @patch("src.demo_orchestrator.acquire_apk")
-    def test_15_no_dynamic_analysis_report_json_created(
+    def test_15_root_dynamic_analysis_report_json_created(
         self, mock_acq, mock_prep, mock_static, mock_runtime, mock_obs
     ):
         mock_obs.return_value = _make_screen_observation()
@@ -602,7 +602,7 @@ class TestDynamicExplorationPipelineWiring(unittest.TestCase):
 
         run_demo("http://example.com/app.apk", self.output_root)
 
-        self.assertFalse((self.output_root / "dynamic_analysis_report.json").exists())
+        self.assertTrue((self.output_root / "dynamic_analysis_report.json").exists())
         self.assertFalse((self.output_root / "dynamic" / "dynamic_analysis_report.json").exists())
 
     # 16. dynamic report artifact remains unavailable
@@ -611,7 +611,7 @@ class TestDynamicExplorationPipelineWiring(unittest.TestCase):
     @patch("src.demo_orchestrator.build_static_context")
     @patch("src.demo_orchestrator.preprocess_apk")
     @patch("src.demo_orchestrator.acquire_apk")
-    def test_16_dynamic_report_artifact_remains_unavailable(
+    def test_16_dynamic_report_artifact_registered(
         self, mock_acq, mock_prep, mock_static, mock_runtime, mock_obs
     ):
         mock_obs.return_value = _make_screen_observation()
@@ -629,8 +629,8 @@ class TestDynamicExplorationPipelineWiring(unittest.TestCase):
 
         st = load_scan_state(self.output_root)
         dyn_art = st["artifacts"]["dynamic_analysis_report"]
-        self.assertFalse(dyn_art["available"])
-        self.assertIsNone(dyn_art["relative_path"])
+        self.assertTrue(dyn_art["available"])
+        self.assertEqual(dyn_art["relative_path"], "dynamic_analysis_report.json")
 
     # 17. report_generation remains partial
     @patch("src.dynamic.ui.observer.observe_screen")
@@ -911,7 +911,7 @@ class TestDynamicExplorationPipelineWiring(unittest.TestCase):
         self.assertTrue(state_file.is_file())
         loaded = load_scan_state(self.output_root)
         self.assertIsNotNone(loaded)
-        self.assertEqual(loaded["stages"]["dynamic_analysis"]["status"], "partial")
+        self.assertEqual(loaded["stages"]["dynamic_analysis"]["status"], "completed")
 
         tmp_files = list(self.output_root.glob(".tmp_*"))
         self.assertEqual(tmp_files, [], "No temporary atomic write files should linger")
@@ -1107,8 +1107,8 @@ class TestTask541SemanticsCleanup(unittest.TestCase):
         self.assertEqual(data["root_node_id"], "root_screen_hex_123")
         self.assertEqual(data["current_node_id"], "curr_screen_hex_456")
 
-    # 11. dynamic_analysis remains partial for completed exploration
-    def test_541_11_dynamic_analysis_remains_partial_for_completed_exploration(self):
+    # Task 8.1: report completion is independent of exploration coverage.
+    def test_541_11_dynamic_analysis_report_completed_for_completed_exploration(self):
         res = ExplorationResult(
             status=ExplorationStatus.COMPLETED.value,
             stop_reason=StopReason.COMPLETED.value,
@@ -1119,10 +1119,10 @@ class TestTask541SemanticsCleanup(unittest.TestCase):
             _wire_dynamic_exploration(self.output_root, "com.example.app", "emulator-5554")
 
         st = load_scan_state(self.output_root)
-        self.assertEqual(st["stages"]["dynamic_analysis"]["status"], "partial")
+        self.assertEqual(st["stages"]["dynamic_analysis"]["status"], "completed")
 
-    # 12. dynamic_analysis remains partial for partial exploration
-    def test_541_12_dynamic_analysis_remains_partial_for_partial_exploration(self):
+    # Task 8.1: partial exploration may produce a completed canonical report.
+    def test_541_12_dynamic_analysis_report_completed_with_partial_coverage(self):
         res = ExplorationResult(
             status=ExplorationStatus.PARTIAL.value,
             stop_reason=StopReason.MAX_STEPS.value,
@@ -1133,10 +1133,10 @@ class TestTask541SemanticsCleanup(unittest.TestCase):
             _wire_dynamic_exploration(self.output_root, "com.example.app", "emulator-5554")
 
         st = load_scan_state(self.output_root)
-        self.assertEqual(st["stages"]["dynamic_analysis"]["status"], "partial")
+        self.assertEqual(st["stages"]["dynamic_analysis"]["status"], "completed")
 
-    # 13. dynamic_analysis never becomes completed
-    def test_541_13_dynamic_analysis_never_becomes_completed(self):
+    # Task 8.1: completion is backed by the canonical artifact.
+    def test_541_13_dynamic_analysis_completes_with_canonical_report(self):
         res = ExplorationResult(
             status=ExplorationStatus.COMPLETED.value,
             stop_reason=StopReason.COMPLETED.value,
@@ -1147,11 +1147,11 @@ class TestTask541SemanticsCleanup(unittest.TestCase):
             _wire_dynamic_exploration(self.output_root, "com.example.app", "emulator-5554")
 
         st = load_scan_state(self.output_root)
-        self.assertNotEqual(st["stages"]["dynamic_analysis"]["status"], "completed")
-        self.assertEqual(st["stages"]["dynamic_analysis"]["status"], "partial")
+        self.assertTrue((self.output_root / "dynamic_analysis_report.json").is_file())
+        self.assertEqual(st["stages"]["dynamic_analysis"]["status"], "completed")
 
-    # 14. dynamic report artifact remains unavailable
-    def test_541_14_dynamic_report_artifact_remains_unavailable(self):
+    # Task 8.1: dynamic artifact is registered after persistence.
+    def test_541_14_dynamic_report_artifact_registered(self):
         res = ExplorationResult(
             status=ExplorationStatus.PARTIAL.value,
             stop_reason=StopReason.MAX_STEPS.value,
@@ -1161,8 +1161,8 @@ class TestTask541SemanticsCleanup(unittest.TestCase):
             _wire_dynamic_exploration(self.output_root, "com.example.app", "emulator-5554")
 
         st = load_scan_state(self.output_root)
-        self.assertFalse(st["artifacts"]["dynamic_analysis_report"]["available"])
-        self.assertIsNone(st["artifacts"]["dynamic_analysis_report"].get("relative_path"))
+        self.assertTrue(st["artifacts"]["dynamic_analysis_report"]["available"])
+        self.assertEqual(st["artifacts"]["dynamic_analysis_report"].get("relative_path"), "dynamic_analysis_report.json")
 
     # 15. report_generation remains partial
     def test_541_15_report_generation_remains_partial(self):
@@ -1217,5 +1217,5 @@ class TestTask541SemanticsCleanup(unittest.TestCase):
         st = load_scan_state(self.output_root)
         self.assertEqual(st["overall_status"], "completed")
         self.assertEqual(st["current_stage"], "completed")
-        self.assertEqual(st["stages"]["dynamic_analysis"]["status"], "partial")
+        self.assertEqual(st["stages"]["dynamic_analysis"]["status"], "completed")
         self.assertEqual(st["stages"]["report_generation"]["status"], "partial")

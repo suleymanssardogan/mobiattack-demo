@@ -784,8 +784,8 @@ class TestDynamicRuntimeCorrelation(unittest.TestCase):
         loaded = RuntimeEvidenceArtifact.load_or_create(self.evidence_file, self.session_id)
         self.assertEqual(loaded.session_id, custom_session)
 
-    # 27. dynamic_analysis never completed
-    def test_27_dynamic_analysis_never_completed(self):
+    # 27. dynamic completion requires a validated canonical report
+    def test_27_dynamic_analysis_completed_with_canonical_report(self):
         from src.demo_orchestrator import _wire_dynamic_exploration
 
         # Preflight PASS
@@ -815,10 +815,14 @@ class TestDynamicRuntimeCorrelation(unittest.TestCase):
             _wire_dynamic_exploration(self.base_dir, package_name=self.pkg, limits=ExplorationLimits(max_steps=1))
 
         final_st = load_scan_state(self.base_dir)
-        # Must be 'partial', never 'completed'
-        self.assertEqual(final_st.get("stages", {}).get("dynamic_analysis", {}).get("status"), "partial")
+        # Task 8.1: completion requires the persisted canonical report.
+        self.assertEqual(final_st.get("stages", {}).get("dynamic_analysis", {}).get("status"), "completed")
+
+        from src.dynamic.report import load_dynamic_analysis_report
+        load_dynamic_analysis_report(self.base_dir)
 
     # 28. no dynamic_analysis_report.json created
+
     def test_28_no_dynamic_analysis_report_json_created(self):
         report_file = self.base_dir / "dynamic" / "dynamic_analysis_report.json"
         self.assertFalse(report_file.is_file())

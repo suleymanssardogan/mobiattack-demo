@@ -1,0 +1,15 @@
+{
+  "decision": "needs_evidence",
+  "decision_id": "policy_af39bb8e8f1779ec",
+  "endpoint_context_id": "ctx_1",
+  "hypothesis_id": "hyp_f4052047b2150e3f",
+  "policy_version": "policy_v1",
+  "proposal_id": "proposal_817cb11e6a741190",
+  "reason": "Required context is unavailable. Missing: Comparable session observations.",
+  "reason_code": "MISSING_REQUIRED_CONTEXT",
+  "test_id": "SESSION_HANDLING",
+  "validated_evidence_refs": [
+    "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_1",
+    "dynamic/traffic.json#transaction_id=tx_1"
+  ]
+}

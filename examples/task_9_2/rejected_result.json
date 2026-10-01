@@ -1,0 +1,29 @@
+{
+  "analysis_id": "analysis_c18447d16b00aa88",
+  "attempts": 2,
+  "coverage_gaps": [],
+  "created_at": "2026-10-01T12:00:00Z",
+  "endpoint_context_id": "ctx_1",
+  "endpoint_role": "unknown",
+  "hypotheses": [],
+  "input_evidence_refs": [
+    "dynamic/api_correlation.json#correlation_id=corr_1",
+    "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_1",
+    "dynamic/runtime_evidence.json#action_id=act_1",
+    "dynamic/traffic.json#transaction_id=tx_1",
+    "dynamic/traffic_evidence.json#action_id=act_1",
+    "static_analysis_report.json#candidate_id=cand_1"
+  ],
+  "model_metadata": {
+    "model": "unspecified",
+    "provider": "unspecified"
+  },
+  "observation": null,
+  "prompt_version": "context_analyst_v1",
+  "schema_version": "1.0",
+  "status": "invalid_output",
+  "validation_errors": [
+    "EVIDENCE_REF_NOT_SUPPLIED",
+    "EVIDENCE_REF_NOT_SUPPLIED"
+  ]
+}

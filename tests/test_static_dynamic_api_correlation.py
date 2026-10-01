@@ -566,8 +566,8 @@ class TestStaticDynamicApiCorrelation(unittest.TestCase):
         self.assertNotIn("findings", res_dict)
         self.assertNotIn("severity", res_dict)
 
-    # 36. dynamic_analysis never completed
-    def test_36_dynamic_analysis_never_completed(self):
+    # 36. dynamic completion requires a validated canonical report
+    def test_36_dynamic_analysis_completed_with_canonical_report(self):
         from src.demo_orchestrator import _wire_dynamic_exploration
         from src.scan_state import create_initial_scan_state, load_scan_state, save_scan_state
 
@@ -605,10 +605,14 @@ class TestStaticDynamicApiCorrelation(unittest.TestCase):
 
         final_st = load_scan_state(self.base_dir)
         stage_status = final_st.get("stages", {}).get("dynamic_analysis", {}).get("status")
-        self.assertEqual(stage_status, "partial")
-        self.assertNotEqual(stage_status, "completed")
+        self.assertEqual(stage_status, "completed")
+        self.assertTrue((self.base_dir / "dynamic_analysis_report.json").is_file())
+
+        from src.dynamic.report import load_dynamic_analysis_report
+        load_dynamic_analysis_report(self.base_dir)
 
     # 37. no dynamic_analysis_report.json created
+
     def test_37_no_dynamic_analysis_report_json_created(self):
         from src.demo_orchestrator import _wire_api_correlation
 
@@ -688,12 +692,116 @@ class TestStaticDynamicApiCorrelation(unittest.TestCase):
             timeline_recorder=mock_timeline,
         )
 
-        mock_timeline._record_system_event.assert_called_once()
-        event_name, event_data = mock_timeline._record_system_event.call_args[0]
+        correlation_events = [call.args for call in mock_timeline._record_system_event.call_args_list
+                              if call.args[0] == "API_CORRELATION_COMPLETED"]
+        self.assertEqual(len(correlation_events), 1)
+        event_name, event_data = correlation_events[0]
         self.assertEqual(event_name, "API_CORRELATION_COMPLETED")
         self.assertEqual(event_data["static_candidates"], 1)
         self.assertEqual(event_data["static_only"], 1)
         self.assertEqual(event_data["correlated_count"], 0)
+
+
+class TestConservativePathIdentity(unittest.TestCase):
+    UUID = "550e8400-e29b-41d4-a716-446655440000"
+    OTHER_UUID = "550e8400-e29b-41d4-a716-446655440001"
+
+    def correlate(self, static_path, dynamic_paths, static_method="GET", dynamic_method="GET"):
+        return correlate_static_dynamic_apis(
+            [{"base_url": "https://api.example.com", "path": static_path, "method": static_method}],
+            [_make_transaction(tx_id=f"tx_{i}", path=path, method=dynamic_method)
+             for i, path in enumerate(dynamic_paths)],
+        )
+
+    def test_literal_numeric_identical_is_exact_high(self):
+        self.assertEqual(match_paths("/users/123", "/users/123"), (True, False))
+        entry = self.correlate("/users/123", ["/users/123"]).correlations[0]
+        self.assertEqual((entry.match_type, entry.confidence), ("exact", "high"))
+
+    def test_literal_numeric_different_never_templates(self):
+        self.assertEqual(match_paths("/users/123", "/users/456"), (False, False))
+
+    def test_literal_uuid_identical_is_exact_high(self):
+        path = f"/orders/{self.UUID}"
+        self.assertEqual(match_paths(path, path), (True, False))
+        entry = self.correlate(path, [path]).correlations[0]
+        self.assertEqual((entry.match_type, entry.confidence), ("exact", "high"))
+
+    def test_literal_uuid_different_never_templates(self):
+        self.assertEqual(match_paths(f"/orders/{self.UUID}", f"/orders/{self.OTHER_UUID}"), (False, False))
+
+    def test_explicit_templates_match_concrete_segments_medium(self):
+        for template in ("{id}", ":userId", "<account_id>"):
+            for value in ("123", self.UUID, "alice"):
+                with self.subTest(template=template, value=value):
+                    self.assertEqual(match_paths(f"/users/{template}", f"/users/{value}"), (True, True))
+                    entry = self.correlate(f"/users/{template}", [f"/users/{value}"]).correlations[0]
+                    self.assertEqual((entry.match_type, entry.confidence), ("template", "medium"))
+
+    def test_template_cannot_consume_multiple_or_empty_segments(self):
+        for path in ("/users/1/profile", "/users/", "/users"):
+            with self.subTest(path=path):
+                self.assertEqual(match_paths("/users/{id}", path), (False, False))
+
+    def test_literal_static_and_different_runtime_remain_unmatched(self):
+        for literal, runtime in (("1", "2"), (self.UUID, self.OTHER_UUID)):
+            with self.subTest(literal=literal):
+                res = self.correlate(f"/users/{literal}", [f"/users/{runtime}"])
+                self.assertEqual(res.summary.correlated_count, 0)
+                self.assertEqual((res.summary.static_only_count, res.summary.dynamic_only_count), (1, 1))
+                self.assertEqual({e.match_type for e in res.correlations}, {"static_only", "dynamic_only"})
+
+    def test_literal_matches_only_identical_runtime(self):
+        res = self.correlate("/users/1", ["/users/1", "/users/2"])
+        exact = next(e for e in res.correlations if e.match_type == "exact")
+        self.assertEqual(exact.transaction_ids, ["tx_0"])
+        dynamic_only = next(e for e in res.correlations if e.match_type == "dynamic_only")
+        self.assertEqual(dynamic_only.path, "/users/2")
+
+    def test_explicit_template_aggregates_runtime_paths(self):
+        res = self.correlate("/users/{id}", ["/users/1", "/users/2"])
+        self.assertEqual(len(res.correlations), 1)
+        entry = res.correlations[0]
+        self.assertEqual(entry.transaction_ids, ["tx_0", "tx_1"])
+        self.assertEqual((entry.match_type, entry.confidence), ("template", "medium"))
+
+    def test_dynamic_template_cannot_parameterize_static_literal(self):
+        for static in ("/users/123", f"/users/{self.UUID}"):
+            self.assertEqual(match_paths(static, "/users/{id}"), (False, False))
+        self.assertEqual(match_paths("/users/{id}", "/users/:other"), (False, False))
+
+    def test_method_mismatch_requires_valid_path_identity(self):
+        for static, dynamic in (("/users/1", "/users/1"), ("/users/{id}", "/users/2")):
+            entry = self.correlate(static, [dynamic], dynamic_method="POST").correlations[0]
+            self.assertEqual((entry.match_type, entry.confidence), ("method_mismatch", "low"))
+        res = self.correlate("/users/1", ["/users/2"], dynamic_method="POST")
+        self.assertEqual({e.match_type for e in res.correlations}, {"static_only", "dynamic_only"})
+
+    def test_unknown_method_requires_valid_path_identity(self):
+        entry = self.correlate("/users/1", ["/users/1"], static_method=None).correlations[0]
+        self.assertEqual((entry.match_type, entry.confidence), ("host_path", "medium"))
+        res = self.correlate("/users/1", ["/users/2"], static_method=None)
+        self.assertEqual(res.summary.correlated_count, 0)
+
+    def test_candidate_id_provenance_matches_canonical_schema(self):
+        from src.report_generator import sanitize_api_candidates_for_canonical_report
+        for field in ("id", "candidate_id", "endpoint_id", None):
+            with self.subTest(field=field):
+                candidate = {"base_url": "https://api.example.com", "path": "/users/1", "method": "GET"}
+                if field:
+                    candidate[field] = "source-id"
+                canonical = sanitize_api_candidates_for_canonical_report([candidate])
+                original = json.dumps(canonical, sort_keys=True)
+                for transactions in ([], [_make_transaction(path="/users/1")]):
+                    res = correlate_static_dynamic_apis(canonical, transactions)
+                    entry = res.correlations[0]
+                    self.assertEqual(entry.static_candidate_id, "source-id" if field else "stat_cand_1")
+                    self.assertEqual(entry.provenance["static_candidate_id_origin"],
+                                     "source_report" if field else "correlation_reference")
+                    self.assertEqual(entry.provenance["static_candidate_id_source_field"], field)
+                    again = correlate_static_dynamic_apis(canonical, transactions)
+                    self.assertEqual(entry.correlation_id, again.correlations[0].correlation_id)
+                self.assertEqual(json.dumps(canonical, sort_keys=True), original)
 
 
 if __name__ == "__main__":

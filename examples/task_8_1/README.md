@@ -1,0 +1,1 @@
+Synthetic Task 8.1 report and scan state examples derived from the unit-test fixture. No device or active API run was performed. The static report reference in scan_state.json illustrates product state; source evidence files are not duplicated here.

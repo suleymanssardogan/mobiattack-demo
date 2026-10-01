@@ -1,0 +1,129 @@
+{
+  "analysis_id": "analysis_829660161d23c8d3",
+  "attempts": 1,
+  "coverage_gaps": [],
+  "created_at": "2026-10-01T12:00:00Z",
+  "endpoint_context_id": "ctx_1",
+  "endpoint_role": "resource_endpoint",
+  "hypotheses": [
+    {
+      "endpoint_context_id": "ctx_1",
+      "evidence_refs": [
+        "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_1"
+      ],
+      "hypothesis_id": "hyp_1ad7e29c097995e9",
+      "hypothesis_type": "input_validation_candidate",
+      "required_evidence": [
+        "Comparable input observations",
+        "Expected input behavior"
+      ],
+      "statement": "Input handling may require later validation because input key names were observed.",
+      "status": "hypothesis"
+    },
+    {
+      "endpoint_context_id": "ctx_1",
+      "evidence_refs": [
+        "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_1"
+      ],
+      "hypothesis_id": "hyp_396e4245df4bbbc5",
+      "hypothesis_type": "authentication_behavior_candidate",
+      "required_evidence": [
+        "Comparable runtime observations",
+        "Expected authentication behavior"
+      ],
+      "statement": "Authentication behavior may require later validation; presence metadata does not establish correctness.",
+      "status": "hypothesis"
+    },
+    {
+      "endpoint_context_id": "ctx_1",
+      "evidence_refs": [
+        "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_1"
+      ],
+      "hypothesis_id": "hyp_a8614516340d7633",
+      "hypothesis_type": "parameter_consistency_candidate",
+      "required_evidence": [
+        "Comparable parameter observations",
+        "Expected parameter behavior"
+      ],
+      "statement": "Parameter behavior may require later validation because parameter names were observed.",
+      "status": "hypothesis"
+    },
+    {
+      "endpoint_context_id": "ctx_1",
+      "evidence_refs": [
+        "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_1"
+      ],
+      "hypothesis_id": "hyp_b340472dd30c50a6",
+      "hypothesis_type": "object_authorization_candidate",
+      "required_evidence": [
+        "Authorized identity and ownership context",
+        "Observed resource behavior"
+      ],
+      "statement": "Object-level authorization behavior may require validation because the endpoint exposes a resource identifier.",
+      "status": "hypothesis"
+    },
+    {
+      "endpoint_context_id": "ctx_1",
+      "evidence_refs": [
+        "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_1"
+      ],
+      "hypothesis_id": "hyp_f4052047b2150e3f",
+      "hypothesis_type": "session_behavior_candidate",
+      "required_evidence": [
+        "Comparable session observations",
+        "Expected session behavior"
+      ],
+      "statement": "Session-dependent behavior may require validation because session-related metadata was observed.",
+      "status": "hypothesis"
+    }
+  ],
+  "input_evidence_refs": [
+    "dynamic/api_correlation.json#correlation_id=corr_1",
+    "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_1",
+    "dynamic/runtime_evidence.json#action_id=act_1",
+    "dynamic/traffic.json#transaction_id=tx_1",
+    "dynamic/traffic_evidence.json#action_id=act_1",
+    "static_analysis_report.json#candidate_id=cand_1"
+  ],
+  "model_metadata": {
+    "model": "fixture-v1",
+    "provider": "fake"
+  },
+  "observation": {
+    "coverage_gaps": [],
+    "created_at": "2026-10-01T12:00:00Z",
+    "endpoint_context_id": "ctx_1",
+    "evidence_refs": [
+      "dynamic/endpoint_contexts.json#endpoint_context_id=ctx_1"
+    ],
+    "facts": [
+      "Action-linked IDs are available in the supplied context.",
+      "Authentication metadata api_key_header_present: not observed; correctness is unknown.",
+      "Authentication metadata authorization_header_present: present; correctness is unknown.",
+      "Authentication metadata bearer_token_present: unknown; correctness is unknown.",
+      "Authentication metadata cookie_present: present; correctness is unknown.",
+      "Authentication metadata session_cookie_present: unknown; correctness is unknown.",
+      "Endpoint context identifies api.example.com/orders/{id} with methods: GET.",
+      "HTTPS visibility: available.",
+      "Observed methods: GET.",
+      "Observed query key names: page, user_id.",
+      "Observed request body key names: order_id.",
+      "Observed response status codes: 200; status alone does not establish security.",
+      "Request body presence metadata: observed.",
+      "Request body shape metadata is available with value types only.",
+      "Resource identifier names are present: body:order_id, path:id, query:user_id; ownership is unknown.",
+      "Response body presence metadata: unknown.",
+      "Response body shape metadata is available with value types only.",
+      "Response content types: application/json.",
+      "Runtime metadata activity_changes_observed: observed; causality is unknown.",
+      "Runtime traffic confirmed this endpoint in the supplied context.",
+      "Static candidate provenance is present; ID origin: source_report.",
+      "Static method: GET."
+    ],
+    "observation_id": "obs_a8b0770b6af480f1"
+  },
+  "prompt_version": "context_analyst_v1",
+  "schema_version": "1.0",
+  "status": "completed",
+  "validation_errors": []
+}
