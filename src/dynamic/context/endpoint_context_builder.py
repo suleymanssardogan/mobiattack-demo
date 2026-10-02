@@ -7,7 +7,7 @@ import re
 from typing import Any
 from urllib.parse import parse_qsl, urlsplit
 
-from src.dynamic.correlation.api_correlator import normalize_host, normalize_path, normalize_method
+from src.dynamic.correlation.api_correlator import normalize_host, normalize_path, normalize_method, normalize_transport, match_paths
 from src.dynamic.correlation.models import ApiCorrelationResult, sanitize_provenance_paths
 from src.dynamic.traffic.models import TrafficTransaction, TrafficEvidenceArtifact
 from src.dynamic.runtime.models import RuntimeEvidenceArtifact
@@ -145,21 +145,62 @@ def build_endpoint_contexts(
     runtime_evidence: RuntimeEvidenceArtifact | None = None,
 ) -> EndpointContextArtifact:
     """Summarize each canonical correlation entry without modifying its inputs."""
-    transactions = {_dict(tx).get("transaction_id"): _dict(tx) for tx in traffic_transactions}
-    traffic_actions = _dict(traffic_evidence).get("actions", [])
-    runtime_actions = _dict(runtime_evidence).get("actions", [])
+    # Duplicate IDs are ambiguous; never choose an arbitrary last payload.
+    tx_data = [_dict(tx) for tx in traffic_transactions]
+    counts = Counter(tx.get("transaction_id") for tx in tx_data if isinstance(tx.get("transaction_id"), str))
+    transactions = {tx["transaction_id"]: tx for tx in tx_data
+                    if isinstance(tx.get("transaction_id"), str) and counts[tx["transaction_id"]] == 1}
+    traffic_data, runtime_data = _dict(traffic_evidence), _dict(runtime_evidence)
+    traffic_actions = traffic_data.get("actions", []) if traffic_data.get("session_id") == api_correlation.session_id else []
+    runtime_actions = runtime_data.get("actions", []) if runtime_data.get("session_id") == api_correlation.session_id else []
     endpoints = []
     for entry in api_correlation.correlations:
-        tx_ids = sorted(set(entry.transaction_ids))
-        linked = [transactions[tid] for tid in tx_ids if tid in transactions]
-        requests = [tx.get("request") or {} for tx in linked]
+        requested_ids = sorted(set(entry.transaction_ids))
+        linked = []
+        for tid in requested_ids:
+            tx = transactions.get(tid)
+            if not tx or tx.get("session_id") not in (None, "", api_correlation.session_id):
+                continue
+            req = tx.get("request")
+            if not isinstance(req, dict) or not all(isinstance(req.get(k), str) and req[k] for k in ("host", "path", "method")):
+                continue
+            if any(req.get(key) is not None and not isinstance(req[key], dict) for key in ("headers", "body_metadata")):
+                continue
+            if tx.get("synthetic") or tx.get("internal") or req.get("synthetic") or req.get("internal"):
+                continue
+            authority = normalize_transport(req["host"], req.get("scheme"), req.get("port"))
+            if not authority[1] or authority != (entry.host, entry.scheme, entry.port):
+                continue
+            if not match_paths(entry.path, req["path"])[0] or normalize_method(req["method"]) not in entry.observed_methods:
+                continue
+            resp = tx.get("response")
+            if resp is not None and (not isinstance(resp, dict) or resp.get("synthetic") or resp.get("internal")
+                    or not isinstance(resp.get("status_code"), int) or isinstance(resp.get("status_code"), bool)
+                    or any(resp.get(key) is not None and not isinstance(resp[key], dict) for key in ("headers", "body_metadata"))):
+                continue
+            linked.append(tx)
+        tx_ids = sorted(tx["transaction_id"] for tx in linked)
+        requests = [tx["request"] for tx in linked]
         responses = [tx["response"] for tx in linked if tx.get("response")]
-        actions = [action for action in traffic_actions if set(action.get("transaction_ids", [])) & set(tx_ids)]
-        action_ids = sorted(set(entry.observed_action_ids) | {a["action_id"] for a in actions if a.get("action_id")})
+        actions = [action for action in traffic_actions if isinstance(action, dict)
+                   and action.get("action_id") and action.get("source_node_id")
+                   and action.get("session_id", api_correlation.session_id) == api_correlation.session_id
+                   and action.get("correlation_status") in ("available", "partial")
+                   and set(action.get("transaction_ids", [])) & set(tx_ids)
+                   and any(route.get("action_id") == action["action_id"]
+                           and route.get("source_node_id") == action["source_node_id"]
+                           and route.get("target_node_id") == action.get("target_node_id")
+                           for route in entry.route_context)]
+        action_ids = sorted({a["action_id"] for a in actions})
         action_context = sorted([_compact_route(a) for a in actions], key=lambda a: json.dumps(a, sort_keys=True))
-        routes = {json.dumps(_compact_route(r), sort_keys=True): _compact_route(r)
-                  for r in entry.route_context + action_context}
-        runtime = [a for a in runtime_actions if a.get("action_id") in action_ids]
+        routes = {json.dumps(route, sort_keys=True): route for route in action_context}
+        runtime = [a for a in runtime_actions if isinstance(a, dict)
+                   and a.get("correlation_status") in ("available", "partial")
+                   and a.get("session_id", api_correlation.session_id) == api_correlation.session_id
+                   and any(a.get("action_id") == route["action_id"]
+                           and a.get("source_node_id") == route["source_node_id"]
+                           and (a.get("target_node_id") is None or a.get("target_node_id") == route.get("target_node_id"))
+                           for route in action_context)]
         usable_runtime = [a for a in runtime if a.get("correlation_status") != "unavailable"]
         flags = {out: any(a.get(source) is True for a in usable_runtime)
                  for out, source in (("pid_changed_observed", "pid_changed"), ("process_death_observed", "process_died"),
@@ -176,10 +217,10 @@ def build_endpoint_contexts(
             # Extraction evidence is summarized through field names; arbitrary values may be credentials.
             if isinstance(entry.provenance.get("evidence"), dict):
                 static["extraction_provenance_keys"] = sorted(_name(k) for k in entry.provenance["evidence"])
-        observed_methods = sorted(set(entry.observed_methods))
+        observed_methods = sorted({normalize_method(req["method"]) for req in requests})
         methods = sorted(set(observed_methods) | ({entry.static_method} if entry.static_method else set()))
         request = _message_context(requests)
-        query_keys = set(entry.observed_query_keys)
+        query_keys = set()
         for req in requests:
             query = req.get("query") or {}
             query_keys.update(query.keys() if isinstance(query, dict) else (k for k, _ in parse_qsl(str(query))))
@@ -188,22 +229,27 @@ def build_endpoint_contexts(
                        query_keys=sorted(_name(k) for k in query_keys))
         response = _message_context(responses)
         counts = Counter(r["status_code"] for r in responses if isinstance(r.get("status_code"), int) and r["status_code"] > 0)
-        response.update(observed_status_codes=sorted(set(entry.observed_status_codes) | set(counts)),
+        response.update(observed_status_codes=sorted(counts),
                         status_code_counts={str(k): counts[k] for k in sorted(counts)})
         schemes = sorted({r.get("scheme", "").lower() for r in requests if r.get("scheme", "").lower() in {"http", "https"}})
-        host, path = normalize_host(entry.host), normalize_path(entry.path)
-        dynamic = {"observed": bool(tx_ids), "transaction_ids": tx_ids, "observation_count": entry.observation_count,
-                   "available_transaction_count": len(linked), "missing_transaction_ids": sorted(set(tx_ids) - transactions.keys()),
-                   "first_observed_at": entry.first_observed_at, "last_observed_at": entry.last_observed_at,
-                   "observed_methods": observed_methods, "observed_status_codes": sorted(set(entry.observed_status_codes)),
+        host, path = entry.host, normalize_path(entry.path)  # Authority is already canonical, including IPv6.
+        dynamic = {"observed": bool(tx_ids), "transaction_ids": tx_ids, "observation_count": len(linked),
+                   "available_transaction_count": len(linked), "missing_transaction_ids": sorted(set(requested_ids) - set(tx_ids)),
+                   "first_observed_at": min((r.get("timestamp") for r in requests if r.get("timestamp")), default=None),
+                   "last_observed_at": max((r.get("timestamp") for r in requests if r.get("timestamp")), default=None),
+                   "observed_methods": observed_methods, "observed_status_codes": sorted(counts),
                    "schemes": schemes}
+        if requested_ids and not linked:
+            dynamic["note"] = "Dynamic evidence unavailable: referenced transaction payloads are missing or invalid."
         if entry.match_type == "static_only":
             dynamic["note"] = "Not observed in available runtime traffic."
         visibility = {key: getattr(api_correlation.summary, key)
                       for key in ("http_visibility", "https_visibility", "https_visibility_reason")}
         endpoints.append(EndpointContext(
-            endpoint_context_id=generate_endpoint_context_id(host, path, entry.static_method, observed_methods, entry.correlation_id),
-            host=host, path=path, scheme=schemes[0] if len(schemes) == 1 else None, methods=methods,
+            endpoint_context_id=generate_endpoint_context_id(
+                host, path, entry.static_method if entry.static_candidate_id else (entry.observed_methods[0] if entry.observed_methods else None),
+                scheme=entry.scheme, port=entry.port),
+            host=host, path=path, scheme=entry.scheme, port=entry.port, methods=methods,
             static=static, dynamic=dynamic, request=request, response=response, auth=_auth(requests),
             action_context=action_context, route_context=[routes[key] for key in sorted(routes)],
             runtime_context=flags, visibility=visibility,

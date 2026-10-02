@@ -1,0 +1,67 @@
+[
+  {
+    "after_api_candidate_count": 0,
+    "after_endpoint_context_count": 0,
+    "app_id": "app_004",
+    "before_api_candidate_count": 0,
+    "before_endpoint_context_count": 0,
+    "declaration_count": 0,
+    "endpoint_context_measurement": "Existing canonical artifact retained; candidate list unchanged, no correlation/context rerun required",
+    "skipped_source_count": 1,
+    "source_scan": "task_9_5_3_app_004",
+    "structural_binding_count": 0,
+    "unbound_declaration_count": 0
+  },
+  {
+    "after_api_candidate_count": 0,
+    "after_endpoint_context_count": 0,
+    "app_id": "app_005",
+    "before_api_candidate_count": 0,
+    "before_endpoint_context_count": 0,
+    "declaration_count": 0,
+    "endpoint_context_measurement": "Existing canonical artifact retained; candidate list unchanged, no correlation/context rerun required",
+    "skipped_source_count": 1,
+    "source_scan": "task_9_5_3_app_005",
+    "structural_binding_count": 0,
+    "unbound_declaration_count": 0
+  },
+  {
+    "after_api_candidate_count": 0,
+    "after_endpoint_context_count": 0,
+    "app_id": "app_006",
+    "before_api_candidate_count": 0,
+    "before_endpoint_context_count": 0,
+    "declaration_count": 0,
+    "endpoint_context_measurement": "Existing canonical artifact retained; candidate list unchanged, no correlation/context rerun required",
+    "skipped_source_count": 0,
+    "source_scan": "task_9_5_3_app_006",
+    "structural_binding_count": 0,
+    "unbound_declaration_count": 0
+  },
+  {
+    "after_api_candidate_count": 0,
+    "after_endpoint_context_count": 0,
+    "app_id": "app_010",
+    "before_api_candidate_count": 0,
+    "before_endpoint_context_count": 0,
+    "declaration_count": 127,
+    "endpoint_context_measurement": "Existing canonical artifact retained; candidate list unchanged, no correlation/context rerun required",
+    "skipped_source_count": 0,
+    "source_scan": "task_9_5_3_app_010_alias_fix",
+    "structural_binding_count": 0,
+    "unbound_declaration_count": 127
+  },
+  {
+    "after_api_candidate_count": 0,
+    "after_endpoint_context_count": 0,
+    "app_id": "app_011",
+    "before_api_candidate_count": 0,
+    "before_endpoint_context_count": 0,
+    "declaration_count": 0,
+    "endpoint_context_measurement": "Existing canonical artifact retained; candidate list unchanged, no correlation/context rerun required",
+    "skipped_source_count": 0,
+    "source_scan": "task_9_5_3_app_011",
+    "structural_binding_count": 0,
+    "unbound_declaration_count": 0
+  }
+]

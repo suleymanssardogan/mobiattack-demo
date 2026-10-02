@@ -207,7 +207,7 @@ class TestApiCandidateExtractorUnit(unittest.TestCase):
             const-string v1, "https://api.example.com"
             invoke-virtual {v0, v1}, Lcom/github/kittinunf/fuel/core/FuelManager;->setBasePath(Ljava/lang/String;)V
             const-string v2, "/data"
-            invoke-static {v2}, Lcom/github/kittinunf/fuel/FuelKt;->get(Ljava/lang/String;)Lcom/github/kittinunf/fuel/core/Request;
+            invoke-virtual {v0, v2}, Lcom/github/kittinunf/fuel/core/FuelManager;->get(Ljava/lang/String;)Lcom/github/kittinunf/fuel/core/Request;
             return-void
         .end method
         """
@@ -227,7 +227,7 @@ class TestApiCandidateExtractorUnit(unittest.TestCase):
             const-string v1, "http://127.0.0.1"
             invoke-virtual {v0, v1}, Lcom/github/kittinunf/fuel/core/FuelManager;->setBasePath(Ljava/lang/String;)V
             const-string v2, "/signup"
-            invoke-static {v2}, Lcom/github/kittinunf/fuel/FuelKt;->post(Ljava/lang/String;)Lcom/github/kittinunf/fuel/core/Request;
+            invoke-virtual {v0, v2}, Lcom/github/kittinunf/fuel/core/FuelManager;->post(Ljava/lang/String;)Lcom/github/kittinunf/fuel/core/Request;
             return-void
         .end method
         """
@@ -245,7 +245,7 @@ class TestApiCandidateExtractorUnit(unittest.TestCase):
             const-string v1, "https://api.test.com/"
             invoke-virtual {v0, v1}, Lcom/github/kittinunf/fuel/core/FuelManager;->setBasePath(Ljava/lang/String;)V
             const-string v2, "/v1/users"
-            invoke-static {v2}, Lcom/github/kittinunf/fuel/FuelKt;->get(Ljava/lang/String;)Lcom/github/kittinunf/fuel/core/Request;
+            invoke-virtual {v0, v2}, Lcom/github/kittinunf/fuel/core/FuelManager;->get(Ljava/lang/String;)Lcom/github/kittinunf/fuel/core/Request;
             return-void
         .end method
         """
@@ -283,7 +283,7 @@ class TestApiCandidateExtractorUnit(unittest.TestCase):
             const-string v1, "https://api-b.com"
             invoke-virtual {v0, v1}, Lcom/github/kittinunf/fuel/core/FuelManager;->setBasePath(Ljava/lang/String;)V
             const-string v2, "/check"
-            invoke-static {v2}, Lcom/github/kittinunf/fuel/FuelKt;->get(Ljava/lang/String;)Lcom/github/kittinunf/fuel/core/Request;
+            invoke-virtual {v0, v2}, Lcom/github/kittinunf/fuel/core/FuelManager;->get(Ljava/lang/String;)Lcom/github/kittinunf/fuel/core/Request;
             return-void
         .end method
         """
@@ -474,3 +474,143 @@ class TestRealOwaspApiCandidateIntegration(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+# Focused regressions for S1's URI and receiver-binding correctness gaps.
+import pytest
+
+_MANAGER = 'Lcom/github/kittinunf/fuel/core/FuelManager;'
+_REQUEST = 'Lcom/github/kittinunf/fuel/core/Request;'
+
+
+def _fuel_probe(tmp_path, instructions):
+    (tmp_path / 'Probe.smali').write_text(
+        '.class public LProbe;\n.super Ljava/lang/Object;\n'
+        '.method public run()V\n.locals 8\n' + instructions +
+        '\nreturn-void\n.end method\n', encoding='utf-8'
+    )
+    return extract_api_candidates(tmp_path)['api_candidates']
+
+
+def _base(receiver, url):
+    return (f'const-string v7, "{url}"\n'
+            f'invoke-virtual {{{receiver}, v7}}, {_MANAGER}->setBasePath(Ljava/lang/String;)V\n')
+
+
+def _request(receiver='v0', path='/signup'):
+    return (f'const-string v6, "{path}"\n'
+            f'invoke-virtual {{{receiver}, v6}}, {_MANAGER}->post(Ljava/lang/String;){_REQUEST}\n')
+
+
+@pytest.mark.parametrize('path', [
+    'file:///android_asset/test.html', 'content://contacts/1', 'data:text/plain,hello',
+    'ftp://example.com/test', 'javascript:alert(1)', 'mailto:user@example.com',
+    'FILE:///android_asset/test.html', '//other.example.com/path',
+    'http:///missing-host', 'https://', 'https://example.com:bad/path',
+    'https://example.com\\other/path', ' https://example.com/path', '',
+])
+def test_fuel_rejects_non_network_or_ambiguous_uri(tmp_path, path):
+    # Escape the literal to preserve the exact Smali string boundary.
+    escaped = path.replace('\\', '\\\\')
+    assert _fuel_probe(tmp_path, _base('v0', 'https://api.example.com') +
+                       _request(path=escaped)) == []
+
+
+@pytest.mark.parametrize('url', ['http://127.0.0.1/signup', 'https://example.com/users',
+                                 'HTTPS://example.com/users'])
+def test_fuel_absolute_network_url_needs_no_base(tmp_path, url):
+    candidate, = _fuel_probe(tmp_path, _request(path=url))
+    assert candidate['full_url'] == url
+    assert candidate['base_url'] is None
+    assert candidate['evidence']['path_value'] == url
+
+
+def test_fuel_two_managers_keep_their_own_base_provenance(tmp_path):
+    candidates = _fuel_probe(tmp_path,
+        _base('v0', 'https://first.example.com') +
+        _base('v3', 'https://second.example.com') + _request('v0') + _request('v3'))
+    assert [c['full_url'] for c in candidates] == [
+        'https://first.example.com/signup', 'https://second.example.com/signup']
+    assert candidates[0]['evidence']['base_url_value'] == 'https://first.example.com'
+    assert candidates[0]['evidence']['base_url_call_line'] < candidates[1]['evidence']['base_url_call_line']
+
+
+def test_fuel_unconfigured_receiver_preserves_only_independent_path(tmp_path):
+    candidate, = _fuel_probe(tmp_path, _base('v3', 'https://second.example.com') + _request('v0'))
+    assert candidate['base_url'] is None
+    assert candidate['full_url'] is None
+    assert candidate['method'] == 'POST'
+    assert candidate['path'] == '/signup'
+    assert candidate['source_file'] == 'Probe.smali'
+    assert candidate['evidence']['path_line'] < candidate['request_line']
+    assert candidate['evidence']['base_url_call_line'] is None
+
+
+def test_fuel_static_call_does_not_borrow_arbitrary_manager_base(tmp_path):
+    candidate, = _fuel_probe(tmp_path, _base('v0', 'https://first.example.com') +
+        _base('v3', 'https://second.example.com') +
+        'const-string v6, "/signup"\n'
+        f'invoke-static {{v6}}, Lcom/github/kittinunf/fuel/FuelKt;->post(Ljava/lang/String;){_REQUEST}\n')
+    assert candidate['base_url'] is None
+    assert candidate['full_url'] is None
+
+
+@pytest.mark.parametrize('overwrite', ['new-instance v0, LOther;', 'move-object v0, v3',
+                                      'const-string v0, "other"'])
+def test_fuel_receiver_overwrite_revokes_binding(tmp_path, overwrite):
+    candidate, = _fuel_probe(tmp_path, _base('v0', 'https://first.example.com') +
+                            overwrite + '\n' + _request())
+    assert candidate['full_url'] is None
+
+
+@pytest.mark.parametrize('url', ['file:///android_asset/', 'content://provider/',
+                                 'data:text/plain,hello', 'https://',
+                                 'https://example.com?redirect=1'])
+def test_fuel_invalid_base_revokes_previous_valid_binding(tmp_path, url):
+    candidate, = _fuel_probe(tmp_path, _base('v0', 'https://first.example.com') +
+                            _base('v0', url) + _request())
+    assert candidate['base_url'] is None
+    assert candidate['full_url'] is None
+    assert candidate['path'] == '/signup'
+
+
+def test_fuel_unknown_base_setter_revokes_old_binding(tmp_path):
+    candidate, = _fuel_probe(tmp_path, _base('v0', 'https://first.example.com') +
+        f'invoke-virtual {{v0, p1}}, {_MANAGER}->setBasePath(Ljava/lang/String;)V\n' + _request())
+    assert candidate['full_url'] is None
+
+
+@pytest.mark.parametrize('boundary', [':join', 'if-eqz p1, :join\n:join', 'goto :join'])
+def test_fuel_ambiguous_control_flow_does_not_bind(tmp_path, boundary):
+    candidate, = _fuel_probe(tmp_path, _base('v0', 'https://first.example.com') +
+                            boundary + '\n' + _request())
+    assert candidate['full_url'] is None
+    assert candidate['path'] == '/signup'
+
+
+def test_fuel_explicit_singleton_context_survives_register_reuse(tmp_path):
+    candidate, = _fuel_probe(tmp_path,
+        'invoke-virtual {v1}, Lcom/github/kittinunf/fuel/core/FuelManager$Companion;->getInstance()'
+        'Lcom/github/kittinunf/fuel/core/FuelManager;\nmove-result-object v0\n' +
+        _base('v0', 'http://127.0.0.1') +
+        'const-string v0, "/signup"\n'
+        f'invoke-static {{v0}}, Lcom/github/kittinunf/fuel/FuelKt;->post(Ljava/lang/String;){_REQUEST}\n')
+    assert candidate['full_url'] == 'http://127.0.0.1/signup'
+    assert candidate['evidence']['base_url_value'] == 'http://127.0.0.1'
+
+
+def test_fuel_random_url_string_without_request_is_not_a_candidate(tmp_path):
+    assert _fuel_probe(tmp_path, 'const-string v0, "https://example.com/random"\n') == []
+
+
+def test_fuel_unconditional_base_before_guard_still_binds_fallthrough(tmp_path):
+    candidate, = _fuel_probe(tmp_path, _base('v0', 'https://first.example.com') +
+        'if-eqz p1, :exit\n' + _request() + ':exit\n')
+    assert candidate['full_url'] == 'https://first.example.com/signup'
+
+
+def test_fuel_unsupported_alias_mutation_cannot_leave_stale_base(tmp_path):
+    candidate, = _fuel_probe(tmp_path, _base('v0', 'https://first.example.com') +
+        'move-object v3, v0\n' + _base('v3', 'https://second.example.com') + _request('v0'))
+    assert candidate['base_url'] is None
+    assert candidate['full_url'] is None

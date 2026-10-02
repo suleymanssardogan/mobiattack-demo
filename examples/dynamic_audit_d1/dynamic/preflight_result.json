@@ -1,0 +1,42 @@
+{
+  "stage": "dynamic_preflight",
+  "device": {
+    "connected": true,
+    "serial": "emulator-5554",
+    "state": "device",
+    "is_emulator": true,
+    "root_detected": false,
+    "root_signals": []
+  },
+  "application": {
+    "package_name": "sg.vantagepoint.mstgkotlin",
+    "installed": true,
+    "launchable": true,
+    "main_activity": "sg.vantagepoint.mstgkotlin.MainActivity",
+    "process_running": true,
+    "foreground": true,
+    "version_name": "1.0",
+    "version_code": 1,
+    "target_sdk": 26,
+    "install_path": "/data/app/~~2HNVP_W7M70UR8qcyufZ2g==/sg.vantagepoint.mstgkotlin-QeMaAJUjgtiP637eQ_AixA==/base.apk",
+    "granted_permissions_count": 2,
+    "requested_permissions_count": 2
+  },
+  "runtime": {
+    "launch_success": true,
+    "immediate_crash": false,
+    "fatal_log_detected": false,
+    "pid": 18904,
+    "launch_attempts": 1,
+    "ready_after_attempt": 1
+  },
+  "network": {
+    "internet_reachable": true,
+    "dns_configured": true
+  },
+  "status": "WARN",
+  "warnings": [
+    "Android Emulator environment detected."
+  ],
+  "errors": []
+}

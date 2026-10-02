@@ -1,0 +1,18 @@
+{
+  "session_id": "965a2656-5e40-45a3-9164-71739e2e5f48",
+  "stage": "dynamic_session",
+  "package_name": "sg.vantagepoint.mstgkotlin",
+  "device_serial": "emulator-5554",
+  "preflight_status": "WARN",
+  "started_at": "2026-10-02T08:30:15.501073+00:00",
+  "ended_at": null,
+  "status": "ACTIVE",
+  "flows": [],
+  "warnings": [
+    "Android Emulator environment detected."
+  ],
+  "errors": [],
+  "metadata": {
+    "run_id": "dynamic_audit_d1"
+  }
+}

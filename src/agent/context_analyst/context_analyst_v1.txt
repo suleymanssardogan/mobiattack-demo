@@ -32,8 +32,12 @@ or a hidden reasoning transcript. No raw credentials, request/response values or
 
 Return ONLY a structured JSON object matching the supplied output_schema, without
 markdown or prose outside JSON. Use exactly the input endpoint_context_id in every
-record and exactly the schema-specified IDs and creation timestamp. Initial
-hypothesis status is hypothesis; no lifecycle transition is allowed in this role.
+record that declares an endpoint and exactly the schema-specified observation/gap
+IDs and creation timestamp. Hypotheses contain only hypothesis_type, statement,
+evidence_refs and required_evidence. Do not generate hypothesis_id,
+endpoint_context_id or status inside hypotheses: the deterministic runtime binds
+them to this endpoint, computes canonical IDs and assigns status hypothesis.
+Select each hypothesis type at most once. No lifecycle transition is allowed.
 Every observation and hypothesis needs supporting canonical evidence_refs from the
 supplied evidence universe. Do not invent tx/correlation IDs or keep unsupported
 refs. The observation refs must support every selected fact and preserve core

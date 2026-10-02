@@ -1,0 +1,27 @@
+{
+  "hypothesis_count": 2,
+  "checks": [
+    {
+      "index": 0,
+      "known_type": true,
+      "id_valid": false,
+      "status_valid": true,
+      "endpoint_valid": true,
+      "duplicate_type": false
+    },
+    {
+      "index": 1,
+      "known_type": true,
+      "id_valid": false,
+      "status_valid": true,
+      "endpoint_valid": true,
+      "duplicate_type": false
+    }
+  ],
+  "validation_error": "HYPOTHESIS_STATE_OR_ID_INVALID",
+  "model": "qwen2.5:7b",
+  "id_mismatches": 2,
+  "status_mismatches": 0,
+  "duplicate_types": 0,
+  "raw_model_output_persisted": false
+}

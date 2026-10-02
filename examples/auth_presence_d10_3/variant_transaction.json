@@ -1,0 +1,61 @@
+{
+  "attribution": {
+    "baseline_transaction_ref": "e4446540-d4eb-40a3-9624-30e30cecc494",
+    "historical_baseline": true,
+    "method": "deterministic_local_executor"
+  },
+  "capture_id": "capture_206e80e2293945ba9246290d93764eb5",
+  "correlation": {},
+  "duration_ms": 0.0,
+  "flow_id": null,
+  "request": {
+    "body": null,
+    "body_metadata": {
+      "binary": false,
+      "size": 0,
+      "truncated": false
+    },
+    "headers": {
+      "accept": "*/*",
+      "accept-encoding": "gzip, deflate",
+      "accept-language": "tr-TR,tr;q=0.9,en-US;q=0.8,en;q=0.7",
+      "host": "192.168.1.154:18081",
+      "proxy-connection": "keep-alive",
+      "referer": "http://192.168.1.154:18081/",
+      "user-agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Mobile Safari/537.36",
+      "x-lab-run-id": "463eae39-8c7c-42b9-92bb-d0b34d467cbf"
+    },
+    "host": "192.168.1.154",
+    "method": "GET",
+    "path": "/profile",
+    "port": 18081,
+    "query": {},
+    "request_id": "c1f157ca-d607-4c89-9854-a193ca5f9fce",
+    "scheme": "http",
+    "timestamp": "2026-10-02T13:00:30.565169+00:00"
+  },
+  "response": {
+    "body": {
+      "error": "authentication_required"
+    },
+    "body_metadata": {
+      "binary": false,
+      "content_type": "application/json",
+      "size": 36,
+      "truncated": false
+    },
+    "headers": {
+      "cache-control": "no-store",
+      "content-length": "36",
+      "content-type": "application/json",
+      "date": "Fri, 02 Oct 2026 13:00:30 GMT",
+      "server": "BaseHTTP/0.6 Python/3.11.7",
+      "x-lab-trace-id": "lab_54e318c6ab834d88b3e11974e9c95ea8"
+    },
+    "status_code": 401,
+    "timestamp": "2026-10-02T13:00:30.566633+00:00"
+  },
+  "scope": "IN_SCOPE",
+  "session_id": "463eae39-8c7c-42b9-92bb-d0b34d467cbf",
+  "transaction_id": "a675d9f3-9cb0-4705-be02-2011479baba7"
+}

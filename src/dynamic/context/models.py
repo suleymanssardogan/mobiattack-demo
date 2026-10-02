@@ -10,9 +10,13 @@ from typing import Any
 
 
 def generate_endpoint_context_id(host: str, path: str, method: str | None,
-                                 observed_methods: list[str], correlation_id: str) -> str:
-    """Preserve correlation identity; observations never regroup endpoints."""
-    identity = [host, path, method or sorted(set(observed_methods)), correlation_id]
+                                 observed_methods: list[str] | None = None,
+                                 correlation_id: str = "", *, scheme: str | None = None,
+                                 port: int | None = None) -> str:
+    """Identity only: protocol, authority, method and literal/template path."""
+    from src.dynamic.correlation.api_correlator import normalize_transport, normalize_path, normalize_method
+    host, scheme, port = normalize_transport(host, scheme, port)
+    identity = [scheme, host, port, normalize_method(method), normalize_path(path)]
     digest = hashlib.sha256(json.dumps(identity, separators=(",", ":")).encode()).hexdigest()[:16]
     return f"ctx_{digest}"
 
@@ -34,6 +38,7 @@ class EndpointContext:
     runtime_context: dict[str, Any] = field(default_factory=dict)
     visibility: dict[str, Any] = field(default_factory=dict)
     evidence_refs: dict[str, Any] = field(default_factory=dict)
+    port: int | None = None
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)

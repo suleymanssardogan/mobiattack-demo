@@ -1,0 +1,27 @@
+[
+  {
+    "event_id": "e7c194d9-070c-4b3d-b512-2778851f1bd0",
+    "type": "SYSTEM_EVENT",
+    "name": "SESSION_STARTED",
+    "timestamp": "2026-10-02T09:38:23.177335+00:00",
+    "metadata": {
+      "package_name": "sg.vantagepoint.mstgkotlin",
+      "device_serial": "emulator-5554",
+      "preflight_status": "NOT_EVALUATED"
+    },
+    "flow_id": null,
+    "session_id": "4c18678f-4a91-4964-ba8e-640dcba428bf"
+  },
+  {
+    "event_id": "ceaf1d54-e786-45c6-a4da-0ef01165705c",
+    "type": "SYSTEM_EVENT",
+    "name": "FLOW_STARTED",
+    "timestamp": "2026-10-02T09:38:23.177948+00:00",
+    "metadata": {
+      "flow_name": "Function observation feasibility",
+      "description": ""
+    },
+    "flow_id": "23f45f6b-8191-4bcb-b4a9-e70ec9d17cb1",
+    "session_id": "4c18678f-4a91-4964-ba8e-640dcba428bf"
+  }
+]

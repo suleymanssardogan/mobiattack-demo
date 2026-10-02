@@ -1,0 +1,62 @@
+[
+  {
+    "event_id": "e466bd34-e292-4359-80de-9e198be026e1",
+    "type": "SYSTEM_EVENT",
+    "name": "SESSION_STARTED",
+    "timestamp": "2026-10-02T11:44:16.327868+00:00",
+    "metadata": {
+      "package_name": "com.vulnerablebankapp",
+      "device_serial": "emulator-5554",
+      "preflight_status": "NOT_EVALUATED"
+    },
+    "flow_id": null,
+    "session_id": "f31c2b91-021e-4bc1-980b-2275b6ef4b9f"
+  },
+  {
+    "event_id": "a0e55f4d-e53e-4449-a82c-cfc51f896015",
+    "type": "SYSTEM_EVENT",
+    "name": "FLOW_STARTED",
+    "timestamp": "2026-10-02T11:44:16.328533+00:00",
+    "metadata": {
+      "flow_name": "Normal login/session feasibility",
+      "description": ""
+    },
+    "flow_id": "44a5ac26-ad94-4167-b54c-02c9ffdf77e2",
+    "session_id": "f31c2b91-021e-4bc1-980b-2275b6ef4b9f"
+  },
+  {
+    "event_id": "6c00bda4-8c53-447b-aae5-f2e199b50ef2",
+    "type": "USER_ACTION",
+    "name": "ACTION_EXECUTED",
+    "timestamp": "2026-10-02T11:44:21.526146+00:00",
+    "metadata": {
+      "action_id": "act_f7a60cfc41c867d6",
+      "action_type": "click",
+      "status": "succeeded",
+      "attempts": 1,
+      "center": [
+        533,
+        1628
+      ],
+      "bounds": [
+        398,
+        1558,
+        669,
+        1699
+      ],
+      "resource_id": null,
+      "route_id": "node_939daea300a113a8"
+    },
+    "flow_id": "44a5ac26-ad94-4167-b54c-02c9ffdf77e2",
+    "session_id": "f31c2b91-021e-4bc1-980b-2275b6ef4b9f"
+  },
+  {
+    "event_id": "d80d8189-6840-44a2-887d-7b078f9b0b6a",
+    "type": "SYSTEM_EVENT",
+    "name": "SESSION_COMPLETED",
+    "timestamp": "2026-10-02T11:44:28.822948+00:00",
+    "metadata": {},
+    "flow_id": null,
+    "session_id": "f31c2b91-021e-4bc1-980b-2275b6ef4b9f"
+  }
+]

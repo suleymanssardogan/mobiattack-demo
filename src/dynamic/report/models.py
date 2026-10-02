@@ -9,7 +9,7 @@ import tempfile
 from typing import Any
 
 REPORT_FILENAME = "dynamic_analysis_report.json"
-COVERAGE_STATES = {"available", "partial", "unavailable", "not_observed"}
+COVERAGE_STATES = {"available", "partial", "unavailable", "not_observed", "unknown"}
 
 
 class DynamicReportError(ValueError):

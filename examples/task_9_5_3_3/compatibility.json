@@ -1,0 +1,7 @@
+{
+  "simple_retrofit_v1_equal": true,
+  "simple_retrofit_v1_candidate_sha256": "b3e0d95456d341fe31d1023ce4c46acb1a12940ed5ffd86148df235153e70369",
+  "fuel_equal": true,
+  "fuel_output_sha256": "b3723751c066e072933e548fabf0ab58ad1bf1bfe304be2a41b4b567396ece20",
+  "comparison": "Exact output equality with optimized binding disabled for V1; Retrofit integration disabled for Fuel"
+}

@@ -1,0 +1,36 @@
+[
+  {
+    "event_id": "c638a671-1ba4-4a34-a87e-33651fa76405",
+    "type": "SYSTEM_EVENT",
+    "name": "SESSION_STARTED",
+    "timestamp": "2026-10-02T12:01:37.055380+00:00",
+    "metadata": {
+      "package_name": "com.android.chrome",
+      "device_serial": "emulator-5554",
+      "preflight_status": "NOT_EVALUATED"
+    },
+    "flow_id": null,
+    "session_id": "031c8fb0-ccfc-4a32-a437-4541a2889ed9"
+  },
+  {
+    "event_id": "d81bf596-6968-4721-8c77-034dafb76d3f",
+    "type": "SYSTEM_EVENT",
+    "name": "FLOW_STARTED",
+    "timestamp": "2026-10-02T12:01:37.055828+00:00",
+    "metadata": {
+      "flow_name": "Local authenticated baseline acquisition",
+      "description": ""
+    },
+    "flow_id": "fe10f346-96ac-45a0-b7f6-6215a0925c9a",
+    "session_id": "031c8fb0-ccfc-4a32-a437-4541a2889ed9"
+  },
+  {
+    "event_id": "b8103f1a-2b99-4a39-acfb-94c978c8ad56",
+    "type": "SYSTEM_EVENT",
+    "name": "SESSION_COMPLETED",
+    "timestamp": "2026-10-02T12:01:42.693638+00:00",
+    "metadata": {},
+    "flow_id": null,
+    "session_id": "031c8fb0-ccfc-4a32-a437-4541a2889ed9"
+  }
+]

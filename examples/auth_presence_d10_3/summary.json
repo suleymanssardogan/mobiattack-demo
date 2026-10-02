@@ -1,0 +1,12 @@
+{
+  "baseline_status": 200,
+  "controlled_variant_sent": true,
+  "evidence_complete": true,
+  "execution_status": "completed",
+  "finding_generated": false,
+  "outcome": "validated",
+  "real_response_observed": true,
+  "secret_persisted": false,
+  "status": "PASS",
+  "variant_status": 401
+}

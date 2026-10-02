@@ -271,5 +271,37 @@ class TestRealOwaspManifestIntegration(unittest.TestCase):
         self.assertEqual(result["activities"], expected_activities)
 
 
+def test_launcher_alias_is_launchable_without_becoming_an_activity(tmp_path):
+    manifest = tmp_path / "AndroidManifest.xml"
+    manifest.write_text('''<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="org.example">
+      <application>
+        <activity android:name=".MainActivity"/>
+        <activity-alias android:name=".Launcher" android:targetActivity=".MainActivity">
+          <intent-filter><action android:name="android.intent.action.MAIN"/>
+            <category android:name="android.intent.category.LAUNCHER"/></intent-filter>
+        </activity-alias>
+      </application></manifest>''')
+    result = parse_manifest(manifest)
+    assert result["launcher_activity"] == "org.example.Launcher"
+    assert result["activities"] == ["org.example.MainActivity"]
+
+
+def test_disabled_or_unresolved_alias_is_not_launcher(tmp_path):
+    manifest = tmp_path / "AndroidManifest.xml"
+    for attributes in (
+        'android:targetActivity=".MainActivity" android:enabled="false"',
+        'android:targetActivity=".Missing"',
+        '',
+    ):
+        manifest.write_text(f'''<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="org.example">
+          <application><activity android:name=".MainActivity"/>
+            <activity-alias android:name=".Launcher" {attributes}>
+              <intent-filter><action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/></intent-filter>
+            </activity-alias>
+          </application></manifest>''')
+        assert parse_manifest(manifest)["launcher_activity"] is None
+
+
 if __name__ == "__main__":
     unittest.main()

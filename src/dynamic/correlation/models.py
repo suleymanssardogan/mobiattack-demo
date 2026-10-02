@@ -61,9 +61,12 @@ def generate_deterministic_correlation_id(
     path: str,
     match_type: str,
     method: str | None = None,
+    scheme: str | None = None,
+    port: int | None = None,
 ) -> str:
     """Computes a stable, deterministic correlation ID from key matching dimensions."""
     key = f"{static_candidate_id or ''}|{host.strip().lower()}|{path.strip()}|{match_type}|{method or ''}"
+    key += f"|{scheme or ''}|{port or ''}"
     digest = hashlib.sha256(key.encode("utf-8")).hexdigest()[:16]
     return f"corr_{digest}"
 
@@ -90,6 +93,8 @@ class ApiCorrelationEntry:
     route_context: list[dict[str, Any]] = field(default_factory=list)
     provenance: dict[str, Any] = field(default_factory=dict)
     notes: str | None = None
+    scheme: str | None = None
+    port: int | None = None
 
     def to_dict(self) -> dict[str, Any]:
         """Returns JSON-serializable dictionary without request/response bodies or sensitive data."""
@@ -98,6 +103,8 @@ class ApiCorrelationEntry:
             "match_type": self.match_type,
             "confidence": self.confidence,
             "host": self.host,
+            "scheme": self.scheme,
+            "port": self.port,
             "path": self.path,
             "static_candidate_id": self.static_candidate_id,
             "transaction_ids": list(self.transaction_ids),
@@ -217,6 +224,8 @@ class ApiCorrelationResult:
                     confidence=c.get("confidence", MatchConfidence.HIGH.value),
                     host=c.get("host", ""),
                     path=c.get("path", ""),
+                    scheme=c.get("scheme"),
+                    port=c.get("port"),
                     static_candidate_id=c.get("static_candidate_id"),
                     transaction_ids=c.get("transaction_ids", []),
                     static_method=c.get("static_method"),

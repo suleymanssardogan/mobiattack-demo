@@ -1,0 +1,30 @@
+{
+  "evidence_ref": "lab_acquisition_463eae398c7c42b992bbd0b34d467cbf",
+  "session_id": "463eae39-8c7c-42b9-92bb-d0b34d467cbf",
+  "status": "completed",
+  "source": "live_android_ui_local_backend_capture",
+  "baseline_refs": {
+    "session_id": "463eae39-8c7c-42b9-92bb-d0b34d467cbf",
+    "endpoint_context_id": "ctx_598671b778f7846b",
+    "login_transaction_ref": "48f20224-c947-4a2b-bb2c-b20576d18665",
+    "login_request_ref": "98b90c51-0723-411d-a529-f46ecb51b8f2",
+    "protected_transaction_ref": "e4446540-d4eb-40a3-9624-30e30cecc494",
+    "protected_request_ref": "45f4469d-c8fb-4bdc-92ec-5c866d1596ef",
+    "login_response_ref": "lab_3bfbe4182c47461aaf25211eec9aca5c",
+    "protected_response_ref": "lab_ce4771d18855479aae0afae5bf00eb38",
+    "authorization_presence": true,
+    "eligible_baseline": true,
+    "source": "controlled_local_lab_real_capture",
+    "security_test_executed": false,
+    "action_id": "act_4d3a12f998f2a6a3",
+    "route_id": "node_ae5d067cf204c0d4",
+    "tool_result_ref": "lab_acquisition_463eae398c7c42b992bbd0b34d467cbf",
+    "backend": "NativeProxyCaptureBackend",
+    "lab_http_port": 18081,
+    "proxy_port": 18080,
+    "proxy_restored": true,
+    "secret_persisted": false
+  },
+  "security_test_executed": false,
+  "endpoint_context_id": "ctx_598671b778f7846b"
+}

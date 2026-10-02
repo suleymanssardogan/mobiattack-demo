@@ -1,0 +1,9 @@
+{
+  "session_id": "463eae39-8c7c-42b9-92bb-d0b34d467cbf",
+  "source_node_id": "node_ae5d067cf204c0d4",
+  "action_id": "act_4d3a12f998f2a6a3",
+  "target_node_id": "node_ae5d067cf204c0d4",
+  "foreground_package": "com.android.chrome",
+  "foreground_activity": "org.chromium.chrome.browser.ChromeTabbedActivity",
+  "source": "existing_ui_observer_and_action_executor"
+}

@@ -1,0 +1,10 @@
+{
+  "app_id": "app_001",
+  "case_count": 1,
+  "holdout": false,
+  "human_review_status": "unreviewed",
+  "platform": "android",
+  "sanitized": true,
+  "source_type": "authorized_training_app",
+  "split": "development"
+}

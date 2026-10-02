@@ -1,0 +1,96 @@
+{
+  "apps": [
+    {
+      "app": "OWASP MSTG Android Kotlin / Hacking Playground",
+      "candidate_count": 1,
+      "retrofit_declarations": 0
+    },
+    {
+      "app": "Wikipedia",
+      "candidate_count": 0,
+      "retrofit_declarations": 127
+    },
+    {
+      "app": "AntennaPod",
+      "candidate_count": 0,
+      "retrofit_declarations": 0
+    }
+  ],
+  "coverage_matrix": {
+    "False_positive_filtering": "PARTIAL",
+    "Fuel_API_Discovery": "PARTIAL",
+    "Manifest": "PARTIAL",
+    "Network_Indicators": "PARTIAL",
+    "Other_API_Frameworks": "FAIL",
+    "Provenance": "PASS",
+    "Retrofit_Base_Binding": "PARTIAL",
+    "Retrofit_Declarations": "PARTIAL",
+    "Structure": "PASS"
+  },
+  "dynamic_or_agent_touched": false,
+  "focused_tests": {
+    "failed": 0,
+    "passed": 162
+  },
+  "full_regression": false,
+  "known_owasp_post_signup": "PASS",
+  "probes": {
+    "fuel_multiple_manager_base_binding": [
+      {
+        "base_url": "https://second.example.com/",
+        "evidence": {
+          "base_url_call_line": 8,
+          "base_url_line": 7,
+          "base_url_register": "v1",
+          "base_url_value": "https://second.example.com/",
+          "path_line": 9,
+          "path_register": "v2",
+          "path_value": "/signup",
+          "request_call_line": 10
+        },
+        "framework": "Fuel",
+        "full_url": "https://second.example.com/signup",
+        "method": "POST",
+        "path": "/signup",
+        "request_line": 10,
+        "source_file": "Managers.smali",
+        "status": "static_api_candidate"
+      }
+    ],
+    "fuel_multiple_manager_cross_binding_observed": true,
+    "local_file_url_only_candidate_count": 0,
+    "local_file_url_passed_to_fuel": [
+      {
+        "base_url": null,
+        "evidence": {
+          "base_url_call_line": null,
+          "base_url_line": null,
+          "base_url_register": null,
+          "base_url_value": null,
+          "path_line": 3,
+          "path_register": "v0",
+          "path_value": "file:///android_asset/test.html",
+          "request_call_line": 4
+        },
+        "framework": "Fuel",
+        "full_url": null,
+        "method": "GET",
+        "path": "file:///android_asset/test.html",
+        "request_line": 4,
+        "source_file": "Probe.smali",
+        "status": "static_api_candidate"
+      }
+    ],
+    "random_url_only_candidate_count": 0,
+    "sdk23_permission_and_disabled_application_manifest": {
+      "activities": [
+        "audit.test.Main"
+      ],
+      "launcher_activity": "audit.test.Main",
+      "package_name": "audit.test",
+      "permissions": []
+    }
+  },
+  "production_code_changed": false,
+  "status": "PARTIAL"
+}

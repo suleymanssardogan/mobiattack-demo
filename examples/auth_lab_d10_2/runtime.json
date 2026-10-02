@@ -1,0 +1,10 @@
+{
+  "timestamp": "2026-10-02T12:03:18.823775+00:00",
+  "package_name": "com.android.chrome",
+  "pid": 4168,
+  "process_running": true,
+  "foreground_package": "com.android.chrome",
+  "foreground_activity": "org.chromium.chrome.browser.ChromeTabbedActivity",
+  "fatal_detected": false,
+  "crash_detected": false
+}

@@ -1,0 +1,55 @@
+{
+  "session_id": "f31c2b91-021e-4bc1-980b-2275b6ef4b9f",
+  "stage": "dynamic_session",
+  "package_name": "com.vulnerablebankapp",
+  "device_serial": "emulator-5554",
+  "preflight_status": "NOT_EVALUATED",
+  "started_at": "2026-10-02T11:44:16.327707+00:00",
+  "ended_at": "2026-10-02T11:44:28.823000+00:00",
+  "status": "COMPLETED",
+  "flows": [
+    {
+      "flow_id": "44a5ac26-ad94-4167-b54c-02c9ffdf77e2",
+      "name": "Normal login/session feasibility",
+      "description": "",
+      "status": "COMPLETED",
+      "started_at": "2026-10-02T11:44:16.328517+00:00",
+      "ended_at": "2026-10-02T11:44:28.822934+00:00",
+      "events": [
+        {
+          "event_id": "6c00bda4-8c53-447b-aae5-f2e199b50ef2",
+          "type": "USER_ACTION",
+          "name": "ACTION_EXECUTED",
+          "timestamp": "2026-10-02T11:44:21.526146+00:00",
+          "metadata": {
+            "action_id": "act_f7a60cfc41c867d6",
+            "action_type": "click",
+            "status": "succeeded",
+            "attempts": 1,
+            "center": [
+              533,
+              1628
+            ],
+            "bounds": [
+              398,
+              1558,
+              669,
+              1699
+            ],
+            "resource_id": null,
+            "route_id": "node_939daea300a113a8"
+          },
+          "flow_id": "44a5ac26-ad94-4167-b54c-02c9ffdf77e2",
+          "session_id": "f31c2b91-021e-4bc1-980b-2275b6ef4b9f"
+        }
+      ]
+    }
+  ],
+  "warnings": [],
+  "errors": [],
+  "metadata": {
+    "task": "D10.1",
+    "authorized_training_source": "https://github.com/Commando-X/vuln-bank-mobile",
+    "dynamic_analysis_completed": false
+  }
+}

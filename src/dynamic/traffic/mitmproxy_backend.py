@@ -3,6 +3,9 @@
 from __future__ import annotations
 
 import logging
+import json
+import threading
+from pathlib import Path
 import os
 import shutil
 import signal
@@ -12,11 +15,14 @@ import time
 from typing import Any, Callable
 
 from src.dynamic.traffic.models import (
+    HttpRequestModel, HttpResponseModel,
     TrafficErrorCode,
     TrafficException,
     TrafficTransaction,
 )
 from src.dynamic.traffic.normalizer import normalize_http_transaction
+
+from src.dynamic.traffic.https_visibility import HttpsVisibility
 
 logger = logging.getLogger(__name__)
 
@@ -63,13 +69,18 @@ def is_port_in_use(port: int, host: str = "127.0.0.1") -> bool:
 class MitmproxyCaptureBackend:
     """Controls mitmdump process lifecycle, addon script, and stream ingestion."""
 
-    def __init__(self, executable_path: str | None = None) -> None:
+    def __init__(self, executable_path: str | None = None, ca_directory: str | Path | None = None) -> None:
         self.executable_path = find_mitmproxy_binary(executable_path)
         self.process: subprocess.Popen[str] | None = None
         self.captured_transactions: list[TrafficTransaction] = []
         self._on_transaction: Callable[[TrafficTransaction], None] | None = None
         self.listen_host: str = "127.0.0.1"
         self.listen_port: int = 8080
+        self.ca_directory = Path(ca_directory) if ca_directory else Path.home() / '.mitmproxy'
+        self.https = HttpsVisibility()
+        self._bridge_ready = threading.Event()
+        self._reader: threading.Thread | None = None
+        self._stderr_reader: threading.Thread | None = None
 
     def check_available(self) -> bool:
         """Returns True if mitmdump/mitmproxy executable is detected on system."""
@@ -100,6 +111,8 @@ class MitmproxyCaptureBackend:
         self.listen_port = listen_port
         self._on_transaction = on_transaction_captured
         self.captured_transactions = []
+        self._bridge_ready.clear()
+        self.https = HttpsVisibility(ca_trust=self.https.ca_trust, ca_reason=self.https.ca_reason)
 
         cmd = [
             self.executable_path,  # type: ignore[list-item]
@@ -108,9 +121,11 @@ class MitmproxyCaptureBackend:
             "-p",
             str(listen_port),
             "--set",
-            "flow_detail=1",
+            "flow_detail=0",
             "--set",
-            "ssl_insecure=true",
+            "ssl_insecure=false",
+            "--set", "confdir=" + str(self.ca_directory),
+            "-s", str(Path(__file__).with_name('mitmproxy_addon.py')),
         ]
         if script_path and os.path.isfile(script_path):
             cmd.extend(["-s", script_path])
@@ -122,9 +137,11 @@ class MitmproxyCaptureBackend:
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
                 text=True,
+                env={**os.environ, 'PYTHONPATH': str(Path(__file__).resolve().parents[3]) + os.pathsep + os.environ.get('PYTHONPATH', '')},
                 preexec_fn=os.setsid if hasattr(os, "setsid") else None,
             )
         except Exception as exc:
+            self.https.backend_failed = True
             raise TrafficException(
                 TrafficErrorCode.CAPTURE_START_FAILED,
                 f"Failed to launch mitmproxy process: {exc}",
@@ -133,11 +150,58 @@ class MitmproxyCaptureBackend:
         # Wait shortly to verify process did not crash immediately
         time.sleep(0.6)
         if self.process.poll() is not None:
+            self.https.backend_failed = True
             _, stderr = self.process.communicate()
             raise TrafficException(
                 TrafficErrorCode.CAPTURE_PROCESS_DIED,
                 f"mitmproxy exited immediately with code {self.process.returncode}: {stderr.strip()}",
             )
+
+        self._reader = threading.Thread(target=self._read_events, daemon=True)
+        self._reader.start()
+        self._stderr_reader = threading.Thread(target=self._drain_stderr, daemon=True)
+        self._stderr_reader.start()
+        if not self._bridge_ready.wait(timeout=timeout_seconds) or not self.is_alive():
+            self.https.backend_failed = True
+            self.stop()
+            raise TrafficException(TrafficErrorCode.CAPTURE_START_FAILED, 'Sanitized capture bridge did not become ready.')
+
+    def _drain_stderr(self) -> None:
+        if self.process and self.process.stderr:
+            for _ in self.process.stderr:
+                pass  # Drain without retaining raw provider logs.
+
+    def _read_events(self) -> None:
+        if self.process and self.process.stdout:
+            for line in self.process.stdout:
+                self.process_event_line(line)
+
+    def process_event_line(self, line: str) -> None:
+        if not line.startswith('MOBIATTACK_EVIDENCE '):
+            return
+        try:
+            record = json.loads(line[len('MOBIATTACK_EVIDENCE '):])
+            if record.get('event') == 'ready':
+                self._bridge_ready.set()
+            elif record.get('event') == 'tls_failure':
+                self.https.tls_failures += 1
+            elif record.get('event') == 'transaction':
+                from src.dynamic.traffic.normalizer import sanitize_transaction_data
+                data = sanitize_transaction_data(record['transaction'])
+                req = HttpRequestModel(**data.pop('request'))
+                resp = HttpResponseModel(**data.pop('response')) if data.get('response') else None
+                data.pop('response', None)
+                transaction = TrafficTransaction(request=req, response=resp, **data)
+                self._record_transaction(transaction, verified=True)
+        except (ValueError, TypeError, KeyError, AttributeError, TrafficException):
+            self.https.backend_failed = True
+
+    def _record_transaction(self, transaction: TrafficTransaction, *, verified: bool = False) -> None:
+        if verified and transaction.request.scheme == 'https' and transaction.response is not None:
+            self.https.verified_transactions += 1
+        self.captured_transactions.append(transaction)
+        if self._on_transaction:
+            self._on_transaction(transaction)
 
     def stop(self, timeout_seconds: float = 4.0) -> None:
         """Terminates mitmproxy process gracefully with SIGTERM, then SIGKILL fallback."""
@@ -168,6 +232,9 @@ class MitmproxyCaptureBackend:
         except Exception as exc:
             logger.error(f"Error terminating mitmproxy process: {exc}")
         finally:
+            for reader in (self._reader, self._stderr_reader):
+                if reader:
+                    reader.join(timeout=timeout_seconds)
             self.process = None
 
     def is_alive(self) -> bool:
@@ -190,9 +257,7 @@ class MitmproxyCaptureBackend:
             capture_id=capture_id,
             duration_ms=duration_ms,
         )
-        self.captured_transactions.append(transaction)
-        if self._on_transaction:
-            self._on_transaction(transaction)
+        self._record_transaction(transaction)
         return transaction
 
     def get_captured_transactions(self) -> list[TrafficTransaction]:

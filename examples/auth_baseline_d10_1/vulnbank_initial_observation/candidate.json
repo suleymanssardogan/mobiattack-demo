@@ -1,0 +1,49 @@
+{
+  "app": "VulnBank Mobile",
+  "package": "com.vulnerablebankapp",
+  "installed": true,
+  "authorized_source": "https://github.com/Commando-X/vuln-bank-mobile",
+  "eligible": false,
+  "auth_removal_sent": false,
+  "ui_labels": [],
+  "action_ids": [],
+  "launch_command_succeeded": true,
+  "runtime": {
+    "package_name": "com.vulnerablebankapp",
+    "pid": 24569,
+    "process_running": true,
+    "foreground_package": "com.vulnerablebankapp",
+    "foreground_activity": "com.vulnerablebankapp.MainActivity",
+    "fatal_detected": false,
+    "crash_detected": false
+  },
+  "ui_before": {
+    "safe_labels": [
+      "login",
+      "register"
+    ],
+    "input_count": 0,
+    "clickable_count": 2,
+    "resource_ids": [
+      "android:id/content",
+      "com.vulnerablebankapp:id/action_bar_root"
+    ]
+  },
+  "route_evidence": {
+    "session_id": "b31e6394-77a3-46bd-9b36-a5351d46734b",
+    "route_id": "node_939daea300a113a8",
+    "foreground_package": "com.vulnerablebankapp",
+    "foreground_activity": "com.vulnerablebankapp.MainActivity"
+  },
+  "proxy_restored": true,
+  "http_visibility": "available",
+  "https_visibility": "unavailable",
+  "total_captured_transactions": 0,
+  "target_transactions": 0,
+  "target_real_responses": 0,
+  "target_auth_transactions": 0,
+  "coverage_note": "not_observed_is_not_no_network_activity",
+  "baseline_evidence_complete": false,
+  "reason": "no_real_authenticated_baseline_observed_normal_login_requires_reachable_training_backend_and_fixture_account",
+  "endpoint_context_count": 0
+}

@@ -1,0 +1,41 @@
+{
+  "schema_version": "1.0",
+  "session_id": "965a2656-5e40-45a3-9164-71739e2e5f48",
+  "backend": "mitmproxy",
+  "total_transactions": 0,
+  "http_count": 0,
+  "https_count": 0,
+  "proxy_restored": true,
+  "http_visibility": "available",
+  "https_visibility": "unavailable",
+  "https_visibility_reason": "cleartext_http_only_backend",
+  "capture": {
+    "capture_id": "849631c1-89b7-4f1b-9e2e-b97f3eb8edee",
+    "session_id": "965a2656-5e40-45a3-9164-71739e2e5f48",
+    "device_serial": "emulator-5554",
+    "backend": "mitmproxy",
+    "proxy_host": "10.0.2.2",
+    "proxy_port": 18080,
+    "started_at": "2026-10-02T08:30:19.638785+00:00",
+    "ended_at": "2026-10-02T08:30:27.708189+00:00",
+    "status": "COMPLETED",
+    "warnings": [],
+    "errors": [],
+    "metadata": {}
+  },
+  "summary": {
+    "capture_id": "849631c1-89b7-4f1b-9e2e-b97f3eb8edee",
+    "session_id": "965a2656-5e40-45a3-9164-71739e2e5f48",
+    "total_transactions": 0,
+    "http_count": 0,
+    "https_count": 0,
+    "domains": [],
+    "correlated_flow_count": 0,
+    "in_scope_count": 0,
+    "proxy_restored": true,
+    "http_visibility": "available",
+    "https_visibility": "unavailable",
+    "https_visibility_reason": "cleartext_http_only_backend"
+  },
+  "transactions": []
+}

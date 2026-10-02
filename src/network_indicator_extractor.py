@@ -148,6 +148,7 @@ NETWORK_URL_RE = re.compile(r'\bhttps?://[a-zA-Z0-9][-a-zA-Z0-9.]*(?::[0-9]+)?(?
 IPV4_RE = re.compile(r'\b(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)\.){3}(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)\b')
 DOMAIN_RE = re.compile(r'\b(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,24}\b')
 PATH_CANDIDATE_RE = re.compile(r'(?<![a-zA-Z0-9_<:/])/(?:[a-zA-Z0-9_.-]+/?)+')
+SMALI_STRING_FIELD_RE = re.compile(r'^\s*\.field\s+[^=\n]+:Ljava/lang/String;\s*=\s*"([^"\\]*(?:\\.[^"\\]*)*)"\s*$')
 
 
 def _clean_trailing_punctuation(val: str) -> str:
@@ -222,7 +223,12 @@ def extract_network_indicators(analysis_root: str | Path) -> dict:
                 if not line:
                     continue
                 if ext == ".smali" and "const-string" not in line:
-                    continue
+                    field = SMALI_STRING_FIELD_RE.match(line)
+                    if not field:
+                        continue
+                    # A declared literal is an indicator only; field names do not
+                    # establish API semantics. Retain the original source line.
+                    line = field.group(1)
 
                 line_network_urls: list[str] = []
                 line_local_urls: list[str] = []

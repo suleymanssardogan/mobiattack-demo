@@ -1,0 +1,61 @@
+{
+  "schema_version": "1.0",
+  "session_id": "audit-synthetic",
+  "created_at": "2026-10-02T08:53:31Z",
+  "summary": {
+    "static_candidate_count": 1,
+    "dynamic_endpoint_count": 1,
+    "correlated_count": 1,
+    "static_only_count": 0,
+    "dynamic_only_count": 0,
+    "http_visibility": "available",
+    "https_visibility": "unavailable",
+    "https_visibility_reason": "certificate_trust_unknown",
+    "visibility_note": "HTTPS traffic visibility was unavailable (certificate_trust_unknown). Unobserved static HTTPS candidates were not observable in runtime traffic."
+  },
+  "correlations": [
+    {
+      "correlation_id": "corr_8e0c20e33f29db43",
+      "match_type": "exact",
+      "confidence": "high",
+      "host": "127.0.0.1",
+      "path": "/signup",
+      "static_candidate_id": "stat_cand_1",
+      "transaction_ids": [
+        "tx_audit"
+      ],
+      "static_method": "POST",
+      "observed_methods": [
+        "POST"
+      ],
+      "observed_status_codes": [
+        201
+      ],
+      "first_observed_at": "2026-10-02T08:30:20Z",
+      "last_observed_at": "2026-10-02T08:30:20Z",
+      "observation_count": 1,
+      "observed_action_ids": [],
+      "observed_query_keys": [
+        "token"
+      ],
+      "route_context": [],
+      "provenance": {
+        "static_candidate_id_origin": "correlation_reference",
+        "static_candidate_id_source_field": null,
+        "source_file": "smali/sg/vantagepoint/mstgkotlin/RegisterActivity$onCreate$2.smali",
+        "request_line": 214,
+        "framework": "Fuel",
+        "evidence": {
+          "base_url_call_line": 99,
+          "base_url_line": 97,
+          "base_url_register": "v1",
+          "base_url_value": "http://127.0.0.1",
+          "path_line": 102,
+          "path_register": "v0",
+          "path_value": "/signup",
+          "request_call_line": 214
+        }
+      }
+    }
+  ]
+}

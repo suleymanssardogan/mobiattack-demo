@@ -63,12 +63,16 @@ class HttpsInterceptionReadiness:
     ca_certificate_installed: bool = False
     certificate_trust_unknown: bool = True
     pinning_suspected: bool = False
+    ca_trust_state: str = "unknown"
+    ca_trust_reason: str = "certificate_trust_unknown"
 
     def to_dict(self) -> dict[str, Any]:
         return {
             "ca_certificate_installed": self.ca_certificate_installed,
             "certificate_trust_unknown": self.certificate_trust_unknown,
             "pinning_suspected": self.pinning_suspected,
+            "ca_trust_state": self.ca_trust_state,
+            "ca_trust_reason": self.ca_trust_reason,
         }
 
 
@@ -228,6 +232,10 @@ class CaptureSummary:
     http_visibility: str = "available"
     https_visibility: str = "unavailable"
     https_visibility_reason: str = "certificate_trust_unknown"
+    ca_trust_state: str = "unknown"
+    ca_trust_reason: str = "certificate_trust_unknown"
+    verified_https_transactions: int = 0
+    tls_failure_count: int = 0
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -243,6 +251,10 @@ class CaptureSummary:
             "http_visibility": self.http_visibility,
             "https_visibility": self.https_visibility,
             "https_visibility_reason": self.https_visibility_reason,
+            "ca_trust_state": self.ca_trust_state,
+            "ca_trust_reason": self.ca_trust_reason,
+            "verified_https_transactions": self.verified_https_transactions,
+            "tls_failure_count": self.tls_failure_count,
         }
 
 
@@ -420,7 +432,7 @@ def create_action_traffic_evidence(
             note = "No traffic was observed during the action window."
         else:
             status = correlation_status or CorrelationStatus.PARTIAL.value
-            note = "No visible HTTP transactions were captured during the action window; HTTPS visibility was unavailable."
+            note = f"No visible HTTP transactions were captured during the action window; HTTPS visibility was {https_visibility}."
             if https_visibility_reason:
                 note += f" ({https_visibility_reason})"
 

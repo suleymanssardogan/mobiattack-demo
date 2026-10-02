@@ -295,3 +295,60 @@ def test_missing_initial_status_is_rejected(endpoint):
         data["hypotheses"][0].pop("status")
         return data
     assert run(endpoint, FakeModelClient(missing)).status == "invalid_output"
+
+
+def semantic_output(data, request):
+    for h in data['hypotheses']:
+        for key in ('hypothesis_id', 'endpoint_context_id', 'status'):
+            h.pop(key)
+    return data
+
+
+def test_runtime_owns_hypothesis_identity_state_and_does_not_mutate_reply(endpoint):
+    from src.agent.context_analyst.validation import record_id
+    captured={}
+    def capture(data,request):
+        semantic_output(data,request)
+        captured['data']=data
+        captured['before']=deepcopy(data)
+        return data
+    client=FakeModelClient(capture)
+    result=run(endpoint,client)
+    assert captured['data']==captured['before']
+    assert result.status=='completed' and result.hypotheses
+    schema=client.requests[0].output_schema['properties']['hypotheses']['items']
+    assert set(schema['properties'])=={'hypothesis_type','statement','evidence_refs','required_evidence'}
+    assert set(schema['required'])==set(schema['properties'])
+    for h in result.hypotheses:
+        assert h.hypothesis_id==record_id('hyp',endpoint.endpoint_context_id+h.hypothesis_type)
+        assert h.endpoint_context_id==endpoint.endpoint_context_id and h.status=='hypothesis'
+    assert result.hypotheses==run(endpoint,FakeModelClient(semantic_output)).hypotheses
+
+
+@pytest.mark.parametrize('mutation', ['statement','required','reference','endpoint','type','forbidden','duplicate'])
+def test_runtime_identity_binding_never_repairs_semantic_errors(endpoint, mutation):
+    def transform(data, request):
+        semantic_output(data,request)
+        h=data['hypotheses'][0]
+        if mutation=='statement': h['statement']='Unsupported semantic claim'
+        if mutation=='required': h['required_evidence']=[]
+        if mutation=='reference': h['evidence_refs'].append('dynamic/traffic.json#transaction_id=tx_invented')
+        if mutation=='endpoint': data['endpoint_context_id']='ctx_wrong'
+        if mutation=='type': h['hypothesis_type']='invented_type'
+        if mutation=='forbidden': h['finding']=True
+        if mutation=='duplicate': data['hypotheses'].append(deepcopy(h))
+        return data
+    result=run(endpoint,FakeModelClient(transform))
+    assert result.status=='invalid_output' and result.attempts==2 and not result.hypotheses
+
+
+@pytest.mark.parametrize('field,value,code', [
+    ('hypothesis_id','hyp_wrong','HYPOTHESIS_ID_INVALID'),
+    ('status','planned','HYPOTHESIS_STATE_INVALID'),
+    ('endpoint_context_id','ctx_other','ENDPOINT_MISMATCH')])
+def test_explicit_legacy_identity_errors_are_distinguished_not_overwritten(endpoint,field,value,code):
+    def transform(data,request):
+        data['hypotheses'][0][field]=value
+        return data
+    result=run(endpoint,FakeModelClient(transform))
+    assert result.status=='invalid_output' and code in result.validation_errors

@@ -2,8 +2,9 @@
 
 from __future__ import annotations
 
-from collections import defaultdict
+from collections import Counter, defaultdict
 import logging
+import ipaddress
 from pathlib import Path
 import re
 from typing import Any
@@ -21,6 +22,10 @@ from src.dynamic.correlation.models import (
 from src.dynamic.traffic.models import TrafficTransaction
 
 logger = logging.getLogger(__name__)
+
+def _dict_session(value: Any) -> str | None:
+    return value.get("session_id") if isinstance(value, dict) else None
+
 
 def normalize_host(raw_host: str | None) -> str:
     """Safely normalizes host string without merging subdomains.
@@ -47,6 +52,35 @@ def normalize_host(raw_host: str | None) -> str:
     elif h.endswith(":443"):
         h = h[:-4]
     return h
+
+
+def normalize_transport(raw_host: str, scheme: str | None, port: Any = None) -> tuple[str, str | None, int | None]:
+    """Canonical authority, explicit protocol and effective port; no cross-protocol inference."""
+    try:
+        authority = raw_host
+        try:
+            if isinstance(ipaddress.ip_address(raw_host), ipaddress.IPv6Address):
+                authority = "[" + raw_host + "]"
+        except ValueError:
+            pass
+        parsed = urllib.parse.urlsplit(authority if "://" in authority else "//" + authority)
+        protocol = (scheme or parsed.scheme or "").lower()
+        if protocol not in {"http", "https"}:
+            return normalize_host(raw_host), None, None
+        if parsed.scheme and parsed.scheme.lower() != protocol:
+            return normalize_host(raw_host), None, None
+        embedded_port = parsed.port
+        if port is not None and (isinstance(port, bool) or str(port) != str(int(port))):
+            return normalize_host(raw_host), None, None
+        explicit_port = int(port) if port is not None else embedded_port
+        if embedded_port is not None and port is not None and embedded_port != explicit_port:
+            return normalize_host(raw_host), None, None
+        effective = explicit_port if explicit_port is not None else (443 if protocol == "https" else 80)
+        if not 1 <= effective <= 65535 or not parsed.hostname or parsed.username or parsed.password:
+            return normalize_host(raw_host), None, None
+        return parsed.hostname.lower().rstrip("."), protocol, effective
+    except (TypeError, ValueError):
+        return normalize_host(raw_host), None, None
 
 
 def normalize_path(raw_path: str | None) -> str:
@@ -198,7 +232,7 @@ def _parse_static_candidate(cand: Any, index: int) -> dict[str, Any]:
         path = path_val or "/"
         scheme = cand.get("scheme", "")
 
-    norm_host = normalize_host(host)
+    norm_host, scheme, effective_port = normalize_transport(host, scheme, cand.get("port"))
     norm_path = normalize_path(path)
     norm_method = normalize_method(method_val)
 
@@ -220,7 +254,8 @@ def _parse_static_candidate(cand: Any, index: int) -> dict[str, Any]:
         "host": norm_host,
         "path": norm_path,
         "method": norm_method,
-        "scheme": scheme.lower() if scheme else "http",
+        "scheme": scheme,
+        "effective_port": effective_port,
         "provenance": provenance,
         "raw": cand,
     }
@@ -267,9 +302,21 @@ def _parse_dynamic_transaction(tx: Any, index: int) -> dict[str, Any]:
         status_code = resp.get("status_code", 0)
     status_code = int(status_code) if status_code is not None else 0
 
+    scheme = getattr(req, "scheme", None) if req else None
+    port = getattr(req, "port", None) if req else None
+    if isinstance(req, dict):
+        scheme, port = req.get("scheme"), req.get("port")
+    norm_host, scheme, effective_port = normalize_transport(host or "", scheme, port)
+    tx_session = getattr(tx, "session_id", None)
+    if isinstance(tx, dict):
+        tx_session = tx.get("session_id")
+
     return {
         "transaction_id": str(tx_id),
-        "host": normalize_host(host or ""),
+        "host": norm_host,
+        "scheme": scheme,
+        "effective_port": effective_port,
+        "session_id": tx_session,
         "path": normalize_path(path or "/"),
         "method": normalize_method(method) or "GET",
         "query_keys": _extract_query_keys(query),
@@ -295,13 +342,36 @@ def correlate_static_dynamic_apis(
     raw_traffic = traffic_transactions if isinstance(traffic_transactions, list) else []
 
     parsed_static = [_parse_static_candidate(c, i) for i, c in enumerate(raw_static)]
-    parsed_traffic = [_parse_dynamic_transaction(t, i) for i, t in enumerate(raw_traffic)]
+    parsed_traffic = []
+    for index, raw_tx in enumerate(raw_traffic):
+        data = raw_tx.to_dict() if hasattr(raw_tx, "to_dict") else raw_tx
+        if not isinstance(data, dict) or not isinstance(data.get("transaction_id"), str) or not data["transaction_id"]:
+            continue
+        request = data.get("request")
+        if (not isinstance(request, dict) or not all(isinstance(request.get(k), str) and request[k]
+                for k in ("host", "path", "method")) or data.get("synthetic") or data.get("internal")
+                or request.get("synthetic") or request.get("internal")):
+            continue
+        response = data.get("response")
+        if response is not None and (not isinstance(response, dict) or response.get("synthetic") or response.get("internal")
+                or not isinstance(response.get("status_code"), int) or isinstance(response.get("status_code"), bool)):
+            continue
+        if any(request.get(key) is not None and not isinstance(request[key], dict) for key in ("headers", "body_metadata")):
+            continue
+        try:
+            tx = _parse_dynamic_transaction(raw_tx, index)
+        except (ValueError, TypeError, AttributeError):
+            continue
+        if tx["scheme"] and (not tx["session_id"] or tx["session_id"] == session_id):
+            parsed_traffic.append(tx)
+    id_counts = Counter(tx["transaction_id"] for tx in parsed_traffic)
+    parsed_traffic = [tx for tx in parsed_traffic if id_counts[tx["transaction_id"]] == 1]
 
     # Map transaction_id -> associated action_ids and route_context
     tx_to_actions: dict[str, list[str]] = defaultdict(list)
     tx_to_routes: dict[str, list[dict[str, Any]]] = defaultdict(list)
 
-    if traffic_evidence:
+    if traffic_evidence and getattr(traffic_evidence, "session_id", _dict_session(traffic_evidence)) == session_id:
         actions_list = []
         if hasattr(traffic_evidence, "actions"):
             actions_list = traffic_evidence.actions
@@ -309,6 +379,12 @@ def correlate_static_dynamic_apis(
             actions_list = traffic_evidence.get("actions", [])
 
         for act in actions_list:
+            data = act.to_dict() if hasattr(act, "to_dict") else act
+            if (not isinstance(data, dict) or not data.get("action_id") or not data.get("source_node_id")
+                    or data.get("session_id", session_id) != session_id
+                    or data.get("correlation_status") not in ("available", "partial")
+                    or not isinstance(data.get("transaction_ids"), list)):
+                continue
             act_id = getattr(act, "action_id", None)
             if act_id is None and isinstance(act, dict):
                 act_id = act.get("action_id", "")
@@ -351,7 +427,9 @@ def correlate_static_dynamic_apis(
         best_conf = ""
 
         for idx, sc in enumerate(parsed_static):
-            if sc["host"] != tx["host"]:
+            if (not sc["scheme"] or not tx["scheme"] or
+                    (sc["scheme"], sc["host"], sc["effective_port"]) !=
+                    (tx["scheme"], tx["host"], tx["effective_port"])):
                 continue
 
             is_match, is_tmpl = match_paths(sc["path"], tx["path"])
@@ -434,6 +512,7 @@ def correlate_static_dynamic_apis(
                 path=sc["path"],
                 match_type=entry_match_type,
                 method=sc["method"],
+                scheme=sc["scheme"], port=sc["effective_port"],
             )
 
             correlations.append(
@@ -443,6 +522,7 @@ def correlate_static_dynamic_apis(
                     confidence=entry_conf,
                     host=sc["host"],
                     path=sc["path"],
+                    scheme=sc["scheme"], port=sc["effective_port"],
                     static_candidate_id=sc["candidate_id"],
                     transaction_ids=tx_ids,
                     static_method=sc["method"],
@@ -466,6 +546,7 @@ def correlate_static_dynamic_apis(
                 path=sc["path"],
                 match_type=MatchType.STATIC_ONLY.value,
                 method=sc["method"],
+                scheme=sc["scheme"], port=sc["effective_port"],
             )
 
             note = "not observed in available runtime traffic"
@@ -479,6 +560,7 @@ def correlate_static_dynamic_apis(
                     confidence=MatchConfidence.LOW.value,
                     host=sc["host"],
                     path=sc["path"],
+                    scheme=sc["scheme"], port=sc["effective_port"],
                     static_candidate_id=sc["candidate_id"],
                     transaction_ids=[],
                     static_method=sc["method"],
@@ -496,13 +578,13 @@ def correlate_static_dynamic_apis(
             )
 
     # Process unmatched dynamic transactions (group by host + path) -> dynamic_only
-    dynamic_only_groups: dict[tuple[str, str], list[dict[str, Any]]] = defaultdict(list)
+    dynamic_only_groups: dict[tuple, list[dict[str, Any]]] = defaultdict(list)
     for tx in parsed_traffic:
         if tx["transaction_id"] not in matched_tx_ids:
-            dynamic_only_groups[(tx["host"], tx["path"])].append(tx)
+            dynamic_only_groups[(tx["scheme"], tx["host"], tx["effective_port"], tx["path"], tx["method"])].append(tx)
 
     dynamic_only_count = len(dynamic_only_groups)
-    for (d_host, d_path), tx_group in sorted(dynamic_only_groups.items()):
+    for (d_scheme, d_host, d_port, d_path, d_method), tx_group in sorted(dynamic_only_groups.items(), key=lambda item: str(item[0])):
         tx_ids = sorted(list({t["transaction_id"] for t in tx_group}))
         obs_methods = sorted(list({t["method"] for t in tx_group}))
         obs_codes = sorted(list({t["status_code"] for t in tx_group if t["status_code"] > 0}))
@@ -529,6 +611,7 @@ def correlate_static_dynamic_apis(
             path=d_path,
             match_type=MatchType.DYNAMIC_ONLY.value,
             method=first_method,
+            scheme=d_scheme, port=d_port,
         )
 
         correlations.append(
@@ -538,6 +621,7 @@ def correlate_static_dynamic_apis(
                 confidence=MatchConfidence.LOW.value,
                 host=d_host,
                 path=d_path,
+                scheme=d_scheme, port=d_port,
                 static_candidate_id=None,
                 transaction_ids=tx_ids,
                 static_method=None,

@@ -1,0 +1,71 @@
+{
+  "session_id": "b22fdc0a-f806-4e31-b3ae-7abee0572c99",
+  "stage": "dynamic_session",
+  "package_name": "sg.vantagepoint.mstgkotlin",
+  "device_serial": "emulator-5554",
+  "preflight_status": "NOT_EVALUATED",
+  "started_at": "2026-10-02T09:32:44.369828+00:00",
+  "ended_at": "2026-10-02T09:32:46.794432+00:00",
+  "status": "COMPLETED",
+  "flows": [
+    {
+      "flow_id": "42098336-054b-40a3-96b5-b8acbca558f1",
+      "name": "Filesystem observation feasibility",
+      "description": "",
+      "status": "COMPLETED",
+      "started_at": "2026-10-02T09:32:44.370583+00:00",
+      "ended_at": "2026-10-02T09:32:46.794418+00:00",
+      "events": [
+        {
+          "event_id": "82bc66c5-8265-41d6-802c-33420b21a5b1",
+          "type": "SYSTEM_EVENT",
+          "name": "FILESYSTEM_WINDOW_STARTED",
+          "timestamp": "2026-10-02T09:32:46.544754+00:00",
+          "metadata": {
+            "route_id": "node_8c9f778b58d89aff",
+            "action_id": "act_f405a10893d9b99a"
+          },
+          "flow_id": "42098336-054b-40a3-96b5-b8acbca558f1",
+          "session_id": "b22fdc0a-f806-4e31-b3ae-7abee0572c99"
+        },
+        {
+          "event_id": "c128885b-90d3-4ed6-9fd5-c3efe7508e56",
+          "type": "USER_ACTION",
+          "name": "ACTION_EXECUTED",
+          "timestamp": "2026-10-02T09:32:46.653949+00:00",
+          "metadata": {
+            "action_id": "act_f405a10893d9b99a",
+            "action_type": "back",
+            "status": "succeeded",
+            "attempts": 1,
+            "keyevent": "KEYCODE_BACK",
+            "keycode": "4",
+            "route_id": "node_8c9f778b58d89aff"
+          },
+          "flow_id": "42098336-054b-40a3-96b5-b8acbca558f1",
+          "session_id": "b22fdc0a-f806-4e31-b3ae-7abee0572c99"
+        },
+        {
+          "event_id": "10a39e8c-a26e-4d81-a115-4c6458cba4c8",
+          "type": "SYSTEM_EVENT",
+          "name": "FILESYSTEM_WINDOW_FINISHED",
+          "timestamp": "2026-10-02T09:32:46.793797+00:00",
+          "metadata": {
+            "coverage": "unavailable",
+            "changes_observed": 0,
+            "observed_not_caused": true
+          },
+          "flow_id": "42098336-054b-40a3-96b5-b8acbca558f1",
+          "session_id": "b22fdc0a-f806-4e31-b3ae-7abee0572c99"
+        }
+      ]
+    }
+  ],
+  "warnings": [],
+  "errors": [],
+  "metadata": {
+    "bounded_spike": true,
+    "filesystem_coverage": "unavailable",
+    "dynamic_analysis_completed": false
+  }
+}

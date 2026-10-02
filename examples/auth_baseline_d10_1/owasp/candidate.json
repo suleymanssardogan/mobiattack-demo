@@ -1,0 +1,55 @@
+{
+  "app": "OWASP MSTG Kotlin",
+  "package": "sg.vantagepoint.mstgkotlin",
+  "installed": true,
+  "authorized_source": "https://github.com/OWASP/MASTG-Hacking-Playground",
+  "eligible": false,
+  "auth_removal_sent": false,
+  "ui_labels": [],
+  "action_ids": [],
+  "launch_command_succeeded": true,
+  "runtime": {
+    "package_name": "sg.vantagepoint.mstgkotlin",
+    "pid": 18904,
+    "process_running": true,
+    "foreground_package": "sg.vantagepoint.mstgkotlin",
+    "foreground_activity": "sg.vantagepoint.mstgkotlin.MainActivity",
+    "fatal_detected": false,
+    "crash_detected": false
+  },
+  "ui_before": {
+    "safe_labels": [],
+    "input_count": 0,
+    "clickable_count": 3,
+    "resource_ids": [
+      "android:id/content",
+      "android:id/navigationBarBackground",
+      "android:id/statusBarBackground",
+      "sg.vantagepoint.mstgkotlin:id/action_bar",
+      "sg.vantagepoint.mstgkotlin:id/action_bar_container",
+      "sg.vantagepoint.mstgkotlin:id/decor_content_parent",
+      "sg.vantagepoint.mstgkotlin:id/menulayout",
+      "sg.vantagepoint.mstgkotlin:id/tvrootcheck",
+      "sg.vantagepoint.mstgkotlin:id/tvsharedpref",
+      "sg.vantagepoint.mstgkotlin:id/tvsharedpref_details",
+      "sg.vantagepoint.mstgkotlin:id/tvwebview"
+    ]
+  },
+  "route_evidence": {
+    "session_id": "60e41fc7-e372-4ade-a027-844bc879a7e0",
+    "route_id": "node_89632704e0e7e91d",
+    "foreground_package": "sg.vantagepoint.mstgkotlin",
+    "foreground_activity": "sg.vantagepoint.mstgkotlin.MainActivity"
+  },
+  "proxy_restored": true,
+  "http_visibility": "available",
+  "https_visibility": "unavailable",
+  "total_captured_transactions": 0,
+  "target_transactions": 0,
+  "target_real_responses": 0,
+  "target_auth_transactions": 0,
+  "coverage_note": "not_observed_is_not_no_network_activity",
+  "baseline_evidence_complete": false,
+  "reason": "no_real_authenticated_baseline_observed_normal_login_requires_reachable_training_backend_and_fixture_account",
+  "endpoint_context_count": 0
+}

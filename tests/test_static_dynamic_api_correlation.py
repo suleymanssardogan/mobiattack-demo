@@ -46,6 +46,7 @@ def _make_transaction(
         transaction_id=tx_id,
         request=HttpRequestModel(
             method=method,
+            scheme="https", port=443,
             host=host,
             path=path,
             query=query or {},
@@ -398,7 +399,7 @@ class TestStaticDynamicApiCorrelation(unittest.TestCase):
             ],
         )
 
-        res = correlate_static_dynamic_apis(static_cands, [tx], traffic_evidence=traffic_evidence)
+        res = correlate_static_dynamic_apis(static_cands, [tx], traffic_evidence=traffic_evidence, session_id=self.session_id)
         entry = res.correlations[0]
         self.assertEqual(entry.observed_action_ids, ["act_btn_login"])
 
@@ -419,7 +420,7 @@ class TestStaticDynamicApiCorrelation(unittest.TestCase):
             ],
         )
 
-        res = correlate_static_dynamic_apis(static_cands, [tx], traffic_evidence=traffic_evidence)
+        res = correlate_static_dynamic_apis(static_cands, [tx], traffic_evidence=traffic_evidence, session_id=self.session_id)
         entry = res.correlations[0]
         self.assertEqual(len(entry.route_context), 1)
         self.assertEqual(entry.route_context[0]["source_node_id"], "node_product")

@@ -1,0 +1,30 @@
+{
+  "checks": {
+    "exact_match": true,
+    "static_template_to_concrete": true,
+    "literal_mismatch_rejected": true,
+    "dynamic_only_no_static_provenance": true,
+    "static_only_honest": true,
+    "coverage_preserved": true,
+    "context_sanitization": true,
+    "existing_fixture_refs": true,
+    "canonical_report_partial_coverage": true
+  },
+  "gaps": {
+    "nondefault_dynamic_port_ignored": true,
+    "scheme_difference_ignored": true,
+    "id_changes_on_static_order_change": true,
+    "id_changes_on_static_only_to_exact": true,
+    "observed_flag_with_missing_tx_payload": true,
+    "cross_session_route_ref_not_validated": true
+  },
+  "focused_tests": {
+    "passed": 207,
+    "failed": 0,
+    "subtests_passed": 18
+  },
+  "live_transactions_available": 0,
+  "synthetic_exact_not_live_signup": true,
+  "production_code_changed": false,
+  "full_regression_run": false
+}

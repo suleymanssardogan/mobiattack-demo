@@ -1,0 +1,55 @@
+{
+  "app": "Damn Vulnerable Bank",
+  "package": "com.app.damnvulnerablebank",
+  "installed": true,
+  "authorized_source": "https://github.com/rewanthtammana/Damn-Vulnerable-Bank",
+  "eligible": false,
+  "auth_removal_sent": false,
+  "ui_labels": [],
+  "action_ids": [],
+  "launch_command_succeeded": true,
+  "runtime": {
+    "package_name": "com.app.damnvulnerablebank",
+    "pid": 24875,
+    "process_running": true,
+    "foreground_package": "com.app.damnvulnerablebank",
+    "foreground_activity": "com.app.damnvulnerablebank.SplashScreen",
+    "fatal_detected": false,
+    "crash_detected": false
+  },
+  "ui_before": {
+    "safe_labels": [
+      "login",
+      "signup"
+    ],
+    "input_count": 1,
+    "clickable_count": 4,
+    "resource_ids": [
+      "android:id/content",
+      "android:id/navigationBarBackground",
+      "com.app.damnvulnerablebank:id/action_bar_root",
+      "com.app.damnvulnerablebank:id/apiurl",
+      "com.app.damnvulnerablebank:id/healthc",
+      "com.app.damnvulnerablebank:id/login1",
+      "com.app.damnvulnerablebank:id/signup1",
+      "com.app.damnvulnerablebank:id/tet"
+    ]
+  },
+  "route_evidence": {
+    "session_id": "24de73dd-5f59-4b9c-b0c1-e227a4a5ad87",
+    "route_id": "node_d7554bd6f0561056",
+    "foreground_package": "com.app.damnvulnerablebank",
+    "foreground_activity": "com.app.damnvulnerablebank.SplashScreen"
+  },
+  "proxy_restored": true,
+  "http_visibility": "available",
+  "https_visibility": "unavailable",
+  "total_captured_transactions": 0,
+  "target_transactions": 0,
+  "target_real_responses": 0,
+  "target_auth_transactions": 0,
+  "coverage_note": "not_observed_is_not_no_network_activity",
+  "baseline_evidence_complete": false,
+  "reason": "no_real_authenticated_baseline_observed_normal_login_requires_reachable_training_backend_and_fixture_account",
+  "endpoint_context_count": 0
+}

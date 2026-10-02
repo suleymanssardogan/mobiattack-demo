@@ -25,6 +25,7 @@ from src.dynamic.traffic.models import (
 from src.dynamic.traffic.normalizer import normalize_http_transaction
 from src.dynamic.traffic.proxy_manager import DeviceProxyManager
 from src.dynamic.traffic.storage import TrafficStorage
+from src.dynamic.traffic.https_visibility import check_ca_trust
 
 logger = logging.getLogger(__name__)
 
@@ -58,7 +59,9 @@ class DynamicTrafficService:
             device_serial=device_serial or "",
             proxy_host=proxy_host,
             proxy_port=proxy_port,
+            capture_backend=type(self.backend).__name__,
         )
+        self.last_readiness = result
         warnings: list[str] = []
         errors: list[dict[str, str]] = []
 
@@ -130,14 +133,14 @@ class DynamicTrafficService:
                     f"Direct ICMP reachability to proxy host '{proxy_host}' from device could not be verified."
                 )
 
-        # 6. HTTPS Interception visibility (Notice: CA cert installation not performed yet)
-        https_info = HttpsInterceptionReadiness(
-            ca_certificate_installed=False,
-            certificate_trust_unknown=True,
-            pinning_suspected=False,
-        )
-        result.https_interception = https_info
-        warnings.append("HTTPS interception certificate trust is not confirmed; plain HTTP will be captured.")
+        # Store inspection is read-only and does not prove that a target app trusts user CAs.
+        if isinstance(self.backend, MitmproxyCaptureBackend):
+            self.refresh_ca_trust(result.device_serial)
+            state = self.backend.https.ca_trust
+            result.https_interception = HttpsInterceptionReadiness(
+                ca_certificate_installed=state == 'trusted', certificate_trust_unknown=state != 'trusted',
+                ca_trust_state=state, ca_trust_reason=self.backend.https.ca_reason)
+        warnings.append("HTTPS visibility requires a verified intercepted transaction; proxy startup is not proof.")
 
         if errors:
             result.status = TrafficReadinessStatus.FAIL
@@ -165,29 +168,28 @@ class DynamicTrafficService:
                 "https_reason": "cleartext_http_only_backend",
             }
 
-        # Mitmproxy or other proxy backend
-        if self.last_readiness and self.last_readiness.https_interception:
-            hi = self.last_readiness.https_interception
-            if hi.ca_certificate_installed and not hi.certificate_trust_unknown:
-                https_vis = "available"
-                reason = "ca_trusted"
-            elif hi.certificate_trust_unknown:
-                https_vis = "unavailable"
-                reason = "certificate_trust_unknown"
-            else:
-                https_vis = "unavailable"
-                reason = "tls_interception_not_configured"
+        if isinstance(self.backend, MitmproxyCaptureBackend):
+            if self.active_capture and self.active_capture.status == CaptureStatus.ACTIVE and not self.backend.is_alive():
+                self.backend.https.backend_failed = True
+            https_vis, reason = self.backend.https.metadata()
+            if not is_backend_available:
+                https_vis, reason = 'unavailable', 'capture_backend_unavailable'
+            ca_trust = self.backend.https.ca_trust
         else:
-            https_vis = "unavailable"
-            reason = "certificate_trust_unknown"
-
-        http_vis = "available" if is_backend_available else "unavailable"
+            https_vis, reason, ca_trust = 'unknown', 'no_https_transaction_available_to_verify', 'unknown'
         return {
-            "capture_available": str(capture_available).lower(),
-            "http_visibility": http_vis,
-            "https_visibility": https_vis,
-            "https_reason": reason,
+            'capture_available': str(capture_available).lower(),
+            'http_visibility': 'available' if is_backend_available else 'unavailable',
+            'https_visibility': https_vis, 'https_reason': reason, 'ca_trust': ca_trust,
+            'ca_trust_reason': self.backend.https.ca_reason if isinstance(self.backend, MitmproxyCaptureBackend) else 'not_applicable',
         }
+
+    def refresh_ca_trust(self, device_serial: str) -> None:
+        if isinstance(self.backend, MitmproxyCaptureBackend) and self.adb_bin:
+            state, reason = check_ca_trust(self.adb_bin, device_serial,
+                                          self.backend.ca_directory / 'mitmproxy-ca-cert.pem')
+            self.backend.https.ca_trust, self.backend.https.ca_reason = state, reason
+
 
     def start_capture(
         self,
@@ -216,6 +218,7 @@ class DynamicTrafficService:
             proxy_host=proxy_host,
             proxy_port=proxy_port,
             status=CaptureStatus.STARTING,
+            backend=type(self.backend).__name__,
         )
         self.active_capture = capture
         self.captured_transactions = []
@@ -238,6 +241,7 @@ class DynamicTrafficService:
                 on_transaction_captured=self._on_transaction_captured,
             )
 
+            self.refresh_ca_trust(device_serial)
             capture.status = CaptureStatus.ACTIVE
             capture.started_at = utc_now_iso()
             self.storage.save_capture_session(session_id_str, capture)
@@ -309,6 +313,7 @@ class DynamicTrafficService:
                 f"Capture is in '{self.active_capture.status.value}' state, cannot stop.",
             )
 
+        vis = self.get_visibility_metadata()
         self.active_capture.status = CaptureStatus.STOPPING
         logger.info(f"Stopping capture {self.active_capture.capture_id}...")
 
@@ -329,6 +334,9 @@ class DynamicTrafficService:
 
         self.active_capture.status = CaptureStatus.COMPLETED
         self.active_capture.ended_at = utc_now_iso()
+
+        self.refresh_ca_trust(self.active_capture.device_serial)
+        vis = self.get_visibility_metadata()
 
         # 3. Compile Summary
         http_count = 0
@@ -352,7 +360,6 @@ class DynamicTrafficService:
             if tx.scope == "IN_SCOPE":
                 in_scope_count += 1
 
-        vis = self.get_visibility_metadata()
         summary = CaptureSummary(
             capture_id=self.active_capture.capture_id,
             session_id=self.active_capture.session_id,
@@ -366,6 +373,10 @@ class DynamicTrafficService:
             http_visibility=vis.get("http_visibility", "available"),
             https_visibility=vis.get("https_visibility", "unavailable"),
             https_visibility_reason=vis.get("https_reason", "certificate_trust_unknown"),
+            ca_trust_state=vis.get('ca_trust', 'unknown'),
+            ca_trust_reason=vis.get('ca_trust_reason', 'certificate_trust_unknown'),
+            verified_https_transactions=self.backend.https.verified_transactions if isinstance(self.backend, MitmproxyCaptureBackend) else 0,
+            tls_failure_count=self.backend.https.tls_failures if isinstance(self.backend, MitmproxyCaptureBackend) else 0,
         )
 
         self.storage.save_capture_session(

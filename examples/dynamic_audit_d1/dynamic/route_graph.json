@@ -1,0 +1,379 @@
+{
+  "schema_version": "1.0",
+  "graph_id": "graph_128433012f88",
+  "run_id": "dynamic_audit_d1",
+  "session_id": "965a2656-5e40-45a3-9164-71739e2e5f48",
+  "created_at": "2026-10-02T08:30:19.673942+00:00",
+  "updated_at": "2026-10-02T08:30:27.508384+00:00",
+  "root_node_id": "node_924d20ee80c01d85",
+  "current_node_id": "node_8c9f778b58d89aff",
+  "node_count": 3,
+  "edge_count": 2,
+  "discovered_action_count": 11,
+  "nodes": [
+    {
+      "route_node_id": "node_89632704e0e7e91d",
+      "screen_identity": "35fcc8acbd574707",
+      "package_name": "sg.vantagepoint.mstgkotlin",
+      "activity": "sg.vantagepoint.mstgkotlin.MainActivity",
+      "is_target_package": true,
+      "is_dialog_or_system": false,
+      "first_seen_at": "2026-10-02T08:30:24.963063+00:00",
+      "last_seen_at": "2026-10-02T08:30:24.963063+00:00",
+      "visit_count": 1,
+      "clickable_count": 3,
+      "input_count": 0,
+      "actions": [
+        {
+          "action_id": "act_a1f54c20fbd79960",
+          "source_node_id": "node_89632704e0e7e91d",
+          "source_screen_identity": "35fcc8acbd574707",
+          "ui_node_id": "fe4bd7ea6f69",
+          "action_type": "click",
+          "resource_id": "sg.vantagepoint.mstgkotlin:id/tvrootcheck",
+          "class_name": "android.widget.TextView",
+          "bounds": [
+            53,
+            1262,
+            1027,
+            1383
+          ],
+          "center": [
+            540,
+            1322
+          ],
+          "content_desc": null,
+          "text": "Root Detection Implementation",
+          "status": "succeeded",
+          "first_seen_at": "2026-10-02T08:30:24.963063+00:00",
+          "last_seen_at": "2026-10-02T08:30:24.963063+00:00"
+        },
+        {
+          "action_id": "act_cc9e7bd1085fc35c",
+          "source_node_id": "node_89632704e0e7e91d",
+          "source_screen_identity": "35fcc8acbd574707",
+          "ui_node_id": "74bb9c808ad3",
+          "action_type": "click",
+          "resource_id": "sg.vantagepoint.mstgkotlin:id/tvsharedpref",
+          "class_name": "android.widget.TextView",
+          "bounds": [
+            53,
+            472,
+            1027,
+            593
+          ],
+          "center": [
+            540,
+            532
+          ],
+          "content_desc": null,
+          "text": "SharedPreferences Implementation",
+          "status": "discovered",
+          "first_seen_at": "2026-10-02T08:30:24.963063+00:00",
+          "last_seen_at": "2026-10-02T08:30:24.963063+00:00"
+        },
+        {
+          "action_id": "act_de3036582a29ba28",
+          "source_node_id": "node_89632704e0e7e91d",
+          "source_screen_identity": "35fcc8acbd574707",
+          "ui_node_id": "cb5fcabdc359",
+          "action_type": "click",
+          "resource_id": "sg.vantagepoint.mstgkotlin:id/tvwebview",
+          "class_name": "android.widget.TextView",
+          "bounds": [
+            53,
+            1099,
+            1027,
+            1220
+          ],
+          "center": [
+            540,
+            1159
+          ],
+          "content_desc": null,
+          "text": "WebView Implementation",
+          "status": "discovered",
+          "first_seen_at": "2026-10-02T08:30:24.963063+00:00",
+          "last_seen_at": "2026-10-02T08:30:24.963063+00:00"
+        }
+      ],
+      "metadata": {}
+    },
+    {
+      "route_node_id": "node_8c9f778b58d89aff",
+      "screen_identity": "b99bad1a3e622f0a",
+      "package_name": "sg.vantagepoint.mstgkotlin",
+      "activity": "sg.vantagepoint.mstgkotlin.MainActivity",
+      "is_target_package": true,
+      "is_dialog_or_system": false,
+      "first_seen_at": "2026-10-02T08:30:27.508384+00:00",
+      "last_seen_at": "2026-10-02T08:30:27.508384+00:00",
+      "visit_count": 1,
+      "clickable_count": 5,
+      "input_count": 0,
+      "actions": [
+        {
+          "action_id": "act_019948d15efed522",
+          "source_node_id": "node_8c9f778b58d89aff",
+          "source_screen_identity": "b99bad1a3e622f0a",
+          "ui_node_id": "74bb9c808ad3",
+          "action_type": "click",
+          "resource_id": "sg.vantagepoint.mstgkotlin:id/tvsharedpref",
+          "class_name": "android.widget.TextView",
+          "bounds": [
+            53,
+            472,
+            1027,
+            593
+          ],
+          "center": [
+            540,
+            532
+          ],
+          "content_desc": null,
+          "text": "SharedPreferences Implementation",
+          "status": "discovered",
+          "first_seen_at": "2026-10-02T08:30:27.508384+00:00",
+          "last_seen_at": "2026-10-02T08:30:27.508384+00:00"
+        },
+        {
+          "action_id": "act_346ac886c2f9b2a7",
+          "source_node_id": "node_8c9f778b58d89aff",
+          "source_screen_identity": "b99bad1a3e622f0a",
+          "ui_node_id": "cb5fcabdc359",
+          "action_type": "click",
+          "resource_id": "sg.vantagepoint.mstgkotlin:id/tvwebview",
+          "class_name": "android.widget.TextView",
+          "bounds": [
+            53,
+            1099,
+            1027,
+            1220
+          ],
+          "center": [
+            540,
+            1159
+          ],
+          "content_desc": null,
+          "text": "WebView Implementation",
+          "status": "discovered",
+          "first_seen_at": "2026-10-02T08:30:27.508384+00:00",
+          "last_seen_at": "2026-10-02T08:30:27.508384+00:00"
+        },
+        {
+          "action_id": "act_4cee1ca2cdba807b",
+          "source_node_id": "node_8c9f778b58d89aff",
+          "source_screen_identity": "b99bad1a3e622f0a",
+          "ui_node_id": "fe4bd7ea6f69",
+          "action_type": "click",
+          "resource_id": "sg.vantagepoint.mstgkotlin:id/tvrootcheck",
+          "class_name": "android.widget.TextView",
+          "bounds": [
+            53,
+            1262,
+            1027,
+            1383
+          ],
+          "center": [
+            540,
+            1322
+          ],
+          "content_desc": null,
+          "text": "Root Detection Implementation",
+          "status": "discovered",
+          "first_seen_at": "2026-10-02T08:30:27.508384+00:00",
+          "last_seen_at": "2026-10-02T08:30:27.508384+00:00"
+        },
+        {
+          "action_id": "act_b2e7ebc0f887176e",
+          "source_node_id": "node_8c9f778b58d89aff",
+          "source_screen_identity": "b99bad1a3e622f0a",
+          "ui_node_id": "0b282be160df",
+          "action_type": "click",
+          "resource_id": "sg.vantagepoint.mstgkotlin:id/btn_insecure_rootcheck",
+          "class_name": "android.widget.Button",
+          "bounds": [
+            53,
+            1924,
+            1027,
+            2050
+          ],
+          "center": [
+            540,
+            1987
+          ],
+          "content_desc": null,
+          "text": "LAUNCH SINGLE ROOT DETECTION",
+          "status": "discovered",
+          "first_seen_at": "2026-10-02T08:30:27.508384+00:00",
+          "last_seen_at": "2026-10-02T08:30:27.508384+00:00"
+        },
+        {
+          "action_id": "act_b3d23ec259664201",
+          "source_node_id": "node_8c9f778b58d89aff",
+          "source_screen_identity": "b99bad1a3e622f0a",
+          "ui_node_id": "a2607609133f",
+          "action_type": "click",
+          "resource_id": "sg.vantagepoint.mstgkotlin:id/btn_secure_rootcheck",
+          "class_name": "android.widget.Button",
+          "bounds": [
+            53,
+            1798,
+            1027,
+            1924
+          ],
+          "center": [
+            540,
+            1861
+          ],
+          "content_desc": null,
+          "text": "LAUNCH MULTIPLE ROOT DETECTION",
+          "status": "discovered",
+          "first_seen_at": "2026-10-02T08:30:27.508384+00:00",
+          "last_seen_at": "2026-10-02T08:30:27.508384+00:00"
+        }
+      ],
+      "metadata": {}
+    },
+    {
+      "route_node_id": "node_924d20ee80c01d85",
+      "screen_identity": "acdb4c1c116dc218",
+      "package_name": "sg.vantagepoint.mstgkotlin",
+      "activity": "sg.vantagepoint.mstgkotlin.MainActivity",
+      "is_target_package": true,
+      "is_dialog_or_system": false,
+      "first_seen_at": "2026-10-02T08:30:22.211996+00:00",
+      "last_seen_at": "2026-10-02T08:30:22.211996+00:00",
+      "visit_count": 1,
+      "clickable_count": 3,
+      "input_count": 0,
+      "actions": [
+        {
+          "action_id": "act_b2ff6a36d599bf4a",
+          "source_node_id": "node_924d20ee80c01d85",
+          "source_screen_identity": "acdb4c1c116dc218",
+          "ui_node_id": "74bb9c808ad3",
+          "action_type": "click",
+          "resource_id": "sg.vantagepoint.mstgkotlin:id/tvsharedpref",
+          "class_name": "android.widget.TextView",
+          "bounds": [
+            53,
+            472,
+            1027,
+            593
+          ],
+          "center": [
+            540,
+            532
+          ],
+          "content_desc": null,
+          "text": "SharedPreferences Implementation",
+          "status": "succeeded",
+          "first_seen_at": "2026-10-02T08:30:22.211996+00:00",
+          "last_seen_at": "2026-10-02T08:30:22.211996+00:00"
+        },
+        {
+          "action_id": "act_c5666425f5a6db5a",
+          "source_node_id": "node_924d20ee80c01d85",
+          "source_screen_identity": "acdb4c1c116dc218",
+          "ui_node_id": "cecffeb3d8f8",
+          "action_type": "click",
+          "resource_id": "sg.vantagepoint.mstgkotlin:id/tvrootcheck",
+          "class_name": "android.widget.TextView",
+          "bounds": [
+            53,
+            798,
+            1027,
+            919
+          ],
+          "center": [
+            540,
+            858
+          ],
+          "content_desc": null,
+          "text": "Root Detection Implementation",
+          "status": "discovered",
+          "first_seen_at": "2026-10-02T08:30:22.211996+00:00",
+          "last_seen_at": "2026-10-02T08:30:22.211996+00:00"
+        },
+        {
+          "action_id": "act_e77ca681b8a5c003",
+          "source_node_id": "node_924d20ee80c01d85",
+          "source_screen_identity": "acdb4c1c116dc218",
+          "ui_node_id": "a0597a12478e",
+          "action_type": "click",
+          "resource_id": "sg.vantagepoint.mstgkotlin:id/tvwebview",
+          "class_name": "android.widget.TextView",
+          "bounds": [
+            53,
+            635,
+            1027,
+            756
+          ],
+          "center": [
+            540,
+            695
+          ],
+          "content_desc": null,
+          "text": "WebView Implementation",
+          "status": "discovered",
+          "first_seen_at": "2026-10-02T08:30:22.211996+00:00",
+          "last_seen_at": "2026-10-02T08:30:22.211996+00:00"
+        }
+      ],
+      "metadata": {}
+    }
+  ],
+  "edges": [
+    {
+      "edge_id": "edge_a75d24e902b61018",
+      "source_node_id": "node_89632704e0e7e91d",
+      "target_node_id": "node_8c9f778b58d89aff",
+      "action_id": "act_a1f54c20fbd79960",
+      "action_type": "click",
+      "created_at": "2026-10-02T08:30:27.508384+00:00",
+      "observation_count": 1,
+      "success": true,
+      "metadata": {
+        "runtime": {
+          "pid_changed": false,
+          "process_died": false,
+          "activity_changed": false,
+          "fatal_appeared": false,
+          "crash_appeared": false,
+          "new_log_event_count": 0
+        },
+        "traffic": {
+          "transaction_count": 0,
+          "transaction_ids": [],
+          "visibility": "partial"
+        }
+      }
+    },
+    {
+      "edge_id": "edge_ee75e11cd02f744f",
+      "source_node_id": "node_924d20ee80c01d85",
+      "target_node_id": "node_89632704e0e7e91d",
+      "action_id": "act_b2ff6a36d599bf4a",
+      "action_type": "click",
+      "created_at": "2026-10-02T08:30:24.963063+00:00",
+      "observation_count": 1,
+      "success": true,
+      "metadata": {
+        "runtime": {
+          "pid_changed": false,
+          "process_died": false,
+          "activity_changed": false,
+          "fatal_appeared": false,
+          "crash_appeared": false,
+          "new_log_event_count": 0
+        },
+        "traffic": {
+          "transaction_count": 0,
+          "transaction_ids": [],
+          "visibility": "partial"
+        }
+      }
+    }
+  ]
+}

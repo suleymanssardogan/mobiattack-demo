@@ -6,8 +6,7 @@ Extracts deterministic facts from a readable AndroidManifest.xml decoded by Apkt
 - activities
 - launcher_activity
 
-Known unresolved edge case:
-- Launcher entry points defined through <activity-alias> are not currently detected.
+Launcher aliases are returned as launchable components; activities retains actual activity declarations.
 """
 
 from pathlib import Path
@@ -115,7 +114,8 @@ def parse_manifest(manifest_path: str | Path) -> dict:
     if application_node is not None:
         for elem in application_node:
             tag = elem.tag
-            if not (tag.endswith("activity") or tag == "activity"):
+            is_alias = tag.rsplit("}", 1)[-1] == "activity-alias"
+            if not (tag.endswith("activity") or is_alias):
                 continue
 
             raw_name = elem.attrib.get(ATTR_NAME)
@@ -124,8 +124,23 @@ def parse_manifest(manifest_path: str | Path) -> dict:
                 continue
 
             norm_name = normalize_activity_name(raw_name.strip(), package_name)
-            if norm_name not in activities:
+            if not is_alias and norm_name not in activities:
                 activities.append(norm_name)
+
+            if elem.attrib.get(f"{{{ANDROID_NS}}}enabled") == "false":
+                continue
+            if is_alias:
+                target = normalize_activity_name(
+                    elem.attrib.get(f"{{{ANDROID_NS}}}targetActivity", "").strip(), package_name
+                )
+                declared_targets = {
+                    normalize_activity_name(node.attrib.get(ATTR_NAME, "").strip(), package_name)
+                    for node in application_node
+                    if node.tag.rsplit("}", 1)[-1] == "activity"
+                    and node.attrib.get(f"{{{ANDROID_NS}}}enabled") != "false"
+                }
+                if not target or target not in declared_targets:
+                    continue
 
             # Detect launcher activity if not already identified
             if launcher_activity is None:

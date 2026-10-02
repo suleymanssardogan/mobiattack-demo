@@ -1,0 +1,1328 @@
+{
+  "owasp_exact_synthetic_traffic": {
+    "session_id": "audit-synthetic",
+    "schema_version": "1.0",
+    "summary": {
+      "endpoint_context_count": 1,
+      "runtime_observed_count": 1,
+      "static_only_count": 0,
+      "dynamic_only_count": 0
+    },
+    "endpoints": [
+      {
+        "endpoint_context_id": "ctx_dfc8dba0bd0e418f",
+        "host": "127.0.0.1",
+        "path": "/signup",
+        "scheme": "http",
+        "methods": [
+          "POST"
+        ],
+        "static": {
+          "static_candidate_id": "stat_cand_1",
+          "match_type": "exact",
+          "confidence": "high",
+          "static_method": "POST",
+          "source_file": "smali/sg/vantagepoint/mstgkotlin/RegisterActivity$onCreate$2.smali",
+          "request_line": 214,
+          "framework": "Fuel",
+          "static_candidate_id_origin": "correlation_reference",
+          "static_candidate_id_source_field": null,
+          "extraction_provenance_keys": [
+            "base_url_call_line",
+            "base_url_line",
+            "base_url_register",
+            "base_url_value",
+            "path_line",
+            "path_register",
+            "path_value",
+            "request_call_line"
+          ]
+        },
+        "dynamic": {
+          "observed": true,
+          "transaction_ids": [
+            "tx_audit"
+          ],
+          "observation_count": 1,
+          "available_transaction_count": 1,
+          "missing_transaction_ids": [],
+          "first_observed_at": "2026-10-02T08:30:20Z",
+          "last_observed_at": "2026-10-02T08:30:20Z",
+          "observed_methods": [
+            "POST"
+          ],
+          "observed_status_codes": [
+            201
+          ],
+          "schemes": [
+            "http"
+          ]
+        },
+        "request": {
+          "content_types": [
+            "application/json"
+          ],
+          "header_names": [
+            "authorization",
+            "content-type"
+          ],
+          "body_present": true,
+          "body_types": [
+            "json"
+          ],
+          "body_keys": [
+            "username"
+          ],
+          "body_shapes": [
+            {
+              "username": "string"
+            }
+          ],
+          "body_sizes": [
+            30
+          ],
+          "methods": [
+            "POST"
+          ],
+          "query_keys": [
+            "token"
+          ]
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "header_names": [
+            "content-type"
+          ],
+          "body_present": true,
+          "body_types": [
+            "json"
+          ],
+          "body_keys": [
+            "id"
+          ],
+          "body_shapes": [
+            {
+              "id": "number"
+            }
+          ],
+          "body_sizes": [],
+          "observed_status_codes": [
+            201
+          ],
+          "status_code_counts": {
+            "201": 1
+          }
+        },
+        "auth": {
+          "authorization_header_present": true,
+          "bearer_token_present": null,
+          "cookie_present": false,
+          "session_cookie_present": false,
+          "api_key_header_present": false
+        },
+        "action_context": [],
+        "route_context": [],
+        "runtime_context": {
+          "pid_changed_observed": false,
+          "process_death_observed": false,
+          "activity_changes_observed": false,
+          "fatal_observed": false,
+          "crash_observed": false,
+          "evidence_available": false
+        },
+        "visibility": {
+          "http_visibility": "available",
+          "https_visibility": "unavailable",
+          "https_visibility_reason": "certificate_trust_unknown"
+        },
+        "evidence_refs": {
+          "static_candidate_ids": [
+            "stat_cand_1"
+          ],
+          "correlation_ids": [
+            "corr_8e0c20e33f29db43"
+          ],
+          "transaction_ids": [
+            "tx_audit"
+          ],
+          "action_ids": [],
+          "runtime_action_ids": []
+        }
+      }
+    ]
+  },
+  "template_{id}": {
+    "session_id": "audit-synthetic",
+    "schema_version": "1.0",
+    "summary": {
+      "endpoint_context_count": 1,
+      "runtime_observed_count": 1,
+      "static_only_count": 0,
+      "dynamic_only_count": 0
+    },
+    "endpoints": [
+      {
+        "endpoint_context_id": "ctx_7971803e671feb9e",
+        "host": "api.example.com",
+        "path": "/users/{id}",
+        "scheme": "http",
+        "methods": [
+          "GET"
+        ],
+        "static": {
+          "static_candidate_id": "stat_cand_1",
+          "match_type": "template",
+          "confidence": "medium",
+          "static_method": "GET",
+          "static_candidate_id_origin": "correlation_reference",
+          "static_candidate_id_source_field": null
+        },
+        "dynamic": {
+          "observed": true,
+          "transaction_ids": [
+            "tx_123",
+            "tx_456"
+          ],
+          "observation_count": 2,
+          "available_transaction_count": 2,
+          "missing_transaction_ids": [],
+          "first_observed_at": "2026-10-02T08:30:20Z",
+          "last_observed_at": "2026-10-02T08:30:20Z",
+          "observed_methods": [
+            "GET"
+          ],
+          "observed_status_codes": [
+            201
+          ],
+          "schemes": [
+            "http"
+          ]
+        },
+        "request": {
+          "content_types": [
+            "application/json"
+          ],
+          "header_names": [
+            "authorization",
+            "content-type"
+          ],
+          "body_present": true,
+          "body_types": [
+            "json"
+          ],
+          "body_keys": [
+            "username"
+          ],
+          "body_shapes": [
+            {
+              "username": "string"
+            }
+          ],
+          "body_sizes": [
+            30
+          ],
+          "methods": [
+            "GET"
+          ],
+          "query_keys": [
+            "token"
+          ]
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "header_names": [
+            "content-type"
+          ],
+          "body_present": true,
+          "body_types": [
+            "json"
+          ],
+          "body_keys": [
+            "id"
+          ],
+          "body_shapes": [
+            {
+              "id": "number"
+            }
+          ],
+          "body_sizes": [],
+          "observed_status_codes": [
+            201
+          ],
+          "status_code_counts": {
+            "201": 2
+          }
+        },
+        "auth": {
+          "authorization_header_present": true,
+          "bearer_token_present": null,
+          "cookie_present": false,
+          "session_cookie_present": false,
+          "api_key_header_present": false
+        },
+        "action_context": [],
+        "route_context": [],
+        "runtime_context": {
+          "pid_changed_observed": false,
+          "process_death_observed": false,
+          "activity_changes_observed": false,
+          "fatal_observed": false,
+          "crash_observed": false,
+          "evidence_available": false
+        },
+        "visibility": {
+          "http_visibility": "available",
+          "https_visibility": "unavailable",
+          "https_visibility_reason": "certificate_trust_unknown"
+        },
+        "evidence_refs": {
+          "static_candidate_ids": [
+            "stat_cand_1"
+          ],
+          "correlation_ids": [
+            "corr_77b3f0efda9ae79e"
+          ],
+          "transaction_ids": [
+            "tx_123",
+            "tx_456"
+          ],
+          "action_ids": [],
+          "runtime_action_ids": []
+        }
+      }
+    ]
+  },
+  "template_:id": {
+    "session_id": "audit-synthetic",
+    "schema_version": "1.0",
+    "summary": {
+      "endpoint_context_count": 1,
+      "runtime_observed_count": 1,
+      "static_only_count": 0,
+      "dynamic_only_count": 0
+    },
+    "endpoints": [
+      {
+        "endpoint_context_id": "ctx_c02b53421d131db9",
+        "host": "api.example.com",
+        "path": "/users/:id",
+        "scheme": "http",
+        "methods": [
+          "GET"
+        ],
+        "static": {
+          "static_candidate_id": "stat_cand_1",
+          "match_type": "template",
+          "confidence": "medium",
+          "static_method": "GET",
+          "static_candidate_id_origin": "correlation_reference",
+          "static_candidate_id_source_field": null
+        },
+        "dynamic": {
+          "observed": true,
+          "transaction_ids": [
+            "tx_123",
+            "tx_456"
+          ],
+          "observation_count": 2,
+          "available_transaction_count": 2,
+          "missing_transaction_ids": [],
+          "first_observed_at": "2026-10-02T08:30:20Z",
+          "last_observed_at": "2026-10-02T08:30:20Z",
+          "observed_methods": [
+            "GET"
+          ],
+          "observed_status_codes": [
+            201
+          ],
+          "schemes": [
+            "http"
+          ]
+        },
+        "request": {
+          "content_types": [
+            "application/json"
+          ],
+          "header_names": [
+            "authorization",
+            "content-type"
+          ],
+          "body_present": true,
+          "body_types": [
+            "json"
+          ],
+          "body_keys": [
+            "username"
+          ],
+          "body_shapes": [
+            {
+              "username": "string"
+            }
+          ],
+          "body_sizes": [
+            30
+          ],
+          "methods": [
+            "GET"
+          ],
+          "query_keys": [
+            "token"
+          ]
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "header_names": [
+            "content-type"
+          ],
+          "body_present": true,
+          "body_types": [
+            "json"
+          ],
+          "body_keys": [
+            "id"
+          ],
+          "body_shapes": [
+            {
+              "id": "number"
+            }
+          ],
+          "body_sizes": [],
+          "observed_status_codes": [
+            201
+          ],
+          "status_code_counts": {
+            "201": 2
+          }
+        },
+        "auth": {
+          "authorization_header_present": true,
+          "bearer_token_present": null,
+          "cookie_present": false,
+          "session_cookie_present": false,
+          "api_key_header_present": false
+        },
+        "action_context": [],
+        "route_context": [],
+        "runtime_context": {
+          "pid_changed_observed": false,
+          "process_death_observed": false,
+          "activity_changes_observed": false,
+          "fatal_observed": false,
+          "crash_observed": false,
+          "evidence_available": false
+        },
+        "visibility": {
+          "http_visibility": "available",
+          "https_visibility": "unavailable",
+          "https_visibility_reason": "certificate_trust_unknown"
+        },
+        "evidence_refs": {
+          "static_candidate_ids": [
+            "stat_cand_1"
+          ],
+          "correlation_ids": [
+            "corr_cf071b8d3c45b490"
+          ],
+          "transaction_ids": [
+            "tx_123",
+            "tx_456"
+          ],
+          "action_ids": [],
+          "runtime_action_ids": []
+        }
+      }
+    ]
+  },
+  "template_<id>": {
+    "session_id": "audit-synthetic",
+    "schema_version": "1.0",
+    "summary": {
+      "endpoint_context_count": 1,
+      "runtime_observed_count": 1,
+      "static_only_count": 0,
+      "dynamic_only_count": 0
+    },
+    "endpoints": [
+      {
+        "endpoint_context_id": "ctx_b9675533e9265722",
+        "host": "api.example.com",
+        "path": "/users/<id>",
+        "scheme": "http",
+        "methods": [
+          "GET"
+        ],
+        "static": {
+          "static_candidate_id": "stat_cand_1",
+          "match_type": "template",
+          "confidence": "medium",
+          "static_method": "GET",
+          "static_candidate_id_origin": "correlation_reference",
+          "static_candidate_id_source_field": null
+        },
+        "dynamic": {
+          "observed": true,
+          "transaction_ids": [
+            "tx_123",
+            "tx_456"
+          ],
+          "observation_count": 2,
+          "available_transaction_count": 2,
+          "missing_transaction_ids": [],
+          "first_observed_at": "2026-10-02T08:30:20Z",
+          "last_observed_at": "2026-10-02T08:30:20Z",
+          "observed_methods": [
+            "GET"
+          ],
+          "observed_status_codes": [
+            201
+          ],
+          "schemes": [
+            "http"
+          ]
+        },
+        "request": {
+          "content_types": [
+            "application/json"
+          ],
+          "header_names": [
+            "authorization",
+            "content-type"
+          ],
+          "body_present": true,
+          "body_types": [
+            "json"
+          ],
+          "body_keys": [
+            "username"
+          ],
+          "body_shapes": [
+            {
+              "username": "string"
+            }
+          ],
+          "body_sizes": [
+            30
+          ],
+          "methods": [
+            "GET"
+          ],
+          "query_keys": [
+            "token"
+          ]
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "header_names": [
+            "content-type"
+          ],
+          "body_present": true,
+          "body_types": [
+            "json"
+          ],
+          "body_keys": [
+            "id"
+          ],
+          "body_shapes": [
+            {
+              "id": "number"
+            }
+          ],
+          "body_sizes": [],
+          "observed_status_codes": [
+            201
+          ],
+          "status_code_counts": {
+            "201": 2
+          }
+        },
+        "auth": {
+          "authorization_header_present": true,
+          "bearer_token_present": null,
+          "cookie_present": false,
+          "session_cookie_present": false,
+          "api_key_header_present": false
+        },
+        "action_context": [],
+        "route_context": [],
+        "runtime_context": {
+          "pid_changed_observed": false,
+          "process_death_observed": false,
+          "activity_changes_observed": false,
+          "fatal_observed": false,
+          "crash_observed": false,
+          "evidence_available": false
+        },
+        "visibility": {
+          "http_visibility": "available",
+          "https_visibility": "unavailable",
+          "https_visibility_reason": "certificate_trust_unknown"
+        },
+        "evidence_refs": {
+          "static_candidate_ids": [
+            "stat_cand_1"
+          ],
+          "correlation_ids": [
+            "corr_4b5c7db166e86c5e"
+          ],
+          "transaction_ids": [
+            "tx_123",
+            "tx_456"
+          ],
+          "action_ids": [],
+          "runtime_action_ids": []
+        }
+      }
+    ]
+  },
+  "literal_mismatch": {
+    "session_id": "audit-synthetic",
+    "schema_version": "1.0",
+    "summary": {
+      "endpoint_context_count": 2,
+      "runtime_observed_count": 1,
+      "static_only_count": 1,
+      "dynamic_only_count": 1
+    },
+    "endpoints": [
+      {
+        "endpoint_context_id": "ctx_840be6734df3333e",
+        "host": "api.example.com",
+        "path": "/users/123",
+        "scheme": null,
+        "methods": [
+          "GET"
+        ],
+        "static": {
+          "static_candidate_id": "stat_cand_1",
+          "match_type": "static_only",
+          "confidence": "low",
+          "static_method": "GET",
+          "static_candidate_id_origin": "correlation_reference",
+          "static_candidate_id_source_field": null
+        },
+        "dynamic": {
+          "observed": false,
+          "transaction_ids": [],
+          "observation_count": 0,
+          "available_transaction_count": 0,
+          "missing_transaction_ids": [],
+          "first_observed_at": null,
+          "last_observed_at": null,
+          "observed_methods": [],
+          "observed_status_codes": [],
+          "schemes": [],
+          "note": "Not observed in available runtime traffic."
+        },
+        "request": {
+          "content_types": [],
+          "header_names": [],
+          "body_present": false,
+          "body_types": [],
+          "body_keys": [],
+          "body_shapes": [],
+          "body_sizes": [],
+          "methods": [],
+          "query_keys": []
+        },
+        "response": {
+          "content_types": [],
+          "header_names": [],
+          "body_present": false,
+          "body_types": [],
+          "body_keys": [],
+          "body_shapes": [],
+          "body_sizes": [],
+          "observed_status_codes": [],
+          "status_code_counts": {}
+        },
+        "auth": {
+          "authorization_header_present": false,
+          "bearer_token_present": false,
+          "cookie_present": false,
+          "session_cookie_present": false,
+          "api_key_header_present": false
+        },
+        "action_context": [],
+        "route_context": [],
+        "runtime_context": {
+          "pid_changed_observed": false,
+          "process_death_observed": false,
+          "activity_changes_observed": false,
+          "fatal_observed": false,
+          "crash_observed": false,
+          "evidence_available": false
+        },
+        "visibility": {
+          "http_visibility": "available",
+          "https_visibility": "unavailable",
+          "https_visibility_reason": "certificate_trust_unknown"
+        },
+        "evidence_refs": {
+          "static_candidate_ids": [
+            "stat_cand_1"
+          ],
+          "correlation_ids": [
+            "corr_565379685c9453b1"
+          ],
+          "transaction_ids": [],
+          "action_ids": [],
+          "runtime_action_ids": []
+        }
+      },
+      {
+        "endpoint_context_id": "ctx_f0f51e472af32e1a",
+        "host": "api.example.com",
+        "path": "/users/456",
+        "scheme": "http",
+        "methods": [
+          "GET"
+        ],
+        "static": {},
+        "dynamic": {
+          "observed": true,
+          "transaction_ids": [
+            "tx_audit"
+          ],
+          "observation_count": 1,
+          "available_transaction_count": 1,
+          "missing_transaction_ids": [],
+          "first_observed_at": "2026-10-02T08:30:20Z",
+          "last_observed_at": "2026-10-02T08:30:20Z",
+          "observed_methods": [
+            "GET"
+          ],
+          "observed_status_codes": [
+            201
+          ],
+          "schemes": [
+            "http"
+          ]
+        },
+        "request": {
+          "content_types": [
+            "application/json"
+          ],
+          "header_names": [
+            "authorization",
+            "content-type"
+          ],
+          "body_present": true,
+          "body_types": [
+            "json"
+          ],
+          "body_keys": [
+            "username"
+          ],
+          "body_shapes": [
+            {
+              "username": "string"
+            }
+          ],
+          "body_sizes": [
+            30
+          ],
+          "methods": [
+            "GET"
+          ],
+          "query_keys": [
+            "token"
+          ]
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "header_names": [
+            "content-type"
+          ],
+          "body_present": true,
+          "body_types": [
+            "json"
+          ],
+          "body_keys": [
+            "id"
+          ],
+          "body_shapes": [
+            {
+              "id": "number"
+            }
+          ],
+          "body_sizes": [],
+          "observed_status_codes": [
+            201
+          ],
+          "status_code_counts": {
+            "201": 1
+          }
+        },
+        "auth": {
+          "authorization_header_present": true,
+          "bearer_token_present": null,
+          "cookie_present": false,
+          "session_cookie_present": false,
+          "api_key_header_present": false
+        },
+        "action_context": [],
+        "route_context": [],
+        "runtime_context": {
+          "pid_changed_observed": false,
+          "process_death_observed": false,
+          "activity_changes_observed": false,
+          "fatal_observed": false,
+          "crash_observed": false,
+          "evidence_available": false
+        },
+        "visibility": {
+          "http_visibility": "available",
+          "https_visibility": "unavailable",
+          "https_visibility_reason": "certificate_trust_unknown"
+        },
+        "evidence_refs": {
+          "static_candidate_ids": [],
+          "correlation_ids": [
+            "corr_50e184a09f83142c"
+          ],
+          "transaction_ids": [
+            "tx_audit"
+          ],
+          "action_ids": [],
+          "runtime_action_ids": []
+        }
+      }
+    ]
+  },
+  "dynamic_only": {
+    "session_id": "audit-synthetic",
+    "schema_version": "1.0",
+    "summary": {
+      "endpoint_context_count": 1,
+      "runtime_observed_count": 1,
+      "static_only_count": 0,
+      "dynamic_only_count": 1
+    },
+    "endpoints": [
+      {
+        "endpoint_context_id": "ctx_5b721630d29426a6",
+        "host": "127.0.0.1",
+        "path": "/signup",
+        "scheme": "http",
+        "methods": [
+          "POST"
+        ],
+        "static": {},
+        "dynamic": {
+          "observed": true,
+          "transaction_ids": [
+            "tx_audit"
+          ],
+          "observation_count": 1,
+          "available_transaction_count": 1,
+          "missing_transaction_ids": [],
+          "first_observed_at": "2026-10-02T08:30:20Z",
+          "last_observed_at": "2026-10-02T08:30:20Z",
+          "observed_methods": [
+            "POST"
+          ],
+          "observed_status_codes": [
+            201
+          ],
+          "schemes": [
+            "http"
+          ]
+        },
+        "request": {
+          "content_types": [
+            "application/json"
+          ],
+          "header_names": [
+            "authorization",
+            "content-type"
+          ],
+          "body_present": true,
+          "body_types": [
+            "json"
+          ],
+          "body_keys": [
+            "username"
+          ],
+          "body_shapes": [
+            {
+              "username": "string"
+            }
+          ],
+          "body_sizes": [
+            30
+          ],
+          "methods": [
+            "POST"
+          ],
+          "query_keys": [
+            "token"
+          ]
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "header_names": [
+            "content-type"
+          ],
+          "body_present": true,
+          "body_types": [
+            "json"
+          ],
+          "body_keys": [
+            "id"
+          ],
+          "body_shapes": [
+            {
+              "id": "number"
+            }
+          ],
+          "body_sizes": [],
+          "observed_status_codes": [
+            201
+          ],
+          "status_code_counts": {
+            "201": 1
+          }
+        },
+        "auth": {
+          "authorization_header_present": true,
+          "bearer_token_present": null,
+          "cookie_present": false,
+          "session_cookie_present": false,
+          "api_key_header_present": false
+        },
+        "action_context": [],
+        "route_context": [],
+        "runtime_context": {
+          "pid_changed_observed": false,
+          "process_death_observed": false,
+          "activity_changes_observed": false,
+          "fatal_observed": false,
+          "crash_observed": false,
+          "evidence_available": false
+        },
+        "visibility": {
+          "http_visibility": "available",
+          "https_visibility": "unavailable",
+          "https_visibility_reason": "certificate_trust_unknown"
+        },
+        "evidence_refs": {
+          "static_candidate_ids": [],
+          "correlation_ids": [
+            "corr_b5afcb48090ccc07"
+          ],
+          "transaction_ids": [
+            "tx_audit"
+          ],
+          "action_ids": [],
+          "runtime_action_ids": []
+        }
+      }
+    ]
+  },
+  "owasp_static_only_real_zero_capture": {
+    "session_id": "audit-synthetic",
+    "schema_version": "1.0",
+    "summary": {
+      "endpoint_context_count": 1,
+      "runtime_observed_count": 0,
+      "static_only_count": 1,
+      "dynamic_only_count": 0
+    },
+    "endpoints": [
+      {
+        "endpoint_context_id": "ctx_b0c0a2622f7806a3",
+        "host": "127.0.0.1",
+        "path": "/signup",
+        "scheme": null,
+        "methods": [
+          "POST"
+        ],
+        "static": {
+          "static_candidate_id": "stat_cand_1",
+          "match_type": "static_only",
+          "confidence": "low",
+          "static_method": "POST",
+          "source_file": "smali/sg/vantagepoint/mstgkotlin/RegisterActivity$onCreate$2.smali",
+          "request_line": 214,
+          "framework": "Fuel",
+          "static_candidate_id_origin": "correlation_reference",
+          "static_candidate_id_source_field": null,
+          "extraction_provenance_keys": [
+            "base_url_call_line",
+            "base_url_line",
+            "base_url_register",
+            "base_url_value",
+            "path_line",
+            "path_register",
+            "path_value",
+            "request_call_line"
+          ]
+        },
+        "dynamic": {
+          "observed": false,
+          "transaction_ids": [],
+          "observation_count": 0,
+          "available_transaction_count": 0,
+          "missing_transaction_ids": [],
+          "first_observed_at": null,
+          "last_observed_at": null,
+          "observed_methods": [],
+          "observed_status_codes": [],
+          "schemes": [],
+          "note": "Not observed in available runtime traffic."
+        },
+        "request": {
+          "content_types": [],
+          "header_names": [],
+          "body_present": false,
+          "body_types": [],
+          "body_keys": [],
+          "body_shapes": [],
+          "body_sizes": [],
+          "methods": [],
+          "query_keys": []
+        },
+        "response": {
+          "content_types": [],
+          "header_names": [],
+          "body_present": false,
+          "body_types": [],
+          "body_keys": [],
+          "body_shapes": [],
+          "body_sizes": [],
+          "observed_status_codes": [],
+          "status_code_counts": {}
+        },
+        "auth": {
+          "authorization_header_present": false,
+          "bearer_token_present": false,
+          "cookie_present": false,
+          "session_cookie_present": false,
+          "api_key_header_present": false
+        },
+        "action_context": [],
+        "route_context": [],
+        "runtime_context": {
+          "pid_changed_observed": false,
+          "process_death_observed": false,
+          "activity_changes_observed": false,
+          "fatal_observed": false,
+          "crash_observed": false,
+          "evidence_available": false
+        },
+        "visibility": {
+          "http_visibility": "available",
+          "https_visibility": "unavailable",
+          "https_visibility_reason": "cleartext_http_only_backend"
+        },
+        "evidence_refs": {
+          "static_candidate_ids": [
+            "stat_cand_1"
+          ],
+          "correlation_ids": [
+            "corr_a7092345f767b4c0"
+          ],
+          "transaction_ids": [],
+          "action_ids": [],
+          "runtime_action_ids": []
+        }
+      }
+    ]
+  },
+  "traffic_unavailable": {
+    "session_id": "audit-synthetic",
+    "schema_version": "1.0",
+    "summary": {
+      "endpoint_context_count": 1,
+      "runtime_observed_count": 0,
+      "static_only_count": 1,
+      "dynamic_only_count": 0
+    },
+    "endpoints": [
+      {
+        "endpoint_context_id": "ctx_b0c0a2622f7806a3",
+        "host": "127.0.0.1",
+        "path": "/signup",
+        "scheme": null,
+        "methods": [
+          "POST"
+        ],
+        "static": {
+          "static_candidate_id": "stat_cand_1",
+          "match_type": "static_only",
+          "confidence": "low",
+          "static_method": "POST",
+          "source_file": "smali/sg/vantagepoint/mstgkotlin/RegisterActivity$onCreate$2.smali",
+          "request_line": 214,
+          "framework": "Fuel",
+          "static_candidate_id_origin": "correlation_reference",
+          "static_candidate_id_source_field": null,
+          "extraction_provenance_keys": [
+            "base_url_call_line",
+            "base_url_line",
+            "base_url_register",
+            "base_url_value",
+            "path_line",
+            "path_register",
+            "path_value",
+            "request_call_line"
+          ]
+        },
+        "dynamic": {
+          "observed": false,
+          "transaction_ids": [],
+          "observation_count": 0,
+          "available_transaction_count": 0,
+          "missing_transaction_ids": [],
+          "first_observed_at": null,
+          "last_observed_at": null,
+          "observed_methods": [],
+          "observed_status_codes": [],
+          "schemes": [],
+          "note": "Not observed in available runtime traffic."
+        },
+        "request": {
+          "content_types": [],
+          "header_names": [],
+          "body_present": false,
+          "body_types": [],
+          "body_keys": [],
+          "body_shapes": [],
+          "body_sizes": [],
+          "methods": [],
+          "query_keys": []
+        },
+        "response": {
+          "content_types": [],
+          "header_names": [],
+          "body_present": false,
+          "body_types": [],
+          "body_keys": [],
+          "body_shapes": [],
+          "body_sizes": [],
+          "observed_status_codes": [],
+          "status_code_counts": {}
+        },
+        "auth": {
+          "authorization_header_present": false,
+          "bearer_token_present": false,
+          "cookie_present": false,
+          "session_cookie_present": false,
+          "api_key_header_present": false
+        },
+        "action_context": [],
+        "route_context": [],
+        "runtime_context": {
+          "pid_changed_observed": false,
+          "process_death_observed": false,
+          "activity_changes_observed": false,
+          "fatal_observed": false,
+          "crash_observed": false,
+          "evidence_available": false
+        },
+        "visibility": {
+          "http_visibility": "unavailable",
+          "https_visibility": "unavailable",
+          "https_visibility_reason": "certificate_trust_unknown"
+        },
+        "evidence_refs": {
+          "static_candidate_ids": [
+            "stat_cand_1"
+          ],
+          "correlation_ids": [
+            "corr_a7092345f767b4c0"
+          ],
+          "transaction_ids": [],
+          "action_ids": [],
+          "runtime_action_ids": []
+        }
+      }
+    ]
+  },
+  "existing_context_fixture": {
+    "session_id": "session-123",
+    "schema_version": "1.0",
+    "summary": {
+      "endpoint_context_count": 1,
+      "runtime_observed_count": 1,
+      "static_only_count": 0,
+      "dynamic_only_count": 0
+    },
+    "endpoints": [
+      {
+        "endpoint_context_id": "ctx_db7d8210be83bad8",
+        "host": "api.example.com",
+        "path": "/login",
+        "scheme": "https",
+        "methods": [
+          "POST"
+        ],
+        "static": {
+          "static_candidate_id": "cand_login",
+          "match_type": "exact",
+          "confidence": "high",
+          "static_method": "POST",
+          "source_file": "smali/Login.smali",
+          "request_line": 42,
+          "framework": "Fuel",
+          "static_candidate_id_origin": "source_report",
+          "static_candidate_id_source_field": "id",
+          "extraction_provenance_keys": [
+            "base_url_value",
+            "password"
+          ]
+        },
+        "dynamic": {
+          "observed": true,
+          "transaction_ids": [
+            "tx_1"
+          ],
+          "observation_count": 1,
+          "available_transaction_count": 1,
+          "missing_transaction_ids": [],
+          "first_observed_at": "2026-10-01T12:00:00Z",
+          "last_observed_at": "2026-10-01T12:00:00Z",
+          "observed_methods": [
+            "POST"
+          ],
+          "observed_status_codes": [
+            200
+          ],
+          "schemes": [
+            "https"
+          ]
+        },
+        "request": {
+          "content_types": [
+            "application/json"
+          ],
+          "header_names": [
+            "authorization",
+            "content-type",
+            "cookie",
+            "x-api-key"
+          ],
+          "body_present": true,
+          "body_types": [
+            "json"
+          ],
+          "body_keys": [
+            "password",
+            "username"
+          ],
+          "body_shapes": [
+            {
+              "password": "string",
+              "username": "string"
+            }
+          ],
+          "body_sizes": [
+            80
+          ],
+          "methods": [
+            "POST"
+          ],
+          "query_keys": [
+            "page",
+            "q"
+          ]
+        },
+        "response": {
+          "content_types": [
+            "application/json"
+          ],
+          "header_names": [
+            "content-type",
+            "set-cookie"
+          ],
+          "body_present": true,
+          "body_types": [
+            "json"
+          ],
+          "body_keys": [
+            "token",
+            "user_id"
+          ],
+          "body_shapes": [
+            {
+              "token": "string",
+              "user_id": "number"
+            }
+          ],
+          "body_sizes": [
+            40
+          ],
+          "observed_status_codes": [
+            200
+          ],
+          "status_code_counts": {
+            "200": 1
+          }
+        },
+        "auth": {
+          "authorization_header_present": true,
+          "bearer_token_present": true,
+          "cookie_present": true,
+          "session_cookie_present": true,
+          "api_key_header_present": true
+        },
+        "action_context": [
+          {
+            "action_id": "act_login",
+            "source_node_id": "screen_login",
+            "target_node_id": "screen_home"
+          }
+        ],
+        "route_context": [
+          {
+            "action_id": "act_login",
+            "source_node_id": "screen_login",
+            "target_node_id": "screen_home"
+          }
+        ],
+        "runtime_context": {
+          "pid_changed_observed": true,
+          "process_death_observed": true,
+          "activity_changes_observed": true,
+          "fatal_observed": true,
+          "crash_observed": true,
+          "evidence_available": true
+        },
+        "visibility": {
+          "http_visibility": "available",
+          "https_visibility": "partial",
+          "https_visibility_reason": "pinning_suspected"
+        },
+        "evidence_refs": {
+          "static_candidate_ids": [
+            "cand_login"
+          ],
+          "correlation_ids": [
+            "corr_e56af5540a4797a0"
+          ],
+          "transaction_ids": [
+            "tx_1"
+          ],
+          "action_ids": [
+            "act_login"
+          ],
+          "runtime_action_ids": [
+            "act_login"
+          ]
+        }
+      }
+    ]
+  }
+}

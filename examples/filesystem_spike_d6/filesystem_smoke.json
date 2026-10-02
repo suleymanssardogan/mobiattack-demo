@@ -1,0 +1,122 @@
+{
+  "app": "sg.vantagepoint.mstgkotlin",
+  "session_id": "b22fdc0a-f806-4e31-b3ae-7abee0572c99",
+  "route_id": "node_8c9f778b58d89aff",
+  "action_id": "act_f405a10893d9b99a",
+  "action": {
+    "action_id": "act_f405a10893d9b99a",
+    "action_type": "back",
+    "status": "succeeded",
+    "started_at": "2026-10-02T09:32:46.605475+00:00",
+    "completed_at": "2026-10-02T09:32:46.653826+00:00",
+    "attempts": 1,
+    "error_code": null,
+    "message": null,
+    "metadata": {
+      "keyevent": "KEYCODE_BACK",
+      "keycode": "4"
+    }
+  },
+  "runtime_after": {
+    "timestamp": "2026-10-02T09:32:46.708324+00:00",
+    "package_name": "sg.vantagepoint.mstgkotlin",
+    "pid": 18904,
+    "process_running": true,
+    "foreground_package": "com.android.chrome",
+    "foreground_activity": "org.chromium.chrome.browser.ChromeTabbedActivity",
+    "fatal_detected": false,
+    "crash_detected": false
+  },
+  "before": {
+    "snapshot_id": "fs_snapshot_ec273bc05c21f307564c9b01",
+    "package": "sg.vantagepoint.mstgkotlin",
+    "session_id": "b22fdc0a-f806-4e31-b3ae-7abee0572c99",
+    "route_id": "node_8c9f778b58d89aff",
+    "action_id": "act_f405a10893d9b99a",
+    "phase": "before",
+    "timestamp": "2026-10-02T09:32:46.605299+00:00",
+    "roots": {
+      "private": {
+        "status": "unavailable",
+        "entries": {}
+      },
+      "external_files": {
+        "status": "unavailable",
+        "entries": {}
+      },
+      "external_media": {
+        "status": "unavailable",
+        "entries": {}
+      }
+    },
+    "coverage_gaps": [
+      "depth_limited_to_3",
+      "metadata_only_same_size_mtime_changes_not_detectable",
+      "inaccessible_storage_does_not_mean_no_filesystem_behavior",
+      "private:access_unavailable_or_directory_not_present",
+      "external_files:access_unavailable_or_directory_not_present",
+      "external_media:access_unavailable_or_directory_not_present"
+    ]
+  },
+  "after": {
+    "snapshot_id": "fs_snapshot_181a930780881f08ed967362",
+    "package": "sg.vantagepoint.mstgkotlin",
+    "session_id": "b22fdc0a-f806-4e31-b3ae-7abee0572c99",
+    "route_id": "node_8c9f778b58d89aff",
+    "action_id": "act_f405a10893d9b99a",
+    "phase": "after",
+    "timestamp": "2026-10-02T09:32:46.708232+00:00",
+    "roots": {
+      "private": {
+        "status": "unavailable",
+        "entries": {}
+      },
+      "external_files": {
+        "status": "unavailable",
+        "entries": {}
+      },
+      "external_media": {
+        "status": "unavailable",
+        "entries": {}
+      }
+    },
+    "coverage_gaps": [
+      "depth_limited_to_3",
+      "metadata_only_same_size_mtime_changes_not_detectable",
+      "inaccessible_storage_does_not_mean_no_filesystem_behavior",
+      "private:access_unavailable_or_directory_not_present",
+      "external_files:access_unavailable_or_directory_not_present",
+      "external_media:access_unavailable_or_directory_not_present"
+    ]
+  },
+  "diff": {
+    "status": "unavailable",
+    "changes": [],
+    "coverage_gaps": [
+      "depth_limited_to_3",
+      "external_files:access_unavailable_or_directory_not_present",
+      "external_files:diff_unavailable_incomplete_snapshot",
+      "external_media:access_unavailable_or_directory_not_present",
+      "external_media:diff_unavailable_incomplete_snapshot",
+      "inaccessible_storage_does_not_mean_no_filesystem_behavior",
+      "metadata_only_same_size_mtime_changes_not_detectable",
+      "private:access_unavailable_or_directory_not_present",
+      "private:diff_unavailable_incomplete_snapshot"
+    ],
+    "no_changes_means": "not_observed_in_accessible_bounded_scope"
+  },
+  "raw_content_persisted": false,
+  "root_or_run_as_used": false,
+  "dynamic_analysis_completed": false,
+  "route_evidence": {
+    "route_id": "node_8c9f778b58d89aff",
+    "session_id": "b22fdc0a-f806-4e31-b3ae-7abee0572c99",
+    "foreground_package": "sg.vantagepoint.mstgkotlin",
+    "source": "existing_ui_observer_route_graph"
+  },
+  "focused_tests": {
+    "passed": 73,
+    "failed": 0,
+    "full_regression_run": false
+  }
+}

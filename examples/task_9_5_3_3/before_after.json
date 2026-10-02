@@ -1,0 +1,163 @@
+[
+  {
+    "after_base_bindings": 0,
+    "after_candidates": 0,
+    "after_complete_bindings": 0,
+    "after_declarations": 0,
+    "after_endpoint_contexts": 0,
+    "after_service_bindings": 0,
+    "app_id": "app_004",
+    "before_base_bindings": 0,
+    "before_candidates": 0,
+    "before_declarations": 0,
+    "before_endpoint_contexts": 0,
+    "before_service_bindings": 0,
+    "extraction_elapsed_seconds": 2.2267,
+    "partial_base_sites": 0,
+    "partial_service_sites": 0,
+    "performance": [
+      {
+        "call_edges_inspected": 0,
+        "elapsed_seconds": 0.0,
+        "files_scanned": 0,
+        "max_traversal_depth": 0,
+        "methods_indexed": 0
+      }
+    ],
+    "reasons": {},
+    "source_scan": "task_9_5_3_app_004"
+  },
+  {
+    "after_base_bindings": 0,
+    "after_candidates": 0,
+    "after_complete_bindings": 0,
+    "after_declarations": 0,
+    "after_endpoint_contexts": 0,
+    "after_service_bindings": 0,
+    "app_id": "app_005",
+    "before_base_bindings": 0,
+    "before_candidates": 0,
+    "before_declarations": 0,
+    "before_endpoint_contexts": 0,
+    "before_service_bindings": 0,
+    "extraction_elapsed_seconds": 1.8345,
+    "partial_base_sites": 0,
+    "partial_service_sites": 0,
+    "performance": [
+      {
+        "call_edges_inspected": 0,
+        "elapsed_seconds": 0.0,
+        "files_scanned": 0,
+        "max_traversal_depth": 0,
+        "methods_indexed": 0
+      }
+    ],
+    "reasons": {},
+    "source_scan": "task_9_5_3_app_005"
+  },
+  {
+    "after_base_bindings": 0,
+    "after_candidates": 0,
+    "after_complete_bindings": 0,
+    "after_declarations": 0,
+    "after_endpoint_contexts": 0,
+    "after_service_bindings": 0,
+    "app_id": "app_006",
+    "before_base_bindings": 0,
+    "before_candidates": 0,
+    "before_declarations": 0,
+    "before_endpoint_contexts": 0,
+    "before_service_bindings": 0,
+    "extraction_elapsed_seconds": 0.4819,
+    "partial_base_sites": 0,
+    "partial_service_sites": 0,
+    "performance": [
+      {
+        "call_edges_inspected": 0,
+        "elapsed_seconds": 0.0,
+        "files_scanned": 0,
+        "max_traversal_depth": 0,
+        "methods_indexed": 0
+      }
+    ],
+    "reasons": {},
+    "source_scan": "task_9_5_3_app_006"
+  },
+  {
+    "after_base_bindings": 0,
+    "after_candidates": 0,
+    "after_complete_bindings": 0,
+    "after_declarations": 127,
+    "after_endpoint_contexts": 0,
+    "after_service_bindings": 0,
+    "app_id": "app_010",
+    "before_base_bindings": 0,
+    "before_candidates": 0,
+    "before_declarations": 127,
+    "before_endpoint_contexts": 0,
+    "before_service_bindings": 0,
+    "extraction_elapsed_seconds": 17.4066,
+    "partial_base_sites": 0,
+    "partial_service_sites": 0,
+    "performance": [
+      {
+        "call_edges_inspected": 1342420,
+        "diagnostics_truncated": false,
+        "elapsed_seconds": 13.0804,
+        "evaluations": 28,
+        "files_scanned": 11393,
+        "indexing_passes": 4,
+        "max_traversal_depth": 2,
+        "methods_indexed": 25,
+        "operations_retained": 4699
+      },
+      {
+        "call_edges_inspected": 0,
+        "elapsed_seconds": 0.0,
+        "files_scanned": 0,
+        "max_traversal_depth": 0,
+        "methods_indexed": 0
+      },
+      {
+        "call_edges_inspected": 0,
+        "elapsed_seconds": 0.0,
+        "files_scanned": 0,
+        "max_traversal_depth": 0,
+        "methods_indexed": 0
+      }
+    ],
+    "reasons": {
+      "UNSUPPORTED_BRANCH_FLOW": 23,
+      "UNSUPPORTED_FIELD_FLOW": 9
+    },
+    "source_scan": "task_9_5_3_app_010_alias_fix"
+  },
+  {
+    "after_base_bindings": 0,
+    "after_candidates": 0,
+    "after_complete_bindings": 0,
+    "after_declarations": 0,
+    "after_endpoint_contexts": 0,
+    "after_service_bindings": 0,
+    "app_id": "app_011",
+    "before_base_bindings": 0,
+    "before_candidates": 0,
+    "before_declarations": 0,
+    "before_endpoint_contexts": 0,
+    "before_service_bindings": 0,
+    "extraction_elapsed_seconds": 3.0453,
+    "partial_base_sites": 0,
+    "partial_service_sites": 0,
+    "performance": [
+      {
+        "call_edges_inspected": 0,
+        "elapsed_seconds": 0.0,
+        "files_scanned": 0,
+        "max_traversal_depth": 0,
+        "methods_indexed": 0
+      }
+    ],
+    "reasons": {},
+    "source_scan": "task_9_5_3_app_011"
+  }
+]

@@ -1,0 +1,36 @@
+{
+  "capture": {
+    "capture_id": "691e7b9b-4dc3-4243-8051-2bbe8fcd896b",
+    "session_id": "463eae39-8c7c-42b9-92bb-d0b34d467cbf",
+    "device_serial": "emulator-5554",
+    "backend": "NativeProxyCaptureBackend",
+    "proxy_host": "10.0.2.2",
+    "proxy_port": 18080,
+    "started_at": "2026-10-02T12:03:11.327604+00:00",
+    "ended_at": "2026-10-02T12:03:19.545805+00:00",
+    "status": "COMPLETED",
+    "warnings": [],
+    "errors": [],
+    "metadata": {}
+  },
+  "summary": {
+    "capture_id": "691e7b9b-4dc3-4243-8051-2bbe8fcd896b",
+    "session_id": "463eae39-8c7c-42b9-92bb-d0b34d467cbf",
+    "total_transactions": 3,
+    "http_count": 3,
+    "https_count": 0,
+    "domains": [
+      "192.168.1.154"
+    ],
+    "correlated_flow_count": 3,
+    "in_scope_count": 3,
+    "proxy_restored": true,
+    "http_visibility": "available",
+    "https_visibility": "unavailable",
+    "https_visibility_reason": "cleartext_http_only_backend",
+    "ca_trust_state": "unknown",
+    "ca_trust_reason": "certificate_trust_unknown",
+    "verified_https_transactions": 0,
+    "tls_failure_count": 0
+  }
+}

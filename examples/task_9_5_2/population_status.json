@@ -1,0 +1,64 @@
+{
+  "apps": [
+    {
+      "apk_sha256": "86c059775aa09e4794defd40f81e69751a81019b1b1f285b30b8f7c5bb5e8b68",
+      "app_id": "app_001",
+      "canonical_case_count": 1,
+      "exploration_status": "partial",
+      "imported": true,
+      "intended_split": "development",
+      "source_type": "authorized_training_app",
+      "source_url": "https://github.com/OWASP/MASTG-Hacking-Playground/releases/download/1.0/MSTG-Android-Kotlin.apk",
+      "static_status": "completed",
+      "stop_reason": "max_depth",
+      "traffic_capture": "proxy_port_in_use"
+    },
+    {
+      "apk_sha256": "6efbd23d6425d0688a2667e371c2e409a8eee2cabc97b1f2eaf2ffdccf3f555f",
+      "app_id": "app_002",
+      "canonical_case_count": 0,
+      "failure_code": "INSTALL_FAILED_NO_MATCHING_ABIS",
+      "imported": false,
+      "intended_split": "development",
+      "runtime_status": "failed",
+      "source_type": "authorized_training_app",
+      "source_url": "https://github.com/OWASP/MASTG-Hacking-Playground/releases/download/1.0/MSTG-Android-Java.apk",
+      "static_status": "completed"
+    },
+    {
+      "apk_sha256": "b18af2a0e44d7634bbcdf93664d9c78a2695e050393fcfbb5e8b91f902d194a4",
+      "app_id": "app_003",
+      "canonical_case_count": 0,
+      "failure_code": "INSTALL_FAILED_DEPRECATED_SDK_VERSION",
+      "imported": false,
+      "intended_split": "holdout",
+      "runtime_status": "failed",
+      "source_type": "authorized_training_app",
+      "source_url": "https://raw.githubusercontent.com/dineshshetty/Android-InsecureBankv2/master/InsecureBankv2.apk",
+      "static_status": "completed"
+    }
+  ],
+  "authorized_applications_analyzed": 3,
+  "case_ids": [
+    "real_app_001_7a3895130090139c"
+  ],
+  "dataset_fingerprint": "2c6e98d16914337a932a364b0258c17a9aa210dc31a14312371e12b167a28695",
+  "default_scoring_case_count": 0,
+  "development_app_count": 1,
+  "holdout_app_count": 0,
+  "initial_authorized_local_application_count": 1,
+  "initial_usable_endpoint_artifact_count": 0,
+  "missing_inputs": [
+    "Additional authorized API-bearing development application evidence",
+    "Authorized API-bearing holdout application evidence",
+    "Independent human-reviewed structured gold labels"
+  ],
+  "model_input_leakage_check": "passed",
+  "nonempty_endpoint_artifacts": 1,
+  "readiness": "NOT_READY_FOR_LOCAL_MODEL_BENCHMARK",
+  "reviewed_case_count": 0,
+  "schema_version": "1.0",
+  "source_endpoint_artifact_sha256": "2ff276eb4572a7bc7a6a0487b99e6390b20085e580a95f8bdc472a9a55573d0d",
+  "task": "9.5.2",
+  "unreviewed_case_count": 1
+}

@@ -1,0 +1,10 @@
+{
+  "baseline_acquisition_ref": "lab_acquisition_463eae398c7c42b992bbd0b34d467cbf",
+  "baseline_artifact": "examples/auth_lab_d10_2/dynamic/traffic.json",
+  "execution_source": "bound_local_http_server_and_deterministic_executor",
+  "finding_generated": false,
+  "fixture_restarted": true,
+  "fixture_sha256": "9a55ba7b97bd1bc161e1b022b934d51d0eb62745316aac9f371b6e73d6567b8f",
+  "fresh_authenticated_baseline_sent": false,
+  "session_mode": "historical_baseline_continuation"
+}

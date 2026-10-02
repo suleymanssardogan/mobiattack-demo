@@ -1,0 +1,12 @@
+[
+  {
+    "auth_present": false,
+    "auth_valid": false,
+    "method": "GET",
+    "path": "/profile",
+    "run_id": "463eae39-8c7c-42b9-92bb-d0b34d467cbf",
+    "source": "local_training_backend_actual_response",
+    "status": 401,
+    "trace_id": "lab_54e318c6ab834d88b3e11974e9c95ea8"
+  }
+]

@@ -5,6 +5,7 @@ static API candidates used in Fuel networking calls.
 
 Supported Framework:
 - Fuel (GET, POST, PUT, DELETE, PATCH)
+- Retrofit method annotations with independently verified literal builder/service binding.
 
 Supported Signatures & Parameter Mapping:
 1. FuelKt extension functions:
@@ -28,11 +29,14 @@ Limitations & V1 Constraints:
 - Conservative invalidation: Any instruction writing to a tracked register with non-string data invalidates that register.
 - Complex flows (move-object, field storage, StringBuilder concatenation) are not propagated in V1.
 - invoke/range syntax is not supported in V1.
+- Base evidence is receiver-local, except explicitly observed FuelManager singleton context.
+- Unsupported control-flow boundaries discard base bindings; URI schemes must be HTTP(S).
 """
 
 from dataclasses import dataclass
 from pathlib import Path
 import re
+from urllib.parse import urlsplit
 
 # Match const-string instructions: const-string vX, "..." or const-string/jumbo vX, "..."
 CONST_STRING_RE = re.compile(r'^\s*const-string(?:/jumbo)?\s+([vp]\d+),\s*"([^"\\]*(?:\\.[^"\\]*)*)"')
@@ -95,19 +99,46 @@ def _parse_register_list(raw_regs: str) -> list[str]:
     return [r.strip() for r in raw_regs.split(",") if r.strip()]
 
 
+def _http_url(value: str, *, base: bool = False) -> bool:
+    """Accept only unambiguous network URLs; never reinterpret another scheme."""
+    if not value or re.search(r"[\s\\]", value):
+        return False
+    try:
+        parsed = urlsplit(value)
+        return (
+            parsed.scheme.lower() in {"http", "https"}
+            and value.lower().startswith(parsed.scheme.lower() + "://")
+            and bool(parsed.hostname)
+            and parsed.username is None
+            and parsed.password is None
+            and parsed.port != 0
+            and not parsed.fragment
+            and (not base or not parsed.query)
+        )
+    except ValueError:
+        return False
+
+
+def _relative_path(value: str) -> bool:
+    if not value or value.startswith("//") or re.search(r"[\s\\]", value):
+        return False
+    try:
+        parsed = urlsplit(value)
+        return not parsed.scheme and not parsed.netloc and bool(parsed.path) and not parsed.fragment
+    except ValueError:
+        return False
+
+
 def _combine_url(base_url: str | None, path: str) -> str | None:
-    """Deterministically join base URL and path avoiding double slashes."""
-    if not path:
-        return None
-    if path.startswith("http://") or path.startswith("https://"):
+    if _http_url(path):
         return path
-    if not base_url:
+    if not base_url or not _http_url(base_url, base=True) or not _relative_path(path):
         return None
     return f"{base_url.rstrip('/')}/{path.lstrip('/')}"
 
 
 def extract_api_candidates(analysis_root: str | Path) -> dict:
-    """Scan Smali files under analysis_root and extract Fuel static API candidates.
+    """Extract Fuel calls and structurally bound Retrofit declarations from Smali.
 
     Args:
         analysis_root: Root directory to scan (e.g. apk_lab/apktool_out).
@@ -165,7 +196,10 @@ def extract_api_candidates(analysis_root: str | Path) -> dict:
 
         in_method = False
         registers: dict[str, TrackedString] = {}
-        latest_base_url: BaseUrlEvidence | None = None
+        receiver_bases: dict[str, BaseUrlEvidence] = {}
+        singleton_receivers: set[str] = set()
+        singleton_base: BaseUrlEvidence | None = None
+        pending_singleton = False
 
         for line_num, raw_line in enumerate(lines, start=1):
             line = raw_line.strip()
@@ -176,24 +210,54 @@ def extract_api_candidates(analysis_root: str | Path) -> dict:
             if METHOD_START_RE.match(line):
                 in_method = True
                 registers.clear()
-                latest_base_url = None
+                receiver_bases.clear()
+                singleton_receivers.clear()
+                singleton_base = None
+                pending_singleton = False
                 continue
 
             if METHOD_END_RE.match(line):
                 in_method = False
                 registers.clear()
-                latest_base_url = None
+                receiver_bases.clear()
+                singleton_receivers.clear()
+                singleton_base = None
+                pending_singleton = False
                 continue
 
             if not in_method:
                 continue
 
+            # Do not carry base identity through unsupported control-flow joins.
+            if line.startswith(":") or re.match(r"(?:goto|packed-switch|sparse-switch)\b", line):
+                receiver_bases.clear()
+                singleton_receivers.clear()
+                singleton_base = None
+                pending_singleton = False
+
+            # The only shared Fuel context accepted is an explicit getInstance result.
+            singleton_result = pending_singleton and line.startswith("move-result-object ")
+            if not line.startswith("."):
+                pending_singleton = False
+
             # 2. Track direct const-string assignments
             m_const = CONST_STRING_RE.match(line)
             if m_const:
                 reg, val = m_const.group(1), m_const.group(2)
+                receiver_bases.pop(reg, None)
+                singleton_receivers.discard(reg)
                 registers[reg] = TrackedString(value=val, line_number=line_num)
                 continue
+
+            # An unsupported object alias can later mutate the same manager.
+            # Revoke its original binding rather than infer an alias relationship.
+            alias = re.match(r"move-object(?:/from16|/16)?\s+([vp]\d+),\s*([vp]\d+)", line)
+            if alias:
+                source = alias.group(2)
+                receiver_bases.pop(source, None)
+                if source in singleton_receivers:
+                    singleton_base = None
+                singleton_receivers.discard(source)
 
             # 3. Invalidate registers overwritten by unsupported instructions
             m_dest = DEST_WRITE_RE.match(line)
@@ -201,6 +265,10 @@ def extract_api_candidates(analysis_root: str | Path) -> dict:
                 dest_reg = m_dest.group(1)
                 # Overwritten with non-string/unknown data -> discard stale tracked value
                 registers.pop(dest_reg, None)
+                receiver_bases.pop(dest_reg, None)
+                singleton_receivers.discard(dest_reg)
+                if singleton_result:
+                    singleton_receivers.add(dest_reg)
 
             # 4. Check invokes
             m_inv = INVOKE_RE.match(line)
@@ -210,20 +278,37 @@ def extract_api_candidates(analysis_root: str | Path) -> dict:
             raw_regs, target_class, method_name = m_inv.group(1), m_inv.group(2).strip(), m_inv.group(3).strip()
             reg_list = _parse_register_list(raw_regs)
 
-            # 4A. FuelManager.setBasePath detection
-            # Signature: Lcom/github/kittinunf/fuel/core/FuelManager;->setBasePath(Ljava/lang/String;)V
-            # Register index 0: FuelManager instance, Register index 1: Base URL string
+            if (
+                target_class == "Lcom/github/kittinunf/fuel/core/FuelManager$Companion;"
+                and method_name == "getInstance"
+                and m_inv.group(4) == ""
+                and m_inv.group(5) == "Lcom/github/kittinunf/fuel/core/FuelManager;"
+                and len(reg_list) == 1
+            ):
+                pending_singleton = True
+                continue
+
+            # Bind only to this receiver. Unknown/invalid setters revoke old evidence.
             if target_class == "Lcom/github/kittinunf/fuel/core/FuelManager;" and method_name == "setBasePath":
-                if len(reg_list) >= 2:
-                    url_reg = reg_list[1]
-                    if url_reg in registers:
-                        tracked_url = registers[url_reg]
-                        latest_base_url = BaseUrlEvidence(
+                if reg_list:
+                    receiver = reg_list[0]
+                    receiver_bases.pop(receiver, None)
+                    if receiver in singleton_receivers:
+                        singleton_base = None
+                    tracked_url = registers.get(reg_list[1]) if len(reg_list) == 2 else None
+                    if (
+                        tracked_url and _http_url(tracked_url.value, base=True)
+                        and m_inv.group(4) == "Ljava/lang/String;" and m_inv.group(5) == "V"
+                    ):
+                        base = BaseUrlEvidence(
                             value=tracked_url.value,
-                            register=url_reg,
+                            register=reg_list[1],
                             line_number=tracked_url.line_number,
                             call_line_number=line_num,
                         )
+                        receiver_bases[receiver] = base
+                        if receiver in singleton_receivers:
+                            singleton_base = base
                 continue
 
             # 4B. Fuel HTTP method call detection
@@ -263,8 +348,17 @@ def extract_api_candidates(analysis_root: str | Path) -> dict:
             tracked_path = registers[path_reg]
             path_val = tracked_path.value
 
-            # Combine URL if local base URL exists
-            base_url_val = latest_base_url.value if latest_base_url else None
+            if not (_http_url(path_val) or _relative_path(path_val)):
+                continue
+
+            base = None
+            if not _http_url(path_val):
+                if target_class == "Lcom/github/kittinunf/fuel/core/FuelManager;":
+                    receiver = reg_list[0]
+                    base = singleton_base if receiver in singleton_receivers else receiver_bases.get(receiver)
+                else:
+                    base = singleton_base
+            base_url_val = base.value if base else None
             full_url_val = _combine_url(base_url_val, path_val)
 
             evidence_dict = {
@@ -273,9 +367,9 @@ def extract_api_candidates(analysis_root: str | Path) -> dict:
                 "path_line": tracked_path.line_number,
                 "request_call_line": line_num,
                 "base_url_value": base_url_val,
-                "base_url_register": latest_base_url.register if latest_base_url else None,
-                "base_url_line": latest_base_url.line_number if latest_base_url else None,
-                "base_url_call_line": latest_base_url.call_line_number if latest_base_url else None,
+                "base_url_register": base.register if base else None,
+                "base_url_line": base.line_number if base else None,
+                "base_url_call_line": base.call_line_number if base else None,
             }
 
             api_candidates.append({
@@ -292,6 +386,9 @@ def extract_api_candidates(analysis_root: str | Path) -> dict:
 
     def sort_key(item: dict) -> tuple:
         return (item["source_file"], item["request_line"], item["method"], item["path"])
+
+    from src.retrofit_candidate_extractor import extract_retrofit
+    api_candidates.extend(extract_retrofit(root_path)["api_candidates"])
 
     return {
         "api_candidates": sorted(api_candidates, key=sort_key),

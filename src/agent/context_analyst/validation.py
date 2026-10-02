@@ -47,12 +47,12 @@ def output_schema(context: ContextAnalystInput, created_at: str):
         "evidence_refs": _array(ref_schema, min_items=1),
         "coverage_gaps": _array({"type": "string", "enum": ids}) if ids else {"type": "array", "maxItems": 0},
         "created_at": {"const": created_at}})
+    # The model selects semantics; runtime owns canonical identity and state.
     hypotheses = _object_schema(AgentHypothesis, {
-        "hypothesis_id": {"type": "string", "enum": [record_id("hyp", eid + kind) for kind in context.hypothesis_catalog]},
-        "endpoint_context_id": {"const": eid}, "hypothesis_type": {"type": "string", "enum": sorted(context.hypothesis_catalog)},
+        "hypothesis_type": {"type": "string", "enum": sorted(context.hypothesis_catalog)},
         "statement": {"type": "string", "enum": [h["statement"] for h in context.hypothesis_catalog.values()]},
-        "evidence_refs": _array(ref_schema, min_items=1), "required_evidence": _array(string), "status": {"const": "hypothesis"}})
-    hypotheses["required"].append("status")
+        "evidence_refs": _array(ref_schema, min_items=1), "required_evidence": _array(string)})
+    hypotheses["required"] = list(hypotheses["properties"])
     coverage = _object_schema(CoverageGap, {
         "gap_id": {"type": "string", "enum": ids}, "endpoint_context_id": {"const": eid},
         "kind": {"type": "string", "enum": sorted({d["kind"] for d in context.coverage["gaps"]})},
@@ -102,6 +102,40 @@ def _unique_object(pairs):
     return output
 
 
+def _canonical_hypotheses(items, context):
+    """Bind semantic records to this trusted endpoint without repairing semantics.
+
+    Complete legacy canonical records remain accepted, but their explicit IDs,
+    endpoint and state must already be correct. Partial legacy metadata is invalid.
+    """
+    result = []
+    seen = set()
+    owned = {"hypothesis_id", "endpoint_context_id", "status"}
+    semantic = {"hypothesis_type", "statement", "evidence_refs", "required_evidence"}
+    for item in items:
+        if not isinstance(item, dict) or set(item) - (owned | semantic) or semantic - set(item):
+            raise OutputInvalid("SCHEMA_INVALID")
+        kind = item["hypothesis_type"]
+        if not isinstance(kind, str) or kind not in context.hypothesis_catalog:
+            raise OutputInvalid("UNSUPPORTED_HYPOTHESIS")
+        if kind in seen:
+            raise OutputInvalid("DUPLICATE_HYPOTHESIS_TYPE")
+        seen.add(kind)
+        identity = {"hypothesis_id": record_id("hyp", context.endpoint_context_id + kind),
+                    "endpoint_context_id": context.endpoint_context_id, "status": "hypothesis"}
+        if owned & set(item):
+            if owned - set(item):
+                raise OutputInvalid("HYPOTHESIS_METADATA_INCOMPLETE")
+            if item["endpoint_context_id"] != identity["endpoint_context_id"]:
+                raise OutputInvalid("ENDPOINT_MISMATCH")
+            if item["status"] != identity["status"]:
+                raise OutputInvalid("HYPOTHESIS_STATE_INVALID")
+            if item["hypothesis_id"] != identity["hypothesis_id"]:
+                raise OutputInvalid("HYPOTHESIS_ID_INVALID")
+        result.append({**item, **identity})
+    return result
+
+
 def validate_model_output(data, context: ContextAnalystInput, *, created_at: str,
                           metadata: ModelMetadata, attempts: int, errors=()) -> ContextAnalystResult:
     try:
@@ -120,10 +154,8 @@ def validate_model_output(data, context: ContextAnalystInput, *, created_at: str
             raise OutputInvalid("ENDPOINT_MISMATCH")
         if not isinstance(data["hypotheses"], list) or not isinstance(data["coverage_gaps"], list):
             raise OutputInvalid("SCHEMA_INVALID")
-        if any(not isinstance(h, dict) or h.get("status") != "hypothesis" for h in data["hypotheses"]):
-            raise OutputInvalid("HYPOTHESIS_STATE_OR_ID_INVALID")
         observation = AgentObservation.from_dict(data["observation"])
-        hypotheses = tuple(AgentHypothesis.from_dict(h) for h in data["hypotheses"])
+        hypotheses = tuple(AgentHypothesis.from_dict(h) for h in _canonical_hypotheses(data["hypotheses"], context))
         gaps = tuple(CoverageGap.from_dict(g) for g in data["coverage_gaps"])
         eid = context.endpoint_context_id
         if any(obj.endpoint_context_id != eid for obj in (observation, *hypotheses, *gaps)):
@@ -141,9 +173,8 @@ def validate_model_output(data, context: ContextAnalystInput, *, created_at: str
             support = context.hypothesis_catalog.get(h.hypothesis_type)
             if support is None:
                 raise OutputInvalid("UNSUPPORTED_HYPOTHESIS")
-            if (h.status != "hypothesis" or h.hypothesis_type in seen_types
-                    or h.hypothesis_id != record_id("hyp", eid + h.hypothesis_type)):
-                raise OutputInvalid("HYPOTHESIS_STATE_OR_ID_INVALID")
+            if h.hypothesis_type in seen_types:
+                raise OutputInvalid("DUPLICATE_HYPOTHESIS_TYPE")
             seen_types.add(h.hypothesis_type)
             if (h.statement != support["statement"] or set(h.required_evidence) != set(support["required_evidence"])
                     or not set(support["evidence_refs"]).issubset(h.evidence_refs)):

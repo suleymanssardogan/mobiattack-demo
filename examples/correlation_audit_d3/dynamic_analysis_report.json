@@ -1,0 +1,156 @@
+{
+  "schema_version": "1.0",
+  "report_type": "dynamic_analysis",
+  "scan_id": "correlation_audit_d3",
+  "generated_at": "2026-10-02T08:53:31.889540+00:00",
+  "report_status": "completed",
+  "analysis_coverage": "partial",
+  "target": {
+    "package_name": "sg.vantagepoint.mstgkotlin",
+    "platform": "android"
+  },
+  "coverage": {
+    "ui_exploration": "partial",
+    "runtime_observation": "unavailable",
+    "http_visibility": "available",
+    "https_visibility": "unavailable",
+    "api_correlation": "available",
+    "endpoint_contexts": "available"
+  },
+  "preflight": {
+    "status": "WARN",
+    "launch_success": true,
+    "process_running": true,
+    "diagnostic_codes": []
+  },
+  "session": {
+    "session_id": "965a2656-5e40-45a3-9164-71739e2e5f48",
+    "status": "ACTIVE",
+    "started_at": "2026-10-02T08:30:15.501073+00:00",
+    "ended_at": null
+  },
+  "exploration": {
+    "status": "partial",
+    "stop_reason": "max_depth",
+    "steps_attempted": 2,
+    "actions_succeeded": 2,
+    "actions_failed": 0,
+    "screens_observed": 3,
+    "transitions_recorded": 2,
+    "duration_seconds": 7.837
+  },
+  "routes": {
+    "node_count": 0,
+    "edge_count": 0,
+    "root_node_id": null,
+    "current_node_id": null,
+    "action_count": 0,
+    "self_loop_count": 0,
+    "system_boundary_count": 0,
+    "external_boundary_count": 0
+  },
+  "runtime": {
+    "action_evidence_count": 0,
+    "correlated_action_count": 0,
+    "pid_change_count": 0,
+    "process_death_count": 0,
+    "activity_change_count": 0,
+    "fatal_count": 0,
+    "crash_count": 0
+  },
+  "traffic": {
+    "backend": null,
+    "total_transactions": 1,
+    "http_count": 1,
+    "https_count": 0,
+    "hosts": [
+      "127.0.0.1"
+    ],
+    "hosts_count": 1,
+    "http_visibility": "available",
+    "https_visibility": "unavailable",
+    "https_visibility_reason": "audit_fixture_no_tls",
+    "proxy_restored": null,
+    "visibility_note": "Traffic visibility is incomplete; unobserved requests may exist."
+  },
+  "traffic_correlation": {
+    "actions_with_evidence": 0,
+    "transaction_correlated_action_count": 0,
+    "partial_correlation_count": 0,
+    "unavailable_correlation_count": 0
+  },
+  "api_correlation": {
+    "static_candidate_count": 1,
+    "dynamic_endpoint_count": 1,
+    "correlated_count": 1,
+    "static_only_count": 0,
+    "dynamic_only_count": 0,
+    "exact_count": 1,
+    "template_count": 0,
+    "method_mismatch_count": 0,
+    "visibility_note": "HTTPS traffic visibility was unavailable (certificate_trust_unknown). Unobserved static HTTPS candidates were not observable in runtime traffic."
+  },
+  "endpoint_context_summary": {
+    "endpoint_context_count": 1,
+    "runtime_observed_count": 1,
+    "static_only_count": 0,
+    "dynamic_only_count": 0
+  },
+  "endpoint_contexts": [
+    {
+      "endpoint_context_id": "ctx_dfc8dba0bd0e418f",
+      "host": "127.0.0.1",
+      "path": "/signup",
+      "static_method": "POST",
+      "observed_methods": [
+        "POST"
+      ],
+      "match_type": "exact",
+      "confidence": "high",
+      "observation_count": 1,
+      "observed_status_codes": [
+        201
+      ],
+      "auth": {
+        "authorization_header_present": true,
+        "bearer_token_present": null,
+        "cookie_present": false,
+        "session_cookie_present": false,
+        "api_key_header_present": false
+      },
+      "evidence_refs": {
+        "action_ids": [],
+        "correlation_ids": [
+          "corr_8e0c20e33f29db43"
+        ],
+        "runtime_action_ids": [],
+        "static_candidate_ids": [
+          "stat_cand_1"
+        ],
+        "transaction_ids": [
+          "tx_audit"
+        ]
+      },
+      "action_ids": []
+    }
+  ],
+  "evidence": {
+    "api_correlation": "dynamic/api_correlation.json",
+    "endpoint_contexts": "dynamic/endpoint_contexts.json",
+    "exploration": "dynamic/exploration_result.json",
+    "preflight": "dynamic/preflight_result.json",
+    "session": "dynamic/session.json",
+    "traffic": "dynamic/traffic.json"
+  },
+  "evidence_status": {
+    "api_correlation": "available",
+    "endpoint_contexts": "available",
+    "exploration": "available",
+    "preflight": "available",
+    "routes": "missing",
+    "runtime": "missing",
+    "session": "available",
+    "traffic": "available",
+    "traffic_correlation": "missing"
+  }
+}

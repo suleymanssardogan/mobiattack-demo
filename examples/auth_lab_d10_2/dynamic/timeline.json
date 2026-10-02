@@ -1,0 +1,74 @@
+[
+  {
+    "event_id": "8c7ed101-73f7-4344-8d37-5af97501d0be",
+    "type": "SYSTEM_EVENT",
+    "name": "SESSION_STARTED",
+    "timestamp": "2026-10-02T12:03:10.878516+00:00",
+    "metadata": {
+      "package_name": "com.android.chrome",
+      "device_serial": "emulator-5554",
+      "preflight_status": "NOT_EVALUATED"
+    },
+    "flow_id": null,
+    "session_id": "463eae39-8c7c-42b9-92bb-d0b34d467cbf"
+  },
+  {
+    "event_id": "4a8d19c7-d02e-4f7b-a57d-137b2ba2ae67",
+    "type": "SYSTEM_EVENT",
+    "name": "FLOW_STARTED",
+    "timestamp": "2026-10-02T12:03:10.878931+00:00",
+    "metadata": {
+      "flow_name": "Local authenticated baseline acquisition",
+      "description": ""
+    },
+    "flow_id": "78c36664-8c71-43f9-a869-bea66a4584bf",
+    "session_id": "463eae39-8c7c-42b9-92bb-d0b34d467cbf"
+  },
+  {
+    "event_id": "e0f3ce92-cd1a-4058-afb3-887c1624d532",
+    "type": "MARKER",
+    "name": "LAB_LOGIN_PROFILE_STARTED",
+    "timestamp": "2026-10-02T12:03:15.986936+00:00",
+    "metadata": {
+      "action_id": "act_4d3a12f998f2a6a3",
+      "route_id": "node_ae5d067cf204c0d4"
+    },
+    "flow_id": "78c36664-8c71-43f9-a869-bea66a4584bf",
+    "session_id": "463eae39-8c7c-42b9-92bb-d0b34d467cbf"
+  },
+  {
+    "event_id": "3a4e3eff-67b5-4175-9926-6cbcf4d077a6",
+    "type": "USER_ACTION",
+    "name": "ACTION_EXECUTED",
+    "timestamp": "2026-10-02T12:03:16.048416+00:00",
+    "metadata": {
+      "action_id": "act_4d3a12f998f2a6a3",
+      "action_type": "click",
+      "status": "succeeded",
+      "attempts": 1,
+      "center": [
+        380,
+        733
+      ],
+      "bounds": [
+        21,
+        638,
+        740,
+        829
+      ],
+      "resource_id": "start",
+      "route_id": "node_ae5d067cf204c0d4"
+    },
+    "flow_id": "78c36664-8c71-43f9-a869-bea66a4584bf",
+    "session_id": "463eae39-8c7c-42b9-92bb-d0b34d467cbf"
+  },
+  {
+    "event_id": "7a0e845a-52cd-4ee8-b2dc-ff6fb76a6609",
+    "type": "SYSTEM_EVENT",
+    "name": "SESSION_COMPLETED",
+    "timestamp": "2026-10-02T12:03:19.580736+00:00",
+    "metadata": {},
+    "flow_id": null,
+    "session_id": "463eae39-8c7c-42b9-92bb-d0b34d467cbf"
+  }
+]

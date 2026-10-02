@@ -1,0 +1,396 @@
+{
+  "install": {
+    "success": true,
+    "error": null,
+    "message": null
+  },
+  "proxy_before": null,
+  "traffic_readiness": {
+    "stage": "proxy_readiness",
+    "device_serial": "emulator-5554",
+    "adb_available": true,
+    "capture_backend": "mitmproxy",
+    "backend_available": true,
+    "proxy_host": "10.0.2.2",
+    "proxy_port": 18080,
+    "port_available": true,
+    "device_reachable_proxy": true,
+    "https_interception": {
+      "ca_certificate_installed": false,
+      "certificate_trust_unknown": true,
+      "pinning_suspected": false
+    },
+    "status": "WARN",
+    "warnings": [
+      "HTTPS interception certificate trust is not confirmed; plain HTTP will be captured."
+    ],
+    "errors": []
+  },
+  "proxy_during": "10.0.2.2:18080",
+  "backend": "NativeProxyCaptureBackend",
+  "capture_summary": {
+    "capture_id": "849631c1-89b7-4f1b-9e2e-b97f3eb8edee",
+    "session_id": "965a2656-5e40-45a3-9164-71739e2e5f48",
+    "total_transactions": 0,
+    "http_count": 0,
+    "https_count": 0,
+    "domains": [],
+    "correlated_flow_count": 0,
+    "in_scope_count": 0,
+    "proxy_restored": true,
+    "http_visibility": "available",
+    "https_visibility": "unavailable",
+    "https_visibility_reason": "cleartext_http_only_backend"
+  },
+  "proxy_after": null,
+  "proxy_restored_verified": true,
+  "runtime_final": {
+    "timestamp": "2026-10-02T08:30:27.747714+00:00",
+    "package_name": "sg.vantagepoint.mstgkotlin",
+    "pid": 18904,
+    "process_running": true,
+    "foreground_package": "sg.vantagepoint.mstgkotlin",
+    "foreground_activity": "sg.vantagepoint.mstgkotlin.MainActivity",
+    "is_foreground": true,
+    "fatal_detected": false,
+    "crash_detected": false,
+    "log_events": [
+      {
+        "timestamp": "10-02 11:30:12.719",
+        "level": "I",
+        "tag": "libc",
+        "message": "SetHeapTaggingLevel: tag level set to 0",
+        "kind": "info",
+        "target_attributed": true,
+        "attribution": "target",
+        "attribution_reason": "pid_scoped"
+      },
+      {
+        "timestamp": "10-02 11:30:12.727",
+        "level": "I",
+        "tag": "oint.mstgkotlin",
+        "message": "Late-enabling -Xcheck:jni",
+        "kind": "info",
+        "target_attributed": true,
+        "attribution": "target",
+        "attribution_reason": "pid_scoped"
+      },
+      {
+        "timestamp": "10-02 11:30:12.807",
+        "level": "I",
+        "tag": "oint.mstgkotlin",
+        "message": "Using CollectorTypeCMC GC.",
+        "kind": "info",
+        "target_attributed": true,
+        "attribution": "target",
+        "attribution_reason": "pid_scoped"
+      },
+      {
+        "timestamp": "10-02 11:30:12.841",
+        "level": "D",
+        "tag": "nativeloader",
+        "message": "Load libframework-connectivity-tiramisu-jni.so using APEX ns com_android_tethering for caller /apex/com.android.tethering/javalib/framework-connectivity-t.jar: ok",
+        "kind": "info",
+        "target_attributed": true,
+        "attribution": "target",
+        "attribution_reason": "pid_scoped"
+      },
+      {
+        "timestamp": "10-02 11:30:12.952",
+        "level": "D",
+        "tag": "ApplicationLoaders",
+        "message": "Returning zygote-cached class loader: /system/framework/android.test.base.jar",
+        "kind": "info",
+        "target_attributed": true,
+        "attribution": "target",
+        "attribution_reason": "pid_scoped"
+      },
+      {
+        "timestamp": "10-02 11:30:12.953",
+        "level": "D",
+        "tag": "ApplicationLoaders",
+        "message": "Returning zygote-cached class loader: /system/framework/org.apache.http.legacy.jar",
+        "kind": "info",
+        "target_attributed": true,
+        "attribution": "target",
+        "attribution_reason": "pid_scoped"
+      },
+      {
+        "timestamp": "10-02 11:30:13.153",
+        "level": "D",
+        "tag": "nativeloader",
+        "message": "Configuring clns-9 for other apk /data/app/~~2HNVP_W7M70UR8qcyufZ2g==/sg.vantagepoint.mstgkotlin-QeMaAJUjgtiP637eQ_AixA==/base.apk. target_sdk_version=26, uses_libraries=, library_path=/data/app/~~2HNVP_W7M70UR8qcyufZ2g==/sg.vantagepoint.mstgkotlin-QeMaAJUjgtiP637eQ_AixA==/lib/arm64, permitted_path=/data:/mnt/expand:/data/user/0/sg.vantagepoint.mstgkotlin",
+        "kind": "info",
+        "target_attributed": true,
+        "attribution": "target",
+        "attribution_reason": "pid_scoped"
+      },
+      {
+        "timestamp": "10-02 11:30:13.160",
+        "level": "I",
+        "tag": "oint.mstgkotlin",
+        "message": "AssetManager2(0x748e46edf8) locale list changing from [] to [en-US]",
+        "kind": "info",
+        "target_attributed": true,
+        "attribution": "target",
+        "attribution_reason": "pid_scoped"
+      },
+      {
+        "timestamp": "10-02 11:30:13.185",
+        "level": "V",
+        "tag": "GraphicsEnvironment",
+        "message": "Currently set values for:",
+        "kind": "info",
+        "target_attributed": true,
+        "attribution": "target",
+        "attribution_reason": "pid_scoped"
+      },
+      {
+        "timestamp": "10-02 11:30:13.189",
+        "level": "V",
+        "tag": "GraphicsEnvironment",
+        "message": "angle_gl_driver_selection_pkgs=[]",
+        "kind": "info",
+        "target_attributed": true,
+        "attribution": "target",
+        "attribution_reason": "pid_scoped"
+      },
+      {
+        "timestamp": "10-02 11:30:13.189",
+        "level": "V",
+        "tag": "GraphicsEnvironment",
+        "message": "angle_gl_driver_selection_values=[]",
+        "kind": "info",
+        "target_attributed": true,
+        "attribution": "target",
+        "attribution_reason": "pid_scoped"
+      },
+      {
+        "timestamp": "10-02 11:30:13.189",
+        "level": "V",
+        "tag": "GraphicsEnvironment",
+        "message": "sg.vantagepoint.mstgkotlin is not listed in per-application setting",
+        "kind": "info",
+        "target_attributed": true,
+        "attribution": "target",
+        "attribution_reason": "pid_scoped"
+      },
+      {
+        "timestamp": "10-02 11:30:13.189",
+        "level": "V",
+        "tag": "GraphicsEnvironment",
+        "message": "ANGLE allowlist from config: com.dreamgames.royalmatch com.dts.freefiremax com.dxx.firenow com.gramgames.mergedragons com.ludo.king com.mojang.minecraftpe com.my.defense com.nintendo.zaka com.os.airforce com.playrix.fishdomdd.gplay io.teslatech.callbreak jp.konami.prospia net.peakgames.toonblast",
+        "kind": "info",
+        "target_attributed": true,
+        "attribution": "target",
+        "attribution_reason": "pid_scoped"
+      },
+      {
+        "timestamp": "10-02 11:30:13.189",
+        "level": "V",
+        "tag": "GraphicsEnvironment",
+        "message": "sg.vantagepoint.mstgkotlin is not listed in ANGLE allowlist or settings, returning default",
+        "kind": "info",
+        "target_attributed": true,
+        "attribution": "target",
+        "attribution_reason": "pid_scoped"
+      },
+      {
+        "timestamp": "10-02 11:30:13.191",
+        "level": "V",
+        "tag": "GraphicsEnvironment",
+        "message": "Neither updatable production driver nor prerelease driver is supported.",
+        "kind": "info",
+        "target_attributed": true,
+        "attribution": "target",
+        "attribution_reason": "pid_scoped"
+      },
+      {
+        "timestamp": "10-02 11:30:13.250",
+        "level": "I",
+        "tag": "DisplayManager",
+        "message": "Choreographer implicitly registered for the refresh rate.",
+        "kind": "info",
+        "target_attributed": true,
+        "attribution": "target",
+        "attribution_reason": "pid_scoped"
+      },
+      {
+        "timestamp": "10-02 11:30:13.254",
+        "level": "I",
+        "tag": "oint.mstgkotlin",
+        "message": "AssetManager2(0x748e46f118) locale list changing from [] to [en-US]",
+        "kind": "info",
+        "target_attributed": true,
+        "attribution": "target",
+        "attribution_reason": "pid_scoped"
+      },
+      {
+        "timestamp": "10-02 11:30:13.293",
+        "level": "E",
+        "tag": "ashmem",
+        "message": "Pinning is deprecated since Android Q. Please use trim or other methods.",
+        "kind": "error",
+        "target_attributed": true,
+        "attribution": "target",
+        "attribution_reason": "pid_scoped"
+      },
+      {
+        "timestamp": "10-02 11:30:13.378",
+        "level": "I",
+        "tag": "EGL_emulation",
+        "message": "Opening libGLESv1_CM_emulation.so",
+        "kind": "info",
+        "target_attributed": true,
+        "attribution": "target",
+        "attribution_reason": "pid_scoped"
+      },
+      {
+        "timestamp": "10-02 11:30:13.381",
+        "level": "I",
+        "tag": "EGL_emulation",
+        "message": "Opening libGLESv2_emulation.so",
+        "kind": "info",
+        "target_attributed": true,
+        "attribution": "target",
+        "attribution_reason": "pid_scoped"
+      },
+      {
+        "timestamp": "10-02 11:30:13.395",
+        "level": "D",
+        "tag": "DesktopModeFlags",
+        "message": "Toggle override initialized to: OVERRIDE_UNSET",
+        "kind": "info",
+        "target_attributed": true,
+        "attribution": "target",
+        "attribution_reason": "pid_scoped"
+      },
+      {
+        "timestamp": "10-02 11:30:13.404",
+        "level": "W",
+        "tag": "HWUI",
+        "message": "Failed to choose config with EGL_SWAP_BEHAVIOR_PRESERVED, retrying without...",
+        "kind": "warning",
+        "target_attributed": true,
+        "attribution": "target",
+        "attribution_reason": "pid_scoped"
+      },
+      {
+        "timestamp": "10-02 11:30:13.405",
+        "level": "W",
+        "tag": "HWUI",
+        "message": "Failed to initialize 101010-2 format, error = EGL_SUCCESS",
+        "kind": "warning",
+        "target_attributed": true,
+        "attribution": "target",
+        "attribution_reason": "pid_scoped"
+      },
+      {
+        "timestamp": "10-02 11:30:13.502",
+        "level": "W",
+        "tag": "HWUI",
+        "message": "Image decoding logging dropped!",
+        "kind": "warning",
+        "target_attributed": true,
+        "attribution": "target",
+        "attribution_reason": "pid_scoped"
+      },
+      {
+        "timestamp": "10-02 11:30:13.512",
+        "level": "I",
+        "tag": "oint.mstgkotlin",
+        "message": "hiddenapi: Accessing hidden method Landroid/view/View;->computeFitSystemWindows(Landroid/graphics/Rect;Landroid/graphics/Rect;)Z (runtime_flags=0, domain=platform, api=unsupported) from Landroid/support/v7/widget/ViewUtils; (domain=app) using reflection: allowed",
+        "kind": "info",
+        "target_attributed": true,
+        "attribution": "target",
+        "attribution_reason": "pid_scoped"
+      },
+      {
+        "timestamp": "10-02 11:30:13.513",
+        "level": "I",
+        "tag": "oint.mstgkotlin",
+        "message": "hiddenapi: Accessing hidden method Landroid/view/ViewGroup;->makeOptionalFitsSystemWindows()V (runtime_flags=0, domain=platform, api=unsupported) from Landroid/support/v7/widget/ViewUtils; (domain=app) using reflection: allowed",
+        "kind": "info",
+        "target_attributed": true,
+        "attribution": "target",
+        "attribution_reason": "pid_scoped"
+      },
+      {
+        "timestamp": "10-02 11:30:13.750",
+        "level": "W",
+        "tag": "HWUI",
+        "message": "Unknown dataspace 0",
+        "kind": "warning",
+        "target_attributed": true,
+        "attribution": "target",
+        "attribution_reason": "pid_scoped"
+      },
+      {
+        "timestamp": "10-02 11:30:14.312",
+        "level": "D",
+        "tag": "InsetsController",
+        "message": "hide(ime(), fromIme=false)",
+        "kind": "info",
+        "target_attributed": true,
+        "attribution": "target",
+        "attribution_reason": "pid_scoped"
+      },
+      {
+        "timestamp": "10-02 11:30:14.315",
+        "level": "I",
+        "tag": "ImeTracker",
+        "message": "sg.vantagepoint.mstgkotlin:f55fed16: onCancelled at PHASE_CLIENT_ALREADY_HIDDEN",
+        "kind": "info",
+        "target_attributed": true,
+        "attribution": "target",
+        "attribution_reason": "pid_scoped"
+      },
+      {
+        "timestamp": "10-02 11:30:15.148",
+        "level": "I",
+        "tag": "oint.mstgkotlin",
+        "message": "Compiler allocated 5111KB to compile void android.view.ViewRootImpl.performTraversals()",
+        "kind": "info",
+        "target_attributed": true,
+        "attribution": "target",
+        "attribution_reason": "pid_scoped"
+      }
+    ],
+    "diagnostics": []
+  },
+  "report_status": "completed",
+  "analysis_coverage": "partial",
+  "coverage": {
+    "ui_exploration": "partial",
+    "runtime_observation": "available",
+    "http_visibility": "available",
+    "https_visibility": "unavailable",
+    "api_correlation": "unavailable",
+    "endpoint_contexts": "unavailable"
+  },
+  "transactions": [],
+  "focused_tests": {
+    "passed": 397,
+    "failed": 0,
+    "full_regression_run": false
+  },
+  "audit_checks": {
+    "action_runtime_links_valid": true,
+    "empty_transaction_links_honest": true,
+    "report_partial_coverage_explicit": true,
+    "backend_failure_isolated_in_focused_tests": true,
+    "no_live_crash_observed": true,
+    "activity_changes_observed": 0
+  },
+  "gaps": [
+    "Native backend supports cleartext proxy traffic only; no live HTTP transaction in this bounded run, so app-origin transaction attribution was not demonstrated.",
+    "Native backend substitutes synthetic HTTP 200 for localhost requests and certain upstream failures; no synthetic-response provenance flag is attached.",
+    "Normalizer redacts known sensitive headers and structured body keys but leaves query secrets and untyped plaintext body secrets intact."
+  ],
+  "additional_limits": [
+    "Readiness hardcodes capture_backend=mitmproxy while actual backend was NativeProxyCaptureBackend; traffic/report backend is unknown.",
+    "Action correlations express temporal observation, not causation or process-level traffic attribution.",
+    "Timestamp comparison strips timezone information while device logcat uses local time and runtime snapshots use UTC; cross-clock log windows need scrutiny.",
+    "Bounded exploration stopped at max_depth; no successful activity transition or live crash was exercised."
+  ]
+}

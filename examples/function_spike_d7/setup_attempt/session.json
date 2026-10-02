@@ -1,0 +1,29 @@
+{
+  "session_id": "4c18678f-4a91-4964-ba8e-640dcba428bf",
+  "stage": "dynamic_session",
+  "package_name": "sg.vantagepoint.mstgkotlin",
+  "device_serial": "emulator-5554",
+  "preflight_status": "NOT_EVALUATED",
+  "started_at": "2026-10-02T09:38:23.177172+00:00",
+  "ended_at": null,
+  "status": "ABORTED",
+  "flows": [
+    {
+      "flow_id": "23f45f6b-8191-4bcb-b4a9-e70ec9d17cb1",
+      "name": "Function observation feasibility",
+      "description": "",
+      "status": "ACTIVE",
+      "started_at": "2026-10-02T09:38:23.177938+00:00",
+      "ended_at": null,
+      "events": []
+    }
+  ],
+  "warnings": [],
+  "errors": [],
+  "metadata": {
+    "bounded_spike": true,
+    "method_invocation_coverage": "unavailable",
+    "dynamic_analysis_completed": false,
+    "spike_setup_error": "ui_descriptor_adapter_error_before_action"
+  }
+}

@@ -173,7 +173,7 @@ class TestDynamicTraffic(unittest.TestCase):
         content, meta = process_body_content(big_body, "text/plain")
         self.assertTrue(meta["truncated"])
         self.assertEqual(meta["original_size"], MAX_CAPTURE_BODY_BYTES + 500)
-        self.assertEqual(len(content), MAX_CAPTURE_BODY_BYTES)
+        self.assertEqual(content, "[REDACTED]")
 
     # 12. binary body metadata olarak tutulur
     def test_12_binary_body_stored_as_metadata(self):

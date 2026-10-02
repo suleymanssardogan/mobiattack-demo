@@ -116,42 +116,45 @@ class NativeProxyCaptureBackend:
                 # Parse target URL / Host
                 url_path = self.path
                 parsed = urlparse(url_path)
-                host = parsed.hostname or self.headers.get("Host", "unknown-host")
-                port = parsed.port or (443 if parsed.scheme == "https" else 80)
+                authority = parsed if parsed.hostname else urlparse("//" + self.headers.get("Host", "unknown-host"))
+                host = authority.hostname or "unknown-host"
+                port = authority.port or (443 if parsed.scheme == "https" else 80)
                 path = parsed.path or "/"
                 if parsed.query:
                     path += f"?{parsed.query}"
 
                 headers_dict = dict(self.headers.items())
 
-                # Prepare response defaults
-                resp_status = 200
-                resp_headers: dict[str, str] = {
-                    "Content-Type": "application/json",
-                    "Server": "MobiAttack-Proxy/1.0",
-                }
-                resp_body: bytes = b'{"status":"ok","captured_by":"mobiattack"}'
-
-                # Forward to actual upstream if requested host is a real resolvable external host
-                if parsed.scheme in ("http", "https") and host not in ("10.0.2.2", "127.0.0.1", "localhost"):
-                    try:
+                # Only a received upstream response is canonical application evidence.
+                # Localhost is forwarded normally; errors produce an internal 502 only.
+                upstream_observed = False
+                failure_reason = "upstream_unavailable"
+                resp_status = 502
+                resp_headers = {"Content-Type": "application/json", "Server": "MobiAttack-Proxy/Internal"}
+                resp_body = b'{"error":"upstream_unavailable","internal":true}'
+                conn = None
+                try:
+                    if parsed.scheme not in ("", "http"):
+                        failure_reason = "unsupported_scheme"
+                    else:
                         conn = http.client.HTTPConnection(host, port, timeout=3.0)
                         fwd_headers = {k: v for k, v in headers_dict.items() if k.lower() != "proxy-connection"}
                         conn.request(method, path, body=req_body, headers=fwd_headers)
                         upstream_resp = conn.getresponse()
+                        upstream_body = upstream_resp.read()
                         resp_status = upstream_resp.status
                         resp_headers = dict(upstream_resp.getheaders())
-                        resp_body = upstream_resp.read()
-                        conn.close()
-                    except (socket.gaierror, socket.error):
-                        # For test/synthetic domains (e.g. api.example-bank.com), return simulated mock upstream response
-                        resp_status = 200
-                        resp_headers = {"Content-Type": "application/json", "Server": "MobiAttack-Mock/1.0"}
-                        resp_body = json.dumps({"status": "success", "message": "Captured and routed by MobiAttack"}).encode("utf-8")
-                    except Exception as e:
-                        logger.warning(f"Upstream forward error to {host}:{port}: {e}")
-                        resp_status = 502
-                        resp_body = json.dumps({"error": "Bad Gateway", "details": str(e)}).encode("utf-8")
+                        resp_body = upstream_body
+                        upstream_observed = True
+                except Exception:
+                    # No mock success, no raw exception/credentials in persisted errors.
+                    failure_reason = "upstream_failure"
+                finally:
+                    if conn:
+                        try:
+                            conn.close()
+                        except Exception:
+                            pass
 
                 # Send response back to emulator / client
                 try:
@@ -186,10 +189,15 @@ class NativeProxyCaptureBackend:
                 # Normalize and dispatch
                 tx = normalize_http_transaction(
                     raw_req=raw_req,
-                    raw_resp=raw_resp,
+                    raw_resp=raw_resp if upstream_observed else None,
                     capture_id=backend_self.capture_id,
                     duration_ms=duration_ms,
                 )
+                if not upstream_observed:
+                    tx.correlation["response_observation"] = {
+                        "state": "unavailable", "reason": failure_reason,
+                        "internal_proxy_response_excluded": True,
+                    }
                 backend_self.captured_transactions.append(tx)
                 if backend_self._on_transaction:
                     backend_self._on_transaction(tx)

@@ -174,15 +174,17 @@ def test_schemas_need_no_secret_values():
 def test_foundation_has_no_runtime_or_external_dependencies(tmp_path):
     source_root = Path(__file__).resolve().parents[1] / "src" / "agent"
     files = {p.name for p in source_root.glob("*.py")}
-    assert files == {"__init__.py", "models.py", "test_catalog.py", "policy.py", "model_client.py"}
+    foundation = {"__init__.py", "models.py", "test_catalog.py", "policy.py", "model_client.py"}
+    assert files == foundation | {"ollama_model_client.py"}
     forbidden = {"openai", "anthropic", "requests", "httpx", "urllib", "socket", "subprocess", "aiohttp", "langchain"}
-    for path in source_root.glob("*.py"):
+    for path in (source_root / name for name in foundation):
         tree = ast.parse(path.read_text())
         for node in ast.walk(tree):
             if isinstance(node, ast.Import):
                 assert not {a.name.split(".")[0] for a in node.names} & forbidden
             if isinstance(node, ast.ImportFrom) and node.module:
                 assert node.module.split(".")[0] not in forbidden
+                assert not node.module.endswith("ollama_model_client")
     state = create_initial_scan_state("scan_test", "https://example.com/app.apk")
     assert state["stages"]["agent_analysis"]["status"] == "not_available"
     assert state["artifacts"]["agent_report"]["available"] is False

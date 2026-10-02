@@ -1,0 +1,115 @@
+{
+  "all_real_candidate_provenance_verified": true,
+  "api_candidates": [],
+  "app": "AntennaPod",
+  "candidate_count": 0,
+  "candidates_by_framework": {
+    "Fuel": 0,
+    "Retrofit": 0
+  },
+  "components": [
+    {
+      "apk_sha256": "95a97f4e88a1df248a2806d420da459b1d6db540d6e1a97fdbeb73c25ae1d80b",
+      "local_asset_url_count": 0,
+      "manifest": {
+        "activities": [
+          "de.danoeh.antennapod.ui.screen.playback.PlaybackSpeedDialogActivity",
+          "de.danoeh.antennapod.activity.SplashActivity",
+          "de.danoeh.antennapod.activity.MainActivity",
+          "de.danoeh.antennapod.ui.screen.preferences.PreferenceActivity",
+          "de.danoeh.antennapod.activity.OpmlImportActivity",
+          "de.danoeh.antennapod.ui.screen.playback.video.VideoplayerActivity",
+          "de.danoeh.antennapod.ui.screen.playback.video.Media3VideoPlayerActivity",
+          "de.danoeh.antennapod.ui.screen.onlinefeedview.OnlineFeedViewActivity",
+          "de.danoeh.antennapod.activity.SelectSubscriptionActivity",
+          "de.danoeh.antennapod.ui.echo.EchoActivity",
+          "de.danoeh.antennapod.ui.widget.WidgetConfigActivity",
+          "androidx.car.app.CarAppPermissionActivity",
+          "com.google.android.gms.common.api.GoogleApiActivity"
+        ],
+        "launcher_activity": "de.danoeh.antennapod.activity.SplashActivity",
+        "package_name": "de.danoeh.antennapod",
+        "permissions": [
+          "android.permission.INTERNET",
+          "android.permission.WAKE_LOCK",
+          "android.permission.ACCESS_NETWORK_STATE",
+          "android.permission.FOREGROUND_SERVICE",
+          "android.permission.POST_NOTIFICATIONS",
+          "android.permission.ACCESS_WIFI_STATE",
+          "android.permission.RECEIVE_BOOT_COMPLETED",
+          "android.permission.BLUETOOTH",
+          "android.permission.VIBRATE",
+          "android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK",
+          "de.danoeh.antennapod.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+        ]
+      },
+      "network_indicator_counts": {
+        "domains": 217,
+        "ip_addresses": 1,
+        "local_file_urls": 0,
+        "network_urls": 138,
+        "path_candidates": 54
+      },
+      "retrofit_bindings": 0,
+      "retrofit_declarations": 0,
+      "retrofit_skipped": [],
+      "source_apk": "de.danoeh.antennapod.apk",
+      "structure": {
+        "assets": [
+          "assets/LICENSE.txt",
+          "assets/LICENSE_APACHE-2.0.txt",
+          "assets/LICENSE_GLIDE.txt",
+          "assets/LICENSE_JSOUP.txt",
+          "assets/LICENSE_OKHTTP.txt",
+          "assets/LICENSE_PICTOGRAMMERS.txt",
+          "assets/LICENSE_SEARCHPREFERENCE.txt",
+          "assets/developers.csv",
+          "assets/dexopt/baseline.prof",
+          "assets/dexopt/baseline.profm",
+          "assets/html-export-favorites-item-template.html",
+          "assets/html-export-feed-template.html",
+          "assets/html-export-template.html",
+          "assets/licenses.xml",
+          "assets/shownotes-style.css",
+          "assets/special_thanks.csv",
+          "assets/translators.csv"
+        ],
+        "dex_count": 4,
+        "dex_files": [
+          "classes.dex",
+          "classes2.dex",
+          "classes3.dex",
+          "classes4.dex"
+        ],
+        "has_kotlin_metadata": true,
+        "has_native_code": true,
+        "is_multidex": true,
+        "native_libraries": [
+          "lib/arm64-v8a/libandroidx.graphics.path.so",
+          "lib/armeabi-v7a/libandroidx.graphics.path.so",
+          "lib/x86/libandroidx.graphics.path.so",
+          "lib/x86_64/libandroidx.graphics.path.so"
+        ],
+        "smali_roots": [
+          "smali",
+          "smali_classes2",
+          "smali_classes3",
+          "smali_classes4"
+        ]
+      },
+      "structure_verified_against_apk_zip": true,
+      "unresolved_reasons": {}
+    }
+  ],
+  "network_indicator_counts": {
+    "domains": 217,
+    "ip_addresses": 1,
+    "local_file_urls": 0,
+    "network_urls": 138,
+    "path_candidates": 54
+  },
+  "note": "Counts are source occurrences; inventory includes config splits; no runtime inference.",
+  "other_supported_mechanisms": [],
+  "retrofit_bindings": 0,
+  "retrofit_declarations": 0
+}

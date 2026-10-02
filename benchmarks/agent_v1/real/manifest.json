@@ -1,0 +1,23 @@
+{
+  "app_count": 1,
+  "apps": [
+    "app_001"
+  ],
+  "benchmark_version": "agent_benchmark_v1",
+  "case_count": 1,
+  "category_counts": {
+    "authentication": 1,
+    "static_only": 1,
+    "visibility_limited": 1
+  },
+  "dataset_fingerprint": "2c6e98d16914337a932a364b0258c17a9aa210dc31a14312371e12b167a28695",
+  "dataset_version": "real_pilot_v1",
+  "development_case_count": 1,
+  "disputed_case_count": 0,
+  "excluded_case_count": 0,
+  "generated_at": "2026-10-01T15:39:52.738798+00:00",
+  "holdout_case_count": 0,
+  "reviewed_case_count": 0,
+  "schema_version": "1.0",
+  "unreviewed_case_count": 1
+}

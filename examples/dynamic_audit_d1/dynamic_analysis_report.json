@@ -1,0 +1,118 @@
+{
+  "schema_version": "1.0",
+  "report_type": "dynamic_analysis",
+  "scan_id": "dynamic_audit_d1",
+  "generated_at": "2026-10-02T08:30:27.852635+00:00",
+  "report_status": "completed",
+  "analysis_coverage": "partial",
+  "target": {
+    "package_name": "sg.vantagepoint.mstgkotlin",
+    "platform": "android"
+  },
+  "coverage": {
+    "ui_exploration": "partial",
+    "runtime_observation": "available",
+    "http_visibility": "available",
+    "https_visibility": "unavailable",
+    "api_correlation": "unavailable",
+    "endpoint_contexts": "unavailable"
+  },
+  "preflight": {
+    "status": "WARN",
+    "launch_success": true,
+    "process_running": true,
+    "diagnostic_codes": []
+  },
+  "session": {
+    "session_id": "965a2656-5e40-45a3-9164-71739e2e5f48",
+    "status": "ACTIVE",
+    "started_at": "2026-10-02T08:30:15.501073+00:00",
+    "ended_at": null
+  },
+  "exploration": {
+    "status": "partial",
+    "stop_reason": "max_depth",
+    "steps_attempted": 2,
+    "actions_succeeded": 2,
+    "actions_failed": 0,
+    "screens_observed": 3,
+    "transitions_recorded": 2,
+    "duration_seconds": 7.837
+  },
+  "routes": {
+    "node_count": 3,
+    "edge_count": 2,
+    "root_node_id": "node_924d20ee80c01d85",
+    "current_node_id": "node_8c9f778b58d89aff",
+    "action_count": 11,
+    "self_loop_count": 0,
+    "system_boundary_count": 0,
+    "external_boundary_count": 0
+  },
+  "runtime": {
+    "action_evidence_count": 2,
+    "correlated_action_count": 2,
+    "pid_change_count": 0,
+    "process_death_count": 0,
+    "activity_change_count": 0,
+    "fatal_count": 0,
+    "crash_count": 0
+  },
+  "traffic": {
+    "backend": "mitmproxy",
+    "total_transactions": 0,
+    "http_count": 0,
+    "https_count": 0,
+    "hosts": [],
+    "hosts_count": 0,
+    "http_visibility": "available",
+    "https_visibility": "unavailable",
+    "https_visibility_reason": "cleartext_http_only_backend",
+    "proxy_restored": true,
+    "visibility_note": "Traffic visibility is incomplete; unobserved requests may exist."
+  },
+  "traffic_correlation": {
+    "actions_with_evidence": 2,
+    "transaction_correlated_action_count": 0,
+    "partial_correlation_count": 2,
+    "unavailable_correlation_count": 0
+  },
+  "api_correlation": {
+    "static_candidate_count": 0,
+    "dynamic_endpoint_count": 0,
+    "correlated_count": 0,
+    "static_only_count": 0,
+    "dynamic_only_count": 0,
+    "exact_count": 0,
+    "template_count": 0,
+    "method_mismatch_count": 0,
+    "visibility_note": null
+  },
+  "endpoint_context_summary": {
+    "endpoint_context_count": 0,
+    "runtime_observed_count": 0,
+    "static_only_count": 0,
+    "dynamic_only_count": 0
+  },
+  "endpoint_contexts": [],
+  "evidence": {
+    "exploration": "dynamic/exploration_result.json",
+    "preflight": "dynamic/preflight_result.json",
+    "routes": "dynamic/route_graph.json",
+    "runtime": "dynamic/runtime_evidence.json",
+    "session": "dynamic/session.json",
+    "traffic": "dynamic/traffic.json",
+    "traffic_correlation": "dynamic/traffic_evidence.json"
+  },
+  "evidence_status": {
+    "api_correlation": "missing",
+    "endpoint_contexts": "missing",
+    "exploration": "available",
+    "preflight": "available",
+    "routes": "available",
+    "runtime": "available",
+    "session": "available",
+    "traffic": "available",
+    "traffic_correlation": "available"
+  }
+}

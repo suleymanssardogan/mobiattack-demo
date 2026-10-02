@@ -1,0 +1,62 @@
+[
+  {
+    "after_candidate_count": 0,
+    "after_endpoint_context_count": 0,
+    "after_indicator_occurrences": 8,
+    "app_id": "app_004",
+    "before_candidate_count": 0,
+    "before_endpoint_context_count": 0,
+    "before_indicator_occurrences": 8,
+    "rerun_scope": "existing static artifacts + canonical correlation + EndpointContext; reused original runtime evidence",
+    "source_scan": "task_9_5_3_app_004",
+    "static_rerun": "task_9_5_3_1_app_004"
+  },
+  {
+    "after_candidate_count": 0,
+    "after_endpoint_context_count": 0,
+    "after_indicator_occurrences": 3,
+    "app_id": "app_005",
+    "before_candidate_count": 0,
+    "before_endpoint_context_count": 0,
+    "before_indicator_occurrences": 2,
+    "rerun_scope": "existing static artifacts + canonical correlation + EndpointContext; reused original runtime evidence",
+    "source_scan": "task_9_5_3_app_005",
+    "static_rerun": "task_9_5_3_1_app_005"
+  },
+  {
+    "after_candidate_count": 0,
+    "after_endpoint_context_count": 0,
+    "after_indicator_occurrences": 5,
+    "app_id": "app_006",
+    "before_candidate_count": 0,
+    "before_endpoint_context_count": 0,
+    "before_indicator_occurrences": 5,
+    "rerun_scope": "existing static artifacts + canonical correlation + EndpointContext; reused original runtime evidence",
+    "source_scan": "task_9_5_3_app_006",
+    "static_rerun": "task_9_5_3_1_app_006"
+  },
+  {
+    "after_candidate_count": 0,
+    "after_endpoint_context_count": 0,
+    "after_indicator_occurrences": 964,
+    "app_id": "app_010",
+    "before_candidate_count": 0,
+    "before_endpoint_context_count": 0,
+    "before_indicator_occurrences": 964,
+    "rerun_scope": "existing static artifacts + canonical correlation + EndpointContext; reused original runtime evidence",
+    "source_scan": "task_9_5_3_app_010_alias_fix",
+    "static_rerun": "task_9_5_3_1_app_010"
+  },
+  {
+    "after_candidate_count": 0,
+    "after_endpoint_context_count": 0,
+    "after_indicator_occurrences": 136,
+    "app_id": "app_011",
+    "before_candidate_count": 0,
+    "before_endpoint_context_count": 0,
+    "before_indicator_occurrences": 125,
+    "rerun_scope": "existing static artifacts + canonical correlation + EndpointContext; reused original runtime evidence",
+    "source_scan": "task_9_5_3_app_011",
+    "static_rerun": "task_9_5_3_1_app_011"
+  }
+]

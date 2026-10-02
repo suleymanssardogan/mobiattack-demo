@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.0",
+  "session_id": "24de73dd-5f59-4b9c-b0c1-e227a4a5ad87",
+  "created_at": "2026-10-02T11:44:47Z",
+  "summary": {
+    "static_candidate_count": 0,
+    "dynamic_endpoint_count": 0,
+    "correlated_count": 0,
+    "static_only_count": 0,
+    "dynamic_only_count": 0,
+    "http_visibility": "available",
+    "https_visibility": "unavailable",
+    "https_visibility_reason": "certificate_trust_unknown",
+    "visibility_note": "HTTPS traffic visibility was unavailable (certificate_trust_unknown). Unobserved static HTTPS candidates were not observable in runtime traffic."
+  },
+  "correlations": []
+}

@@ -1,0 +1,11 @@
+{
+  "session_id": "24de73dd-5f59-4b9c-b0c1-e227a4a5ad87",
+  "schema_version": "1.0",
+  "summary": {
+    "endpoint_context_count": 0,
+    "runtime_observed_count": 0,
+    "static_only_count": 0,
+    "dynamic_only_count": 0
+  },
+  "endpoints": []
+}

@@ -1,0 +1,264 @@
+{
+  "app_id": "app_010",
+  "components": [
+    {
+      "performance": {
+        "call_edges_inspected": 1342420,
+        "diagnostics_truncated": false,
+        "elapsed_seconds": 13.0804,
+        "evaluations": 28,
+        "files_scanned": 11393,
+        "indexing_passes": 4,
+        "max_traversal_depth": 2,
+        "methods_indexed": 25,
+        "operations_retained": 4699
+      },
+      "unresolved": [
+        {
+          "kind": "unresolved",
+          "line": 0,
+          "reason": "UNSUPPORTED_BRANCH_FLOW",
+          "source_file": "smali/androidx/appcompat/widget/ResourceManagerInternal$ColorFilterLruCache.smali",
+          "source_method": "create(Ljava/lang/Object;)Ljava/lang/Object;"
+        },
+        {
+          "kind": "unresolved",
+          "line": 0,
+          "reason": "UNSUPPORTED_BRANCH_FLOW",
+          "source_file": "smali/kotlin/collections/CollectionsKt.smali",
+          "source_method": "first(Ljava/util/List;)Ljava/lang/Object;"
+        },
+        {
+          "kind": "unresolved",
+          "line": 0,
+          "reason": "UNSUPPORTED_BRANCH_FLOW",
+          "source_file": "smali/org/wikipedia/categories/CategoryActivity$CategoryMembersAdapter.smali",
+          "source_method": "onCreateViewHolder(Landroid/view/ViewGroup;I)Landroidx/recyclerview/widget/RecyclerView$ViewHolder;"
+        },
+        {
+          "kind": "unresolved",
+          "line": 0,
+          "reason": "UNSUPPORTED_BRANCH_FLOW",
+          "source_file": "smali/org/wikipedia/dataclient/ServiceFactory.smali",
+          "source_method": "createRetrofit$default(Lorg/wikipedia/dataclient/ServiceFactory;Lorg/wikipedia/dataclient/WikiSite;Ljava/lang/String;)Lretrofit2/Retrofit;"
+        },
+        {
+          "kind": "unresolved",
+          "line": 0,
+          "reason": "UNSUPPORTED_BRANCH_FLOW",
+          "source_file": "smali/org/wikipedia/dataclient/ServiceFactory.smali",
+          "source_method": "get(Lorg/wikipedia/dataclient/WikiSite;Ljava/lang/String;Ljava/lang/Class;)Ljava/lang/Object;"
+        },
+        {
+          "kind": "unresolved",
+          "line": 0,
+          "reason": "UNSUPPORTED_BRANCH_FLOW",
+          "source_file": "smali/org/wikipedia/descriptions/DescriptionEditViewModel$2.smali",
+          "source_method": "invoke(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;"
+        },
+        {
+          "kind": "unresolved",
+          "line": 0,
+          "reason": "UNSUPPORTED_BRANCH_FLOW",
+          "source_file": "smali/org/wikipedia/descriptions/DescriptionEditViewModel$2.smali",
+          "source_method": "invokeSuspend(Ljava/lang/Object;)Ljava/lang/Object;"
+        },
+        {
+          "kind": "unresolved",
+          "line": 0,
+          "reason": "UNSUPPORTED_BRANCH_FLOW",
+          "source_file": "smali/org/wikipedia/donate/GooglePayViewModel.smali",
+          "source_method": "<init>(Landroidx/lifecycle/SavedStateHandle;)V"
+        },
+        {
+          "kind": "unresolved",
+          "line": 0,
+          "reason": "UNSUPPORTED_BRANCH_FLOW",
+          "source_file": "smali/org/wikipedia/feed/HomeViewModel$1.smali",
+          "source_method": "invoke(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;"
+        },
+        {
+          "kind": "unresolved",
+          "line": 0,
+          "reason": "UNSUPPORTED_BRANCH_FLOW",
+          "source_file": "smali/org/wikipedia/feed/HomeViewModel$1.smali",
+          "source_method": "invokeSuspend(Ljava/lang/Object;)Ljava/lang/Object;"
+        },
+        {
+          "kind": "unresolved",
+          "line": 0,
+          "reason": "UNSUPPORTED_BRANCH_FLOW",
+          "source_file": "smali/org/wikipedia/onboarding/OnboardingPageView.smali",
+          "source_method": "<init>(Landroid/content/Context;Landroid/util/AttributeSet;)V"
+        },
+        {
+          "kind": "unresolved",
+          "line": 0,
+          "reason": "UNSUPPORTED_BRANCH_FLOW",
+          "source_file": "smali/org/wikipedia/readinglist/ReadingListItemActionsDialog.smali",
+          "source_method": "onCreateView(Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Landroid/os/Bundle;)Landroid/view/View;"
+        },
+        {
+          "kind": "unresolved",
+          "line": 0,
+          "reason": "UNSUPPORTED_BRANCH_FLOW",
+          "source_file": "smali/org/wikipedia/readinglist/ReadingListItemActionsView.smali",
+          "source_method": "<init>(Landroid/content/Context;)V"
+        },
+        {
+          "kind": "unresolved",
+          "line": 64,
+          "reason": "UNSUPPORTED_FIELD_FLOW",
+          "source_file": "smali/org/wikipedia/search/SearchResultsViewModel.smali",
+          "source_method": "<init>()V"
+        },
+        {
+          "kind": "unresolved",
+          "line": 77,
+          "reason": "UNSUPPORTED_FIELD_FLOW",
+          "source_file": "smali/org/wikipedia/search/SearchResultsViewModel.smali",
+          "source_method": "<init>()V"
+        },
+        {
+          "kind": "unresolved",
+          "line": 92,
+          "reason": "UNSUPPORTED_FIELD_FLOW",
+          "source_file": "smali/org/wikipedia/search/SearchResultsViewModel.smali",
+          "source_method": "<init>()V"
+        },
+        {
+          "kind": "unresolved",
+          "line": 104,
+          "reason": "UNSUPPORTED_FIELD_FLOW",
+          "source_file": "smali/org/wikipedia/search/SearchResultsViewModel.smali",
+          "source_method": "<init>()V"
+        },
+        {
+          "kind": "unresolved",
+          "line": 122,
+          "reason": "UNSUPPORTED_FIELD_FLOW",
+          "source_file": "smali/org/wikipedia/search/SearchResultsViewModel.smali",
+          "source_method": "<init>()V"
+        },
+        {
+          "kind": "unresolved",
+          "line": 134,
+          "reason": "UNSUPPORTED_FIELD_FLOW",
+          "source_file": "smali/org/wikipedia/search/SearchResultsViewModel.smali",
+          "source_method": "<init>()V"
+        },
+        {
+          "kind": "unresolved",
+          "line": 146,
+          "reason": "UNSUPPORTED_FIELD_FLOW",
+          "source_file": "smali/org/wikipedia/search/SearchResultsViewModel.smali",
+          "source_method": "<init>()V"
+        },
+        {
+          "kind": "unresolved",
+          "line": 158,
+          "reason": "UNSUPPORTED_FIELD_FLOW",
+          "source_file": "smali/org/wikipedia/search/SearchResultsViewModel.smali",
+          "source_method": "<init>()V"
+        },
+        {
+          "kind": "unresolved",
+          "line": 162,
+          "reason": "UNSUPPORTED_FIELD_FLOW",
+          "source_file": "smali/org/wikipedia/search/SearchResultsViewModel.smali",
+          "source_method": "<init>()V"
+        },
+        {
+          "kind": "unresolved",
+          "line": 0,
+          "reason": "UNSUPPORTED_BRANCH_FLOW",
+          "source_file": "smali/org/wikipedia/settings/AppIconDialog$AppIconAdapter.smali",
+          "source_method": "onCreateViewHolder(Landroid/view/ViewGroup;I)Landroidx/recyclerview/widget/RecyclerView$ViewHolder;"
+        },
+        {
+          "kind": "unresolved",
+          "line": 0,
+          "reason": "UNSUPPORTED_BRANCH_FLOW",
+          "source_file": "smali/org/wikipedia/settings/languages/WikipediaLanguagesFragment$WikipediaLanguageItemAdapter.smali",
+          "source_method": "onCreateViewHolder(Landroid/view/ViewGroup;I)Landroidx/recyclerview/widget/RecyclerView$ViewHolder;"
+        },
+        {
+          "kind": "unresolved",
+          "line": 0,
+          "reason": "UNSUPPORTED_BRANCH_FLOW",
+          "source_file": "smali/org/wikipedia/suggestededits/SuggestedEditsRecentEditsFilterActivity$RecentEditsFilterAdapter.smali",
+          "source_method": "onCreateViewHolder(Landroid/view/ViewGroup;I)Landroidx/recyclerview/widget/RecyclerView$ViewHolder;"
+        },
+        {
+          "kind": "unresolved",
+          "line": 0,
+          "reason": "UNSUPPORTED_BRANCH_FLOW",
+          "source_file": "smali/org/wikipedia/suggestededits/SuggestedEditsRecentEditsFilterItemView.smali",
+          "source_method": "<init>(Lorg/wikipedia/suggestededits/SuggestedEditsRecentEditsFilterActivity;)V"
+        },
+        {
+          "kind": "unresolved",
+          "line": 0,
+          "reason": "UNSUPPORTED_BRANCH_FLOW",
+          "source_file": "smali/org/wikipedia/talk/TalkTopicsActivity$HeaderItemAdapter.smali",
+          "source_method": "onCreateViewHolder(Landroid/view/ViewGroup;I)Landroidx/recyclerview/widget/RecyclerView$ViewHolder;"
+        },
+        {
+          "kind": "unresolved",
+          "line": 0,
+          "reason": "UNSUPPORTED_BRANCH_FLOW",
+          "source_file": "smali/org/wikipedia/talk/template/TalkTemplatesFragment$RecyclerAdapter.smali",
+          "source_method": "onCreateViewHolder(Landroid/view/ViewGroup;I)Landroidx/recyclerview/widget/RecyclerView$ViewHolder;"
+        },
+        {
+          "kind": "unresolved",
+          "line": 0,
+          "reason": "UNSUPPORTED_BRANCH_FLOW",
+          "source_file": "smali/org/wikipedia/usercontrib/UserContribItemView.smali",
+          "source_method": "<init>(Landroid/content/Context;)V"
+        },
+        {
+          "kind": "unresolved",
+          "line": 0,
+          "reason": "UNSUPPORTED_BRANCH_FLOW",
+          "source_file": "smali/retrofit2/BuiltInConverters.smali",
+          "source_method": "responseBodyConverter(Ljava/lang/reflect/Type;[Ljava/lang/annotation/Annotation;Lretrofit2/Retrofit;)Lretrofit2/Converter;"
+        },
+        {
+          "kind": "unresolved",
+          "line": 0,
+          "reason": "UNSUPPORTED_BRANCH_FLOW",
+          "source_file": "smali/retrofit2/HttpServiceMethod.smali",
+          "source_method": "parseAnnotations(Lretrofit2/Retrofit;Ljava/lang/Class;Ljava/lang/reflect/Method;)Lretrofit2/HttpServiceMethod;"
+        },
+        {
+          "kind": "unresolved",
+          "line": 0,
+          "reason": "UNSUPPORTED_BRANCH_FLOW",
+          "source_file": "smali/retrofit2/Retrofit$1.smali",
+          "source_method": "invoke(Ljava/lang/Object;Ljava/lang/reflect/Method;[Ljava/lang/Object;)Ljava/lang/Object;"
+        }
+      ]
+    },
+    {
+      "performance": {
+        "call_edges_inspected": 0,
+        "elapsed_seconds": 0.0,
+        "files_scanned": 0,
+        "max_traversal_depth": 0,
+        "methods_indexed": 0
+      },
+      "unresolved": []
+    },
+    {
+      "performance": {
+        "call_edges_inspected": 0,
+        "elapsed_seconds": 0.0,
+        "files_scanned": 0,
+        "max_traversal_depth": 0,
+        "methods_indexed": 0
+      },
+      "unresolved": []
+    }
+  ]
+}

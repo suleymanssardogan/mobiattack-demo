@@ -1,0 +1,26 @@
+{
+  "auth_removed": true,
+  "authenticated_session_currently_reverified": false,
+  "baseline_request_ref": "45f4469d-c8fb-4bdc-92ec-5c866d1596ef",
+  "baseline_response_keys": [
+    "authenticated",
+    "profile",
+    "purpose"
+  ],
+  "baseline_response_ref": "lab_ce4771d18855479aae0afae5bf00eb38",
+  "baseline_status": 200,
+  "comparison_ref": "comparison_e9edff7b2cdcd2b6e8e6",
+  "control_ref": "control_e9edff7b2cdcd2b6e8e6",
+  "expected_auth_enforcement_observed": true,
+  "finding_generated": false,
+  "fixture_restarted": true,
+  "historical_baseline": true,
+  "method_path_query_body_unchanged": true,
+  "status_200_alone_sufficient": false,
+  "variant_request_ref": "c1f157ca-d607-4c89-9854-a193ca5f9fce",
+  "variant_response_keys": [
+    "error"
+  ],
+  "variant_response_ref": "lab_54e318c6ab834d88b3e11974e9c95ea8",
+  "variant_status": 401
+}

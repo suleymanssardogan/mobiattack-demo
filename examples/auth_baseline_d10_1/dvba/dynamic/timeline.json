@@ -1,0 +1,36 @@
+[
+  {
+    "event_id": "dc1070c3-274a-441a-8f48-563c83c100bd",
+    "type": "SYSTEM_EVENT",
+    "name": "SESSION_STARTED",
+    "timestamp": "2026-10-02T11:44:38.289227+00:00",
+    "metadata": {
+      "package_name": "com.app.damnvulnerablebank",
+      "device_serial": "emulator-5554",
+      "preflight_status": "NOT_EVALUATED"
+    },
+    "flow_id": null,
+    "session_id": "24de73dd-5f59-4b9c-b0c1-e227a4a5ad87"
+  },
+  {
+    "event_id": "9db28caf-242a-4dcf-8124-904b887c2fec",
+    "type": "SYSTEM_EVENT",
+    "name": "FLOW_STARTED",
+    "timestamp": "2026-10-02T11:44:38.289852+00:00",
+    "metadata": {
+      "flow_name": "Normal login/session feasibility",
+      "description": ""
+    },
+    "flow_id": "1ea36747-4ae8-45e0-837c-5da1318b6017",
+    "session_id": "24de73dd-5f59-4b9c-b0c1-e227a4a5ad87"
+  },
+  {
+    "event_id": "cea42a20-fc45-4c2e-944d-f87004a599eb",
+    "type": "SYSTEM_EVENT",
+    "name": "SESSION_COMPLETED",
+    "timestamp": "2026-10-02T11:44:47.742812+00:00",
+    "metadata": {},
+    "flow_id": null,
+    "session_id": "24de73dd-5f59-4b9c-b0c1-e227a4a5ad87"
+  }
+]

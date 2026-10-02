@@ -1,0 +1,17 @@
+{
+  "endpoint_context_id": "ctx_598671b778f7846b",
+  "purpose": "Check expected authentication enforcement in the local training fixture",
+  "requested_action": "validate_authentication_presence",
+  "required_evidence_refs": [
+    "45f4469d-c8fb-4bdc-92ec-5c866d1596ef",
+    "463eae39-8c7c-42b9-92bb-d0b34d467cbf",
+    "ctx_598671b778f7846b",
+    "lab_acquisition_463eae398c7c42b992bbd0b34d467cbf",
+    "lab_ce4771d18855479aae0afae5bf00eb38"
+  ],
+  "risk_class": "low",
+  "schema_version": "1.0",
+  "session_id": "463eae39-8c7c-42b9-92bb-d0b34d467cbf",
+  "test_category": "authentication_presence",
+  "test_id": "AUTHENTICATION_PRESENCE"
+}

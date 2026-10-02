@@ -1,0 +1,36 @@
+[
+  {
+    "event_id": "987fcf65-fa04-43b7-8ec4-241efe0f7093",
+    "type": "SYSTEM_EVENT",
+    "name": "SESSION_STARTED",
+    "timestamp": "2026-10-02T11:42:57.365938+00:00",
+    "metadata": {
+      "package_name": "com.vulnerablebankapp",
+      "device_serial": "emulator-5554",
+      "preflight_status": "NOT_EVALUATED"
+    },
+    "flow_id": null,
+    "session_id": "b31e6394-77a3-46bd-9b36-a5351d46734b"
+  },
+  {
+    "event_id": "2d2bd25d-2972-464a-9e3c-aa26bca1d449",
+    "type": "SYSTEM_EVENT",
+    "name": "FLOW_STARTED",
+    "timestamp": "2026-10-02T11:42:57.366901+00:00",
+    "metadata": {
+      "flow_name": "Normal login/session feasibility",
+      "description": ""
+    },
+    "flow_id": "40e1fd61-27f9-4657-afaf-f9125fae2d32",
+    "session_id": "b31e6394-77a3-46bd-9b36-a5351d46734b"
+  },
+  {
+    "event_id": "9d58f7a5-c252-40e7-b6e3-cfc28f18fbd5",
+    "type": "SYSTEM_EVENT",
+    "name": "SESSION_COMPLETED",
+    "timestamp": "2026-10-02T11:43:05.703834+00:00",
+    "metadata": {},
+    "flow_id": null,
+    "session_id": "b31e6394-77a3-46bd-9b36-a5351d46734b"
+  }
+]

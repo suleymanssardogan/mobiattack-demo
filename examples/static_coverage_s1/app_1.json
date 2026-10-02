@@ -1,0 +1,97 @@
+{
+  "all_real_candidate_provenance_verified": true,
+  "api_candidates": [
+    {
+      "base_url": "http://127.0.0.1",
+      "evidence": {
+        "base_url_call_line": 99,
+        "base_url_line": 97,
+        "base_url_register": "v1",
+        "base_url_value": "http://127.0.0.1",
+        "path_line": 102,
+        "path_register": "v0",
+        "path_value": "/signup",
+        "request_call_line": 214
+      },
+      "framework": "Fuel",
+      "full_url": "http://127.0.0.1/signup",
+      "method": "POST",
+      "path": "/signup",
+      "request_line": 214,
+      "source_apk": "MSTG-Android-Kotlin.apk",
+      "source_file": "smali/sg/vantagepoint/mstgkotlin/RegisterActivity$onCreate$2.smali",
+      "status": "static_api_candidate"
+    }
+  ],
+  "app": "OWASP MSTG Android Kotlin / Hacking Playground",
+  "candidate_count": 1,
+  "candidates_by_framework": {
+    "Fuel": 1,
+    "Retrofit": 0
+  },
+  "components": [
+    {
+      "apk_sha256": "86c059775aa09e4794defd40f81e69751a81019b1b1f285b30b8f7c5bb5e8b68",
+      "local_asset_url_count": 2,
+      "manifest": {
+        "activities": [
+          "sg.vantagepoint.mstgkotlin.MainActivity",
+          "sg.vantagepoint.mstgkotlin.RegisterActivity",
+          "sg.vantagepoint.mstgkotlin.MenuActivity",
+          "sg.vantagepoint.mstgkotlin.SecureWebViewActivity",
+          "sg.vantagepoint.mstgkotlin.InsecureWebViewActivity"
+        ],
+        "launcher_activity": "sg.vantagepoint.mstgkotlin.MainActivity",
+        "package_name": "sg.vantagepoint.mstgkotlin",
+        "permissions": [
+          "android.permission.INTERNET"
+        ]
+      },
+      "network_indicator_counts": {
+        "domains": 2,
+        "ip_addresses": 0,
+        "local_file_urls": 2,
+        "network_urls": 1,
+        "path_candidates": 5
+      },
+      "retrofit_bindings": 0,
+      "retrofit_declarations": 0,
+      "retrofit_skipped": [
+        {
+          "reason": "size_or_source_boundary",
+          "source_file": "smali/kotlin/collections/ArraysKt___ArraysKt.smali"
+        }
+      ],
+      "source_apk": "MSTG-Android-Kotlin.apk",
+      "structure": {
+        "assets": [
+          "assets/unsafe_content.html"
+        ],
+        "dex_count": 1,
+        "dex_files": [
+          "classes.dex"
+        ],
+        "has_kotlin_metadata": true,
+        "has_native_code": false,
+        "is_multidex": false,
+        "native_libraries": [],
+        "smali_roots": [
+          "smali"
+        ]
+      },
+      "structure_verified_against_apk_zip": true,
+      "unresolved_reasons": {}
+    }
+  ],
+  "network_indicator_counts": {
+    "domains": 2,
+    "ip_addresses": 0,
+    "local_file_urls": 2,
+    "network_urls": 1,
+    "path_candidates": 5
+  },
+  "note": "Counts are source occurrences; inventory includes config splits; no runtime inference.",
+  "other_supported_mechanisms": [],
+  "retrofit_bindings": 0,
+  "retrofit_declarations": 0
+}

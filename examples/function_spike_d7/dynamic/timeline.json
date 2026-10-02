@@ -1,0 +1,75 @@
+[
+  {
+    "event_id": "0a5520d1-ced3-4b99-925a-62dbb1847857",
+    "type": "SYSTEM_EVENT",
+    "name": "SESSION_STARTED",
+    "timestamp": "2026-10-02T09:38:56.160562+00:00",
+    "metadata": {
+      "package_name": "sg.vantagepoint.mstgkotlin",
+      "device_serial": "emulator-5554",
+      "preflight_status": "NOT_EVALUATED"
+    },
+    "flow_id": null,
+    "session_id": "937f55af-d6cb-421f-bc7a-aa9a1047d380"
+  },
+  {
+    "event_id": "be2d591c-ef50-4bcc-b509-8955722fea83",
+    "type": "SYSTEM_EVENT",
+    "name": "FLOW_STARTED",
+    "timestamp": "2026-10-02T09:38:56.161193+00:00",
+    "metadata": {
+      "flow_name": "Function observation feasibility",
+      "description": ""
+    },
+    "flow_id": "da43d7f9-d228-4788-a64b-b4085aa8c160",
+    "session_id": "937f55af-d6cb-421f-bc7a-aa9a1047d380"
+  },
+  {
+    "event_id": "ee8e0610-9d27-4caa-b45c-0b1033114258",
+    "type": "USER_ACTION",
+    "name": "ACTION_EXECUTED",
+    "timestamp": "2026-10-02T09:38:58.239092+00:00",
+    "metadata": {
+      "action_id": "act_b2ff6a36d599bf4a",
+      "action_type": "click",
+      "status": "succeeded",
+      "attempts": 1,
+      "center": [
+        540,
+        532
+      ],
+      "bounds": [
+        53,
+        472,
+        1027,
+        593
+      ],
+      "resource_id": "sg.vantagepoint.mstgkotlin:id/tvsharedpref",
+      "route_id": "node_924d20ee80c01d85"
+    },
+    "flow_id": "da43d7f9-d228-4788-a64b-b4085aa8c160",
+    "session_id": "937f55af-d6cb-421f-bc7a-aa9a1047d380"
+  },
+  {
+    "event_id": "5d38686c-cb9a-472f-828b-0d19f8d634a3",
+    "type": "SYSTEM_EVENT",
+    "name": "FUNCTION_OBSERVATION_UNAVAILABLE",
+    "timestamp": "2026-10-02T09:38:58.360733+00:00",
+    "metadata": {
+      "route_id": "node_924d20ee80c01d85",
+      "action_id": "act_b2ff6a36d599bf4a",
+      "reason": "no_non_invasive_method_entry_evidence_backend"
+    },
+    "flow_id": "da43d7f9-d228-4788-a64b-b4085aa8c160",
+    "session_id": "937f55af-d6cb-421f-bc7a-aa9a1047d380"
+  },
+  {
+    "event_id": "d253971f-80b8-4db6-b7ec-a9d4647fe55e",
+    "type": "SYSTEM_EVENT",
+    "name": "SESSION_COMPLETED",
+    "timestamp": "2026-10-02T09:38:58.361716+00:00",
+    "metadata": {},
+    "flow_id": null,
+    "session_id": "937f55af-d6cb-421f-bc7a-aa9a1047d380"
+  }
+]

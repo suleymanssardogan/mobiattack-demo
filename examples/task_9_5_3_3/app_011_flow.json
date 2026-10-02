@@ -1,0 +1,15 @@
+{
+  "app_id": "app_011",
+  "components": [
+    {
+      "performance": {
+        "call_edges_inspected": 0,
+        "elapsed_seconds": 0.0,
+        "files_scanned": 0,
+        "max_traversal_depth": 0,
+        "methods_indexed": 0
+      },
+      "unresolved": []
+    }
+  ]
+}

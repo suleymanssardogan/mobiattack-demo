@@ -1,0 +1,21 @@
+{
+  "coverage": "available",
+  "created_at": "2026-10-02T13:00:31.067760+00:00",
+  "criterion": "controlled_behavior_check",
+  "endpoint_context_id": "ctx_598671b778f7846b",
+  "evidence_refs": [
+    "45f4469d-c8fb-4bdc-92ec-5c866d1596ef",
+    "463eae39-8c7c-42b9-92bb-d0b34d467cbf",
+    "c1f157ca-d607-4c89-9854-a193ca5f9fce",
+    "comparison_e9edff7b2cdcd2b6e8e6",
+    "control_e9edff7b2cdcd2b6e8e6",
+    "ctx_598671b778f7846b",
+    "execution_e9edff7b2cdcd2b6e8e6",
+    "lab_54e318c6ab834d88b3e11974e9c95ea8",
+    "lab_ce4771d18855479aae0afae5bf00eb38"
+  ],
+  "outcome": "validated",
+  "schema_version": "1.0",
+  "session_id": "463eae39-8c7c-42b9-92bb-d0b34d467cbf",
+  "test_id": "AUTHENTICATION_PRESENCE"
+}

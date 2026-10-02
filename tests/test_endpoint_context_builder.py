@@ -21,7 +21,7 @@ def evidence():
                  "source_file": "smali/Login.smali", "request_line": 42, "framework": "Fuel",
                  "evidence": {"base_url_value": "https://api.example.com", "password": "PROVENANCE_SECRET"}}
     tx = TrafficTransaction(transaction_id="tx_1", request=HttpRequestModel(
-        method="POST", scheme="https", host="api.example.com", path="/login", timestamp="2026-10-01T12:00:00Z",
+        method="POST", scheme="https", port=443, host="api.example.com", path="/login", timestamp="2026-10-01T12:00:00Z",
         headers={"Authorization": "Bearer TOKEN_SECRET", "Cookie": "session_id=COOKIE_SECRET", "X-API-Key": "API_SECRET",
                  "Content-Type": "application/json; charset=utf-8"},
         query={"q": "QUERY_SECRET", "page": "2"}, body={"username": "USER_SECRET", "password": "PASS_SECRET"},
@@ -52,7 +52,7 @@ def test_exact_context(evidence):
 def test_template_context_aggregation():
     txs = [TrafficTransaction(transaction_id=f"tx_{i}", request=HttpRequestModel(
         host="api.example.com", path=f"/users/{i}")) for i in (1, 2)]
-    corr = correlate_static_dynamic_apis([{"host": "api.example.com", "path": "/users/{id}", "method": "GET"}], txs)
+    corr = correlate_static_dynamic_apis([{"scheme":"http", "host": "api.example.com", "path": "/users/{id}", "method": "GET"}], txs)
     artifact = build_endpoint_contexts(corr, txs)
     assert len(artifact.endpoints) == 1
     assert artifact.endpoints[0].path == "/users/{id}"
@@ -78,7 +78,7 @@ def test_dynamic_only_no_fabricated_static(evidence):
 
 
 def test_method_mismatch_preserves_methods(evidence):
-    corr = correlate_static_dynamic_apis([{"host": "api.example.com", "path": "/login", "method": "GET"}], evidence[1])
+    corr = correlate_static_dynamic_apis([{"scheme":"https", "host": "api.example.com", "path": "/login", "method": "GET"}], evidence[1])
     e = build_endpoint_contexts(corr, evidence[1]).endpoints[0]
     assert e.static["match_type"] == "method_mismatch"
     assert e.static["static_method"] == "GET"
@@ -293,8 +293,8 @@ def test_missing_runtime_and_traffic_evidence(evidence):
     e = build_endpoint_contexts(evidence[0], evidence[1]).endpoints[0]
     assert not e.runtime_context["evidence_available"]
     assert e.action_context == []
-    assert e.evidence_refs["action_ids"] == ["act_login"]
-    assert e.route_context
+    assert e.evidence_refs["action_ids"] == []
+    assert e.route_context == []
 
 
 def test_missing_transaction_does_not_invent_body(evidence):
@@ -394,7 +394,7 @@ def test_wide_form_bounded(evidence):
 def test_literal_numeric_contexts_remain_separate():
     txs = [TrafficTransaction(transaction_id=f"tx{i}", request=HttpRequestModel(
         host="api.example.com", path=f"/users/{i}")) for i in (1, 2)]
-    corr = correlate_static_dynamic_apis([{"host": "api.example.com", "path": "/users/1", "method": "GET"}], txs)
+    corr = correlate_static_dynamic_apis([{"scheme":"http", "host": "api.example.com", "path": "/users/1", "method": "GET"}], txs)
     artifact = build_endpoint_contexts(corr, txs)
     assert {e.path for e in artifact.endpoints} == {"/users/1", "/users/2"}
     assert len({e.endpoint_context_id for e in artifact.endpoints}) == 2
@@ -414,8 +414,9 @@ def test_mixed_schemes_are_not_fabricated(evidence):
     tx = copy.deepcopy(evidence[1][0]); tx.transaction_id = "tx2"; tx.request.scheme = "http"
     evidence[1].append(tx); evidence[0].correlations[0].transaction_ids.append("tx2")
     e = context(evidence)
-    assert e.scheme is None
-    assert e.dynamic["schemes"] == ["http", "https"]
+    assert e.scheme == "https"
+    assert e.dynamic["schemes"] == ["https"]
+    assert e.dynamic["missing_transaction_ids"] == ["tx2"]
 
 
 def test_invalid_runtime_isolated(evidence, tmp_path):

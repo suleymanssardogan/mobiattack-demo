@@ -1,0 +1,22 @@
+[
+  {
+    "trace_id": "lab_3bfbe4182c47461aaf25211eec9aca5c",
+    "run_id": "463eae39-8c7c-42b9-92bb-d0b34d467cbf",
+    "method": "POST",
+    "path": "/login",
+    "status": 200,
+    "auth_present": false,
+    "auth_valid": false,
+    "source": "local_training_backend_actual_response"
+  },
+  {
+    "trace_id": "lab_ce4771d18855479aae0afae5bf00eb38",
+    "run_id": "463eae39-8c7c-42b9-92bb-d0b34d467cbf",
+    "method": "GET",
+    "path": "/profile",
+    "status": 200,
+    "auth_present": true,
+    "auth_valid": true,
+    "source": "local_training_backend_actual_response"
+  }
+]

@@ -1,0 +1,102 @@
+{
+  "case_id": "real_app_001_7a3895130090139c",
+  "gold": null,
+  "input": {
+    "coverage_metadata": {
+      "stop_reason": "max_depth",
+      "traffic_available": false
+    },
+    "endpoint_context": {
+      "action_context": [],
+      "auth": {
+        "api_key_header_present": false,
+        "authorization_header_present": false,
+        "bearer_token_present": false,
+        "cookie_present": false,
+        "session_cookie_present": false
+      },
+      "dynamic": {
+        "available_transaction_count": 0,
+        "missing_transaction_ids": [],
+        "observed": false,
+        "observed_methods": []
+      },
+      "endpoint_context_id": "ctx_b0c0a2622f7806a3",
+      "evidence_refs": {
+        "action_ids": [],
+        "correlation_ids": [
+          "corr_a7092345f767b4c0"
+        ],
+        "runtime_action_ids": [],
+        "static_candidate_ids": [
+          "stat_cand_1"
+        ],
+        "transaction_ids": []
+      },
+      "host": "host-2bfd5dcbac320415.app001.local",
+      "methods": [
+        "POST"
+      ],
+      "path": "/signup",
+      "request": {
+        "body_keys": [],
+        "body_present": null,
+        "body_shapes": [],
+        "body_types": [],
+        "content_types": [],
+        "header_names": [],
+        "query_keys": []
+      },
+      "response": {
+        "body_keys": [],
+        "body_present": null,
+        "body_shapes": [],
+        "body_types": [],
+        "content_types": [],
+        "header_names": [],
+        "observed_status_codes": []
+      },
+      "route_context": [],
+      "runtime_context": {
+        "activity_changes_observed": false,
+        "crash_observed": false,
+        "evidence_available": false,
+        "fatal_observed": false,
+        "pid_changed_observed": false,
+        "process_death_observed": false
+      },
+      "scheme": null,
+      "static": {
+        "confidence": "low",
+        "match_type": "static_only",
+        "static_candidate_id": "stat_cand_1",
+        "static_candidate_id_origin": "correlation_reference",
+        "static_candidate_id_source_field": null,
+        "static_method": "POST"
+      },
+      "visibility": {
+        "http_visibility": "available",
+        "https_visibility": "unavailable"
+      }
+    }
+  },
+  "review": {
+    "notes": [],
+    "reviewer_ids": [],
+    "status": "unreviewed"
+  },
+  "schema_version": "1.0",
+  "source": {
+    "app_id": "app_001",
+    "dataset_type": "real",
+    "dataset_version": "real_pilot_v1",
+    "endpoint_context_id": "ctx_b0c0a2622f7806a3",
+    "scan_reference": "scan_app_001",
+    "split": "development"
+  },
+  "tags": [
+    "authentication",
+    "static_only",
+    "visibility_limited"
+  ]
+}

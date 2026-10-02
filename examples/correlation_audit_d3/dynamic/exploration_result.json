@@ -1,0 +1,22 @@
+{
+  "schema_version": "1.0",
+  "status": "partial",
+  "stop_reason": "max_depth",
+  "steps_attempted": 2,
+  "actions_succeeded": 2,
+  "actions_failed": 0,
+  "screens_observed": 3,
+  "transitions_recorded": 2,
+  "started_at": "2026-10-02T08:30:19.674176+00:00",
+  "completed_at": "2026-10-02T08:30:27.511557+00:00",
+  "duration_seconds": 7.837,
+  "root_node_id": "node_924d20ee80c01d85",
+  "current_node_id": "node_8c9f778b58d89aff",
+  "error": null,
+  "metadata": {
+    "max_steps": 3,
+    "max_depth": 2,
+    "nodes_in_graph": 3,
+    "edges_in_graph": 2
+  }
+}

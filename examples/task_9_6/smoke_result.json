@@ -1,0 +1,36 @@
+{
+  "allow_count": 0,
+  "analyst_attempts": 2,
+  "analyst_errors": [
+    "HYPOTHESIS_STATE_OR_ID_INVALID",
+    "HYPOTHESIS_STATE_OR_ID_INVALID"
+  ],
+  "analyst_metadata": {
+    "cost_usd": null,
+    "input_tokens": null,
+    "latency_ms": null,
+    "model": "unspecified",
+    "model_version": null,
+    "output_tokens": null,
+    "provider": "unspecified"
+  },
+  "analyst_status": "invalid_output",
+  "context_analyst": "FAIL",
+  "deny_count": 0,
+  "hypotheses_count": 0,
+  "local_available": true,
+  "model": "qwen2.5:7b",
+  "model_calls": 2,
+  "needs_evidence_count": 0,
+  "no_active_api_testing": true,
+  "no_executor": true,
+  "no_finding": true,
+  "no_poc": true,
+  "ollama_version": "0.21.2",
+  "policy_gate": "NOT_RUN",
+  "policy_model_calls": 0,
+  "proposals_count": 0,
+  "status": "BLOCKED",
+  "synthetic_case": "case_001",
+  "test_planner": "NOT_RUN"
+}

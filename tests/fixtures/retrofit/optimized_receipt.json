@@ -1,0 +1,22 @@
+{
+  "base_apk_sha256": "45f864ab953c2d1516397c5ee44476bcb44b1393373ed60246e1333986551eab",
+  "complete_method_spans": [
+    [
+      107,
+      754
+    ],
+    [
+      756,
+      773
+    ],
+    [
+      1084,
+      1143
+    ]
+  ],
+  "fixture_sha256": "856896c9d46f3802f870285552e278ed0f91bded8b53143832d0aa687a8d6bf1",
+  "original_line_numbers_preserved": true,
+  "original_source_sha256": "192f3ad46c74cf1521d125ffbf331d2bf4928a4ef31f2089074f2ad7701dcb61",
+  "selection": "Exact complete optimized factory/get methods; other methods blanked",
+  "source_file": "smali/org/wikipedia/dataclient/ServiceFactory.smali"
+}

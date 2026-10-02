@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.0",
+  "session_id": "463eae39-8c7c-42b9-92bb-d0b34d467cbf",
+  "created_at": "2026-10-02T12:03:18.996279+00:00",
+  "updated_at": "2026-10-02T12:03:18.996305+00:00",
+  "actions": [
+    {
+      "action_id": "act_4d3a12f998f2a6a3",
+      "occurrence": 1,
+      "source_node_id": "node_ae5d067cf204c0d4",
+      "target_node_id": "node_ae5d067cf204c0d4",
+      "correlation_status": "partial",
+      "transaction_count": 2,
+      "transaction_ids": [
+        "48f20224-c947-4a2b-bb2c-b20576d18665",
+        "e4446540-d4eb-40a3-9624-30e30cecc494"
+      ],
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "hosts": [
+        "192.168.1.154"
+      ],
+      "status_codes": [
+        200,
+        200
+      ],
+      "http_visibility": "available",
+      "https_visibility": "unavailable",
+      "https_visibility_reason": "",
+      "correlation_note": "traffic observed during action window",
+      "error": null
+    }
+  ]
+}

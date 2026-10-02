@@ -1,0 +1,20 @@
+{
+  "case_id": "real_app_001_37d75064ea9ce786",
+  "gold": {
+    "allowed_hypothesis_types": [],
+    "expected_coverage_gaps": [],
+    "expected_endpoint_role": "unknown",
+    "expected_hypothesis_types": [],
+    "expected_policy_outcomes": {},
+    "expected_test_ids": [],
+    "forbidden_hypothesis_types": [],
+    "forbidden_test_ids": [],
+    "must_not_emit_finding": true,
+    "unknown_fields": []
+  },
+  "review": {
+    "notes": [],
+    "reviewer_ids": [],
+    "status": "unreviewed"
+  }
+}

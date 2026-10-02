@@ -1,0 +1,62 @@
+{
+  "45f4469d-c8fb-4bdc-92ec-5c866d1596ef": {
+    "endpoint_context_id": "ctx_598671b778f7846b",
+    "kind": "request",
+    "ref": "45f4469d-c8fb-4bdc-92ec-5c866d1596ef",
+    "session_id": "463eae39-8c7c-42b9-92bb-d0b34d467cbf"
+  },
+  "463eae39-8c7c-42b9-92bb-d0b34d467cbf": {
+    "endpoint_context_id": "ctx_598671b778f7846b",
+    "kind": "runtime",
+    "ref": "463eae39-8c7c-42b9-92bb-d0b34d467cbf",
+    "session_id": "463eae39-8c7c-42b9-92bb-d0b34d467cbf"
+  },
+  "c1f157ca-d607-4c89-9854-a193ca5f9fce": {
+    "endpoint_context_id": "ctx_598671b778f7846b",
+    "kind": "request",
+    "ref": "c1f157ca-d607-4c89-9854-a193ca5f9fce",
+    "session_id": "463eae39-8c7c-42b9-92bb-d0b34d467cbf"
+  },
+  "comparison_e9edff7b2cdcd2b6e8e6": {
+    "endpoint_context_id": "ctx_598671b778f7846b",
+    "kind": "comparison",
+    "ref": "comparison_e9edff7b2cdcd2b6e8e6",
+    "session_id": "463eae39-8c7c-42b9-92bb-d0b34d467cbf"
+  },
+  "control_e9edff7b2cdcd2b6e8e6": {
+    "endpoint_context_id": "ctx_598671b778f7846b",
+    "kind": "control",
+    "ref": "control_e9edff7b2cdcd2b6e8e6",
+    "session_id": "463eae39-8c7c-42b9-92bb-d0b34d467cbf"
+  },
+  "ctx_598671b778f7846b": {
+    "endpoint_context_id": "ctx_598671b778f7846b",
+    "kind": "context",
+    "ref": "ctx_598671b778f7846b",
+    "session_id": "463eae39-8c7c-42b9-92bb-d0b34d467cbf"
+  },
+  "execution_e9edff7b2cdcd2b6e8e6": {
+    "endpoint_context_id": "ctx_598671b778f7846b",
+    "kind": "tool",
+    "ref": "execution_e9edff7b2cdcd2b6e8e6",
+    "session_id": "463eae39-8c7c-42b9-92bb-d0b34d467cbf"
+  },
+  "lab_54e318c6ab834d88b3e11974e9c95ea8": {
+    "endpoint_context_id": "ctx_598671b778f7846b",
+    "kind": "response",
+    "ref": "lab_54e318c6ab834d88b3e11974e9c95ea8",
+    "session_id": "463eae39-8c7c-42b9-92bb-d0b34d467cbf"
+  },
+  "lab_acquisition_463eae398c7c42b992bbd0b34d467cbf": {
+    "endpoint_context_id": "ctx_598671b778f7846b",
+    "kind": "tool",
+    "ref": "lab_acquisition_463eae398c7c42b992bbd0b34d467cbf",
+    "session_id": "463eae39-8c7c-42b9-92bb-d0b34d467cbf"
+  },
+  "lab_ce4771d18855479aae0afae5bf00eb38": {
+    "endpoint_context_id": "ctx_598671b778f7846b",
+    "kind": "response",
+    "ref": "lab_ce4771d18855479aae0afae5bf00eb38",
+    "session_id": "463eae39-8c7c-42b9-92bb-d0b34d467cbf"
+  }
+}

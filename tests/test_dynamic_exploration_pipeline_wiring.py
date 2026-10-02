@@ -917,6 +917,39 @@ class TestDynamicExplorationPipelineWiring(unittest.TestCase):
         self.assertEqual(tmp_files, [], "No temporary atomic write files should linger")
 
 
+    @patch("src.dynamic.traffic.service.DynamicTrafficService")
+    @patch("src.demo_orchestrator.run_exploration")
+    @patch("src.dynamic.ui.observer.observe_screen")
+    @patch("src.demo_orchestrator.launch_android_app")
+    @patch("src.demo_orchestrator.build_static_context")
+    @patch("src.demo_orchestrator.preprocess_apk")
+    @patch("src.demo_orchestrator.acquire_apk")
+    def test_capture_port_reaches_readiness_and_backend(
+        self, acq, prep, static, runtime, observe, explore, service_class
+    ):
+        self._setup_mock_monolithic_pipeline(acq, prep, static, runtime)
+        observe.return_value = _make_screen_observation()
+        explore.return_value = ExplorationResult(status="completed", stop_reason="completed", screens_observed=1)
+        service = service_class.return_value
+        service.check_readiness.return_value.backend_available = True
+        service.check_readiness.return_value.adb_available = True
+        service.captured_transactions = []
+        service.active_capture = None
+        run_demo("http://example.com/app.apk", self.output_root, traffic_proxy_port=18080)
+        self.assertEqual(service.check_readiness.call_args.kwargs["proxy_port"], 18080)
+        self.assertEqual(service.start_capture.call_args.kwargs["proxy_port"], 18080)
+        service.stop_capture.assert_called_once()
+        events = json.loads((self.output_root / "dynamic" / "timeline.json").read_text())
+        self.assertIn("18080", json.dumps(events))
+
+    @patch("src.demo_orchestrator.acquire_apk")
+    def test_invalid_capture_port_rejected_before_acquisition(self, acquire):
+        for port in (True, 0, 65536, "18080"):
+            with self.assertRaises(ValueError):
+                run_demo("http://example.com/app.apk", self.output_root, traffic_proxy_port=port)
+        acquire.assert_not_called()
+
+
 class TestTask541SemanticsCleanup(unittest.TestCase):
     """Verifies Task 5.4.1 canonical status vocabulary, stop reason mapping, and scan_state semantics."""
 

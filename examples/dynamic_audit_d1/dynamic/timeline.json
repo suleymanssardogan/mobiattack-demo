@@ -1,0 +1,314 @@
+[
+  {
+    "event_id": "a5f1666b-8145-4f70-8db9-abf983449c4a",
+    "type": "SYSTEM_EVENT",
+    "name": "SESSION_STARTED",
+    "timestamp": "2026-10-02T08:30:15.501656+00:00",
+    "metadata": {
+      "package_name": "sg.vantagepoint.mstgkotlin",
+      "device_serial": "emulator-5554",
+      "preflight_status": "WARN"
+    },
+    "flow_id": null,
+    "session_id": "965a2656-5e40-45a3-9164-71739e2e5f48"
+  },
+  {
+    "event_id": "9d645890-fc0b-463d-8199-6398fd5421eb",
+    "type": "SYSTEM_EVENT",
+    "name": "DYNAMIC_PREFLIGHT_COMPLETED",
+    "timestamp": "2026-10-02T08:30:15.503012+00:00",
+    "metadata": {
+      "status": "WARN",
+      "device_connected": true,
+      "device_is_emulator": true,
+      "package_installed": true,
+      "process_running": true,
+      "foreground": true,
+      "launch_success": true,
+      "launch_attempts": 1,
+      "network_reachable": true,
+      "pid": 18904,
+      "ready_after_attempt": 1,
+      "warnings": [
+        "Android Emulator environment detected."
+      ]
+    },
+    "flow_id": null,
+    "session_id": "965a2656-5e40-45a3-9164-71739e2e5f48"
+  },
+  {
+    "event_id": "02be5ca7-5f9a-460d-ad73-2e3d37e0ad3c",
+    "type": "SYSTEM_EVENT",
+    "name": "SCREEN_OBSERVED",
+    "timestamp": "2026-10-02T08:30:19.192810+00:00",
+    "metadata": {
+      "screen_identity": "acdb4c1c116dc218",
+      "foreground_package": "sg.vantagepoint.mstgkotlin",
+      "foreground_activity": "sg.vantagepoint.mstgkotlin.MainActivity",
+      "is_target_package": true,
+      "is_dialog_or_system": false,
+      "node_count": 17,
+      "clickable_count": 3,
+      "input_count": 0,
+      "observation_attempts": 1
+    },
+    "flow_id": null,
+    "session_id": "965a2656-5e40-45a3-9164-71739e2e5f48"
+  },
+  {
+    "type": "system_event",
+    "name": "EXPLORATION_STARTED",
+    "timestamp": "2026-10-02T08:30:19.674278+00:00",
+    "metadata": {
+      "max_steps": 3,
+      "max_depth": 2,
+      "deadline_seconds": 35,
+      "graph_id": "graph_128433012f88"
+    },
+    "session_id": "965a2656-5e40-45a3-9164-71739e2e5f48"
+  },
+  {
+    "type": "system_event",
+    "name": "SCREEN_OBSERVED",
+    "timestamp": "2026-10-02T08:30:22.212147+00:00",
+    "metadata": {
+      "step": 0,
+      "node_id": "node_924d20ee80c01d85",
+      "screen_identity": "acdb4c1c116dc218",
+      "activity": "sg.vantagepoint.mstgkotlin.MainActivity",
+      "clickable_count": 3,
+      "input_count": 0
+    },
+    "session_id": "965a2656-5e40-45a3-9164-71739e2e5f48"
+  },
+  {
+    "type": "system_event",
+    "name": "ACTION_SELECTED",
+    "timestamp": "2026-10-02T08:30:22.213681+00:00",
+    "metadata": {
+      "step": 1,
+      "action_id": "act_b2ff6a36d599bf4a",
+      "source_node_id": "node_924d20ee80c01d85",
+      "source_screen_identity": "acdb4c1c116dc218",
+      "action_type": "click",
+      "center": [
+        540,
+        532
+      ],
+      "resource_id": "sg.vantagepoint.mstgkotlin:id/tvsharedpref"
+    },
+    "session_id": "965a2656-5e40-45a3-9164-71739e2e5f48"
+  },
+  {
+    "type": "user_action",
+    "name": "ACTION_EXECUTED",
+    "timestamp": "2026-10-02T08:30:22.496856+00:00",
+    "metadata": {
+      "action_id": "act_b2ff6a36d599bf4a",
+      "action_type": "click",
+      "status": "succeeded",
+      "attempts": 1,
+      "center": [
+        540,
+        532
+      ],
+      "bounds": [
+        53,
+        472,
+        1027,
+        593
+      ],
+      "resource_id": "sg.vantagepoint.mstgkotlin:id/tvsharedpref"
+    },
+    "session_id": "965a2656-5e40-45a3-9164-71739e2e5f48"
+  },
+  {
+    "type": "system_event",
+    "name": "SCREEN_OBSERVED",
+    "timestamp": "2026-10-02T08:30:24.961010+00:00",
+    "metadata": {
+      "step": 1,
+      "screen_identity": "35fcc8acbd574707",
+      "activity": "sg.vantagepoint.mstgkotlin.MainActivity",
+      "clickable_count": 3,
+      "input_count": 0
+    },
+    "session_id": "965a2656-5e40-45a3-9164-71739e2e5f48"
+  },
+  {
+    "type": "system_event",
+    "name": "ACTION_RUNTIME_CORRELATED",
+    "timestamp": "2026-10-02T08:30:24.963434+00:00",
+    "metadata": {
+      "step": 1,
+      "action_id": "act_b2ff6a36d599bf4a",
+      "source_node_id": "node_924d20ee80c01d85",
+      "target_node_id": "node_89632704e0e7e91d",
+      "correlation_status": "available",
+      "pid_changed": false,
+      "process_died": false,
+      "foreground_changed": false,
+      "activity_changed": false,
+      "fatal_appeared": false,
+      "crash_appeared": false,
+      "new_log_event_count": 0
+    },
+    "session_id": "965a2656-5e40-45a3-9164-71739e2e5f48"
+  },
+  {
+    "type": "system_event",
+    "name": "ACTION_TRAFFIC_CORRELATED",
+    "timestamp": "2026-10-02T08:30:24.964161+00:00",
+    "metadata": {
+      "step": 1,
+      "action_id": "act_b2ff6a36d599bf4a",
+      "source_node_id": "node_924d20ee80c01d85",
+      "target_node_id": "node_89632704e0e7e91d",
+      "correlation_status": "partial",
+      "transaction_count": 0,
+      "transaction_ids": [],
+      "methods": [],
+      "hosts": [],
+      "visibility": "partial",
+      "correlation_note": "No visible HTTP transactions were captured during the action window; HTTPS visibility was unavailable. (cleartext_http_only_backend)"
+    },
+    "session_id": "965a2656-5e40-45a3-9164-71739e2e5f48"
+  },
+  {
+    "type": "system_event",
+    "name": "ROUTE_TRANSITION_RECORDED",
+    "timestamp": "2026-10-02T08:30:24.964594+00:00",
+    "metadata": {
+      "step": 1,
+      "edge_id": "edge_ee75e11cd02f744f",
+      "source_node_id": "node_924d20ee80c01d85",
+      "target_node_id": "node_89632704e0e7e91d",
+      "is_self_loop": false,
+      "observation_count": 1
+    },
+    "session_id": "965a2656-5e40-45a3-9164-71739e2e5f48"
+  },
+  {
+    "type": "system_event",
+    "name": "ACTION_SELECTED",
+    "timestamp": "2026-10-02T08:30:24.966291+00:00",
+    "metadata": {
+      "step": 2,
+      "action_id": "act_a1f54c20fbd79960",
+      "source_node_id": "node_89632704e0e7e91d",
+      "source_screen_identity": "35fcc8acbd574707",
+      "action_type": "click",
+      "center": [
+        540,
+        1322
+      ],
+      "resource_id": "sg.vantagepoint.mstgkotlin:id/tvrootcheck"
+    },
+    "session_id": "965a2656-5e40-45a3-9164-71739e2e5f48"
+  },
+  {
+    "type": "user_action",
+    "name": "ACTION_EXECUTED",
+    "timestamp": "2026-10-02T08:30:25.094632+00:00",
+    "metadata": {
+      "action_id": "act_a1f54c20fbd79960",
+      "action_type": "click",
+      "status": "succeeded",
+      "attempts": 1,
+      "center": [
+        540,
+        1322
+      ],
+      "bounds": [
+        53,
+        1262,
+        1027,
+        1383
+      ],
+      "resource_id": "sg.vantagepoint.mstgkotlin:id/tvrootcheck"
+    },
+    "session_id": "965a2656-5e40-45a3-9164-71739e2e5f48"
+  },
+  {
+    "type": "system_event",
+    "name": "SCREEN_OBSERVED",
+    "timestamp": "2026-10-02T08:30:27.507007+00:00",
+    "metadata": {
+      "step": 2,
+      "screen_identity": "b99bad1a3e622f0a",
+      "activity": "sg.vantagepoint.mstgkotlin.MainActivity",
+      "clickable_count": 5,
+      "input_count": 0
+    },
+    "session_id": "965a2656-5e40-45a3-9164-71739e2e5f48"
+  },
+  {
+    "type": "system_event",
+    "name": "ACTION_RUNTIME_CORRELATED",
+    "timestamp": "2026-10-02T08:30:27.508903+00:00",
+    "metadata": {
+      "step": 2,
+      "action_id": "act_a1f54c20fbd79960",
+      "source_node_id": "node_89632704e0e7e91d",
+      "target_node_id": "node_8c9f778b58d89aff",
+      "correlation_status": "available",
+      "pid_changed": false,
+      "process_died": false,
+      "foreground_changed": false,
+      "activity_changed": false,
+      "fatal_appeared": false,
+      "crash_appeared": false,
+      "new_log_event_count": 0
+    },
+    "session_id": "965a2656-5e40-45a3-9164-71739e2e5f48"
+  },
+  {
+    "type": "system_event",
+    "name": "ACTION_TRAFFIC_CORRELATED",
+    "timestamp": "2026-10-02T08:30:27.509740+00:00",
+    "metadata": {
+      "step": 2,
+      "action_id": "act_a1f54c20fbd79960",
+      "source_node_id": "node_89632704e0e7e91d",
+      "target_node_id": "node_8c9f778b58d89aff",
+      "correlation_status": "partial",
+      "transaction_count": 0,
+      "transaction_ids": [],
+      "methods": [],
+      "hosts": [],
+      "visibility": "partial",
+      "correlation_note": "No visible HTTP transactions were captured during the action window; HTTPS visibility was unavailable. (cleartext_http_only_backend)"
+    },
+    "session_id": "965a2656-5e40-45a3-9164-71739e2e5f48"
+  },
+  {
+    "type": "system_event",
+    "name": "ROUTE_TRANSITION_RECORDED",
+    "timestamp": "2026-10-02T08:30:27.510269+00:00",
+    "metadata": {
+      "step": 2,
+      "edge_id": "edge_a75d24e902b61018",
+      "source_node_id": "node_89632704e0e7e91d",
+      "target_node_id": "node_8c9f778b58d89aff",
+      "is_self_loop": false,
+      "observation_count": 1
+    },
+    "session_id": "965a2656-5e40-45a3-9164-71739e2e5f48"
+  },
+  {
+    "type": "system_event",
+    "name": "EXPLORATION_COMPLETED",
+    "timestamp": "2026-10-02T08:30:27.511595+00:00",
+    "metadata": {
+      "status": "partial",
+      "stop_reason": "max_depth",
+      "steps_attempted": 2,
+      "actions_succeeded": 2,
+      "actions_failed": 0,
+      "screens_observed": 3,
+      "transitions_recorded": 2,
+      "duration_seconds": 7.837
+    },
+    "session_id": "965a2656-5e40-45a3-9164-71739e2e5f48"
+  }
+]

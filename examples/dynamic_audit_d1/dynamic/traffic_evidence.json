@@ -1,0 +1,42 @@
+{
+  "schema_version": "1.0",
+  "session_id": "965a2656-5e40-45a3-9164-71739e2e5f48",
+  "created_at": "2026-10-02T08:30:19.674246+00:00",
+  "updated_at": "2026-10-02T08:30:27.509400+00:00",
+  "actions": [
+    {
+      "action_id": "act_b2ff6a36d599bf4a",
+      "occurrence": 1,
+      "source_node_id": "node_924d20ee80c01d85",
+      "target_node_id": "node_89632704e0e7e91d",
+      "correlation_status": "partial",
+      "transaction_count": 0,
+      "transaction_ids": [],
+      "methods": [],
+      "hosts": [],
+      "status_codes": [],
+      "http_visibility": "available",
+      "https_visibility": "unavailable",
+      "https_visibility_reason": "cleartext_http_only_backend",
+      "correlation_note": "No visible HTTP transactions were captured during the action window; HTTPS visibility was unavailable. (cleartext_http_only_backend)",
+      "error": null
+    },
+    {
+      "action_id": "act_a1f54c20fbd79960",
+      "occurrence": 1,
+      "source_node_id": "node_89632704e0e7e91d",
+      "target_node_id": "node_8c9f778b58d89aff",
+      "correlation_status": "partial",
+      "transaction_count": 0,
+      "transaction_ids": [],
+      "methods": [],
+      "hosts": [],
+      "status_codes": [],
+      "http_visibility": "available",
+      "https_visibility": "unavailable",
+      "https_visibility_reason": "cleartext_http_only_backend",
+      "correlation_note": "No visible HTTP transactions were captured during the action window; HTTPS visibility was unavailable. (cleartext_http_only_backend)",
+      "error": null
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "apk_base_sha256": "45f864ab953c2d1516397c5ee44476bcb44b1393373ed60246e1333986551eab",
+  "app_id": "app_010",
+  "expected_canonical_candidates": 0,
+  "expected_declaration": {
+    "annotation_line": 43,
+    "method": "GET",
+    "path": "api/search",
+    "path_line": 44
+  },
+  "expected_reason": "NO_SUPPORTED_STRUCTURAL_BASE_BINDING",
+  "fixture_is_exact_local_artifact_copy": true,
+  "fixture_sha256": "fe94e01542f188fca2fc7ac5ce29c6d5e2487c941061c63d67a2f9abe60aae9f",
+  "source_artifact": "processed/base/apktool_out/smali/org/wikipedia/search/SemanticSearchService.smali"
+}

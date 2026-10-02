@@ -1,0 +1,81 @@
+{
+  "target": {
+    "class_name": "sg.vantagepoint.mstgkotlin.MainActivity",
+    "method_name": "toggleFlag"
+  },
+  "result": {
+    "status": "unavailable",
+    "target": {
+      "class_name": "sg.vantagepoint.mstgkotlin.MainActivity",
+      "method_name": "toggleFlag"
+    },
+    "window": {
+      "session_id": "937f55af-d6cb-421f-bc7a-aa9a1047d380",
+      "route_id": "node_924d20ee80c01d85",
+      "action_id": "act_b2ff6a36d599bf4a",
+      "started_at": "2026-10-02T09:38:58.209771+00:00",
+      "ended_at": "2026-10-02T09:38:58.238993+00:00"
+    },
+    "observations": [],
+    "coverage_gaps": [
+      "method_entry_observation_backend_unavailable",
+      "debugger_method_events_or_explicit_app_events_required",
+      "no_observed_invocation_does_not_mean_method_never_executed"
+    ],
+    "instrumentation_enabled": false,
+    "semantics": "runtime_observation_only"
+  },
+  "ui_action": {
+    "action_id": "act_b2ff6a36d599bf4a",
+    "action_type": "click",
+    "status": "succeeded",
+    "started_at": "2026-10-02T09:38:58.209967+00:00",
+    "completed_at": "2026-10-02T09:38:58.238919+00:00",
+    "attempts": 1,
+    "error_code": null,
+    "message": null,
+    "metadata": {
+      "center": [
+        540,
+        532
+      ],
+      "bounds": [
+        53,
+        472,
+        1027,
+        593
+      ],
+      "resource_id": "sg.vantagepoint.mstgkotlin:id/tvsharedpref"
+    }
+  },
+  "route_evidence": {
+    "route_id": "node_924d20ee80c01d85",
+    "session_id": "937f55af-d6cb-421f-bc7a-aa9a1047d380",
+    "screen_identity": "acdb4c1c116dc218",
+    "foreground_package": "sg.vantagepoint.mstgkotlin",
+    "foreground_activity": "sg.vantagepoint.mstgkotlin.MainActivity"
+  },
+  "runtime": {
+    "timestamp": "2026-10-02T09:38:58.240426+00:00",
+    "package_name": "sg.vantagepoint.mstgkotlin",
+    "pid": 18904,
+    "process_running": true,
+    "fatal_detected": false,
+    "crash_detected": false
+  },
+  "feasibility": {
+    "app_debuggable": true,
+    "mechanism_required": "debugger_method_entry_events_or_explicit_app_emitted_events",
+    "debugger_attached": false,
+    "root_used": false,
+    "apk_modified": false,
+    "method_trace_started": false
+  },
+  "invocation_observed": false,
+  "raw_argument_or_return_values_persisted": false,
+  "focused_tests": {
+    "passed": 78,
+    "failed": 0,
+    "full_regression_run": false
+  }
+}

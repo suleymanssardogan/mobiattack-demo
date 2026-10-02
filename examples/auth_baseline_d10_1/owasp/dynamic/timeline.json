@@ -1,0 +1,36 @@
+[
+  {
+    "event_id": "a6620eaa-76b5-444e-b72c-895b7602a8ef",
+    "type": "SYSTEM_EVENT",
+    "name": "SESSION_STARTED",
+    "timestamp": "2026-10-02T11:45:19.273373+00:00",
+    "metadata": {
+      "package_name": "sg.vantagepoint.mstgkotlin",
+      "device_serial": "emulator-5554",
+      "preflight_status": "NOT_EVALUATED"
+    },
+    "flow_id": null,
+    "session_id": "60e41fc7-e372-4ade-a027-844bc879a7e0"
+  },
+  {
+    "event_id": "52053d43-3309-48b9-aa49-fe8a6da39a0f",
+    "type": "SYSTEM_EVENT",
+    "name": "FLOW_STARTED",
+    "timestamp": "2026-10-02T11:45:19.273970+00:00",
+    "metadata": {
+      "flow_name": "Normal login/session feasibility",
+      "description": ""
+    },
+    "flow_id": "c1d2312a-9d5e-4017-9be9-153e2735858d",
+    "session_id": "60e41fc7-e372-4ade-a027-844bc879a7e0"
+  },
+  {
+    "event_id": "6a07bf2e-62f5-4148-8fbb-61e1bcb8cf38",
+    "type": "SYSTEM_EVENT",
+    "name": "SESSION_COMPLETED",
+    "timestamp": "2026-10-02T11:45:27.094901+00:00",
+    "metadata": {},
+    "flow_id": null,
+    "session_id": "60e41fc7-e372-4ade-a027-844bc879a7e0"
+  }
+]

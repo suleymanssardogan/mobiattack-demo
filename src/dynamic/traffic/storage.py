@@ -16,6 +16,8 @@ from src.dynamic.traffic.models import (
     TrafficTransaction,
 )
 
+from src.dynamic.traffic.normalizer import sanitize_transaction_data
+
 logger = logging.getLogger(__name__)
 
 DEFAULT_SESSIONS_DIR = "artifacts/dynamic/sessions"
@@ -38,7 +40,7 @@ class TrafficStorage:
         jsonl_path = os.path.join(traffic_dir, "transactions.jsonl")
 
         try:
-            line = json.dumps(transaction.to_dict(), ensure_ascii=False) + "\n"
+            line = json.dumps(sanitize_transaction_data(transaction.to_dict()), ensure_ascii=False) + "\n"
             with open(jsonl_path, "a", encoding="utf-8") as f:
                 f.write(line)
         except Exception as exc:
@@ -110,7 +112,7 @@ class TrafficStorage:
             "capture": capture.to_dict() if capture else None,
             "summary": summary.to_dict() if summary else None,
             "transactions": [
-                t.to_dict() if isinstance(t, TrafficTransaction) else t
+                sanitize_transaction_data(t.to_dict() if isinstance(t, TrafficTransaction) else t)
                 for t in transactions
             ],
         }

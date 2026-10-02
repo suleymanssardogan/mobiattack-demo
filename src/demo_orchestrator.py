@@ -404,6 +404,7 @@ def _wire_dynamic_exploration(
     progress_callback: Callable[[str, str, str, dict | None], None] | None = None,
     limits: Any | None = None,
     initial_observation: Any | None = None,
+    traffic_proxy_port: int = 8080,
 ) -> Any | None:
     """Wires and executes the bounded dynamic exploration loop in the real scan pipeline.
 
@@ -530,16 +531,17 @@ def _wire_dynamic_exploration(
 
         traffic_started = False
         try:
-            readiness = traffic_service.check_readiness(device_serial=target_serial)
+            readiness = traffic_service.check_readiness(device_serial=target_serial, proxy_port=traffic_proxy_port)
             if readiness.backend_available and readiness.adb_available:
                 traffic_service.start_capture(
                     session=session_id,
                     device_serial=target_serial,
+                    proxy_port=traffic_proxy_port,
                 )
                 traffic_started = True
                 timeline_recorder._record_system_event(
                     "TRAFFIC_CAPTURE_STARTED",
-                    {"backend": traffic_backend.__class__.__name__, "proxy_port": 8080},
+                    {"backend": traffic_backend.__class__.__name__, "proxy_port": traffic_proxy_port},
                 )
             else:
                 timeline_recorder._record_system_event(
@@ -1027,6 +1029,7 @@ def run_demo(
     progress_callback: Callable[[str, str, str, dict | None], None] | None = None,
     install_mode: str = "manual",
     install_wait_timeout_seconds: float = 180.0,
+    traffic_proxy_port: int = 8080,
 ) -> dict:
     """Executes the full deterministic MobiAttack-v1 demo pipeline.
 
@@ -1038,6 +1041,7 @@ def run_demo(
         reinstall: If True, instructs ADB to allow reinstalling existing packages.
         grant_permissions: If True, passes '-g' to ADB to pre-grant runtime permissions.
         timeout_seconds: Subprocess timeout ceiling for preprocessing and ADB commands.
+        traffic_proxy_port: Existing capture service port; defaults to 8080.
         progress_callback: Optional callable(stage, state, message, data=None) for live tracking.
 
     Returns:
@@ -1047,6 +1051,8 @@ def run_demo(
         DemoOrchestrationError: On failure at any pipeline stage, preserving stage tag
                                 and original exception cause.
     """
+    if type(traffic_proxy_port) is not int or not 1 <= traffic_proxy_port <= 65535:
+        raise ValueError("traffic_proxy_port must be an integer from 1 to 65535")
     root_path = Path(output_root).resolve()
     downloads_dir = root_path / "downloads"
     workspaces_dir = root_path / "workspaces"
@@ -1308,6 +1314,7 @@ def run_demo(
             adb_serial,
             progress_callback=progress_callback,
             initial_observation=init_obs,
+            **({"traffic_proxy_port": traffic_proxy_port} if traffic_proxy_port != 8080 else {}),
         )
 
         # STAGE 5: Result Assembly for Split Package
@@ -1615,6 +1622,7 @@ def run_demo(
         adb_serial,
         progress_callback=progress_callback,
         initial_observation=init_obs,
+        **({"traffic_proxy_port": traffic_proxy_port} if traffic_proxy_port != 8080 else {}),
     )
 
     # -------------------------------------------------------------

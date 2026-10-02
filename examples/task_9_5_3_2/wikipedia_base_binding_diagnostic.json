@@ -1,0 +1,35 @@
+{
+  "app_id": "app_010",
+  "canonical_candidate_count": 0,
+  "decision": "RETROFIT_PATHS_FOUND_BUT_BASE_UNRESOLVED",
+  "forms": [
+    {
+      "line": 107,
+      "reason": "Base URL enters as a method argument; V1 does not follow caller-to-callee value flow",
+      "source_method": "createRetrofit$default(ServiceFactory;WikiSite;String;)Retrofit;"
+    },
+    {
+      "line": 710,
+      "reason": "R8 inlines the builder into direct Retrofit construction"
+    },
+    {
+      "line": 735,
+      "reason": "Direct Retrofit constructor takes OkHttp HttpUrl; literal Builder.baseUrl(String) chain is absent"
+    },
+    {
+      "line": 1105,
+      "reason": "Fallback base is computed from WikiSite.url and string concatenation"
+    },
+    {
+      "line": 1126,
+      "reason": "Retrofit instance returned across a method boundary"
+    },
+    {
+      "line": 1134,
+      "reason": "create(Class) receives class parameter p3, not a same-method const-class"
+    }
+  ],
+  "source_file": "smali/org/wikipedia/dataclient/ServiceFactory.smali",
+  "supported_binding_count": 0,
+  "valid_path_declaration_count": 127
+}

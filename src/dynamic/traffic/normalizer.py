@@ -4,10 +4,12 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
+from copy import deepcopy
 from typing import Any
-from urllib.parse import parse_qs, urlparse
+from urllib.parse import parse_qs, urlparse, urlencode, urlsplit, urlunsplit
 
-from src.dynamic.traffic.models import HttpRequestModel, HttpResponseModel, TrafficTransaction
+from src.dynamic.traffic.models import (HttpRequestModel, HttpResponseModel, TrafficTransaction, TrafficException, TrafficErrorCode)
 
 MAX_CAPTURE_BODY_BYTES = 1_048_576  # 1 MB
 
@@ -35,41 +37,100 @@ SENSITIVE_PAYLOAD_KEYS = {
     "cookie",
     "credit_card",
     "cvv",
+    "auth",
+    "key",
+    "session",
+    "jwt",
 }
 
 
-def sanitize_headers(headers: dict[str, str] | None) -> dict[str, str]:
-    """Normalizes header keys to lowercase and redacts sensitive headers."""
-    if not headers:
-        return {}
+def _sensitive_name(key: str) -> bool:
+    name = re.sub(r"([a-z])([A-Z])", r"\1_\2", str(key)).lower().replace("-", "_")
+    return name in SENSITIVE_PAYLOAD_KEYS or any(
+        part in SENSITIVE_PAYLOAD_KEYS for part in name.split("_")
+    )
 
-    sanitized: dict[str, str] = {}
-    for key, val in headers.items():
-        lowered_key = str(key).strip().lower()
-        if lowered_key in SENSITIVE_HEADERS:
-            sanitized[lowered_key] = "[REDACTED]"
+
+def _redact_shape(value: Any) -> Any:
+    if isinstance(value, dict):
+        return {key: _redact_shape(item) for key, item in value.items()}
+    if isinstance(value, list):
+        return [_redact_shape(item) for item in value]
+    return "[REDACTED]"
+
+
+def _sanitize_url_header(value: str) -> str:
+    try:
+        parsed = urlsplit(value)
+        if parsed.username is not None or parsed.password is not None:
+            return "[REDACTED]"
+        query = sanitize_body_payload(parse_qs(parsed.query, keep_blank_values=True))
+        return urlunsplit((parsed.scheme, parsed.netloc, parsed.path,
+                           urlencode(query, doseq=True), ""))
+    except ValueError:
+        return "[REDACTED]"
+
+
+def sanitize_headers(headers: dict[str, str] | None) -> dict[str, str]:
+    """Keep header names, redact credential headers and secrets in URL headers."""
+    sanitized = {}
+    for key, val in (headers or {}).items():
+        name = str(key).strip().lower()
+        if name in SENSITIVE_HEADERS or _sensitive_name(name):
+            sanitized[name] = "[REDACTED]"
+        elif name in {"location", "content-location", "referer"}:
+            sanitized[name] = _sanitize_url_header(str(val))
         else:
-            sanitized[lowered_key] = str(val)
+            sanitized[name] = str(val)
     return sanitized
 
 
 def sanitize_body_payload(body: Any) -> Any:
-    """Recursively redacts sensitive keys from JSON-parsed or dict body payload."""
+    """Preserve structured shape and names while redacting sensitive leaves."""
     if isinstance(body, dict):
-        sanitized_dict: dict[str, Any] = {}
-        for key, val in body.items():
-            lower_key = str(key).lower()
-            # Do NOT redact if it is MobiAttack's internal correlation 'session_id' or 'transaction_id'
-            if any(pat in lower_key for pat in SENSITIVE_PAYLOAD_KEYS):
-                sanitized_dict[key] = "[REDACTED]"
-            elif isinstance(val, (dict, list)):
-                sanitized_dict[key] = sanitize_body_payload(val)
-            else:
-                sanitized_dict[key] = val
-        return sanitized_dict
-    elif isinstance(body, list):
+        return {key: _redact_shape(val) if _sensitive_name(key) else
+                sanitize_body_payload(val) for key, val in body.items()}
+    if isinstance(body, list):
         return [sanitize_body_payload(item) for item in body]
     return body
+
+
+def _internal(data: dict | None) -> bool:
+    return bool(data and (data.get("synthetic") or data.get("internal")))
+
+
+def sanitize_transaction_data(data: dict) -> dict:
+    """Final persistence boundary, also covering directly constructed transactions."""
+    if _internal(data) or _internal(data.get("request")):
+        raise TrafficException(TrafficErrorCode.TRAFFIC_PARSE_FAILED,
+                               "Internal proxy requests are not application evidence.")
+    clean = deepcopy(data)
+    response = clean.get("response")
+    if _internal(response):
+        clean["response"] = None
+        clean.setdefault("correlation", {})["response_observation"] = {
+            "state": "unavailable", "reason": "internal_proxy_response_excluded"}
+    for side in ("request", "response"):
+        item = clean.get(side)
+        if not isinstance(item, dict):
+            continue
+        item["headers"] = sanitize_headers(item.get("headers"))
+        body = item.get("body")
+        meta = item.setdefault("body_metadata", {})
+        if meta.get("binary"):
+            item["body"] = None
+        elif isinstance(body, (dict, list)):
+            item["body"] = sanitize_body_payload(body)
+        elif body is not None:
+            item["body"], new_meta = process_body_content(body, item["headers"].get("content-type"))
+            item["body_metadata"] = {**new_meta, **meta}
+        if side == "request":
+            item.pop("url", None)  # Canonical requests use host/path/query, never a raw URL.
+            path = urlsplit(item.get("path") or "/")
+            path_query = parse_qs(path.query, keep_blank_values=True)
+            item["path"] = path.path or "/"
+            item["query"] = sanitize_body_payload({**path_query, **(item.get("query") or {})})
+    return clean
 
 
 def process_body_content(
@@ -79,6 +140,15 @@ def process_body_content(
     """Enforces size limits, parses JSON or handles binary content safely."""
     if raw_body is None or raw_body == b"" or raw_body == "":
         return None, {"size": 0, "truncated": False, "binary": False}
+
+    if isinstance(raw_body, (dict, list)):
+        encoded = json.dumps(raw_body).encode("utf-8")
+        if len(encoded) > MAX_CAPTURE_BODY_BYTES:
+            return "[REDACTED]", {"size": len(encoded), "original_size": len(encoded),
+                                  "truncated": True, "redacted": True, "binary": False,
+                                  "content_type": content_type or "application/json"}
+        return sanitize_body_payload(raw_body), {"size": len(encoded), "truncated": False,
+                                                 "binary": False, "content_type": content_type or "application/json"}
 
     # Ensure bytes
     if isinstance(raw_body, str):
@@ -106,7 +176,7 @@ def process_body_content(
     is_form = "x-www-form-urlencoded" in ct
     is_text = any(t in ct for t in ["text/", "xml", "html", "javascript"]) or is_json or is_form
 
-    if not is_text and any(bin_type in ct for bin_type in ["image/", "audio/", "video/", "octet-stream", "zip", "pdf"]):
+    if ct and not is_text:
         body_meta["binary"] = True
         body_meta["sha256"] = hashlib.sha256(body_bytes).hexdigest()
         return None, body_meta
@@ -115,18 +185,15 @@ def process_body_content(
     try:
         decoded_text = body_bytes.decode("utf-8")
     except UnicodeDecodeError:
-        try:
-            decoded_text = body_bytes.decode("latin-1")
-        except Exception:
-            body_meta["binary"] = True
-            body_meta["sha256"] = hashlib.sha256(body_bytes).hexdigest()
-            return None, body_meta
+        body_meta["binary"] = True
+        body_meta["sha256"] = hashlib.sha256(body_bytes).hexdigest()
+        return None, body_meta
 
     # Parse JSON if applicable
     if is_json or decoded_text.strip().startswith(("{", "[")):
         try:
             parsed = json.loads(decoded_text)
-            sanitized = sanitize_body_payload(parsed)
+            sanitized = sanitize_body_payload(parsed) if isinstance(parsed, (dict, list)) else "[REDACTED]"
             return sanitized, body_meta
         except Exception:
             pass
@@ -140,7 +207,8 @@ def process_body_content(
         except Exception:
             pass
 
-    return decoded_text, body_meta
+    body_meta["redacted"] = True
+    return "[REDACTED]", body_meta
 
 
 def normalize_http_transaction(
@@ -152,6 +220,12 @@ def normalize_http_transaction(
     scope: str = "UNKNOWN",
 ) -> TrafficTransaction:
     """Creates a normalized TrafficTransaction with sanitized headers, parsed body, and query."""
+    if _internal(raw_req):
+        raise TrafficException(TrafficErrorCode.TRAFFIC_PARSE_FAILED,
+                               "Internal proxy requests are not application evidence.")
+    internal_response = _internal(raw_resp)
+    if internal_response:
+        raw_resp = None
     # Process Request
     req_headers = sanitize_headers(raw_req.get("headers"))
     req_ct = req_headers.get("content-type")
@@ -164,10 +238,15 @@ def normalize_http_transaction(
     host = raw_req.get("host") or (parsed_url.hostname if parsed_url else "")
     port = raw_req.get("port") or (parsed_url.port if parsed_url and parsed_url.port else (443 if scheme == "https" else 80))
     path = raw_req.get("path") or (parsed_url.path if parsed_url else "/")
+    path_parts = urlsplit(path)
+    path = path_parts.path or "/"
     query = raw_req.get("query")
     if query is None and parsed_url and parsed_url.query:
-        qs = parse_qs(parsed_url.query)
+        qs = parse_qs(parsed_url.query, keep_blank_values=True)
         query = {k: v[0] if len(v) == 1 else v for k, v in qs.items()}
+
+    path_query = parse_qs(path_parts.query, keep_blank_values=True)
+    query = sanitize_body_payload({**path_query, **(query or {})})
 
     request_model = HttpRequestModel(
         timestamp=raw_req.get("timestamp") or raw_req.get("time") or "",
@@ -204,4 +283,6 @@ def normalize_http_transaction(
         response=response_model,
         duration_ms=round(duration_ms, 2),
         scope=scope,
+        correlation={"response_observation": {"state": "unavailable",
+                     "reason": "internal_proxy_response_excluded"}} if internal_response else {},
     )
