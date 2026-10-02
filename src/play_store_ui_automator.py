@@ -18,6 +18,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 import re
 import subprocess
+import time
 import xml.etree.ElementTree as ET
 
 from src.android_runtime_launcher import (
@@ -295,6 +296,12 @@ def inspect_play_store_hierarchy(
         # If the page has none of the app details indicators, avoid clicking stray install buttons
         inspection.package_context_verified = False
 
+    if not inspection.package_context_verified:
+        inspection.is_blocked = True
+        inspection.block_reason = 'ui_automation_failed'
+        inspection.diagnostics.append('App details have not loaded; no install control will be tapped.')
+        return inspection
+
     # 9. Search for Accepted Free-Install Button ("Install" / "Yükle")
     for node in vending_nodes:
         node_text = (node.attrib.get("text") or "").strip()
@@ -371,18 +378,30 @@ def attempt_play_store_ui_install(
             diagnostics: list[str]
             tap_coordinates: tuple[int, int] | None
     """
-    try:
-        root = dump_window_hierarchy(serial=serial, adb_bin=adb_bin, timeout_seconds=timeout_seconds)
-    except Exception as exc:
-        return {
-            "success": False,
-            "status": "failed",
-            "reason": "ui_automation_failed",
-            "diagnostics": [f"Failed to dump UI hierarchy: {exc}"],
-            "tap_coordinates": None,
-        }
-
-    inspection = inspect_play_store_hierarchy(root=root, package_name=package_name)
+    # Store navigation is asynchronous. Retry only an unrecognized/loading screen;
+    # explicit account, payment and compatibility blockers still stop immediately.
+    deadline = time.monotonic() + timeout_seconds
+    inspection = None
+    for attempt in range(4):
+        remaining = deadline - time.monotonic()
+        if remaining <= 0:
+            break
+        try:
+            root = dump_window_hierarchy(serial=serial, adb_bin=adb_bin, timeout_seconds=remaining)
+        except Exception as exc:
+            return {
+                'success': False, 'status': 'failed', 'reason': 'ui_automation_failed',
+                'diagnostics': [f'Failed to dump UI hierarchy: {exc}'], 'tap_coordinates': None,
+            }
+        inspection = inspect_play_store_hierarchy(root=root, package_name=package_name)
+        if not inspection.is_blocked or inspection.block_reason != 'ui_automation_failed':
+            break
+        remaining = deadline - time.monotonic()
+        if attempt < 3 and remaining > 0:
+            time.sleep(min(1.0, remaining))
+    if inspection is None:
+        return {'success': False, 'status': 'failed', 'reason': 'ui_automation_failed',
+                'diagnostics': ['Play Store inspection timeout.'], 'tap_coordinates': None}
 
     if inspection.is_installed:
         return {

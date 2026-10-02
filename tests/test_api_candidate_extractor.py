@@ -520,8 +520,9 @@ def test_fuel_rejects_non_network_or_ambiguous_uri(tmp_path, path):
                                  'HTTPS://example.com/users'])
 def test_fuel_absolute_network_url_needs_no_base(tmp_path, url):
     candidate, = _fuel_probe(tmp_path, _request(path=url))
-    assert candidate['full_url'] == url
-    assert candidate['base_url'] is None
+    assert candidate['full_url'] == url.replace('HTTPS://', 'https://')
+    assert candidate['provenance'][0]['extractor_identity']['base_url'] is None
+    assert candidate['base_url'] == candidate['full_url'].rsplit('/', 1)[0]
     assert candidate['evidence']['path_value'] == url
 
 

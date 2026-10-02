@@ -269,3 +269,138 @@ class TestReportGenerator(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestCompactReportSummary(unittest.TestCase):
+    """Presentation must preserve coverage truth and leave evidence untouched."""
+
+    def setUp(self):
+        from src.web.report_summary import build_report_summary, load_report_summary
+        self.build = build_report_summary
+        self.load = load_report_summary
+        self.root = Path(__file__).resolve().parents[1]
+        self.fixture = self.root / 'examples/auth_standards_report_d13'
+        self.dynamic = json.loads((self.fixture / 'dynamic_analysis_report.json').read_text())
+
+    def test_static_selected_fields_and_indicator_counts(self):
+        source = json.loads((self.root / 'demo_runs/preset_android_monolithic/static_analysis_report.json').read_text())
+        result = self.build(source)['static_summary']
+        self.assertEqual(result['package'], 'sg.vantagepoint.mstgkotlin')
+        self.assertEqual(result['api_candidates_count'], 1)
+        self.assertEqual(result['frameworks_detected'], ['Fuel'])
+        self.assertIn('INTERNET', result['key_permissions'])
+        self.assertEqual(result['network_indicators']['ips'], len(source['network_indicators']['ip_addresses']))
+        self.assertEqual(result['status'], 'partial')
+
+    def test_projection_excludes_secrets_provenance_and_tool_paths(self):
+        source = {'application': {'package_name': 'training.app', 'filename': '/Users/dev/private.apk'},
+                  'permissions': ['android.permission.INTERNET'],
+                  'api_candidates': [{'framework': 'Fuel', 'source': '/tmp/private.smali', 'token': 'secret-marker'}],
+                  'network_indicators': {'network_urls': ['https://example.com/profile?token=secret-marker',
+                                                        'https://user:secret-marker@private.example.com/']},
+                  'acquisition': {'token': 'secret-marker'}, 'limitations': ['password=secret-marker']}
+        result = self.build(source)
+        encoded = json.dumps(result)
+        for forbidden in ['secret-marker', 'private.smali', '/Users/', 'private.example.com', 'acquisition']:
+            self.assertNotIn(forbidden, encoded)
+        self.assertEqual(result['static_summary']['network_indicators']['hosts'], ['example.com'])
+
+    def test_auth_enforcement_summary_has_only_six_fields(self):
+        result = self.load(self.fixture)
+        row = result['security_validation_summary'][0]
+        self.assertEqual(set(row), {'endpoint', 'test_category', 'outcome', 'reason_code', 'standard_mapping', 'evidence_available'})
+        self.assertEqual(row['outcome'], 'validated')
+        self.assertEqual(row['reason_code'], 'AUTH_ENFORCEMENT_CONFIRMED')
+        self.assertEqual(row['evidence_available'], 'YES')
+        self.assertIn(':18081/profile', row['endpoint'])
+        self.assertIn('MASVS-AUTH-1', row['standard_mapping'])
+        self.assertIn('not a vulnerability finding', result['security_note'])
+        self.assertNotIn('finding', row)
+
+    def test_blocked_inconclusive_rejected_are_visible(self):
+        import copy
+        source = copy.deepcopy(self.dynamic)
+        row = source['security_results']['results'][0]
+        source['security_results']['results'] = []
+        for outcome in ['blocked', 'inconclusive', 'rejected']:
+            item = copy.deepcopy(row)
+            item['validation_outcome'] = outcome
+            item['execution_status'] = 'blocked'
+            source['security_results']['results'].append(item)
+        result = self.build(dynamic_report=source)
+        self.assertEqual([r['outcome'] for r in result['security_validation_summary']], ['blocked', 'inconclusive', 'rejected'])
+        self.assertEqual(result['dynamic_summary']['security_tests_executed'], 0)
+        self.assertEqual(result['dynamic_summary']['validation_outcomes']['inconclusive'], 1)
+
+    def test_partial_https_and_unknown_launch_remain_explicit(self):
+        dynamic = self.load(self.fixture)['dynamic_summary']
+        self.assertEqual(dynamic['status'], 'partial')
+        self.assertEqual(dynamic['launch_status'], 'Unknown')
+        self.assertEqual(dynamic['traffic_visibility']['https_visibility'], 'unavailable')
+        self.assertIn('Runtime observation is unavailable.', dynamic['coverage_limitations'])
+
+    def test_zero_observations_never_means_secure(self):
+        import copy
+        source = copy.deepcopy(self.dynamic)
+        source['endpoint_context_summary']['runtime_observed_count'] = 0
+        source['security_results']['results'] = []
+        result = self.build(dynamic_report=source)['dynamic_summary']
+        self.assertEqual(result['observed_endpoints'], 0)
+        self.assertTrue(any('does not establish absence' in text for text in result['coverage_limitations']))
+        self.assertTrue(any('security was not established' in text for text in result['coverage_limitations']))
+        self.assertNotEqual(result['status'], 'secure')
+
+    def test_missing_reports_remain_unknown_not_success(self):
+        result = self.build()
+        self.assertIsNone(result['static_summary']['api_candidates_count'])
+        self.assertIsNone(result['dynamic_summary']['observed_endpoints'])
+        self.assertEqual(result['dynamic_summary']['status'], 'unavailable')
+
+    def test_canonical_artifacts_byte_identical_after_summary(self):
+        before = {p: p.read_bytes() for p in self.fixture.rglob('*') if p.is_file()}
+        first = self.load(self.fixture)
+        self.assertEqual(first, self.load(self.fixture))
+        self.assertEqual(before, {p: p.read_bytes() for p in self.fixture.rglob('*') if p.is_file()})
+
+    def test_missing_source_evidence_is_not_reported_available(self):
+        import shutil
+        with tempfile.TemporaryDirectory() as directory:
+            copied = Path(directory) / self.fixture.name
+            shutil.copytree(self.fixture, copied)
+            (copied / 'dynamic/security_results.json').unlink()
+            report = (copied / 'dynamic_analysis_report.json').read_bytes()
+            result = self.load(copied)
+            self.assertEqual(result['security_validation_summary'][0]['evidence_available'], 'NO')
+            self.assertIn('Some linked security evidence is unavailable.', result['dynamic_summary']['coverage_limitations'])
+            self.assertEqual(report, (copied / 'dynamic_analysis_report.json').read_bytes())
+
+    def test_endpoint_query_values_are_not_displayed(self):
+        import copy
+        source = copy.deepcopy(self.dynamic)
+        endpoint = next(r for r in source['endpoint_contexts'] if r['endpoint_context_id'] == source['security_results']['results'][0]['endpoint_context_id'])
+        endpoint['path'] = '/profile?token=secret-marker'
+        result = self.build(dynamic_report=source)
+        self.assertNotIn('secret-marker', json.dumps(result))
+        self.assertTrue(result['security_validation_summary'][0]['endpoint'].endswith('/profile'))
+
+    def test_summary_preserves_scheme_and_nondefault_port(self):
+        context_id = self.dynamic['security_results']['results'][0]['endpoint_context_id']
+        context = {'scheme': 'http', 'host': 'example.com', 'port': 443, 'path': '/profile', 'methods': ['GET']}
+        result = self.build(dynamic_report=self.dynamic, contexts={context_id: context})
+        self.assertEqual(result['security_validation_summary'][0]['endpoint'], 'GET http://example.com:443/profile')
+        context.update(scheme='https', port=443)
+        result = self.build(dynamic_report=self.dynamic, contexts={context_id: context})
+        self.assertEqual(result['security_validation_summary'][0]['endpoint'], 'GET https://example.com/profile')
+
+    def test_static_canonical_bytes_are_preserved(self):
+        import shutil
+        with tempfile.TemporaryDirectory() as directory:
+            run = Path(directory) / 'static_lab'
+            run.mkdir()
+            canonical = run / 'static_analysis_report.json'
+            shutil.copyfile(self.root / 'demo_runs/preset_android_monolithic/static_analysis_report.json', canonical)
+            before = canonical.read_bytes()
+            summary = self.load(run)
+            self.assertTrue(summary['canonical_artifacts']['static'])
+            self.assertEqual(summary['static_summary']['api_candidates_count'], 1)
+            self.assertEqual(before, canonical.read_bytes())

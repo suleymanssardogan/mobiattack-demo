@@ -1,0 +1,99 @@
+{
+  "dynamic_security_report": {
+    "coverage_limitations": [
+      "Dynamic report is unavailable.",
+      "HTTP visibility is unavailable.",
+      "HTTPS visibility is unavailable.",
+      "Runtime observation is unavailable.",
+      "Exploration is unavailable.",
+      "No security validation results are available; security was not established."
+    ],
+    "results": [],
+    "runtime_status": "unavailable"
+  },
+  "dynamic_summary": {
+    "actions_attempted": null,
+    "actions_succeeded": null,
+    "coverage_limitations": [
+      "Dynamic report is unavailable.",
+      "HTTP visibility is unavailable.",
+      "HTTPS visibility is unavailable.",
+      "Runtime observation is unavailable.",
+      "Exploration is unavailable.",
+      "No security validation results are available; security was not established."
+    ],
+    "launch_status": "Unknown",
+    "observed_endpoints": null,
+    "routes_explored": null,
+    "runtime_status": "unavailable",
+    "security_tests_executed": 0,
+    "status": "unavailable",
+    "traffic_visibility": {
+      "http_visibility": "unavailable",
+      "https_visibility": "unavailable"
+    },
+    "validation_outcomes": {
+      "blocked": 0,
+      "inconclusive": 0,
+      "rejected": 0,
+      "validated": 0
+    }
+  },
+  "security_note": "Validated auth enforcement is expected security behavior, not a vulnerability finding.",
+  "security_validation_summary": [],
+  "static_security_report": {
+    "coverage_limitations": [
+      "Static coverage is partial.",
+      "Additional static coverage limits are recorded in the full evidence.",
+      "API discovery covers supported code patterns; it is not a complete endpoint inventory.",
+      "Only available application splits were analyzed.",
+      "Some code could not be fully decoded.",
+      "Static API candidates are not runtime confirmation.",
+      "Static control coverage is partial or unavailable for: MASVS-AUTH, MASVS-CODE, MASVS-CRYPTO, MASVS-NETWORK, MASVS-PLATFORM, MASVS-PRIVACY, MASVS-RESILIENCE, MASVS-STORAGE.",
+      "API discovery is bounded; unresolved networking is not absence of networking."
+    ],
+    "findings": [],
+    "status": "partial"
+  },
+  "static_summary": {
+    "api_candidates_count": 0,
+    "app": "unknown",
+    "coverage_limitations": [
+      "Static coverage is partial.",
+      "Additional static coverage limits are recorded in the full evidence.",
+      "API discovery covers supported code patterns; it is not a complete endpoint inventory.",
+      "Only available application splits were analyzed.",
+      "Some code could not be fully decoded.",
+      "Static API candidates are not runtime confirmation.",
+      "Static control coverage is partial or unavailable for: MASVS-AUTH, MASVS-CODE, MASVS-CRYPTO, MASVS-NETWORK, MASVS-PLATFORM, MASVS-PRIVACY, MASVS-RESILIENCE, MASVS-STORAGE.",
+      "API discovery is bounded; unresolved networking is not absence of networking."
+    ],
+    "frameworks_detected": [],
+    "key_permissions": [
+      "INTERNET",
+      "ACCESS_NETWORK_STATE",
+      "ACCESS_FINE_LOCATION",
+      "ACCESS_COARSE_LOCATION",
+      "READ_PHONE_STATE",
+      "READ_EXTERNAL_STORAGE",
+      "WRITE_EXTERNAL_STORAGE"
+    ],
+    "network_indicators": {
+      "domains": 42,
+      "hosts": [
+        "af.wikipedia.org",
+        "anp.wikipedia.org",
+        "api.wikimedia.org",
+        "apps.mapbox.com",
+        "ar.wikipedia.org"
+      ],
+      "ips": 0,
+      "local_file_urls": 0,
+      "paths": 347,
+      "urls": 1938
+    },
+    "package": "org.wikipedia",
+    "status": "partial"
+  },
+  "summary_version": "1.0"
+}

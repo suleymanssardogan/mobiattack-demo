@@ -796,10 +796,12 @@ class TestConservativePathIdentity(unittest.TestCase):
                 for transactions in ([], [_make_transaction(path="/users/1")]):
                     res = correlate_static_dynamic_apis(canonical, transactions)
                     entry = res.correlations[0]
-                    self.assertEqual(entry.static_candidate_id, "source-id" if field else "stat_cand_1")
-                    self.assertEqual(entry.provenance["static_candidate_id_origin"],
-                                     "source_report" if field else "correlation_reference")
-                    self.assertEqual(entry.provenance["static_candidate_id_source_field"], field)
+                    # C7 assigns the canonical report its own deterministic candidate_id.
+                    # Correlation must reuse the ID actually carried by that report.
+                    expected_field = "id" if field == "id" else "candidate_id"
+                    self.assertEqual(entry.static_candidate_id, canonical[0][expected_field])
+                    self.assertEqual(entry.provenance["static_candidate_id_origin"], "source_report")
+                    self.assertEqual(entry.provenance["static_candidate_id_source_field"], expected_field)
                     again = correlate_static_dynamic_apis(canonical, transactions)
                     self.assertEqual(entry.correlation_id, again.correlations[0].correlation_id)
                 self.assertEqual(json.dumps(canonical, sort_keys=True), original)

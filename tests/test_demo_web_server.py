@@ -128,7 +128,7 @@ class TestDemoWebServer(unittest.TestCase):
         self.assertIn('id="msg-agent_analysis">Not available in this scan', html)
         self.assertIn("Connectivity Probe", html)
         self.assertIn("Emulator connectivity only — not application navigation.", html)
-        self.assertIn("Grant permissions", html)
+        self.assertNotIn('id="grantPermissions"', html)
         self.assertIn('id="quickTargetsAndroid"', html)
         self.assertIn('id="quickTargetsIos"', html)
         self.assertIn('id="androidAnalysisOptions"', html)
@@ -136,7 +136,7 @@ class TestDemoWebServer(unittest.TestCase):
         self.assertIn("com.google.android.calculator", html)
         self.assertIn("MSTG-JWT.ipa", html)
         self.assertNotIn("com.sec.android.app.popupcalculator", html)
-        self.assertIn('value="emulator-5554" readonly', html)
+        self.assertNotIn('id="adbSerial"', html)
         self.assertIn('window.location.hostname === "mobiattack-demo.vercel.app"', html)
         self.assertIn('localPage.searchParams.set("target", url)', html)
         self.assertIn('id="presentationNotice"', html)
@@ -207,7 +207,9 @@ class TestDemoWebServer(unittest.TestCase):
 
         # Allow background thread to finish
         time.sleep(0.4)
-        self.assertEqual(mock_run_demo.call_args.kwargs["adb_serial"], "emulator-5554")
+        self.assertIsNone(mock_run_demo.call_args.kwargs["adb_serial"])
+        self.assertEqual(mock_run_demo.call_args.kwargs["install_mode"], "ui_automation")
+        self.assertTrue(mock_run_demo.call_args.kwargs["grant_permissions"])
 
         status, s_body = self._get_json(f"/api/status/{run_id}")
         self.assertEqual(status, 200)
@@ -279,11 +281,12 @@ class TestDemoWebServer(unittest.TestCase):
             "success_with_warnings",
         )
 
+    @patch("src.demo_web_server.select_target_device", return_value="test-device")
     @patch("src.demo_web_server.configure_adb_reverse")
     @patch("src.demo_web_server.trigger_device_browser")
     @patch("src.demo_web_server.remove_adb_reverse")
     @patch("src.demo_web_server.ProbeServer")
-    def test_optional_probe_endpoint(self, mock_probe_cls, mock_remove, mock_trigger, mock_reverse):
+    def test_optional_probe_endpoint(self, mock_probe_cls, mock_remove, mock_trigger, mock_reverse, mock_device):
         mock_instance = MagicMock()
         mock_instance.port = 54321
         mock_instance.get_probe_url.return_value = "http://127.0.0.1:54321/probe/test_123"
@@ -293,7 +296,7 @@ class TestDemoWebServer(unittest.TestCase):
         status, body = self._post("/api/probe", {"adb_serial": "some-other-device"})
         self.assertEqual(status, 200)
         self.assertTrue(body.get("hit"))
-        self.assertEqual(mock_reverse.call_args.kwargs["adb_serial"], "emulator-5554")
+        self.assertEqual(mock_reverse.call_args.kwargs["adb_serial"], "test-device")
         self.assertEqual(body.get("hit_count"), 1)
         self.assertEqual(body.get("connectivity_probe"), "verified")
         self.assertIn("Emulator connectivity only", body.get("disclaimer", ""))
@@ -366,6 +369,26 @@ class TestDemoWebServer(unittest.TestCase):
         self.assertIn("urlClassificationBadge", html)
         self.assertIn("Target Application", html)
 
+    @patch("src.demo_web_server.DemoWebServer.start_run", return_value="ui_r1_run")
+    def test_web_run_normalizes_identity_and_forces_automatic_workflow(self, start):
+        status, body = self._post("/api/run", {
+            "url": "https://play.google.com/store/apps/details?id=com.example.app&hl=tr&utm_source=demo",
+            "install_mode": "manual", "grant_permissions": False, "adb_serial": "untrusted-device",
+        })
+        self.assertEqual(status, 200)
+        self.assertEqual(start.call_args.kwargs["url"], "https://play.google.com/store/apps/details?id=com.example.app")
+        self.assertEqual(start.call_args.kwargs["install_mode"], "ui_automation")
+        self.assertTrue(start.call_args.kwargs["grant_permissions"])
+        self.assertIsNone(start.call_args.kwargs["adb_serial"])
+
+    @patch("src.demo_web_server.DemoWebServer.start_run")
+    def test_unsupported_android_input_never_starts_acquisition(self, start):
+        for url in ("https://example.com/page", "https:///app.apk", "https://example.com:bad/app.apk"):
+            status, body = self._post("/api/run", {"url": url})
+            self.assertEqual(status, 400)
+            self.assertEqual(body["message"], "Unsupported Android application URL. Use a direct APK URL or Google Play Store application URL.")
+        start.assert_not_called()
+
     def test_api_classify_direct_apk(self):
         status, body = self._post("/api/classify", {
             "platform": "android",
@@ -409,8 +432,9 @@ class TestDemoWebServer(unittest.TestCase):
         self.assertEqual(status, 400)
         self.assertTrue(any(s in body.get("error", "") for s in ("iOS static analysis requires a direct .ipa", "iOS analysis is not implemented in V1.")))
 
+    @patch("src.demo_web_server.select_target_device", return_value="test-device")
     @patch("src.demo_web_server.open_play_store_on_device")
-    def test_api_open_store(self, mock_open):
+    def test_api_open_store(self, mock_open, mock_device):
         mock_open.return_value = {"success": True, "serial": "emulator-5554"}
         status, body = self._post("/api/open_store", {
             "package_name": "owasp.sat.agoat",
@@ -419,7 +443,7 @@ class TestDemoWebServer(unittest.TestCase):
         self.assertEqual(status, 200)
         self.assertTrue(body["success"])
         mock_open.assert_called_once()
-        self.assertEqual(mock_open.call_args.kwargs["serial"], "emulator-5554")
+        self.assertEqual(mock_open.call_args.kwargs["serial"], "test-device")
 
     def test_api_classify_direct_ipa(self):
         status, body = self._post("/api/classify", {
@@ -478,3 +502,93 @@ class TestDemoWebServer(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestCompactSummaryPresentation(unittest.TestCase):
+    """Read-only summary endpoint tests without sockets or scan execution."""
+
+    def test_summary_api_returns_projection_without_running_scan(self):
+        from src.demo_web_server import _DemoRequestHandler
+        root = Path(__file__).resolve().parents[1]
+        server = MagicMock()
+        server.get_run_dir.return_value = root / 'examples/auth_standards_report_d13'
+        handler = object.__new__(_DemoRequestHandler)
+        handler._send_json = MagicMock()
+        handler._handle_summary_api('auth_standards_report_d13', server)
+        code, payload = handler._send_json.call_args.args
+        self.assertEqual(code, 200)
+        self.assertEqual(payload['security_validation_summary'][0]['evidence_available'], 'YES')
+        self.assertNotIn('evidence_refs', json.dumps(payload))
+        server.start_run.assert_not_called()
+
+    def test_missing_run_returns_clean_404(self):
+        from src.demo_web_server import _DemoRequestHandler
+        server = MagicMock()
+        server.get_run_dir.return_value = None
+        handler = object.__new__(_DemoRequestHandler)
+        handler._send_json = MagicMock()
+        handler._handle_summary_api('absent', server)
+        self.assertEqual(handler._send_json.call_args.args[0], 404)
+
+    def test_malformed_summary_does_not_expose_internal_error(self):
+        from src.demo_web_server import _DemoRequestHandler
+        server = MagicMock()
+        handler = object.__new__(_DemoRequestHandler)
+        handler._send_json = MagicMock()
+        with patch('src.web.report_summary.load_report_summary', side_effect=ValueError('/tmp/secret-path')):
+            handler._handle_summary_api('broken', server)
+        self.assertEqual(handler._send_json.call_args.args, (500, {'status': 'error', 'message': 'Summary unavailable.'}))
+
+    def test_compact_dashboard_renders_coverage_and_pages_without_secret_markup(self):
+        import shutil
+        import subprocess
+        from src.web.report_summary import load_report_summary
+        if not shutil.which('node'):
+            self.skipTest('Node is unavailable for focused UI rendering check')
+        root = Path(__file__).resolve().parents[1]
+        html = (root / 'src/templates/dashboard.html').read_text()
+        script = html.split('    let compactSummaryRequest = 0;', 1)[1].split('    function renderAnalysisResults(', 1)[0]
+        summary = load_report_summary(root / 'examples/auth_standards_report_d13')
+        summary['security_validation_summary'] *= 11
+        summary['static_summary']['app'] = '<script>unsafe</script>'
+        harness = '''
+const assert = require('assert');
+const elements = {compactReportSummary: {}, summaryPrevious: {}, summaryNext: {}};
+global.document = {getElementById: id => elements[id]};
+function escapeHtml(value) { return String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function backendUrl(path) { return path; }
+'''
+        harness += script + '\ncompactSummaryData = ' + json.dumps(summary) + ';\nrenderCompactSummary("lab");\n'
+        harness += '''
+assert(elements.compactReportSummary.innerHTML.includes('Validated — auth enforcement confirmed'));
+assert(elements.compactReportSummary.innerHTML.includes('HTTPS visibility is unavailable.'));
+assert(elements.compactReportSummary.innerHTML.includes('Showing 1–10 of 11'));
+assert(!elements.compactReportSummary.innerHTML.includes('<script>unsafe</script>'));
+assert(elements.compactReportSummary.innerHTML.includes('Full dynamic evidence (JSON)'));
+assert(elements.summaryPrevious.disabled);
+elements.summaryNext.onclick();
+assert(elements.compactReportSummary.innerHTML.includes('Showing 11–11 of 11'));
+assert(elements.summaryNext.disabled);
+'''
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / 'summary.js'
+            path.write_text(harness)
+            checked = subprocess.run(['node', str(path)], capture_output=True, text=True, timeout=10)
+        self.assertEqual(checked.returncode, 0, checked.stderr)
+
+    def test_compact_summary_is_default_with_details_collapsed(self):
+        from html.parser import HTMLParser
+        class Tabs(HTMLParser):
+            def __init__(self):
+                super().__init__()
+                self.items = {}
+            def handle_starttag(self, tag, attrs):
+                attributes = dict(attrs)
+                if attributes.get('id') in {'tab-btn-summary', 'tab-pane-summary', 'tab-pane-overview', 'detailedReportNavigation'}:
+                    self.items[attributes['id']] = attributes
+        parser = Tabs()
+        parser.feed((Path(__file__).resolve().parents[1] / 'src/templates/dashboard.html').read_text())
+        self.assertIn('active', parser.items['tab-btn-summary']['class'])
+        self.assertIn('active', parser.items['tab-pane-summary']['class'])
+        self.assertNotIn('active', parser.items['tab-pane-overview']['class'])
+        self.assertNotIn('open', parser.items['detailedReportNavigation'])

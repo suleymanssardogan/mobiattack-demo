@@ -1,0 +1,40 @@
+{
+  "owasp": {
+    "status": "PASS",
+    "acquisition": "0d01797a5d6833803169fe65af038e1e8e60999c07baad4dc01231efc61e841f",
+    "static": "c4f6f87f70be9c6b5583ef3a1b08b8040e50a7455c3a4f5ded38f101c1eaa396",
+    "launcher": "346bd1f32b9497e220ba492a7c2f5b6cadf8303b788572911db7750d78be93b0",
+    "repeat_match": true,
+    "runtime": true,
+    "package": "sg.vantagepoint.mstgkotlin",
+    "activity": "sg.vantagepoint.mstgkotlin.MainActivity"
+  },
+  "wikipedia": {
+    "status": "PASS",
+    "acquisition": "5d491e84a568cd7ab6ef206c27d0c6b8a02a3a5794e2810b8db02d5d5b1735ac",
+    "static": "86d1b4341c4d01f6e88990b061a16bffc75e1dd8b84bb2b5047f7ad3912d1b80",
+    "launcher": "8f3f5ad36c3f58ba37a8b475fc086becff4ffe406732473628d11bda13dcd4bd",
+    "repeat_match": true,
+    "launcher_status": "resolved",
+    "activity": "org.wikipedia.DefaultIcon",
+    "split_count": 3,
+    "runtime": true
+  },
+  "flashlight": {
+    "status": "PASS",
+    "acquisition": "c2dce539c4159fea518eae69eb8a4693d699932b62c7a03ca507da7bf50d963d",
+    "static": "61556560341b4b21550f68a970b8ab9678d1102c4077712a122023b8d4523260",
+    "launcher": "88f8831e39d6765cfb363de64a588cb1ad898a87d474425329d783f5e8881307",
+    "repeat_match": true,
+    "launcher_status": "resolved",
+    "activity": "mobi.freeapps.flashlight.free.FlashlightFree",
+    "split_count": 5,
+    "runtime": true
+  },
+  "calculator": {
+    "status": "EXPECTED_FAILURE",
+    "reason_code": "PLAYSTORE_UI_AUTOMATION_FAILED",
+    "reason": "Play Store UI automation failed: ui_automation_failed"
+  },
+  "cross_scan_match": true
+}

@@ -15,46 +15,17 @@ def resolve_launchable_activity(
     package_name: str,
 ) -> str | None:
     """Discovers the main/launchable activity for a package on the device."""
-    # Method 1: 'cmd package resolve-activity --brief <pkg>'
-    code, stdout, _ = run_adb_cmd(
-        adb_bin,
-        ["shell", "cmd", "package", "resolve-activity", "--brief", package_name],
-        serial=serial,
-    )
-    if code == 0 and stdout:
+    from src.android_identity import launch_component, AndroidIdentityError
+    code, stdout, _ = run_adb_cmd(adb_bin,
+        ['shell', 'cmd', 'package', 'resolve-activity', '--brief', '-a',
+         'android.intent.action.MAIN', '-c', 'android.intent.category.LAUNCHER', package_name], serial=serial)
+    if code == 0:
+        components = []
         for line in stdout.splitlines():
-            line = line.strip()
-            if "/" in line and not line.startswith("priority="):
-                # Returns formatted like 'com.example.app/.MainActivity'
-                parts = line.split("/")
-                if len(parts) == 2 and package_name in parts[0]:
-                    act = parts[1]
-                    if act.startswith("."):
-                        return parts[0] + act
-                    return act
-
-    # Method 2: Fallback query via dumpsys package intent-filters
-    code, dumpsys_out, _ = run_adb_cmd(
-        adb_bin,
-        ["shell", "dumpsys", "package", package_name],
-        serial=serial,
-    )
-    if code == 0 and dumpsys_out:
-        # Search for android.intent.action.MAIN filter
-        pattern = re.compile(
-            r"Activity\s+([a-zA-Z0-9_\.]+\/[a-zA-Z0-9_\.]+).*?android\.intent\.action\.MAIN",
-            re.DOTALL,
-        )
-        match = pattern.search(dumpsys_out)
-        if match:
-            raw_comp = match.group(1).strip()
-            if "/" in raw_comp:
-                parts = raw_comp.split("/")
-                act = parts[1]
-                if act.startswith("."):
-                    return parts[0] + act
-                return act
-
+            if '/' not in line or line.startswith('priority='):continue
+            try:components.append(launch_component(package_name, line.strip()))
+            except AndroidIdentityError:continue
+        if len(set(components)) == 1:return components[0].split('/', 1)[1]
     return None
 
 
@@ -70,31 +41,11 @@ def launch_application(
     if not target_activity:
         target_activity = resolve_launchable_activity(adb_bin, serial, package_name)
 
-    if not target_activity:
-        # Fallback to monkey launch if activity cannot be resolved directly
-        code_mk, stdout_mk, _ = run_adb_cmd(
-            adb_bin,
-            ["shell", "monkey", "-p", package_name, "-c", "android.intent.category.LAUNCHER", "1"],
-            serial=serial,
-            timeout_seconds=timeout_seconds,
-        )
-        if code_mk == 0 and "Events injected: 1" in (stdout_mk or ""):
-            return True, None, None, None
-
-        return (
-            False,
-            None,
-            ErrorCode.APP_LAUNCH_FAILED,
-            f"No launchable activity found for package '{package_name}'",
-        )
-
-    # Normalize component: com.example.app/.MainActivity -> com.example.app/com.example.app.MainActivity
-    if target_activity.startswith("."):
-        component = f"{package_name}/{package_name}{target_activity}"
-    elif "/" in target_activity:
-        component = target_activity
-    else:
-        component = f"{package_name}/{target_activity}"
+    from src.android_identity import launch_component, AndroidIdentityError
+    try:
+        component = launch_component(package_name, target_activity)
+    except AndroidIdentityError as error:
+        return False, None, ErrorCode.LAUNCHER_UNRESOLVED, error.reason_code
 
     # Execute am start -W
     code, stdout, stderr = run_adb_cmd(

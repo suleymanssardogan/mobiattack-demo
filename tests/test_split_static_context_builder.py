@@ -232,13 +232,12 @@ class TestSplitStaticContextBuilder(unittest.TestCase):
                 }
             ],
         }
-        ctx = build_split_static_context(dexless_set, unified_analysis_root=self.unified_dir)
-        self.assertEqual(len(ctx["api_candidates"]), 0)
-        self.assertEqual(ctx["aggregation_counts"]["api_candidate_count"], 0)
+        with self.assertRaisesRegex(ValueError, 'authoritative base'):
+            build_split_static_context(dexless_set, unified_analysis_root=self.unified_dir)
 
     def test_failed_split_recorded_as_warning_without_crashing(self):
         failed_set = {
-            "package_name": "com.partial",
+            "package_name": "apps.r.flashlight",
             "package_layout": "split",
             "components": [
                 {
@@ -264,7 +263,7 @@ class TestSplitStaticContextBuilder(unittest.TestCase):
             ],
         }
         ctx = build_split_static_context(failed_set, unified_analysis_root=self.unified_dir)
-        self.assertEqual(ctx["package_name"], "com.partial")
+        self.assertEqual(ctx["package_name"], "apps.r.flashlight")
         self.assertEqual(len(ctx["structure"]["components"]), 2)
         corrupt_struct = next(s for s in ctx["structure"]["components"] if s["source_apk"] == "split_corrupt.apk")
         self.assertEqual(corrupt_struct["status"], "unavailable")
@@ -272,7 +271,7 @@ class TestSplitStaticContextBuilder(unittest.TestCase):
 
     def test_monolithic_single_apk_regression(self):
         monolithic_set = {
-            "package_name": "com.single",
+            "package_name": "apps.r.flashlight",
             "package_layout": "monolithic",
             "components": [
                 {

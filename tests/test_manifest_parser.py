@@ -97,7 +97,7 @@ class TestManifestParserUnit(unittest.TestCase):
         # Verify deduplication and proper list extraction
         self.assertEqual(
             result["permissions"],
-            ["android.permission.INTERNET", "android.permission.ACCESS_FINE_LOCATION"],
+            ["android.permission.ACCESS_FINE_LOCATION", "android.permission.INTERNET"],
         )
 
     def test_04_multiple_activities(self):

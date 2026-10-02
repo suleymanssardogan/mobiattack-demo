@@ -1,0 +1,19 @@
+{
+  "coverage": "partial",
+  "current_node_id": "node_ae5d067cf204c0d4",
+  "edges": [],
+  "nodes": [
+    {
+      "actions": [
+        {
+          "action_id": "act_4d3a12f998f2a6a3"
+        }
+      ],
+      "is_target_package": true,
+      "route_node_id": "node_ae5d067cf204c0d4"
+    }
+  ],
+  "root_node_id": "node_ae5d067cf204c0d4",
+  "session_id": "463eae39-8c7c-42b9-92bb-d0b34d467cbf",
+  "source": "existing_route_evidence_projection"
+}

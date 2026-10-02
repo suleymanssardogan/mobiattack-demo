@@ -1,0 +1,55 @@
+{
+  "static_only": true,
+  "api_discovery_changed": false,
+  "apps": [
+    {
+      "app": "OWASP",
+      "package": "sg.vantagepoint.mstgkotlin",
+      "min_sdk": 19,
+      "target_sdk": 26,
+      "components": 5,
+      "finding_reasons": [
+        "MANIFEST_DEBUGGABLE_TRUE",
+        "HTTP_NETWORK_CALL_CONTEXT"
+      ],
+      "indicators": 4,
+      "candidates": 5,
+      "supersonicads_promoted": false
+    },
+    {
+      "app": "Wikipedia",
+      "package": "org.wikipedia",
+      "min_sdk": 32,
+      "target_sdk": 37,
+      "components": 111,
+      "finding_reasons": [],
+      "indicators": 38,
+      "candidates": 10,
+      "supersonicads_promoted": false
+    },
+    {
+      "app": "Flashlight",
+      "package": "mobi.freeapps.flashlight.free",
+      "min_sdk": 32,
+      "target_sdk": 37,
+      "components": 25,
+      "finding_reasons": [],
+      "indicators": 16,
+      "candidates": 2,
+      "supersonicads_promoted": false
+    },
+    {
+      "app": "Rotate Rings",
+      "package": "com.nebula.rotaterings",
+      "min_sdk": 25,
+      "target_sdk": 36,
+      "components": 151,
+      "finding_reasons": [
+        "NETWORK_CONFIG_CLEARTEXT_ALLOWED"
+      ],
+      "indicators": 58,
+      "candidates": 8,
+      "supersonicads_promoted": false
+    }
+  ]
+}

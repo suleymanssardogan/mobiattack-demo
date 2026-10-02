@@ -1,0 +1,4169 @@
+{
+  "acquisition": {
+    "components": [
+      {
+        "device_path": "/data/app/~~4HFfHd0JRsUMroO72H_JDw==/mobi.freeapps.flashlight.free-njake5nlxUr54GFLD4FU1A==/base.apk",
+        "dex_count": 1,
+        "dex_files": [
+          "classes.dex"
+        ],
+        "filename": "base.apk",
+        "has_android_manifest": true,
+        "has_dex": true,
+        "is_valid": true,
+        "is_valid_zip": true,
+        "local_path": "downloads/package_set/apks/base.apk",
+        "preprocessing": {
+          "apktool_dir": "/private/tmp/mobiattack-c1-real-final/flashlight/processed/base/apktool_out",
+          "apktool_status": "success_with_warnings",
+          "jadx_dir": "/private/tmp/mobiattack-c1-real-final/flashlight/processed/base/jadx_out",
+          "jadx_status": "success_with_warnings",
+          "raw_apk_dir": "/private/tmp/mobiattack-c1-real-final/flashlight/processed/base/raw_apk",
+          "raw_extract_status": "success",
+          "warnings": [
+            "Apktool decode warning in 'base.apk': W: Unresolved resource reference: ResReference{pkg=ResPackage{id=0x7f, name=mobi.freeapps.flashlight.free}, id=0x7f06000d, type=ref}\nW: Unresolved resource reference: ResReference{pkg=ResPackage{id=0x",
+            "JADX exited with warnings (code 3) for 'base.apk'"
+          ],
+          "workspace": "/private/tmp/mobiattack-c1-real-final/flashlight/processed/base"
+        },
+        "role": "base",
+        "sha256": "ae4d6a84ab9a112add4604f05a836c85a541d7d1cb6f89151da3810a62b4451c",
+        "size_bytes": 1718168
+      },
+      {
+        "device_path": "/data/app/~~4HFfHd0JRsUMroO72H_JDw==/mobi.freeapps.flashlight.free-njake5nlxUr54GFLD4FU1A==/split_config.ar.apk",
+        "dex_count": 0,
+        "dex_files": [],
+        "filename": "split_config.ar.apk",
+        "has_android_manifest": true,
+        "has_dex": false,
+        "is_valid": true,
+        "is_valid_zip": true,
+        "local_path": "downloads/package_set/apks/split_config.ar.apk",
+        "preprocessing": {
+          "apktool_dir": "/private/tmp/mobiattack-c1-real-final/flashlight/processed/split_config.ar/apktool_out",
+          "apktool_status": "success",
+          "jadx_dir": null,
+          "jadx_status": "skipped_no_dex",
+          "raw_apk_dir": "/private/tmp/mobiattack-c1-real-final/flashlight/processed/split_config.ar/raw_apk",
+          "raw_extract_status": "success",
+          "warnings": [],
+          "workspace": "/private/tmp/mobiattack-c1-real-final/flashlight/processed/split_config.ar"
+        },
+        "role": "config_locale",
+        "sha256": "de4216a688ca250d53ee9e9024850194029df8b9fb40b69c9bb4f9a1412e3239",
+        "size_bytes": 20690
+      },
+      {
+        "device_path": "/data/app/~~4HFfHd0JRsUMroO72H_JDw==/mobi.freeapps.flashlight.free-njake5nlxUr54GFLD4FU1A==/split_config.en.apk",
+        "dex_count": 0,
+        "dex_files": [],
+        "filename": "split_config.en.apk",
+        "has_android_manifest": true,
+        "has_dex": false,
+        "is_valid": true,
+        "is_valid_zip": true,
+        "local_path": "downloads/package_set/apks/split_config.en.apk",
+        "preprocessing": {
+          "apktool_dir": "/private/tmp/mobiattack-c1-real-final/flashlight/processed/split_config.en/apktool_out",
+          "apktool_status": "success",
+          "jadx_dir": null,
+          "jadx_status": "skipped_no_dex",
+          "raw_apk_dir": "/private/tmp/mobiattack-c1-real-final/flashlight/processed/split_config.en/raw_apk",
+          "raw_extract_status": "success",
+          "warnings": [],
+          "workspace": "/private/tmp/mobiattack-c1-real-final/flashlight/processed/split_config.en"
+        },
+        "role": "config_locale",
+        "sha256": "c93eec8bcfe2b8408becaf80b06cf10d29d29de81e0750ec0cb045ae29af3815",
+        "size_bytes": 37074
+      },
+      {
+        "device_path": "/data/app/~~4HFfHd0JRsUMroO72H_JDw==/mobi.freeapps.flashlight.free-njake5nlxUr54GFLD4FU1A==/split_config.tr.apk",
+        "dex_count": 0,
+        "dex_files": [],
+        "filename": "split_config.tr.apk",
+        "has_android_manifest": true,
+        "has_dex": false,
+        "is_valid": true,
+        "is_valid_zip": true,
+        "local_path": "downloads/package_set/apks/split_config.tr.apk",
+        "preprocessing": {
+          "apktool_dir": "/private/tmp/mobiattack-c1-real-final/flashlight/processed/split_config.tr/apktool_out",
+          "apktool_status": "success",
+          "jadx_dir": null,
+          "jadx_status": "skipped_no_dex",
+          "raw_apk_dir": "/private/tmp/mobiattack-c1-real-final/flashlight/processed/split_config.tr/raw_apk",
+          "raw_extract_status": "success",
+          "warnings": [],
+          "workspace": "/private/tmp/mobiattack-c1-real-final/flashlight/processed/split_config.tr"
+        },
+        "role": "config_locale",
+        "sha256": "0779601ef61ed58caeb11ab0088b124450e7115954a63f3967a4b0b81bbddc2f",
+        "size_bytes": 20690
+      },
+      {
+        "device_path": "/data/app/~~4HFfHd0JRsUMroO72H_JDw==/mobi.freeapps.flashlight.free-njake5nlxUr54GFLD4FU1A==/split_config.xxhdpi.apk",
+        "dex_count": 0,
+        "dex_files": [],
+        "filename": "split_config.xxhdpi.apk",
+        "has_android_manifest": true,
+        "has_dex": false,
+        "is_valid": true,
+        "is_valid_zip": true,
+        "local_path": "downloads/package_set/apks/split_config.xxhdpi.apk",
+        "preprocessing": {
+          "apktool_dir": "/private/tmp/mobiattack-c1-real-final/flashlight/processed/split_config.xxhdpi/apktool_out",
+          "apktool_status": "success",
+          "jadx_dir": null,
+          "jadx_status": "skipped_no_dex",
+          "raw_apk_dir": "/private/tmp/mobiattack-c1-real-final/flashlight/processed/split_config.xxhdpi/raw_apk",
+          "raw_extract_status": "success",
+          "warnings": [],
+          "workspace": "/private/tmp/mobiattack-c1-real-final/flashlight/processed/split_config.xxhdpi"
+        },
+        "role": "config_density",
+        "sha256": "49e0bceed466ec77f71cc410157557fa69cbf0189396da9c3ebca8a3883e7882",
+        "size_bytes": 245330
+      }
+    ],
+    "input_url": "unknown",
+    "package_layout": "split",
+    "package_name": "mobi.freeapps.flashlight.free",
+    "platform": "android",
+    "source_type": "direct_apk",
+    "split_count": 5
+  },
+  "activities": [
+    "mobi.freeapps.flashlight.free.FlashlightFree",
+    "mobi.freeapps.flashlight.FlashPreference",
+    "com.google.android.gms.ads.AdActivity",
+    "com.google.android.gms.ads.OutOfContextTestingActivity",
+    "com.google.android.gms.ads.NotificationHandlerActivity"
+  ],
+  "analysis_notes": [
+    "JADX completed with warnings (exit code 3). Decompiled source may contain partial warnings.",
+    "Split package analysis: only installed splits returned by pm path on the device were analyzed.",
+    "[base.apk] Apktool decode warning in 'base.apk': W: Unresolved resource reference: ResReference{pkg=ResPackage{id=0x7f, name=mobi.freeapps.flashlight.free}, id=0x7f06000d, type=ref}\nW: Unresolved resource reference: ResReference{pkg=ResPackage{id=0x",
+    "[base.apk] JADX exited with warnings (code 3) for 'base.apk'",
+    "Static network indicators are extracted from application content and do not by themselves prove runtime network usage.",
+    "API candidates are static call-context candidates extracted from Smali register flows and do not represent confirmed runtime endpoints.",
+    "No API candidates were identified by the current call-context extractor.",
+    "Static network indicators may still exist. The current V1 API candidate extractor supports limited framework-specific call patterns. Zero candidates does not mean the application has no APIs.",
+    "No vulnerability exploitation was performed.",
+    "No security verdict was produced."
+  ],
+  "api_candidates": [],
+  "api_discovery": {
+    "components": [
+      {
+        "bounded_provenance": {
+          "coverage": {
+            "partial": true,
+            "skipped": []
+          },
+          "max_depth": 3,
+          "unresolved": [
+            {
+              "line": 0,
+              "reason": "BRANCH_DEPENDENT_FLOW",
+              "resolution_state": "unresolved",
+              "source_file": "smali/androidx/appcompat/view/menu/ActionMenuItemView.smali",
+              "source_method": "onTouchEvent(Landroid/view/MotionEvent;)Z"
+            },
+            {
+              "line": 0,
+              "reason": "BRANCH_DEPENDENT_FLOW",
+              "resolution_state": "unresolved",
+              "source_file": "smali/g7.smali",
+              "source_method": "b(Landroid/view/MotionEvent;I)Z"
+            },
+            {
+              "line": 0,
+              "reason": "BRANCH_DEPENDENT_FLOW",
+              "resolution_state": "unresolved",
+              "source_file": "smali/ga.smali",
+              "source_method": "onTouch(Landroid/view/View;Landroid/view/MotionEvent;)Z"
+            },
+            {
+              "line": 0,
+              "reason": "BRANCH_DEPENDENT_FLOW",
+              "resolution_state": "unresolved",
+              "source_file": "smali/h3.smali",
+              "source_method": "run()V"
+            },
+            {
+              "line": 0,
+              "reason": "BRANCH_DEPENDENT_FLOW",
+              "resolution_state": "unresolved",
+              "source_file": "smali/hl.smali",
+              "source_method": "run()V"
+            },
+            {
+              "line": 0,
+              "reason": "BRANCH_DEPENDENT_FLOW",
+              "resolution_state": "unresolved",
+              "source_file": "smali/kd.smali",
+              "source_method": "d(Ljava/lang/String;)I"
+            },
+            {
+              "line": 0,
+              "reason": "BRANCH_DEPENDENT_FLOW",
+              "resolution_state": "unresolved",
+              "source_file": "smali/kd.smali",
+              "source_method": "e(Ljava/lang/String;)Ljava/net/URL;"
+            },
+            {
+              "line": 0,
+              "reason": "BRANCH_DEPENDENT_FLOW",
+              "resolution_state": "unresolved",
+              "source_file": "smali/nm.smali",
+              "source_method": "p(Lnm;)Ldr;"
+            },
+            {
+              "line": 0,
+              "reason": "MUTABLE_FIELD_OR_COLLECTION_FLOW",
+              "resolution_state": "unresolved",
+              "source_file": "smali/sq.smali",
+              "source_method": "run()V"
+            },
+            {
+              "line": 0,
+              "reason": "BRANCH_DEPENDENT_FLOW",
+              "resolution_state": "unresolved",
+              "source_file": "smali/v0.smali",
+              "source_method": "onTouch(Landroid/view/View;Landroid/view/MotionEvent;)Z"
+            },
+            {
+              "line": 0,
+              "reason": "BRANCH_DEPENDENT_FLOW",
+              "resolution_state": "unresolved",
+              "source_file": "smali/z0.smali",
+              "source_method": "run()V"
+            }
+          ]
+        },
+        "httpurlconnection": {
+          "coverage": {
+            "partial": true,
+            "skipped": []
+          },
+          "unresolved": [
+            {
+              "framework": "httpurlconnection",
+              "line": 928,
+              "reason": "UNSUPPORTED_CONTROL_FLOW",
+              "resolution_state": "unresolved",
+              "source_component": "Lh3;",
+              "source_file": "smali/h3.smali",
+              "source_method": "run()V"
+            },
+            {
+              "framework": "httpurlconnection",
+              "line": 1651,
+              "reason": "UNSUPPORTED_CONTROL_FLOW",
+              "resolution_state": "unresolved",
+              "source_component": "Lkd;",
+              "source_file": "smali/kd.smali",
+              "source_method": "d(Ljava/lang/String;)I"
+            },
+            {
+              "framework": "httpurlconnection",
+              "line": 2278,
+              "reason": "UNSUPPORTED_CONTROL_FLOW",
+              "resolution_state": "unresolved",
+              "source_component": "Lkd;",
+              "source_file": "smali/kd.smali",
+              "source_method": "e(Ljava/lang/String;)Ljava/net/URL;"
+            },
+            {
+              "framework": "httpurlconnection",
+              "line": 7179,
+              "reason": "UNSUPPORTED_CONTROL_FLOW",
+              "resolution_state": "unresolved",
+              "source_component": "Lnm;",
+              "source_file": "smali/nm.smali",
+              "source_method": "p(Lnm;)Ldr;"
+            }
+          ]
+        },
+        "ktor": {
+          "coverage": {
+            "partial": false,
+            "skipped": []
+          },
+          "unresolved": []
+        },
+        "okhttp": {
+          "coverage": {
+            "partial": false,
+            "skipped": []
+          },
+          "unresolved": []
+        },
+        "retrofit": {
+          "coverage": {
+            "partial": false,
+            "skipped": []
+          },
+          "unresolved": [],
+          "unresolved_declarations": []
+        },
+        "source_apk": "base.apk",
+        "volley": {
+          "coverage": {
+            "partial": false,
+            "skipped": []
+          },
+          "unresolved": []
+        }
+      }
+    ]
+  },
+  "apk_components": [
+    {
+      "apktool_status": "success_with_warnings",
+      "device_path": "/data/app/~~4HFfHd0JRsUMroO72H_JDw==/mobi.freeapps.flashlight.free-njake5nlxUr54GFLD4FU1A==/base.apk",
+      "dex_count": 1,
+      "dex_files": [
+        "classes.dex"
+      ],
+      "filename": "base.apk",
+      "has_android_manifest": true,
+      "has_dex": true,
+      "is_valid": true,
+      "is_valid_zip": true,
+      "jadx_status": "success_with_warnings",
+      "local_path": "downloads/package_set/apks/base.apk",
+      "preprocessing": {
+        "apktool_status": "success_with_warnings",
+        "jadx_status": "success_with_warnings",
+        "raw_extract_status": "success",
+        "warnings": [
+          "Apktool decode warning in 'base.apk': W: Unresolved resource reference: ResReference{pkg=ResPackage{id=0x7f, name=mobi.freeapps.flashlight.free}, id=0x7f06000d, type=ref}\nW: Unresolved resource reference: ResReference{pkg=ResPackage{id=0x",
+          "JADX exited with warnings (code 3) for 'base.apk'"
+        ]
+      },
+      "raw_extract_status": "success",
+      "role": "base",
+      "sha256": "ae4d6a84ab9a112add4604f05a836c85a541d7d1cb6f89151da3810a62b4451c",
+      "size_bytes": 1718168,
+      "warnings": [
+        "Apktool decode warning in 'base.apk': W: Unresolved resource reference: ResReference{pkg=ResPackage{id=0x7f, name=mobi.freeapps.flashlight.free}, id=0x7f06000d, type=ref}\nW: Unresolved resource reference: ResReference{pkg=ResPackage{id=0x",
+        "JADX exited with warnings (code 3) for 'base.apk'"
+      ]
+    },
+    {
+      "apktool_status": "success",
+      "device_path": "/data/app/~~4HFfHd0JRsUMroO72H_JDw==/mobi.freeapps.flashlight.free-njake5nlxUr54GFLD4FU1A==/split_config.ar.apk",
+      "dex_count": 0,
+      "dex_files": [],
+      "filename": "split_config.ar.apk",
+      "has_android_manifest": true,
+      "has_dex": false,
+      "is_valid": true,
+      "is_valid_zip": true,
+      "jadx_status": "skipped_no_dex",
+      "local_path": "downloads/package_set/apks/split_config.ar.apk",
+      "preprocessing": {
+        "apktool_status": "success",
+        "jadx_status": "skipped_no_dex",
+        "raw_extract_status": "success",
+        "warnings": []
+      },
+      "raw_extract_status": "success",
+      "role": "config_locale",
+      "sha256": "de4216a688ca250d53ee9e9024850194029df8b9fb40b69c9bb4f9a1412e3239",
+      "size_bytes": 20690,
+      "warnings": []
+    },
+    {
+      "apktool_status": "success",
+      "device_path": "/data/app/~~4HFfHd0JRsUMroO72H_JDw==/mobi.freeapps.flashlight.free-njake5nlxUr54GFLD4FU1A==/split_config.en.apk",
+      "dex_count": 0,
+      "dex_files": [],
+      "filename": "split_config.en.apk",
+      "has_android_manifest": true,
+      "has_dex": false,
+      "is_valid": true,
+      "is_valid_zip": true,
+      "jadx_status": "skipped_no_dex",
+      "local_path": "downloads/package_set/apks/split_config.en.apk",
+      "preprocessing": {
+        "apktool_status": "success",
+        "jadx_status": "skipped_no_dex",
+        "raw_extract_status": "success",
+        "warnings": []
+      },
+      "raw_extract_status": "success",
+      "role": "config_locale",
+      "sha256": "c93eec8bcfe2b8408becaf80b06cf10d29d29de81e0750ec0cb045ae29af3815",
+      "size_bytes": 37074,
+      "warnings": []
+    },
+    {
+      "apktool_status": "success",
+      "device_path": "/data/app/~~4HFfHd0JRsUMroO72H_JDw==/mobi.freeapps.flashlight.free-njake5nlxUr54GFLD4FU1A==/split_config.tr.apk",
+      "dex_count": 0,
+      "dex_files": [],
+      "filename": "split_config.tr.apk",
+      "has_android_manifest": true,
+      "has_dex": false,
+      "is_valid": true,
+      "is_valid_zip": true,
+      "jadx_status": "skipped_no_dex",
+      "local_path": "downloads/package_set/apks/split_config.tr.apk",
+      "preprocessing": {
+        "apktool_status": "success",
+        "jadx_status": "skipped_no_dex",
+        "raw_extract_status": "success",
+        "warnings": []
+      },
+      "raw_extract_status": "success",
+      "role": "config_locale",
+      "sha256": "0779601ef61ed58caeb11ab0088b124450e7115954a63f3967a4b0b81bbddc2f",
+      "size_bytes": 20690,
+      "warnings": []
+    },
+    {
+      "apktool_status": "success",
+      "device_path": "/data/app/~~4HFfHd0JRsUMroO72H_JDw==/mobi.freeapps.flashlight.free-njake5nlxUr54GFLD4FU1A==/split_config.xxhdpi.apk",
+      "dex_count": 0,
+      "dex_files": [],
+      "filename": "split_config.xxhdpi.apk",
+      "has_android_manifest": true,
+      "has_dex": false,
+      "is_valid": true,
+      "is_valid_zip": true,
+      "jadx_status": "skipped_no_dex",
+      "local_path": "downloads/package_set/apks/split_config.xxhdpi.apk",
+      "preprocessing": {
+        "apktool_status": "success",
+        "jadx_status": "skipped_no_dex",
+        "raw_extract_status": "success",
+        "warnings": []
+      },
+      "raw_extract_status": "success",
+      "role": "config_density",
+      "sha256": "49e0bceed466ec77f71cc410157557fa69cbf0189396da9c3ebca8a3883e7882",
+      "size_bytes": 245330,
+      "warnings": []
+    }
+  ],
+  "application": {
+    "filename": "unknown",
+    "is_valid_apk": false,
+    "launcher_activity": "mobi.freeapps.flashlight.free.FlashlightFree",
+    "launcher_status": "resolved",
+    "launcher_target_activity": null,
+    "package_name": "mobi.freeapps.flashlight.free",
+    "sha256": "unknown",
+    "size_bytes": null
+  },
+  "limitations": [
+    "Analysis is limited to static heuristics on decoded package contents without runtime execution.",
+    "V1 API candidate extractor only tracks specific call-context register patterns (e.g. Fuel).",
+    "Dynamic instrumentation, traffic interception (MITM/Burp), and deep UI exploration were not performed.",
+    "No security verdict, vulnerability score, or risk classification is provided.",
+    "Split package analysis is limited to installed splits returned by pm path. Dynamic feature modules or config splits not delivered to the device were not analyzed."
+  ],
+  "manifest": {
+    "activities": [
+      "mobi.freeapps.flashlight.free.FlashlightFree",
+      "mobi.freeapps.flashlight.FlashPreference",
+      "com.google.android.gms.ads.AdActivity",
+      "com.google.android.gms.ads.OutOfContextTestingActivity",
+      "com.google.android.gms.ads.NotificationHandlerActivity"
+    ],
+    "application": {
+      "allow_backup": true,
+      "debuggable": null,
+      "enabled": null,
+      "enabled_effective": true,
+      "network_security_config": null,
+      "observed_attributes": {
+        "allowBackup": "true",
+        "debuggable": null,
+        "enabled": null,
+        "usesCleartextTraffic": null
+      },
+      "uses_cleartext_traffic": null
+    },
+    "components": [
+      {
+        "enabled": null,
+        "enabled_effective": true,
+        "exported": false,
+        "exported_effective": false,
+        "exported_source": "explicit",
+        "intent_filters": [],
+        "name": "com.google.android.gms.ads.AdActivity",
+        "permission": null,
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "activity",
+        "write_permission": null
+      },
+      {
+        "enabled": null,
+        "enabled_effective": true,
+        "exported": false,
+        "exported_effective": false,
+        "exported_source": "explicit",
+        "intent_filters": [],
+        "name": "com.google.android.gms.ads.NotificationHandlerActivity",
+        "permission": null,
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "activity",
+        "write_permission": null
+      },
+      {
+        "enabled": null,
+        "enabled_effective": true,
+        "exported": false,
+        "exported_effective": false,
+        "exported_source": "explicit",
+        "intent_filters": [],
+        "name": "com.google.android.gms.ads.OutOfContextTestingActivity",
+        "permission": null,
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "activity",
+        "write_permission": null
+      },
+      {
+        "enabled": null,
+        "enabled_effective": true,
+        "exported": null,
+        "exported_effective": false,
+        "exported_source": "platform_default",
+        "intent_filters": [],
+        "name": "mobi.freeapps.flashlight.FlashPreference",
+        "permission": null,
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "activity",
+        "write_permission": null
+      },
+      {
+        "enabled": null,
+        "enabled_effective": true,
+        "exported": true,
+        "exported_effective": true,
+        "exported_source": "explicit",
+        "intent_filters": [
+          {
+            "actions": [
+              "android.intent.action.MAIN"
+            ],
+            "categories": [
+              "android.intent.category.LAUNCHER"
+            ],
+            "data": []
+          }
+        ],
+        "name": "mobi.freeapps.flashlight.free.FlashlightFree",
+        "permission": null,
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "activity",
+        "write_permission": null
+      },
+      {
+        "enabled": null,
+        "enabled_effective": true,
+        "exported": false,
+        "exported_effective": false,
+        "exported_source": "explicit",
+        "intent_filters": [],
+        "name": "androidx.startup.InitializationProvider",
+        "permission": null,
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "provider",
+        "write_permission": null
+      },
+      {
+        "enabled": null,
+        "enabled_effective": true,
+        "exported": false,
+        "exported_effective": false,
+        "exported_source": "explicit",
+        "intent_filters": [],
+        "name": "com.google.android.gms.ads.MobileAdsInitProvider",
+        "permission": null,
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "provider",
+        "write_permission": null
+      },
+      {
+        "enabled": true,
+        "enabled_effective": true,
+        "exported": true,
+        "exported_effective": true,
+        "exported_source": "explicit",
+        "intent_filters": [
+          {
+            "actions": [
+              "androidx.profileinstaller.action.BENCHMARK_OPERATION"
+            ],
+            "categories": [],
+            "data": []
+          },
+          {
+            "actions": [
+              "androidx.profileinstaller.action.INSTALL_PROFILE"
+            ],
+            "categories": [],
+            "data": []
+          },
+          {
+            "actions": [
+              "androidx.profileinstaller.action.SAVE_PROFILE"
+            ],
+            "categories": [],
+            "data": []
+          },
+          {
+            "actions": [
+              "androidx.profileinstaller.action.SKIP_FILE"
+            ],
+            "categories": [],
+            "data": []
+          }
+        ],
+        "name": "androidx.profileinstaller.ProfileInstallReceiver",
+        "permission": "android.permission.DUMP",
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "receiver",
+        "write_permission": null
+      },
+      {
+        "enabled": false,
+        "enabled_effective": false,
+        "exported": false,
+        "exported_effective": false,
+        "exported_source": "explicit",
+        "intent_filters": [
+          {
+            "actions": [
+              "android.intent.action.ACTION_POWER_CONNECTED",
+              "android.intent.action.ACTION_POWER_DISCONNECTED"
+            ],
+            "categories": [],
+            "data": []
+          }
+        ],
+        "name": "androidx.work.impl.background.systemalarm.ConstraintProxy$BatteryChargingProxy",
+        "permission": null,
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "receiver",
+        "write_permission": null
+      },
+      {
+        "enabled": false,
+        "enabled_effective": false,
+        "exported": false,
+        "exported_effective": false,
+        "exported_source": "explicit",
+        "intent_filters": [
+          {
+            "actions": [
+              "android.intent.action.BATTERY_LOW",
+              "android.intent.action.BATTERY_OKAY"
+            ],
+            "categories": [],
+            "data": []
+          }
+        ],
+        "name": "androidx.work.impl.background.systemalarm.ConstraintProxy$BatteryNotLowProxy",
+        "permission": null,
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "receiver",
+        "write_permission": null
+      },
+      {
+        "enabled": false,
+        "enabled_effective": false,
+        "exported": false,
+        "exported_effective": false,
+        "exported_source": "explicit",
+        "intent_filters": [
+          {
+            "actions": [
+              "android.net.conn.CONNECTIVITY_CHANGE"
+            ],
+            "categories": [],
+            "data": []
+          }
+        ],
+        "name": "androidx.work.impl.background.systemalarm.ConstraintProxy$NetworkStateProxy",
+        "permission": null,
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "receiver",
+        "write_permission": null
+      },
+      {
+        "enabled": false,
+        "enabled_effective": false,
+        "exported": false,
+        "exported_effective": false,
+        "exported_source": "explicit",
+        "intent_filters": [
+          {
+            "actions": [
+              "android.intent.action.DEVICE_STORAGE_LOW",
+              "android.intent.action.DEVICE_STORAGE_OK"
+            ],
+            "categories": [],
+            "data": []
+          }
+        ],
+        "name": "androidx.work.impl.background.systemalarm.ConstraintProxy$StorageNotLowProxy",
+        "permission": null,
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "receiver",
+        "write_permission": null
+      },
+      {
+        "enabled": null,
+        "enabled_effective": null,
+        "exported": false,
+        "exported_effective": false,
+        "exported_source": "explicit",
+        "intent_filters": [
+          {
+            "actions": [
+              "androidx.work.impl.background.systemalarm.UpdateProxies"
+            ],
+            "categories": [],
+            "data": []
+          }
+        ],
+        "name": "androidx.work.impl.background.systemalarm.ConstraintProxyUpdateReceiver",
+        "permission": null,
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "receiver",
+        "write_permission": null
+      },
+      {
+        "enabled": false,
+        "enabled_effective": false,
+        "exported": false,
+        "exported_effective": false,
+        "exported_source": "explicit",
+        "intent_filters": [
+          {
+            "actions": [
+              "android.intent.action.BOOT_COMPLETED",
+              "android.intent.action.TIMEZONE_CHANGED",
+              "android.intent.action.TIME_SET"
+            ],
+            "categories": [],
+            "data": []
+          }
+        ],
+        "name": "androidx.work.impl.background.systemalarm.RescheduleReceiver",
+        "permission": null,
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "receiver",
+        "write_permission": null
+      },
+      {
+        "enabled": true,
+        "enabled_effective": true,
+        "exported": true,
+        "exported_effective": true,
+        "exported_source": "explicit",
+        "intent_filters": [
+          {
+            "actions": [
+              "androidx.work.diagnostics.REQUEST_DIAGNOSTICS"
+            ],
+            "categories": [],
+            "data": []
+          }
+        ],
+        "name": "androidx.work.impl.diagnostics.DiagnosticsReceiver",
+        "permission": "android.permission.DUMP",
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "receiver",
+        "write_permission": null
+      },
+      {
+        "enabled": true,
+        "enabled_effective": true,
+        "exported": false,
+        "exported_effective": false,
+        "exported_source": "explicit",
+        "intent_filters": [],
+        "name": "androidx.work.impl.utils.ForceStopRunnable$BroadcastReceiver",
+        "permission": null,
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "receiver",
+        "write_permission": null
+      },
+      {
+        "enabled": true,
+        "enabled_effective": true,
+        "exported": false,
+        "exported_effective": false,
+        "exported_source": "explicit",
+        "intent_filters": [
+          {
+            "actions": [
+              "android.intent.action.BOOT_COMPLETED"
+            ],
+            "categories": [],
+            "data": []
+          }
+        ],
+        "name": "mobi.freeapps.flashlight.free.FlashlightFree$ServiceAutostart",
+        "permission": null,
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "receiver",
+        "write_permission": null
+      },
+      {
+        "enabled": null,
+        "enabled_effective": true,
+        "exported": false,
+        "exported_effective": false,
+        "exported_source": "explicit",
+        "intent_filters": [
+          {
+            "actions": [
+              "android.appwidget.action.APPWIDGET_UPDATE"
+            ],
+            "categories": [],
+            "data": []
+          }
+        ],
+        "name": "mobi.freeapps.flashlight.free.FlashlightFree$Widget",
+        "permission": null,
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "receiver",
+        "write_permission": null
+      },
+      {
+        "enabled": true,
+        "enabled_effective": true,
+        "exported": null,
+        "exported_effective": false,
+        "exported_source": "platform_default",
+        "intent_filters": [],
+        "name": "mobi.freeapps.flashlight.free.FlashlightFree$WidgetReceiver",
+        "permission": null,
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "receiver",
+        "write_permission": null
+      },
+      {
+        "enabled": null,
+        "enabled_effective": true,
+        "exported": false,
+        "exported_effective": false,
+        "exported_source": "explicit",
+        "intent_filters": [],
+        "name": "androidx.room.MultiInstanceInvalidationService",
+        "permission": null,
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "service",
+        "write_permission": null
+      },
+      {
+        "enabled": null,
+        "enabled_effective": null,
+        "exported": false,
+        "exported_effective": false,
+        "exported_source": "explicit",
+        "intent_filters": [],
+        "name": "androidx.work.impl.background.systemalarm.SystemAlarmService",
+        "permission": null,
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "service",
+        "write_permission": null
+      },
+      {
+        "enabled": null,
+        "enabled_effective": null,
+        "exported": true,
+        "exported_effective": true,
+        "exported_source": "explicit",
+        "intent_filters": [],
+        "name": "androidx.work.impl.background.systemjob.SystemJobService",
+        "permission": "android.permission.BIND_JOB_SERVICE",
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "service",
+        "write_permission": null
+      },
+      {
+        "enabled": null,
+        "enabled_effective": null,
+        "exported": false,
+        "exported_effective": false,
+        "exported_source": "explicit",
+        "intent_filters": [],
+        "name": "androidx.work.impl.foreground.SystemForegroundService",
+        "permission": null,
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "service",
+        "write_permission": null
+      },
+      {
+        "enabled": true,
+        "enabled_effective": true,
+        "exported": false,
+        "exported_effective": false,
+        "exported_source": "explicit",
+        "intent_filters": [],
+        "name": "com.google.android.gms.ads.AdService",
+        "permission": null,
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "service",
+        "write_permission": null
+      },
+      {
+        "enabled": null,
+        "enabled_effective": true,
+        "exported": null,
+        "exported_effective": false,
+        "exported_source": "platform_default",
+        "intent_filters": [],
+        "name": "mobi.freeapps.flashlight.free.FlashlightFree$Service",
+        "permission": null,
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "service",
+        "write_permission": null
+      }
+    ],
+    "launcher_activity": "mobi.freeapps.flashlight.free.FlashlightFree",
+    "launcher_status": "resolved",
+    "launcher_target_activity": null,
+    "min_sdk": 32,
+    "network_security_policy": {
+      "cleartext_permissions": [],
+      "status": "not_declared"
+    },
+    "package_name": "mobi.freeapps.flashlight.free",
+    "permission_declarations": [
+      {
+        "max_sdk": null,
+        "name": "android.permission.ACCESS_ADSERVICES_AD_ID",
+        "source": "AndroidManifest.xml",
+        "tag": "uses-permission"
+      },
+      {
+        "max_sdk": null,
+        "name": "android.permission.ACCESS_ADSERVICES_ATTRIBUTION",
+        "source": "AndroidManifest.xml",
+        "tag": "uses-permission"
+      },
+      {
+        "max_sdk": null,
+        "name": "android.permission.ACCESS_ADSERVICES_TOPICS",
+        "source": "AndroidManifest.xml",
+        "tag": "uses-permission"
+      },
+      {
+        "max_sdk": null,
+        "name": "android.permission.ACCESS_NETWORK_STATE",
+        "source": "AndroidManifest.xml",
+        "tag": "uses-permission"
+      },
+      {
+        "max_sdk": null,
+        "name": "android.permission.CAMERA",
+        "source": "AndroidManifest.xml",
+        "tag": "uses-permission"
+      },
+      {
+        "max_sdk": null,
+        "name": "android.permission.FLASHLIGHT",
+        "source": "AndroidManifest.xml",
+        "tag": "uses-permission"
+      },
+      {
+        "max_sdk": null,
+        "name": "android.permission.FOREGROUND_SERVICE",
+        "source": "AndroidManifest.xml",
+        "tag": "uses-permission"
+      },
+      {
+        "max_sdk": null,
+        "name": "android.permission.INTERNET",
+        "source": "AndroidManifest.xml",
+        "tag": "uses-permission"
+      },
+      {
+        "max_sdk": null,
+        "name": "android.permission.POST_NOTIFICATIONS",
+        "source": "AndroidManifest.xml",
+        "tag": "uses-permission"
+      },
+      {
+        "max_sdk": null,
+        "name": "android.permission.RECEIVE_BOOT_COMPLETED",
+        "source": "AndroidManifest.xml",
+        "tag": "uses-permission"
+      },
+      {
+        "max_sdk": null,
+        "name": "android.permission.VIBRATE",
+        "source": "AndroidManifest.xml",
+        "tag": "uses-permission"
+      },
+      {
+        "max_sdk": null,
+        "name": "android.permission.WAKE_LOCK",
+        "source": "AndroidManifest.xml",
+        "tag": "uses-permission"
+      },
+      {
+        "max_sdk": null,
+        "name": "com.google.android.gms.permission.AD_ID",
+        "source": "AndroidManifest.xml",
+        "tag": "uses-permission"
+      },
+      {
+        "max_sdk": null,
+        "name": "mobi.freeapps.flashlight.free.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION",
+        "source": "AndroidManifest.xml",
+        "tag": "uses-permission"
+      }
+    ],
+    "permissions": [
+      "android.permission.ACCESS_ADSERVICES_AD_ID",
+      "android.permission.ACCESS_ADSERVICES_ATTRIBUTION",
+      "android.permission.ACCESS_ADSERVICES_TOPICS",
+      "android.permission.ACCESS_NETWORK_STATE",
+      "android.permission.CAMERA",
+      "android.permission.FLASHLIGHT",
+      "android.permission.FOREGROUND_SERVICE",
+      "android.permission.INTERNET",
+      "android.permission.POST_NOTIFICATIONS",
+      "android.permission.RECEIVE_BOOT_COMPLETED",
+      "android.permission.VIBRATE",
+      "android.permission.WAKE_LOCK",
+      "com.google.android.gms.permission.AD_ID",
+      "mobi.freeapps.flashlight.free.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+    ],
+    "providers": [
+      {
+        "enabled": null,
+        "enabled_effective": true,
+        "exported": false,
+        "exported_effective": false,
+        "exported_source": "explicit",
+        "intent_filters": [],
+        "name": "androidx.startup.InitializationProvider",
+        "permission": null,
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "provider",
+        "write_permission": null
+      },
+      {
+        "enabled": null,
+        "enabled_effective": true,
+        "exported": false,
+        "exported_effective": false,
+        "exported_source": "explicit",
+        "intent_filters": [],
+        "name": "com.google.android.gms.ads.MobileAdsInitProvider",
+        "permission": null,
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "provider",
+        "write_permission": null
+      }
+    ],
+    "receivers": [
+      {
+        "enabled": true,
+        "enabled_effective": true,
+        "exported": true,
+        "exported_effective": true,
+        "exported_source": "explicit",
+        "intent_filters": [
+          {
+            "actions": [
+              "androidx.profileinstaller.action.BENCHMARK_OPERATION"
+            ],
+            "categories": [],
+            "data": []
+          },
+          {
+            "actions": [
+              "androidx.profileinstaller.action.INSTALL_PROFILE"
+            ],
+            "categories": [],
+            "data": []
+          },
+          {
+            "actions": [
+              "androidx.profileinstaller.action.SAVE_PROFILE"
+            ],
+            "categories": [],
+            "data": []
+          },
+          {
+            "actions": [
+              "androidx.profileinstaller.action.SKIP_FILE"
+            ],
+            "categories": [],
+            "data": []
+          }
+        ],
+        "name": "androidx.profileinstaller.ProfileInstallReceiver",
+        "permission": "android.permission.DUMP",
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "receiver",
+        "write_permission": null
+      },
+      {
+        "enabled": false,
+        "enabled_effective": false,
+        "exported": false,
+        "exported_effective": false,
+        "exported_source": "explicit",
+        "intent_filters": [
+          {
+            "actions": [
+              "android.intent.action.ACTION_POWER_CONNECTED",
+              "android.intent.action.ACTION_POWER_DISCONNECTED"
+            ],
+            "categories": [],
+            "data": []
+          }
+        ],
+        "name": "androidx.work.impl.background.systemalarm.ConstraintProxy$BatteryChargingProxy",
+        "permission": null,
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "receiver",
+        "write_permission": null
+      },
+      {
+        "enabled": false,
+        "enabled_effective": false,
+        "exported": false,
+        "exported_effective": false,
+        "exported_source": "explicit",
+        "intent_filters": [
+          {
+            "actions": [
+              "android.intent.action.BATTERY_LOW",
+              "android.intent.action.BATTERY_OKAY"
+            ],
+            "categories": [],
+            "data": []
+          }
+        ],
+        "name": "androidx.work.impl.background.systemalarm.ConstraintProxy$BatteryNotLowProxy",
+        "permission": null,
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "receiver",
+        "write_permission": null
+      },
+      {
+        "enabled": false,
+        "enabled_effective": false,
+        "exported": false,
+        "exported_effective": false,
+        "exported_source": "explicit",
+        "intent_filters": [
+          {
+            "actions": [
+              "android.net.conn.CONNECTIVITY_CHANGE"
+            ],
+            "categories": [],
+            "data": []
+          }
+        ],
+        "name": "androidx.work.impl.background.systemalarm.ConstraintProxy$NetworkStateProxy",
+        "permission": null,
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "receiver",
+        "write_permission": null
+      },
+      {
+        "enabled": false,
+        "enabled_effective": false,
+        "exported": false,
+        "exported_effective": false,
+        "exported_source": "explicit",
+        "intent_filters": [
+          {
+            "actions": [
+              "android.intent.action.DEVICE_STORAGE_LOW",
+              "android.intent.action.DEVICE_STORAGE_OK"
+            ],
+            "categories": [],
+            "data": []
+          }
+        ],
+        "name": "androidx.work.impl.background.systemalarm.ConstraintProxy$StorageNotLowProxy",
+        "permission": null,
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "receiver",
+        "write_permission": null
+      },
+      {
+        "enabled": null,
+        "enabled_effective": null,
+        "exported": false,
+        "exported_effective": false,
+        "exported_source": "explicit",
+        "intent_filters": [
+          {
+            "actions": [
+              "androidx.work.impl.background.systemalarm.UpdateProxies"
+            ],
+            "categories": [],
+            "data": []
+          }
+        ],
+        "name": "androidx.work.impl.background.systemalarm.ConstraintProxyUpdateReceiver",
+        "permission": null,
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "receiver",
+        "write_permission": null
+      },
+      {
+        "enabled": false,
+        "enabled_effective": false,
+        "exported": false,
+        "exported_effective": false,
+        "exported_source": "explicit",
+        "intent_filters": [
+          {
+            "actions": [
+              "android.intent.action.BOOT_COMPLETED",
+              "android.intent.action.TIMEZONE_CHANGED",
+              "android.intent.action.TIME_SET"
+            ],
+            "categories": [],
+            "data": []
+          }
+        ],
+        "name": "androidx.work.impl.background.systemalarm.RescheduleReceiver",
+        "permission": null,
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "receiver",
+        "write_permission": null
+      },
+      {
+        "enabled": true,
+        "enabled_effective": true,
+        "exported": true,
+        "exported_effective": true,
+        "exported_source": "explicit",
+        "intent_filters": [
+          {
+            "actions": [
+              "androidx.work.diagnostics.REQUEST_DIAGNOSTICS"
+            ],
+            "categories": [],
+            "data": []
+          }
+        ],
+        "name": "androidx.work.impl.diagnostics.DiagnosticsReceiver",
+        "permission": "android.permission.DUMP",
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "receiver",
+        "write_permission": null
+      },
+      {
+        "enabled": true,
+        "enabled_effective": true,
+        "exported": false,
+        "exported_effective": false,
+        "exported_source": "explicit",
+        "intent_filters": [],
+        "name": "androidx.work.impl.utils.ForceStopRunnable$BroadcastReceiver",
+        "permission": null,
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "receiver",
+        "write_permission": null
+      },
+      {
+        "enabled": true,
+        "enabled_effective": true,
+        "exported": false,
+        "exported_effective": false,
+        "exported_source": "explicit",
+        "intent_filters": [
+          {
+            "actions": [
+              "android.intent.action.BOOT_COMPLETED"
+            ],
+            "categories": [],
+            "data": []
+          }
+        ],
+        "name": "mobi.freeapps.flashlight.free.FlashlightFree$ServiceAutostart",
+        "permission": null,
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "receiver",
+        "write_permission": null
+      },
+      {
+        "enabled": null,
+        "enabled_effective": true,
+        "exported": false,
+        "exported_effective": false,
+        "exported_source": "explicit",
+        "intent_filters": [
+          {
+            "actions": [
+              "android.appwidget.action.APPWIDGET_UPDATE"
+            ],
+            "categories": [],
+            "data": []
+          }
+        ],
+        "name": "mobi.freeapps.flashlight.free.FlashlightFree$Widget",
+        "permission": null,
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "receiver",
+        "write_permission": null
+      },
+      {
+        "enabled": true,
+        "enabled_effective": true,
+        "exported": null,
+        "exported_effective": false,
+        "exported_source": "platform_default",
+        "intent_filters": [],
+        "name": "mobi.freeapps.flashlight.free.FlashlightFree$WidgetReceiver",
+        "permission": null,
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "receiver",
+        "write_permission": null
+      }
+    ],
+    "sdk_evidence": {
+      "min_sdk": "apktool.yml: sdkInfo.minSdkVersion",
+      "target_sdk": "apktool.yml: sdkInfo.targetSdkVersion"
+    },
+    "services": [
+      {
+        "enabled": null,
+        "enabled_effective": true,
+        "exported": false,
+        "exported_effective": false,
+        "exported_source": "explicit",
+        "intent_filters": [],
+        "name": "androidx.room.MultiInstanceInvalidationService",
+        "permission": null,
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "service",
+        "write_permission": null
+      },
+      {
+        "enabled": null,
+        "enabled_effective": null,
+        "exported": false,
+        "exported_effective": false,
+        "exported_source": "explicit",
+        "intent_filters": [],
+        "name": "androidx.work.impl.background.systemalarm.SystemAlarmService",
+        "permission": null,
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "service",
+        "write_permission": null
+      },
+      {
+        "enabled": null,
+        "enabled_effective": null,
+        "exported": true,
+        "exported_effective": true,
+        "exported_source": "explicit",
+        "intent_filters": [],
+        "name": "androidx.work.impl.background.systemjob.SystemJobService",
+        "permission": "android.permission.BIND_JOB_SERVICE",
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "service",
+        "write_permission": null
+      },
+      {
+        "enabled": null,
+        "enabled_effective": null,
+        "exported": false,
+        "exported_effective": false,
+        "exported_source": "explicit",
+        "intent_filters": [],
+        "name": "androidx.work.impl.foreground.SystemForegroundService",
+        "permission": null,
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "service",
+        "write_permission": null
+      },
+      {
+        "enabled": true,
+        "enabled_effective": true,
+        "exported": false,
+        "exported_effective": false,
+        "exported_source": "explicit",
+        "intent_filters": [],
+        "name": "com.google.android.gms.ads.AdService",
+        "permission": null,
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "service",
+        "write_permission": null
+      },
+      {
+        "enabled": null,
+        "enabled_effective": true,
+        "exported": null,
+        "exported_effective": false,
+        "exported_source": "platform_default",
+        "intent_filters": [],
+        "name": "mobi.freeapps.flashlight.free.FlashlightFree$Service",
+        "permission": null,
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "service",
+        "write_permission": null
+      }
+    ],
+    "target_sdk": 37,
+    "version_code": null
+  },
+  "manifest_evidence": [
+    {
+      "activities": [
+        "mobi.freeapps.flashlight.free.FlashlightFree",
+        "mobi.freeapps.flashlight.FlashPreference",
+        "com.google.android.gms.ads.AdActivity",
+        "com.google.android.gms.ads.OutOfContextTestingActivity",
+        "com.google.android.gms.ads.NotificationHandlerActivity"
+      ],
+      "launcher_activity": "mobi.freeapps.flashlight.free.FlashlightFree",
+      "manifest": {
+        "activities": [
+          "mobi.freeapps.flashlight.free.FlashlightFree",
+          "mobi.freeapps.flashlight.FlashPreference",
+          "com.google.android.gms.ads.AdActivity",
+          "com.google.android.gms.ads.OutOfContextTestingActivity",
+          "com.google.android.gms.ads.NotificationHandlerActivity"
+        ],
+        "application": {
+          "allow_backup": true,
+          "debuggable": null,
+          "enabled": null,
+          "enabled_effective": true,
+          "network_security_config": null,
+          "observed_attributes": {
+            "allowBackup": "true",
+            "debuggable": null,
+            "enabled": null,
+            "usesCleartextTraffic": null
+          },
+          "uses_cleartext_traffic": null
+        },
+        "components": [
+          {
+            "enabled": null,
+            "enabled_effective": true,
+            "exported": false,
+            "exported_effective": false,
+            "exported_source": "explicit",
+            "intent_filters": [],
+            "name": "com.google.android.gms.ads.AdActivity",
+            "permission": null,
+            "read_permission": null,
+            "source": "AndroidManifest.xml",
+            "target_activity": null,
+            "type": "activity",
+            "write_permission": null
+          },
+          {
+            "enabled": null,
+            "enabled_effective": true,
+            "exported": false,
+            "exported_effective": false,
+            "exported_source": "explicit",
+            "intent_filters": [],
+            "name": "com.google.android.gms.ads.NotificationHandlerActivity",
+            "permission": null,
+            "read_permission": null,
+            "source": "AndroidManifest.xml",
+            "target_activity": null,
+            "type": "activity",
+            "write_permission": null
+          },
+          {
+            "enabled": null,
+            "enabled_effective": true,
+            "exported": false,
+            "exported_effective": false,
+            "exported_source": "explicit",
+            "intent_filters": [],
+            "name": "com.google.android.gms.ads.OutOfContextTestingActivity",
+            "permission": null,
+            "read_permission": null,
+            "source": "AndroidManifest.xml",
+            "target_activity": null,
+            "type": "activity",
+            "write_permission": null
+          },
+          {
+            "enabled": null,
+            "enabled_effective": true,
+            "exported": null,
+            "exported_effective": false,
+            "exported_source": "platform_default",
+            "intent_filters": [],
+            "name": "mobi.freeapps.flashlight.FlashPreference",
+            "permission": null,
+            "read_permission": null,
+            "source": "AndroidManifest.xml",
+            "target_activity": null,
+            "type": "activity",
+            "write_permission": null
+          },
+          {
+            "enabled": null,
+            "enabled_effective": true,
+            "exported": true,
+            "exported_effective": true,
+            "exported_source": "explicit",
+            "intent_filters": [
+              {
+                "actions": [
+                  "android.intent.action.MAIN"
+                ],
+                "categories": [
+                  "android.intent.category.LAUNCHER"
+                ],
+                "data": []
+              }
+            ],
+            "name": "mobi.freeapps.flashlight.free.FlashlightFree",
+            "permission": null,
+            "read_permission": null,
+            "source": "AndroidManifest.xml",
+            "target_activity": null,
+            "type": "activity",
+            "write_permission": null
+          },
+          {
+            "enabled": null,
+            "enabled_effective": true,
+            "exported": false,
+            "exported_effective": false,
+            "exported_source": "explicit",
+            "intent_filters": [],
+            "name": "androidx.startup.InitializationProvider",
+            "permission": null,
+            "read_permission": null,
+            "source": "AndroidManifest.xml",
+            "target_activity": null,
+            "type": "provider",
+            "write_permission": null
+          },
+          {
+            "enabled": null,
+            "enabled_effective": true,
+            "exported": false,
+            "exported_effective": false,
+            "exported_source": "explicit",
+            "intent_filters": [],
+            "name": "com.google.android.gms.ads.MobileAdsInitProvider",
+            "permission": null,
+            "read_permission": null,
+            "source": "AndroidManifest.xml",
+            "target_activity": null,
+            "type": "provider",
+            "write_permission": null
+          },
+          {
+            "enabled": true,
+            "enabled_effective": true,
+            "exported": true,
+            "exported_effective": true,
+            "exported_source": "explicit",
+            "intent_filters": [
+              {
+                "actions": [
+                  "androidx.profileinstaller.action.BENCHMARK_OPERATION"
+                ],
+                "categories": [],
+                "data": []
+              },
+              {
+                "actions": [
+                  "androidx.profileinstaller.action.INSTALL_PROFILE"
+                ],
+                "categories": [],
+                "data": []
+              },
+              {
+                "actions": [
+                  "androidx.profileinstaller.action.SAVE_PROFILE"
+                ],
+                "categories": [],
+                "data": []
+              },
+              {
+                "actions": [
+                  "androidx.profileinstaller.action.SKIP_FILE"
+                ],
+                "categories": [],
+                "data": []
+              }
+            ],
+            "name": "androidx.profileinstaller.ProfileInstallReceiver",
+            "permission": "android.permission.DUMP",
+            "read_permission": null,
+            "source": "AndroidManifest.xml",
+            "target_activity": null,
+            "type": "receiver",
+            "write_permission": null
+          },
+          {
+            "enabled": false,
+            "enabled_effective": false,
+            "exported": false,
+            "exported_effective": false,
+            "exported_source": "explicit",
+            "intent_filters": [
+              {
+                "actions": [
+                  "android.intent.action.ACTION_POWER_CONNECTED",
+                  "android.intent.action.ACTION_POWER_DISCONNECTED"
+                ],
+                "categories": [],
+                "data": []
+              }
+            ],
+            "name": "androidx.work.impl.background.systemalarm.ConstraintProxy$BatteryChargingProxy",
+            "permission": null,
+            "read_permission": null,
+            "source": "AndroidManifest.xml",
+            "target_activity": null,
+            "type": "receiver",
+            "write_permission": null
+          },
+          {
+            "enabled": false,
+            "enabled_effective": false,
+            "exported": false,
+            "exported_effective": false,
+            "exported_source": "explicit",
+            "intent_filters": [
+              {
+                "actions": [
+                  "android.intent.action.BATTERY_LOW",
+                  "android.intent.action.BATTERY_OKAY"
+                ],
+                "categories": [],
+                "data": []
+              }
+            ],
+            "name": "androidx.work.impl.background.systemalarm.ConstraintProxy$BatteryNotLowProxy",
+            "permission": null,
+            "read_permission": null,
+            "source": "AndroidManifest.xml",
+            "target_activity": null,
+            "type": "receiver",
+            "write_permission": null
+          },
+          {
+            "enabled": false,
+            "enabled_effective": false,
+            "exported": false,
+            "exported_effective": false,
+            "exported_source": "explicit",
+            "intent_filters": [
+              {
+                "actions": [
+                  "android.net.conn.CONNECTIVITY_CHANGE"
+                ],
+                "categories": [],
+                "data": []
+              }
+            ],
+            "name": "androidx.work.impl.background.systemalarm.ConstraintProxy$NetworkStateProxy",
+            "permission": null,
+            "read_permission": null,
+            "source": "AndroidManifest.xml",
+            "target_activity": null,
+            "type": "receiver",
+            "write_permission": null
+          },
+          {
+            "enabled": false,
+            "enabled_effective": false,
+            "exported": false,
+            "exported_effective": false,
+            "exported_source": "explicit",
+            "intent_filters": [
+              {
+                "actions": [
+                  "android.intent.action.DEVICE_STORAGE_LOW",
+                  "android.intent.action.DEVICE_STORAGE_OK"
+                ],
+                "categories": [],
+                "data": []
+              }
+            ],
+            "name": "androidx.work.impl.background.systemalarm.ConstraintProxy$StorageNotLowProxy",
+            "permission": null,
+            "read_permission": null,
+            "source": "AndroidManifest.xml",
+            "target_activity": null,
+            "type": "receiver",
+            "write_permission": null
+          },
+          {
+            "enabled": null,
+            "enabled_effective": null,
+            "exported": false,
+            "exported_effective": false,
+            "exported_source": "explicit",
+            "intent_filters": [
+              {
+                "actions": [
+                  "androidx.work.impl.background.systemalarm.UpdateProxies"
+                ],
+                "categories": [],
+                "data": []
+              }
+            ],
+            "name": "androidx.work.impl.background.systemalarm.ConstraintProxyUpdateReceiver",
+            "permission": null,
+            "read_permission": null,
+            "source": "AndroidManifest.xml",
+            "target_activity": null,
+            "type": "receiver",
+            "write_permission": null
+          },
+          {
+            "enabled": false,
+            "enabled_effective": false,
+            "exported": false,
+            "exported_effective": false,
+            "exported_source": "explicit",
+            "intent_filters": [
+              {
+                "actions": [
+                  "android.intent.action.BOOT_COMPLETED",
+                  "android.intent.action.TIMEZONE_CHANGED",
+                  "android.intent.action.TIME_SET"
+                ],
+                "categories": [],
+                "data": []
+              }
+            ],
+            "name": "androidx.work.impl.background.systemalarm.RescheduleReceiver",
+            "permission": null,
+            "read_permission": null,
+            "source": "AndroidManifest.xml",
+            "target_activity": null,
+            "type": "receiver",
+            "write_permission": null
+          },
+          {
+            "enabled": true,
+            "enabled_effective": true,
+            "exported": true,
+            "exported_effective": true,
+            "exported_source": "explicit",
+            "intent_filters": [
+              {
+                "actions": [
+                  "androidx.work.diagnostics.REQUEST_DIAGNOSTICS"
+                ],
+                "categories": [],
+                "data": []
+              }
+            ],
+            "name": "androidx.work.impl.diagnostics.DiagnosticsReceiver",
+            "permission": "android.permission.DUMP",
+            "read_permission": null,
+            "source": "AndroidManifest.xml",
+            "target_activity": null,
+            "type": "receiver",
+            "write_permission": null
+          },
+          {
+            "enabled": true,
+            "enabled_effective": true,
+            "exported": false,
+            "exported_effective": false,
+            "exported_source": "explicit",
+            "intent_filters": [],
+            "name": "androidx.work.impl.utils.ForceStopRunnable$BroadcastReceiver",
+            "permission": null,
+            "read_permission": null,
+            "source": "AndroidManifest.xml",
+            "target_activity": null,
+            "type": "receiver",
+            "write_permission": null
+          },
+          {
+            "enabled": true,
+            "enabled_effective": true,
+            "exported": false,
+            "exported_effective": false,
+            "exported_source": "explicit",
+            "intent_filters": [
+              {
+                "actions": [
+                  "android.intent.action.BOOT_COMPLETED"
+                ],
+                "categories": [],
+                "data": []
+              }
+            ],
+            "name": "mobi.freeapps.flashlight.free.FlashlightFree$ServiceAutostart",
+            "permission": null,
+            "read_permission": null,
+            "source": "AndroidManifest.xml",
+            "target_activity": null,
+            "type": "receiver",
+            "write_permission": null
+          },
+          {
+            "enabled": null,
+            "enabled_effective": true,
+            "exported": false,
+            "exported_effective": false,
+            "exported_source": "explicit",
+            "intent_filters": [
+              {
+                "actions": [
+                  "android.appwidget.action.APPWIDGET_UPDATE"
+                ],
+                "categories": [],
+                "data": []
+              }
+            ],
+            "name": "mobi.freeapps.flashlight.free.FlashlightFree$Widget",
+            "permission": null,
+            "read_permission": null,
+            "source": "AndroidManifest.xml",
+            "target_activity": null,
+            "type": "receiver",
+            "write_permission": null
+          },
+          {
+            "enabled": true,
+            "enabled_effective": true,
+            "exported": null,
+            "exported_effective": false,
+            "exported_source": "platform_default",
+            "intent_filters": [],
+            "name": "mobi.freeapps.flashlight.free.FlashlightFree$WidgetReceiver",
+            "permission": null,
+            "read_permission": null,
+            "source": "AndroidManifest.xml",
+            "target_activity": null,
+            "type": "receiver",
+            "write_permission": null
+          },
+          {
+            "enabled": null,
+            "enabled_effective": true,
+            "exported": false,
+            "exported_effective": false,
+            "exported_source": "explicit",
+            "intent_filters": [],
+            "name": "androidx.room.MultiInstanceInvalidationService",
+            "permission": null,
+            "read_permission": null,
+            "source": "AndroidManifest.xml",
+            "target_activity": null,
+            "type": "service",
+            "write_permission": null
+          },
+          {
+            "enabled": null,
+            "enabled_effective": null,
+            "exported": false,
+            "exported_effective": false,
+            "exported_source": "explicit",
+            "intent_filters": [],
+            "name": "androidx.work.impl.background.systemalarm.SystemAlarmService",
+            "permission": null,
+            "read_permission": null,
+            "source": "AndroidManifest.xml",
+            "target_activity": null,
+            "type": "service",
+            "write_permission": null
+          },
+          {
+            "enabled": null,
+            "enabled_effective": null,
+            "exported": true,
+            "exported_effective": true,
+            "exported_source": "explicit",
+            "intent_filters": [],
+            "name": "androidx.work.impl.background.systemjob.SystemJobService",
+            "permission": "android.permission.BIND_JOB_SERVICE",
+            "read_permission": null,
+            "source": "AndroidManifest.xml",
+            "target_activity": null,
+            "type": "service",
+            "write_permission": null
+          },
+          {
+            "enabled": null,
+            "enabled_effective": null,
+            "exported": false,
+            "exported_effective": false,
+            "exported_source": "explicit",
+            "intent_filters": [],
+            "name": "androidx.work.impl.foreground.SystemForegroundService",
+            "permission": null,
+            "read_permission": null,
+            "source": "AndroidManifest.xml",
+            "target_activity": null,
+            "type": "service",
+            "write_permission": null
+          },
+          {
+            "enabled": true,
+            "enabled_effective": true,
+            "exported": false,
+            "exported_effective": false,
+            "exported_source": "explicit",
+            "intent_filters": [],
+            "name": "com.google.android.gms.ads.AdService",
+            "permission": null,
+            "read_permission": null,
+            "source": "AndroidManifest.xml",
+            "target_activity": null,
+            "type": "service",
+            "write_permission": null
+          },
+          {
+            "enabled": null,
+            "enabled_effective": true,
+            "exported": null,
+            "exported_effective": false,
+            "exported_source": "platform_default",
+            "intent_filters": [],
+            "name": "mobi.freeapps.flashlight.free.FlashlightFree$Service",
+            "permission": null,
+            "read_permission": null,
+            "source": "AndroidManifest.xml",
+            "target_activity": null,
+            "type": "service",
+            "write_permission": null
+          }
+        ],
+        "launcher_activity": "mobi.freeapps.flashlight.free.FlashlightFree",
+        "launcher_status": "resolved",
+        "launcher_target_activity": null,
+        "min_sdk": 32,
+        "network_security_policy": {
+          "cleartext_permissions": [],
+          "status": "not_declared"
+        },
+        "package_name": "mobi.freeapps.flashlight.free",
+        "permission_declarations": [
+          {
+            "max_sdk": null,
+            "name": "android.permission.ACCESS_ADSERVICES_AD_ID",
+            "source": "AndroidManifest.xml",
+            "tag": "uses-permission"
+          },
+          {
+            "max_sdk": null,
+            "name": "android.permission.ACCESS_ADSERVICES_ATTRIBUTION",
+            "source": "AndroidManifest.xml",
+            "tag": "uses-permission"
+          },
+          {
+            "max_sdk": null,
+            "name": "android.permission.ACCESS_ADSERVICES_TOPICS",
+            "source": "AndroidManifest.xml",
+            "tag": "uses-permission"
+          },
+          {
+            "max_sdk": null,
+            "name": "android.permission.ACCESS_NETWORK_STATE",
+            "source": "AndroidManifest.xml",
+            "tag": "uses-permission"
+          },
+          {
+            "max_sdk": null,
+            "name": "android.permission.CAMERA",
+            "source": "AndroidManifest.xml",
+            "tag": "uses-permission"
+          },
+          {
+            "max_sdk": null,
+            "name": "android.permission.FLASHLIGHT",
+            "source": "AndroidManifest.xml",
+            "tag": "uses-permission"
+          },
+          {
+            "max_sdk": null,
+            "name": "android.permission.FOREGROUND_SERVICE",
+            "source": "AndroidManifest.xml",
+            "tag": "uses-permission"
+          },
+          {
+            "max_sdk": null,
+            "name": "android.permission.INTERNET",
+            "source": "AndroidManifest.xml",
+            "tag": "uses-permission"
+          },
+          {
+            "max_sdk": null,
+            "name": "android.permission.POST_NOTIFICATIONS",
+            "source": "AndroidManifest.xml",
+            "tag": "uses-permission"
+          },
+          {
+            "max_sdk": null,
+            "name": "android.permission.RECEIVE_BOOT_COMPLETED",
+            "source": "AndroidManifest.xml",
+            "tag": "uses-permission"
+          },
+          {
+            "max_sdk": null,
+            "name": "android.permission.VIBRATE",
+            "source": "AndroidManifest.xml",
+            "tag": "uses-permission"
+          },
+          {
+            "max_sdk": null,
+            "name": "android.permission.WAKE_LOCK",
+            "source": "AndroidManifest.xml",
+            "tag": "uses-permission"
+          },
+          {
+            "max_sdk": null,
+            "name": "com.google.android.gms.permission.AD_ID",
+            "source": "AndroidManifest.xml",
+            "tag": "uses-permission"
+          },
+          {
+            "max_sdk": null,
+            "name": "mobi.freeapps.flashlight.free.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION",
+            "source": "AndroidManifest.xml",
+            "tag": "uses-permission"
+          }
+        ],
+        "permissions": [
+          "android.permission.ACCESS_ADSERVICES_AD_ID",
+          "android.permission.ACCESS_ADSERVICES_ATTRIBUTION",
+          "android.permission.ACCESS_ADSERVICES_TOPICS",
+          "android.permission.ACCESS_NETWORK_STATE",
+          "android.permission.CAMERA",
+          "android.permission.FLASHLIGHT",
+          "android.permission.FOREGROUND_SERVICE",
+          "android.permission.INTERNET",
+          "android.permission.POST_NOTIFICATIONS",
+          "android.permission.RECEIVE_BOOT_COMPLETED",
+          "android.permission.VIBRATE",
+          "android.permission.WAKE_LOCK",
+          "com.google.android.gms.permission.AD_ID",
+          "mobi.freeapps.flashlight.free.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+        ],
+        "providers": [
+          {
+            "enabled": null,
+            "enabled_effective": true,
+            "exported": false,
+            "exported_effective": false,
+            "exported_source": "explicit",
+            "intent_filters": [],
+            "name": "androidx.startup.InitializationProvider",
+            "permission": null,
+            "read_permission": null,
+            "source": "AndroidManifest.xml",
+            "target_activity": null,
+            "type": "provider",
+            "write_permission": null
+          },
+          {
+            "enabled": null,
+            "enabled_effective": true,
+            "exported": false,
+            "exported_effective": false,
+            "exported_source": "explicit",
+            "intent_filters": [],
+            "name": "com.google.android.gms.ads.MobileAdsInitProvider",
+            "permission": null,
+            "read_permission": null,
+            "source": "AndroidManifest.xml",
+            "target_activity": null,
+            "type": "provider",
+            "write_permission": null
+          }
+        ],
+        "receivers": [
+          {
+            "enabled": true,
+            "enabled_effective": true,
+            "exported": true,
+            "exported_effective": true,
+            "exported_source": "explicit",
+            "intent_filters": [
+              {
+                "actions": [
+                  "androidx.profileinstaller.action.BENCHMARK_OPERATION"
+                ],
+                "categories": [],
+                "data": []
+              },
+              {
+                "actions": [
+                  "androidx.profileinstaller.action.INSTALL_PROFILE"
+                ],
+                "categories": [],
+                "data": []
+              },
+              {
+                "actions": [
+                  "androidx.profileinstaller.action.SAVE_PROFILE"
+                ],
+                "categories": [],
+                "data": []
+              },
+              {
+                "actions": [
+                  "androidx.profileinstaller.action.SKIP_FILE"
+                ],
+                "categories": [],
+                "data": []
+              }
+            ],
+            "name": "androidx.profileinstaller.ProfileInstallReceiver",
+            "permission": "android.permission.DUMP",
+            "read_permission": null,
+            "source": "AndroidManifest.xml",
+            "target_activity": null,
+            "type": "receiver",
+            "write_permission": null
+          },
+          {
+            "enabled": false,
+            "enabled_effective": false,
+            "exported": false,
+            "exported_effective": false,
+            "exported_source": "explicit",
+            "intent_filters": [
+              {
+                "actions": [
+                  "android.intent.action.ACTION_POWER_CONNECTED",
+                  "android.intent.action.ACTION_POWER_DISCONNECTED"
+                ],
+                "categories": [],
+                "data": []
+              }
+            ],
+            "name": "androidx.work.impl.background.systemalarm.ConstraintProxy$BatteryChargingProxy",
+            "permission": null,
+            "read_permission": null,
+            "source": "AndroidManifest.xml",
+            "target_activity": null,
+            "type": "receiver",
+            "write_permission": null
+          },
+          {
+            "enabled": false,
+            "enabled_effective": false,
+            "exported": false,
+            "exported_effective": false,
+            "exported_source": "explicit",
+            "intent_filters": [
+              {
+                "actions": [
+                  "android.intent.action.BATTERY_LOW",
+                  "android.intent.action.BATTERY_OKAY"
+                ],
+                "categories": [],
+                "data": []
+              }
+            ],
+            "name": "androidx.work.impl.background.systemalarm.ConstraintProxy$BatteryNotLowProxy",
+            "permission": null,
+            "read_permission": null,
+            "source": "AndroidManifest.xml",
+            "target_activity": null,
+            "type": "receiver",
+            "write_permission": null
+          },
+          {
+            "enabled": false,
+            "enabled_effective": false,
+            "exported": false,
+            "exported_effective": false,
+            "exported_source": "explicit",
+            "intent_filters": [
+              {
+                "actions": [
+                  "android.net.conn.CONNECTIVITY_CHANGE"
+                ],
+                "categories": [],
+                "data": []
+              }
+            ],
+            "name": "androidx.work.impl.background.systemalarm.ConstraintProxy$NetworkStateProxy",
+            "permission": null,
+            "read_permission": null,
+            "source": "AndroidManifest.xml",
+            "target_activity": null,
+            "type": "receiver",
+            "write_permission": null
+          },
+          {
+            "enabled": false,
+            "enabled_effective": false,
+            "exported": false,
+            "exported_effective": false,
+            "exported_source": "explicit",
+            "intent_filters": [
+              {
+                "actions": [
+                  "android.intent.action.DEVICE_STORAGE_LOW",
+                  "android.intent.action.DEVICE_STORAGE_OK"
+                ],
+                "categories": [],
+                "data": []
+              }
+            ],
+            "name": "androidx.work.impl.background.systemalarm.ConstraintProxy$StorageNotLowProxy",
+            "permission": null,
+            "read_permission": null,
+            "source": "AndroidManifest.xml",
+            "target_activity": null,
+            "type": "receiver",
+            "write_permission": null
+          },
+          {
+            "enabled": null,
+            "enabled_effective": null,
+            "exported": false,
+            "exported_effective": false,
+            "exported_source": "explicit",
+            "intent_filters": [
+              {
+                "actions": [
+                  "androidx.work.impl.background.systemalarm.UpdateProxies"
+                ],
+                "categories": [],
+                "data": []
+              }
+            ],
+            "name": "androidx.work.impl.background.systemalarm.ConstraintProxyUpdateReceiver",
+            "permission": null,
+            "read_permission": null,
+            "source": "AndroidManifest.xml",
+            "target_activity": null,
+            "type": "receiver",
+            "write_permission": null
+          },
+          {
+            "enabled": false,
+            "enabled_effective": false,
+            "exported": false,
+            "exported_effective": false,
+            "exported_source": "explicit",
+            "intent_filters": [
+              {
+                "actions": [
+                  "android.intent.action.BOOT_COMPLETED",
+                  "android.intent.action.TIMEZONE_CHANGED",
+                  "android.intent.action.TIME_SET"
+                ],
+                "categories": [],
+                "data": []
+              }
+            ],
+            "name": "androidx.work.impl.background.systemalarm.RescheduleReceiver",
+            "permission": null,
+            "read_permission": null,
+            "source": "AndroidManifest.xml",
+            "target_activity": null,
+            "type": "receiver",
+            "write_permission": null
+          },
+          {
+            "enabled": true,
+            "enabled_effective": true,
+            "exported": true,
+            "exported_effective": true,
+            "exported_source": "explicit",
+            "intent_filters": [
+              {
+                "actions": [
+                  "androidx.work.diagnostics.REQUEST_DIAGNOSTICS"
+                ],
+                "categories": [],
+                "data": []
+              }
+            ],
+            "name": "androidx.work.impl.diagnostics.DiagnosticsReceiver",
+            "permission": "android.permission.DUMP",
+            "read_permission": null,
+            "source": "AndroidManifest.xml",
+            "target_activity": null,
+            "type": "receiver",
+            "write_permission": null
+          },
+          {
+            "enabled": true,
+            "enabled_effective": true,
+            "exported": false,
+            "exported_effective": false,
+            "exported_source": "explicit",
+            "intent_filters": [],
+            "name": "androidx.work.impl.utils.ForceStopRunnable$BroadcastReceiver",
+            "permission": null,
+            "read_permission": null,
+            "source": "AndroidManifest.xml",
+            "target_activity": null,
+            "type": "receiver",
+            "write_permission": null
+          },
+          {
+            "enabled": true,
+            "enabled_effective": true,
+            "exported": false,
+            "exported_effective": false,
+            "exported_source": "explicit",
+            "intent_filters": [
+              {
+                "actions": [
+                  "android.intent.action.BOOT_COMPLETED"
+                ],
+                "categories": [],
+                "data": []
+              }
+            ],
+            "name": "mobi.freeapps.flashlight.free.FlashlightFree$ServiceAutostart",
+            "permission": null,
+            "read_permission": null,
+            "source": "AndroidManifest.xml",
+            "target_activity": null,
+            "type": "receiver",
+            "write_permission": null
+          },
+          {
+            "enabled": null,
+            "enabled_effective": true,
+            "exported": false,
+            "exported_effective": false,
+            "exported_source": "explicit",
+            "intent_filters": [
+              {
+                "actions": [
+                  "android.appwidget.action.APPWIDGET_UPDATE"
+                ],
+                "categories": [],
+                "data": []
+              }
+            ],
+            "name": "mobi.freeapps.flashlight.free.FlashlightFree$Widget",
+            "permission": null,
+            "read_permission": null,
+            "source": "AndroidManifest.xml",
+            "target_activity": null,
+            "type": "receiver",
+            "write_permission": null
+          },
+          {
+            "enabled": true,
+            "enabled_effective": true,
+            "exported": null,
+            "exported_effective": false,
+            "exported_source": "platform_default",
+            "intent_filters": [],
+            "name": "mobi.freeapps.flashlight.free.FlashlightFree$WidgetReceiver",
+            "permission": null,
+            "read_permission": null,
+            "source": "AndroidManifest.xml",
+            "target_activity": null,
+            "type": "receiver",
+            "write_permission": null
+          }
+        ],
+        "sdk_evidence": {
+          "min_sdk": "apktool.yml: sdkInfo.minSdkVersion",
+          "target_sdk": "apktool.yml: sdkInfo.targetSdkVersion"
+        },
+        "services": [
+          {
+            "enabled": null,
+            "enabled_effective": true,
+            "exported": false,
+            "exported_effective": false,
+            "exported_source": "explicit",
+            "intent_filters": [],
+            "name": "androidx.room.MultiInstanceInvalidationService",
+            "permission": null,
+            "read_permission": null,
+            "source": "AndroidManifest.xml",
+            "target_activity": null,
+            "type": "service",
+            "write_permission": null
+          },
+          {
+            "enabled": null,
+            "enabled_effective": null,
+            "exported": false,
+            "exported_effective": false,
+            "exported_source": "explicit",
+            "intent_filters": [],
+            "name": "androidx.work.impl.background.systemalarm.SystemAlarmService",
+            "permission": null,
+            "read_permission": null,
+            "source": "AndroidManifest.xml",
+            "target_activity": null,
+            "type": "service",
+            "write_permission": null
+          },
+          {
+            "enabled": null,
+            "enabled_effective": null,
+            "exported": true,
+            "exported_effective": true,
+            "exported_source": "explicit",
+            "intent_filters": [],
+            "name": "androidx.work.impl.background.systemjob.SystemJobService",
+            "permission": "android.permission.BIND_JOB_SERVICE",
+            "read_permission": null,
+            "source": "AndroidManifest.xml",
+            "target_activity": null,
+            "type": "service",
+            "write_permission": null
+          },
+          {
+            "enabled": null,
+            "enabled_effective": null,
+            "exported": false,
+            "exported_effective": false,
+            "exported_source": "explicit",
+            "intent_filters": [],
+            "name": "androidx.work.impl.foreground.SystemForegroundService",
+            "permission": null,
+            "read_permission": null,
+            "source": "AndroidManifest.xml",
+            "target_activity": null,
+            "type": "service",
+            "write_permission": null
+          },
+          {
+            "enabled": true,
+            "enabled_effective": true,
+            "exported": false,
+            "exported_effective": false,
+            "exported_source": "explicit",
+            "intent_filters": [],
+            "name": "com.google.android.gms.ads.AdService",
+            "permission": null,
+            "read_permission": null,
+            "source": "AndroidManifest.xml",
+            "target_activity": null,
+            "type": "service",
+            "write_permission": null
+          },
+          {
+            "enabled": null,
+            "enabled_effective": true,
+            "exported": null,
+            "exported_effective": false,
+            "exported_source": "platform_default",
+            "intent_filters": [],
+            "name": "mobi.freeapps.flashlight.free.FlashlightFree$Service",
+            "permission": null,
+            "read_permission": null,
+            "source": "AndroidManifest.xml",
+            "target_activity": null,
+            "type": "service",
+            "write_permission": null
+          }
+        ],
+        "target_sdk": 37,
+        "version_code": null
+      },
+      "package_name": "mobi.freeapps.flashlight.free",
+      "permissions": [
+        "android.permission.ACCESS_ADSERVICES_AD_ID",
+        "android.permission.ACCESS_ADSERVICES_ATTRIBUTION",
+        "android.permission.ACCESS_ADSERVICES_TOPICS",
+        "android.permission.ACCESS_NETWORK_STATE",
+        "android.permission.CAMERA",
+        "android.permission.FLASHLIGHT",
+        "android.permission.FOREGROUND_SERVICE",
+        "android.permission.INTERNET",
+        "android.permission.POST_NOTIFICATIONS",
+        "android.permission.RECEIVE_BOOT_COMPLETED",
+        "android.permission.VIBRATE",
+        "android.permission.WAKE_LOCK",
+        "com.google.android.gms.permission.AD_ID",
+        "mobi.freeapps.flashlight.free.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+      ],
+      "role": "base",
+      "source_apk": "base.apk"
+    },
+    {
+      "activities": [],
+      "launcher_activity": null,
+      "manifest": {
+        "activities": [],
+        "application": {
+          "allow_backup": null,
+          "debuggable": null,
+          "enabled": null,
+          "enabled_effective": true,
+          "network_security_config": null,
+          "observed_attributes": {
+            "allowBackup": null,
+            "debuggable": null,
+            "enabled": null,
+            "usesCleartextTraffic": null
+          },
+          "uses_cleartext_traffic": null
+        },
+        "components": [],
+        "launcher_activity": null,
+        "launcher_status": "LAUNCHER_UNRESOLVED",
+        "launcher_target_activity": null,
+        "min_sdk": 32,
+        "network_security_policy": {
+          "cleartext_permissions": [],
+          "status": "not_declared"
+        },
+        "package_name": "mobi.freeapps.flashlight.free",
+        "permission_declarations": [],
+        "permissions": [],
+        "providers": [],
+        "receivers": [],
+        "sdk_evidence": {
+          "min_sdk": "apktool.yml: sdkInfo.minSdkVersion"
+        },
+        "services": [],
+        "target_sdk": null,
+        "version_code": null
+      },
+      "package_name": "mobi.freeapps.flashlight.free",
+      "permissions": [],
+      "role": "config_locale",
+      "source_apk": "split_config.ar.apk"
+    },
+    {
+      "activities": [],
+      "launcher_activity": null,
+      "manifest": {
+        "activities": [],
+        "application": {
+          "allow_backup": null,
+          "debuggable": null,
+          "enabled": null,
+          "enabled_effective": true,
+          "network_security_config": null,
+          "observed_attributes": {
+            "allowBackup": null,
+            "debuggable": null,
+            "enabled": null,
+            "usesCleartextTraffic": null
+          },
+          "uses_cleartext_traffic": null
+        },
+        "components": [],
+        "launcher_activity": null,
+        "launcher_status": "LAUNCHER_UNRESOLVED",
+        "launcher_target_activity": null,
+        "min_sdk": 32,
+        "network_security_policy": {
+          "cleartext_permissions": [],
+          "status": "not_declared"
+        },
+        "package_name": "mobi.freeapps.flashlight.free",
+        "permission_declarations": [],
+        "permissions": [],
+        "providers": [],
+        "receivers": [],
+        "sdk_evidence": {
+          "min_sdk": "apktool.yml: sdkInfo.minSdkVersion"
+        },
+        "services": [],
+        "target_sdk": null,
+        "version_code": null
+      },
+      "package_name": "mobi.freeapps.flashlight.free",
+      "permissions": [],
+      "role": "config_locale",
+      "source_apk": "split_config.en.apk"
+    },
+    {
+      "activities": [],
+      "launcher_activity": null,
+      "manifest": {
+        "activities": [],
+        "application": {
+          "allow_backup": null,
+          "debuggable": null,
+          "enabled": null,
+          "enabled_effective": true,
+          "network_security_config": null,
+          "observed_attributes": {
+            "allowBackup": null,
+            "debuggable": null,
+            "enabled": null,
+            "usesCleartextTraffic": null
+          },
+          "uses_cleartext_traffic": null
+        },
+        "components": [],
+        "launcher_activity": null,
+        "launcher_status": "LAUNCHER_UNRESOLVED",
+        "launcher_target_activity": null,
+        "min_sdk": 32,
+        "network_security_policy": {
+          "cleartext_permissions": [],
+          "status": "not_declared"
+        },
+        "package_name": "mobi.freeapps.flashlight.free",
+        "permission_declarations": [],
+        "permissions": [],
+        "providers": [],
+        "receivers": [],
+        "sdk_evidence": {
+          "min_sdk": "apktool.yml: sdkInfo.minSdkVersion"
+        },
+        "services": [],
+        "target_sdk": null,
+        "version_code": null
+      },
+      "package_name": "mobi.freeapps.flashlight.free",
+      "permissions": [],
+      "role": "config_locale",
+      "source_apk": "split_config.tr.apk"
+    },
+    {
+      "activities": [],
+      "launcher_activity": null,
+      "manifest": {
+        "activities": [],
+        "application": {
+          "allow_backup": null,
+          "debuggable": null,
+          "enabled": null,
+          "enabled_effective": true,
+          "network_security_config": null,
+          "observed_attributes": {
+            "allowBackup": null,
+            "debuggable": null,
+            "enabled": null,
+            "usesCleartextTraffic": null
+          },
+          "uses_cleartext_traffic": null
+        },
+        "components": [],
+        "launcher_activity": null,
+        "launcher_status": "LAUNCHER_UNRESOLVED",
+        "launcher_target_activity": null,
+        "min_sdk": 32,
+        "network_security_policy": {
+          "cleartext_permissions": [],
+          "status": "not_declared"
+        },
+        "package_name": "mobi.freeapps.flashlight.free",
+        "permission_declarations": [],
+        "permissions": [],
+        "providers": [],
+        "receivers": [],
+        "sdk_evidence": {
+          "min_sdk": "apktool.yml: sdkInfo.minSdkVersion"
+        },
+        "services": [],
+        "target_sdk": null,
+        "version_code": null
+      },
+      "package_name": "mobi.freeapps.flashlight.free",
+      "permissions": [],
+      "role": "config_density",
+      "source_apk": "split_config.xxhdpi.apk"
+    }
+  ],
+  "network_indicators": {
+    "domains": [
+      {
+        "line_number": 7,
+        "source_apk": "base.apk",
+        "source_file": "res/xml/splits0.xml",
+        "type": "domain",
+        "value": "config.ar"
+      },
+      {
+        "line_number": 10,
+        "source_apk": "base.apk",
+        "source_file": "res/xml/splits0.xml",
+        "type": "domain",
+        "value": "config.be"
+      },
+      {
+        "line_number": 11,
+        "source_apk": "base.apk",
+        "source_file": "res/xml/splits0.xml",
+        "type": "domain",
+        "value": "config.bg"
+      },
+      {
+        "line_number": 14,
+        "source_apk": "base.apk",
+        "source_file": "res/xml/splits0.xml",
+        "type": "domain",
+        "value": "config.ca"
+      },
+      {
+        "line_number": 17,
+        "source_apk": "base.apk",
+        "source_file": "res/xml/splits0.xml",
+        "type": "domain",
+        "value": "config.de"
+      },
+      {
+        "line_number": 20,
+        "source_apk": "base.apk",
+        "source_file": "res/xml/splits0.xml",
+        "type": "domain",
+        "value": "config.es"
+      },
+      {
+        "line_number": 22,
+        "source_apk": "base.apk",
+        "source_file": "res/xml/splits0.xml",
+        "type": "domain",
+        "value": "config.eu"
+      },
+      {
+        "line_number": 24,
+        "source_apk": "base.apk",
+        "source_file": "res/xml/splits0.xml",
+        "type": "domain",
+        "value": "config.fi"
+      },
+      {
+        "line_number": 25,
+        "source_apk": "base.apk",
+        "source_file": "res/xml/splits0.xml",
+        "type": "domain",
+        "value": "config.fr"
+      },
+      {
+        "line_number": 29,
+        "source_apk": "base.apk",
+        "source_file": "res/xml/splits0.xml",
+        "type": "domain",
+        "value": "config.hr"
+      },
+      {
+        "line_number": 30,
+        "source_apk": "base.apk",
+        "source_file": "res/xml/splits0.xml",
+        "type": "domain",
+        "value": "config.hu"
+      },
+      {
+        "line_number": 32,
+        "source_apk": "base.apk",
+        "source_file": "res/xml/splits0.xml",
+        "type": "domain",
+        "value": "config.in"
+      },
+      {
+        "line_number": 33,
+        "source_apk": "base.apk",
+        "source_file": "res/xml/splits0.xml",
+        "type": "domain",
+        "value": "config.is"
+      },
+      {
+        "line_number": 34,
+        "source_apk": "base.apk",
+        "source_file": "res/xml/splits0.xml",
+        "type": "domain",
+        "value": "config.it"
+      },
+      {
+        "line_number": 44,
+        "source_apk": "base.apk",
+        "source_file": "res/xml/splits0.xml",
+        "type": "domain",
+        "value": "config.lt"
+      },
+      {
+        "line_number": 45,
+        "source_apk": "base.apk",
+        "source_file": "res/xml/splits0.xml",
+        "type": "domain",
+        "value": "config.lv"
+      },
+      {
+        "line_number": 51,
+        "source_apk": "base.apk",
+        "source_file": "res/xml/splits0.xml",
+        "type": "domain",
+        "value": "config.my"
+      },
+      {
+        "line_number": 54,
+        "source_apk": "base.apk",
+        "source_file": "res/xml/splits0.xml",
+        "type": "domain",
+        "value": "config.nl"
+      },
+      {
+        "line_number": 55,
+        "source_apk": "base.apk",
+        "source_file": "res/xml/splits0.xml",
+        "type": "domain",
+        "value": "config.no"
+      },
+      {
+        "line_number": 58,
+        "source_apk": "base.apk",
+        "source_file": "res/xml/splits0.xml",
+        "type": "domain",
+        "value": "config.pl"
+      },
+      {
+        "line_number": 59,
+        "source_apk": "base.apk",
+        "source_file": "res/xml/splits0.xml",
+        "type": "domain",
+        "value": "config.pt"
+      },
+      {
+        "line_number": 60,
+        "source_apk": "base.apk",
+        "source_file": "res/xml/splits0.xml",
+        "type": "domain",
+        "value": "config.ro"
+      },
+      {
+        "line_number": 61,
+        "source_apk": "base.apk",
+        "source_file": "res/xml/splits0.xml",
+        "type": "domain",
+        "value": "config.ru"
+      },
+      {
+        "line_number": 62,
+        "source_apk": "base.apk",
+        "source_file": "res/xml/splits0.xml",
+        "type": "domain",
+        "value": "config.si"
+      },
+      {
+        "line_number": 63,
+        "source_apk": "base.apk",
+        "source_file": "res/xml/splits0.xml",
+        "type": "domain",
+        "value": "config.sk"
+      },
+      {
+        "line_number": 71,
+        "source_apk": "base.apk",
+        "source_file": "res/xml/splits0.xml",
+        "type": "domain",
+        "value": "config.th"
+      },
+      {
+        "line_number": 73,
+        "source_apk": "base.apk",
+        "source_file": "res/xml/splits0.xml",
+        "type": "domain",
+        "value": "config.tr"
+      },
+      {
+        "line_number": 74,
+        "source_apk": "base.apk",
+        "source_file": "res/xml/splits0.xml",
+        "type": "domain",
+        "value": "config.uk"
+      },
+      {
+        "line_number": 76,
+        "source_apk": "base.apk",
+        "source_file": "res/xml/splits0.xml",
+        "type": "domain",
+        "value": "config.uz"
+      },
+      {
+        "line_number": 51,
+        "source_apk": "base.apk",
+        "source_file": "res/values/strings.xml",
+        "type": "domain",
+        "value": "freeapps.mobi"
+      },
+      {
+        "line_number": 1697,
+        "source_apk": "base.apk",
+        "source_file": "smali/lq.smali",
+        "type": "domain",
+        "value": "pagead2.googlesyndication.com"
+      },
+      {
+        "line_number": 1475,
+        "source_apk": "base.apk",
+        "source_file": "smali/mt.smali",
+        "type": "domain",
+        "value": "pagead2.googlesyndication.com"
+      },
+      {
+        "line_number": 7939,
+        "source_apk": "base.apk",
+        "source_file": "smali/xn.smali",
+        "type": "domain",
+        "value": "www.googleadservices.com"
+      },
+      {
+        "line_number": 7941,
+        "source_apk": "base.apk",
+        "source_file": "smali/xn.smali",
+        "type": "domain",
+        "value": "www.googleadservices.com"
+      },
+      {
+        "line_number": 2,
+        "source_apk": "split_config.ar.apk",
+        "source_file": "AndroidManifest.xml",
+        "type": "domain",
+        "value": "config.ar"
+      },
+      {
+        "line_number": 2,
+        "source_apk": "split_config.tr.apk",
+        "source_file": "AndroidManifest.xml",
+        "type": "domain",
+        "value": "config.tr"
+      }
+    ],
+    "ip_addresses": [],
+    "local_file_urls": [],
+    "network_urls": [
+      {
+        "line_number": 184,
+        "source_apk": "base.apk",
+        "source_file": "smali/mobi/freeapps/flashlight/Helper$1.smali",
+        "type": "network_url",
+        "value": "http://play.google.com/store/apps/details?id="
+      },
+      {
+        "line_number": 4,
+        "source_apk": "base.apk",
+        "source_file": "unknown/META-INF/androidx/constraintlayout/constraintlayout-core/LICENSE.txt",
+        "type": "network_url",
+        "value": "http://www.apache.org/licenses/"
+      },
+      {
+        "line_number": 7314,
+        "source_apk": "base.apk",
+        "source_file": "smali/xn.smali",
+        "type": "network_url",
+        "value": "https://admob-gmats.uc.r.appspot.com/"
+      },
+      {
+        "line_number": 7316,
+        "source_apk": "base.apk",
+        "source_file": "smali/xn.smali",
+        "type": "network_url",
+        "value": "https://admob-gmats.uc.r.appspot.com/"
+      },
+      {
+        "line_number": 7191,
+        "source_apk": "base.apk",
+        "source_file": "smali/nm.smali",
+        "type": "network_url",
+        "value": "https://fundingchoicesmessages.google.com/a/consent"
+      },
+      {
+        "line_number": 199,
+        "source_apk": "base.apk",
+        "source_file": "smali/lt.smali",
+        "type": "network_url",
+        "value": "https://goo.gle/ad-manager-android-update-manifest."
+      },
+      {
+        "line_number": 323,
+        "source_apk": "base.apk",
+        "source_file": "smali/lt.smali",
+        "type": "network_url",
+        "value": "https://goo.gle/ad-manager-android-update-manifest."
+      },
+      {
+        "line_number": 199,
+        "source_apk": "base.apk",
+        "source_file": "smali/lt.smali",
+        "type": "network_url",
+        "value": "https://goo.gle/admob-android-update-manifest"
+      },
+      {
+        "line_number": 323,
+        "source_apk": "base.apk",
+        "source_file": "smali/lt.smali",
+        "type": "network_url",
+        "value": "https://goo.gle/admob-android-update-manifest."
+      },
+      {
+        "line_number": 1379,
+        "source_apk": "base.apk",
+        "source_file": "smali/xn.smali",
+        "type": "network_url",
+        "value": "https://googleads.g.doubleclick.net"
+      },
+      {
+        "line_number": 9401,
+        "source_apk": "base.apk",
+        "source_file": "smali/xn.smali",
+        "type": "network_url",
+        "value": "https://googleads.g.doubleclick.net"
+      },
+      {
+        "line_number": 9403,
+        "source_apk": "base.apk",
+        "source_file": "smali/xn.smali",
+        "type": "network_url",
+        "value": "https://googleads.g.doubleclick.net"
+      },
+      {
+        "line_number": 3695,
+        "source_apk": "base.apk",
+        "source_file": "smali/xn.smali",
+        "type": "network_url",
+        "value": "https://googleads.g.doubleclick.net/mads/static/mad/sdk/native/native_ads.html"
+      },
+      {
+        "line_number": 632,
+        "source_apk": "base.apk",
+        "source_file": "smali/xn.smali",
+        "type": "network_url",
+        "value": "https://googleads.g.doubleclick.net/mads/static/mad/sdk/native/production/mraid/v3/mraid_app_banner.js"
+      },
+      {
+        "line_number": 641,
+        "source_apk": "base.apk",
+        "source_file": "smali/xn.smali",
+        "type": "network_url",
+        "value": "https://googleads.g.doubleclick.net/mads/static/mad/sdk/native/production/mraid/v3/mraid_app_expanded_banner.js"
+      },
+      {
+        "line_number": 650,
+        "source_apk": "base.apk",
+        "source_file": "smali/xn.smali",
+        "type": "network_url",
+        "value": "https://googleads.g.doubleclick.net/mads/static/mad/sdk/native/production/mraid/v3/mraid_app_interstitial.js"
+      },
+      {
+        "line_number": 63,
+        "source_apk": "base.apk",
+        "source_file": "smali/xn.smali",
+        "type": "network_url",
+        "value": "https://googleads.g.doubleclick.net/mads/static/mad/sdk/native/production/sdk-core-v40-impl.html"
+      },
+      {
+        "line_number": 71,
+        "source_apk": "base.apk",
+        "source_file": "smali/xn.smali",
+        "type": "network_url",
+        "value": "https://googleads.g.doubleclick.net/mads/static/sdk/native/sdk-core-v40.html"
+      },
+      {
+        "line_number": 3704,
+        "source_apk": "base.apk",
+        "source_file": "smali/xn.smali",
+        "type": "network_url",
+        "value": "https://imasdk.googleapis.com/admob/sdkloader/native_video.html"
+      },
+      {
+        "line_number": 80,
+        "source_apk": "base.apk",
+        "source_file": "smali/xn.smali",
+        "type": "network_url",
+        "value": "https://mediation.goog/mads/static/sdk/native/sdk-core-v40.html"
+      },
+      {
+        "line_number": 7147,
+        "source_apk": "base.apk",
+        "source_file": "smali/xn.smali",
+        "type": "network_url",
+        "value": "https://pagead2.googlesyndication.com/pagead/ping?e=2&f=1"
+      },
+      {
+        "line_number": 7149,
+        "source_apk": "base.apk",
+        "source_file": "smali/xn.smali",
+        "type": "network_url",
+        "value": "https://pagead2.googlesyndication.com/pagead/ping?e=2&f=1"
+      },
+      {
+        "line_number": 136,
+        "source_apk": "base.apk",
+        "source_file": "AndroidManifest.xml",
+        "type": "network_url",
+        "value": "https://play.google.com/store"
+      },
+      {
+        "line_number": 554,
+        "source_apk": "base.apk",
+        "source_file": "smali/mobi/freeapps/flashlight/Helper.smali",
+        "type": "network_url",
+        "value": "https://play.google.com/store/apps/details?id="
+      },
+      {
+        "line_number": 9401,
+        "source_apk": "base.apk",
+        "source_file": "smali/xn.smali",
+        "type": "network_url",
+        "value": "https://pubads.g.doubleclick.net"
+      },
+      {
+        "line_number": 9403,
+        "source_apk": "base.apk",
+        "source_file": "smali/xn.smali",
+        "type": "network_url",
+        "value": "https://pubads.g.doubleclick.net"
+      },
+      {
+        "line_number": 4615,
+        "source_apk": "base.apk",
+        "source_file": "smali/xn.smali",
+        "type": "network_url",
+        "value": "https://www.google.com/dfp/debugSignals"
+      },
+      {
+        "line_number": 4617,
+        "source_apk": "base.apk",
+        "source_file": "smali/xn.smali",
+        "type": "network_url",
+        "value": "https://www.google.com/dfp/debugSignals"
+      },
+      {
+        "line_number": 4604,
+        "source_apk": "base.apk",
+        "source_file": "smali/xn.smali",
+        "type": "network_url",
+        "value": "https://www.google.com/dfp/inAppPreview"
+      },
+      {
+        "line_number": 4606,
+        "source_apk": "base.apk",
+        "source_file": "smali/xn.smali",
+        "type": "network_url",
+        "value": "https://www.google.com/dfp/inAppPreview"
+      },
+      {
+        "line_number": 4593,
+        "source_apk": "base.apk",
+        "source_file": "smali/xn.smali",
+        "type": "network_url",
+        "value": "https://www.google.com/dfp/linkDevice"
+      },
+      {
+        "line_number": 4595,
+        "source_apk": "base.apk",
+        "source_file": "smali/xn.smali",
+        "type": "network_url",
+        "value": "https://www.google.com/dfp/linkDevice"
+      },
+      {
+        "line_number": 4626,
+        "source_apk": "base.apk",
+        "source_file": "smali/xn.smali",
+        "type": "network_url",
+        "value": "https://www.google.com/dfp/sendDebugData"
+      },
+      {
+        "line_number": 4628,
+        "source_apk": "base.apk",
+        "source_file": "smali/xn.smali",
+        "type": "network_url",
+        "value": "https://www.google.com/dfp/sendDebugData"
+      }
+    ],
+    "path_candidates": [
+      {
+        "line_number": 823,
+        "source_apk": "base.apk",
+        "source_file": "smali/xn.smali",
+        "type": "path_candidate",
+        "value": "/aclk"
+      },
+      {
+        "line_number": 6203,
+        "source_apk": "base.apk",
+        "source_file": "smali/xn.smali",
+        "type": "path_candidate",
+        "value": "/aclk"
+      },
+      {
+        "line_number": 6208,
+        "source_apk": "base.apk",
+        "source_file": "smali/xn.smali",
+        "type": "path_candidate",
+        "value": "/aclk"
+      },
+      {
+        "line_number": 832,
+        "source_apk": "base.apk",
+        "source_file": "smali/xn.smali",
+        "type": "path_candidate",
+        "value": "/adview"
+      },
+      {
+        "line_number": 6225,
+        "source_apk": "base.apk",
+        "source_file": "smali/xn.smali",
+        "type": "path_candidate",
+        "value": "/dbm/ad"
+      },
+      {
+        "line_number": 6227,
+        "source_apk": "base.apk",
+        "source_file": "smali/xn.smali",
+        "type": "path_candidate",
+        "value": "/dbm/ad"
+      },
+      {
+        "line_number": 6203,
+        "source_apk": "base.apk",
+        "source_file": "smali/xn.smali",
+        "type": "path_candidate",
+        "value": "/dbm/clk"
+      },
+      {
+        "line_number": 6208,
+        "source_apk": "base.apk",
+        "source_file": "smali/xn.smali",
+        "type": "path_candidate",
+        "value": "/dbm/clk"
+      },
+      {
+        "line_number": 6225,
+        "source_apk": "base.apk",
+        "source_file": "smali/xn.smali",
+        "type": "path_candidate",
+        "value": "/pagead/adview"
+      },
+      {
+        "line_number": 6227,
+        "source_apk": "base.apk",
+        "source_file": "smali/xn.smali",
+        "type": "path_candidate",
+        "value": "/pagead/adview"
+      },
+      {
+        "line_number": 6225,
+        "source_apk": "base.apk",
+        "source_file": "smali/xn.smali",
+        "type": "path_candidate",
+        "value": "/pagead/conversion"
+      },
+      {
+        "line_number": 6227,
+        "source_apk": "base.apk",
+        "source_file": "smali/xn.smali",
+        "type": "path_candidate",
+        "value": "/pagead/conversion"
+      },
+      {
+        "line_number": 823,
+        "source_apk": "base.apk",
+        "source_file": "smali/xn.smali",
+        "type": "path_candidate",
+        "value": "/pcs/click"
+      },
+      {
+        "line_number": 6203,
+        "source_apk": "base.apk",
+        "source_file": "smali/xn.smali",
+        "type": "path_candidate",
+        "value": "/pcs/click"
+      },
+      {
+        "line_number": 6208,
+        "source_apk": "base.apk",
+        "source_file": "smali/xn.smali",
+        "type": "path_candidate",
+        "value": "/pcs/click"
+      },
+      {
+        "line_number": 832,
+        "source_apk": "base.apk",
+        "source_file": "smali/xn.smali",
+        "type": "path_candidate",
+        "value": "/pcs/view"
+      },
+      {
+        "line_number": 6225,
+        "source_apk": "base.apk",
+        "source_file": "smali/xn.smali",
+        "type": "path_candidate",
+        "value": "/pcs/view"
+      },
+      {
+        "line_number": 6227,
+        "source_apk": "base.apk",
+        "source_file": "smali/xn.smali",
+        "type": "path_candidate",
+        "value": "/pcs/view"
+      },
+      {
+        "line_number": 9048,
+        "source_apk": "base.apk",
+        "source_file": "smali/xn.smali",
+        "type": "path_candidate",
+        "value": "/play"
+      },
+      {
+        "line_number": 9050,
+        "source_apk": "base.apk",
+        "source_file": "smali/xn.smali",
+        "type": "path_candidate",
+        "value": "/play"
+      },
+      {
+        "line_number": 5109,
+        "source_apk": "base.apk",
+        "source_file": "smali/xn.smali",
+        "type": "path_candidate",
+        "value": "/result"
+      },
+      {
+        "line_number": 5114,
+        "source_apk": "base.apk",
+        "source_file": "smali/xn.smali",
+        "type": "path_candidate",
+        "value": "/result"
+      }
+    ],
+    "total_count": 92
+  },
+  "package_layout": "split",
+  "permissions": [
+    "android.permission.ACCESS_ADSERVICES_AD_ID",
+    "android.permission.ACCESS_ADSERVICES_ATTRIBUTION",
+    "android.permission.ACCESS_ADSERVICES_TOPICS",
+    "android.permission.ACCESS_NETWORK_STATE",
+    "android.permission.CAMERA",
+    "android.permission.FLASHLIGHT",
+    "android.permission.FOREGROUND_SERVICE",
+    "android.permission.INTERNET",
+    "android.permission.POST_NOTIFICATIONS",
+    "android.permission.RECEIVE_BOOT_COMPLETED",
+    "android.permission.VIBRATE",
+    "android.permission.WAKE_LOCK",
+    "com.google.android.gms.permission.AD_ID",
+    "mobi.freeapps.flashlight.free.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+  ],
+  "platform": "android",
+  "preprocessing": {
+    "components": [
+      {
+        "apktool_status": "success_with_warnings",
+        "filename": "base.apk",
+        "jadx_status": "success_with_warnings",
+        "raw_extract_status": "success",
+        "role": null,
+        "warnings": [
+          "Apktool decode warning in 'base.apk': W: Unresolved resource reference: ResReference{pkg=ResPackage{id=0x7f, name=mobi.freeapps.flashlight.free}, id=0x7f06000d, type=ref}\nW: Unresolved resource reference: ResReference{pkg=ResPackage{id=0x",
+          "JADX exited with warnings (code 3) for 'base.apk'"
+        ]
+      },
+      {
+        "apktool_status": "success",
+        "filename": "split_config.ar.apk",
+        "jadx_status": "skipped_no_dex",
+        "raw_extract_status": "success",
+        "role": null,
+        "warnings": []
+      },
+      {
+        "apktool_status": "success",
+        "filename": "split_config.en.apk",
+        "jadx_status": "skipped_no_dex",
+        "raw_extract_status": "success",
+        "role": null,
+        "warnings": []
+      },
+      {
+        "apktool_status": "success",
+        "filename": "split_config.tr.apk",
+        "jadx_status": "skipped_no_dex",
+        "raw_extract_status": "success",
+        "role": null,
+        "warnings": []
+      },
+      {
+        "apktool_status": "success",
+        "filename": "split_config.xxhdpi.apk",
+        "jadx_status": "skipped_no_dex",
+        "raw_extract_status": "success",
+        "role": null,
+        "warnings": []
+      }
+    ],
+    "jadx": {
+      "status": "success_with_warnings"
+    }
+  },
+  "report_type": "static_analysis",
+  "report_version": "1.0",
+  "run_id": "c10_repeat_a",
+  "split_count": 5,
+  "split_structure": [
+    {
+      "assets": [
+        "assets/dexopt/baseline.prof",
+        "assets/dexopt/baseline.profm"
+      ],
+      "dex_count": 1,
+      "dex_files": [
+        "classes.dex"
+      ],
+      "has_kotlin_metadata": true,
+      "has_native_code": false,
+      "is_multidex": false,
+      "native_libraries": [],
+      "role": "base",
+      "smali_roots": [
+        "smali"
+      ],
+      "source_apk": "base.apk",
+      "status": "success"
+    },
+    {
+      "assets": [],
+      "dex_count": 0,
+      "dex_files": [],
+      "has_kotlin_metadata": false,
+      "has_native_code": false,
+      "is_multidex": false,
+      "native_libraries": [],
+      "role": "config_locale",
+      "smali_roots": [],
+      "source_apk": "split_config.ar.apk",
+      "status": "success"
+    },
+    {
+      "assets": [],
+      "dex_count": 0,
+      "dex_files": [],
+      "has_kotlin_metadata": false,
+      "has_native_code": false,
+      "is_multidex": false,
+      "native_libraries": [],
+      "role": "config_locale",
+      "smali_roots": [],
+      "source_apk": "split_config.en.apk",
+      "status": "success"
+    },
+    {
+      "assets": [],
+      "dex_count": 0,
+      "dex_files": [],
+      "has_kotlin_metadata": false,
+      "has_native_code": false,
+      "is_multidex": false,
+      "native_libraries": [],
+      "role": "config_locale",
+      "smali_roots": [],
+      "source_apk": "split_config.tr.apk",
+      "status": "success"
+    },
+    {
+      "assets": [],
+      "dex_count": 0,
+      "dex_files": [],
+      "has_kotlin_metadata": false,
+      "has_native_code": false,
+      "is_multidex": false,
+      "native_libraries": [],
+      "role": "config_density",
+      "smali_roots": [],
+      "source_apk": "split_config.xxhdpi.apk",
+      "status": "success"
+    }
+  ],
+  "status": "partial",
+  "structure": {
+    "components": [
+      {
+        "assets": [
+          "assets/dexopt/baseline.prof",
+          "assets/dexopt/baseline.profm"
+        ],
+        "dex_count": 1,
+        "dex_files": [
+          "classes.dex"
+        ],
+        "has_kotlin_metadata": true,
+        "has_native_code": false,
+        "is_multidex": false,
+        "native_libraries": [],
+        "role": "base",
+        "smali_roots": [
+          "smali"
+        ],
+        "source_apk": "base.apk",
+        "status": "success"
+      },
+      {
+        "assets": [],
+        "dex_count": 0,
+        "dex_files": [],
+        "has_kotlin_metadata": false,
+        "has_native_code": false,
+        "is_multidex": false,
+        "native_libraries": [],
+        "role": "config_locale",
+        "smali_roots": [],
+        "source_apk": "split_config.ar.apk",
+        "status": "success"
+      },
+      {
+        "assets": [],
+        "dex_count": 0,
+        "dex_files": [],
+        "has_kotlin_metadata": false,
+        "has_native_code": false,
+        "is_multidex": false,
+        "native_libraries": [],
+        "role": "config_locale",
+        "smali_roots": [],
+        "source_apk": "split_config.en.apk",
+        "status": "success"
+      },
+      {
+        "assets": [],
+        "dex_count": 0,
+        "dex_files": [],
+        "has_kotlin_metadata": false,
+        "has_native_code": false,
+        "is_multidex": false,
+        "native_libraries": [],
+        "role": "config_locale",
+        "smali_roots": [],
+        "source_apk": "split_config.tr.apk",
+        "status": "success"
+      },
+      {
+        "assets": [],
+        "dex_count": 0,
+        "dex_files": [],
+        "has_kotlin_metadata": false,
+        "has_native_code": false,
+        "is_multidex": false,
+        "native_libraries": [],
+        "role": "config_density",
+        "smali_roots": [],
+        "source_apk": "split_config.xxhdpi.apk",
+        "status": "success"
+      }
+    ],
+    "dex_count": 1,
+    "dex_files": [
+      "base.apk:classes.dex"
+    ],
+    "has_kotlin_metadata": true,
+    "has_native_code": false,
+    "is_multidex": false,
+    "total_dex_count": 1
+  },
+  "vulnerabilities": {
+    "candidates": [
+      {
+        "classification": "candidate",
+        "component": "application.android:allowBackup",
+        "control_id": "STATIC-STORAGE-BACKUP",
+        "evidence_tier": "candidate",
+        "evidence_type": "manifest_attribute",
+        "finding_type": "backup_policy",
+        "observed_value": true,
+        "provenance_refs": [
+          "static_control_evidence_dac33f5536c19ddaab869b7e"
+        ],
+        "reason_code": "BACKUP_ENABLED_DATA_SCOPE_UNKNOWN",
+        "source": "AndroidManifest.xml",
+        "standards": {
+          "mastg_test_refs": [],
+          "masvs_category": "MASVS-STORAGE",
+          "masvs_control_refs": [],
+          "maswe_refs": []
+        }
+      },
+      {
+        "classification": "candidate",
+        "component": "mobi.freeapps.flashlight.free.FlashlightFree",
+        "control_id": "STATIC-PLATFORM-EXPORT",
+        "evidence_tier": "candidate",
+        "evidence_type": "manifest_component",
+        "finding_type": "exported_component",
+        "observed_value": true,
+        "provenance_refs": [
+          "static_control_evidence_c9373f522d231fa781be5b16"
+        ],
+        "reason_code": "EXPORTED_COMPONENT_REQUIRES_USAGE_REVIEW",
+        "source": "AndroidManifest.xml",
+        "standards": {
+          "mastg_test_refs": [],
+          "masvs_category": "MASVS-PLATFORM",
+          "masvs_control_refs": [],
+          "maswe_refs": []
+        }
+      }
+    ],
+    "control_catalog_version": "static_controls_v1",
+    "control_coverage": [
+      {
+        "assessment_state": "not_evaluated",
+        "control_id": "STATIC-AUTH-SIGNAL",
+        "coverage_reason": "No deterministic static authentication bypass evaluator.",
+        "coverage_state": "unsupported",
+        "evidence_refs": [],
+        "masvs_category": "MASVS-AUTH"
+      },
+      {
+        "assessment_state": "unknown",
+        "control_id": "STATIC-CODE-DEBUG",
+        "coverage_reason": "Explicit packaged manifest attribute supported; unresolved resources not guessed.",
+        "coverage_state": "supported",
+        "evidence_refs": [],
+        "masvs_category": "MASVS-CODE"
+      },
+      {
+        "assessment_state": "not_evaluated",
+        "control_id": "STATIC-CODE-DEV",
+        "coverage_reason": "Artifact names alone do not prove unsafe release configuration.",
+        "coverage_state": "unsupported",
+        "evidence_refs": [],
+        "masvs_category": "MASVS-CODE"
+      },
+      {
+        "assessment_state": "not_evaluated",
+        "control_id": "STATIC-CRYPTO-KEY",
+        "coverage_reason": "No structural key-to-crypto-call evidence evaluator; strings are insufficient.",
+        "coverage_state": "unsupported",
+        "evidence_refs": [],
+        "masvs_category": "MASVS-CRYPTO"
+      },
+      {
+        "assessment_state": "not_evaluated",
+        "control_id": "STATIC-CRYPTO-WEAK",
+        "coverage_reason": "No exact crypto call/context evaluator; algorithm names alone are insufficient.",
+        "coverage_state": "unsupported",
+        "evidence_refs": [],
+        "masvs_category": "MASVS-CRYPTO"
+      },
+      {
+        "assessment_state": "unknown",
+        "control_id": "STATIC-NET-CLEARTEXT",
+        "coverage_reason": "Explicit manifest or resolved network security configuration only.",
+        "coverage_state": "supported",
+        "evidence_refs": [],
+        "masvs_category": "MASVS-NETWORK"
+      },
+      {
+        "assessment_state": "unknown",
+        "control_id": "STATIC-NET-CONFIG",
+        "coverage_reason": "Resolved cleartext policies supported; unresolved policies require review.",
+        "coverage_state": "partial",
+        "evidence_refs": [],
+        "masvs_category": "MASVS-NETWORK"
+      },
+      {
+        "assessment_state": "unknown",
+        "control_id": "STATIC-NET-HTTP-CALL",
+        "coverage_reason": "Direct canonical call provenance supported; runtime use and sensitive data remain unknown.",
+        "coverage_state": "partial",
+        "evidence_refs": [],
+        "masvs_category": "MASVS-NETWORK"
+      },
+      {
+        "assessment_state": "unknown",
+        "control_id": "STATIC-PLATFORM-DEEPLINK",
+        "coverage_reason": "Manifest intent filters available; unsafe routing/data flow not evaluated.",
+        "coverage_state": "partial",
+        "evidence_refs": [],
+        "masvs_category": "MASVS-PLATFORM"
+      },
+      {
+        "assessment_state": "requires_review",
+        "control_id": "STATIC-PLATFORM-EXPORT",
+        "coverage_reason": "Manifest exposure supported; usage and permission enforcement not proven.",
+        "coverage_state": "partial",
+        "evidence_refs": [
+          "static_control_evidence_c9373f522d231fa781be5b16"
+        ],
+        "masvs_category": "MASVS-PLATFORM"
+      },
+      {
+        "assessment_state": "not_evaluated",
+        "control_id": "STATIC-PLATFORM-WEBVIEW",
+        "coverage_reason": "No deterministic WebView security call/configuration evaluator.",
+        "coverage_state": "unsupported",
+        "evidence_refs": [],
+        "masvs_category": "MASVS-PLATFORM"
+      },
+      {
+        "assessment_state": "not_evaluated",
+        "control_id": "STATIC-PRIVACY-EXPOSURE",
+        "coverage_reason": "No deterministic sensitive-data exposure flow evaluator; names are insufficient.",
+        "coverage_state": "unsupported",
+        "evidence_refs": [],
+        "masvs_category": "MASVS-PRIVACY"
+      },
+      {
+        "assessment_state": "requires_review",
+        "control_id": "STATIC-PRIVACY-PERMISSION",
+        "coverage_reason": "Requested permissions supported as indicators; data use/exposure not proven.",
+        "coverage_state": "partial",
+        "evidence_refs": [
+          "static_control_evidence_076dd17cb934d615efb96081",
+          "static_control_evidence_08ad95ea559844b2641a05ae",
+          "static_control_evidence_0a9e8cc96045132b9f3899cf",
+          "static_control_evidence_176c24ee843801a57148d461",
+          "static_control_evidence_197092dcc7a3791653e412a7",
+          "static_control_evidence_198598d608c3d0032407881a",
+          "static_control_evidence_46be569db9f471c0545c218b",
+          "static_control_evidence_5f115d56768fe059a58e105c",
+          "static_control_evidence_64439c761f414339eb1de350",
+          "static_control_evidence_6da4ea1551f03ddfdd1c4ace",
+          "static_control_evidence_928fa383f1aa3a137ca3beaa",
+          "static_control_evidence_9dcba9b1943bf0f4dc359324",
+          "static_control_evidence_d1cc69773041a5827660e99c",
+          "static_control_evidence_e2701dd11a690e17e77a511d"
+        ],
+        "masvs_category": "MASVS-PRIVACY"
+      },
+      {
+        "assessment_state": "unknown",
+        "control_id": "STATIC-RESILIENCE-ROOT",
+        "coverage_reason": "Exact root binary strings supported as candidates; actual checks not proven.",
+        "coverage_state": "partial",
+        "evidence_refs": [],
+        "masvs_category": "MASVS-RESILIENCE"
+      },
+      {
+        "assessment_state": "not_evaluated",
+        "control_id": "STATIC-STORAGE-API",
+        "coverage_reason": "No exact storage call plus sensitive-data flow evaluator.",
+        "coverage_state": "unsupported",
+        "evidence_refs": [],
+        "masvs_category": "MASVS-STORAGE"
+      },
+      {
+        "assessment_state": "requires_review",
+        "control_id": "STATIC-STORAGE-BACKUP",
+        "coverage_reason": "Backup flag supported; sensitive data scope/exclusion unknown.",
+        "coverage_state": "partial",
+        "evidence_refs": [
+          "static_control_evidence_dac33f5536c19ddaab869b7e"
+        ],
+        "masvs_category": "MASVS-STORAGE"
+      }
+    ],
+    "coverage_note": "No findings does not establish security. Indicators and candidates require additional evidence.",
+    "findings": [],
+    "indicators": [
+      {
+        "classification": "indicator",
+        "component": "network_urls",
+        "evidence_tier": "indicator",
+        "evidence_type": "static_string",
+        "finding_type": "http_string",
+        "observed_value": "http://play.google.com/store/apps/details",
+        "provenance_refs": [
+          "static_control_evidence_3e4f09404bb0ff32562a1a42"
+        ],
+        "reason_code": "HTTP_STRING_ONLY",
+        "source": "smali/mobi/freeapps/flashlight/Helper$1.smali"
+      },
+      {
+        "classification": "indicator",
+        "component": "network_urls",
+        "evidence_tier": "indicator",
+        "evidence_type": "static_string",
+        "finding_type": "http_string",
+        "observed_value": "http://www.apache.org/licenses/",
+        "provenance_refs": [
+          "static_control_evidence_c01c23b1b2e5b47614df0ffc"
+        ],
+        "reason_code": "HTTP_STRING_ONLY",
+        "source": "unknown/META-INF/androidx/constraintlayout/constraintlayout-core/LICENSE.txt"
+      },
+      {
+        "classification": "indicator",
+        "component": "uses-permission",
+        "control_id": "STATIC-PRIVACY-PERMISSION",
+        "evidence_tier": "indicator",
+        "evidence_type": "manifest_attribute",
+        "finding_type": "requested_permission",
+        "observed_value": "android.permission.ACCESS_ADSERVICES_AD_ID",
+        "provenance_refs": [
+          "static_control_evidence_076dd17cb934d615efb96081"
+        ],
+        "reason_code": "PERMISSION_DECLARATION_ONLY",
+        "source": "AndroidManifest.xml",
+        "standards": {
+          "mastg_test_refs": [],
+          "masvs_category": "MASVS-PRIVACY",
+          "masvs_control_refs": [],
+          "maswe_refs": []
+        }
+      },
+      {
+        "classification": "indicator",
+        "component": "uses-permission",
+        "control_id": "STATIC-PRIVACY-PERMISSION",
+        "evidence_tier": "indicator",
+        "evidence_type": "manifest_attribute",
+        "finding_type": "requested_permission",
+        "observed_value": "android.permission.ACCESS_ADSERVICES_ATTRIBUTION",
+        "provenance_refs": [
+          "static_control_evidence_9dcba9b1943bf0f4dc359324"
+        ],
+        "reason_code": "PERMISSION_DECLARATION_ONLY",
+        "source": "AndroidManifest.xml",
+        "standards": {
+          "mastg_test_refs": [],
+          "masvs_category": "MASVS-PRIVACY",
+          "masvs_control_refs": [],
+          "maswe_refs": []
+        }
+      },
+      {
+        "classification": "indicator",
+        "component": "uses-permission",
+        "control_id": "STATIC-PRIVACY-PERMISSION",
+        "evidence_tier": "indicator",
+        "evidence_type": "manifest_attribute",
+        "finding_type": "requested_permission",
+        "observed_value": "android.permission.ACCESS_ADSERVICES_TOPICS",
+        "provenance_refs": [
+          "static_control_evidence_6da4ea1551f03ddfdd1c4ace"
+        ],
+        "reason_code": "PERMISSION_DECLARATION_ONLY",
+        "source": "AndroidManifest.xml",
+        "standards": {
+          "mastg_test_refs": [],
+          "masvs_category": "MASVS-PRIVACY",
+          "masvs_control_refs": [],
+          "maswe_refs": []
+        }
+      },
+      {
+        "classification": "indicator",
+        "component": "uses-permission",
+        "control_id": "STATIC-PRIVACY-PERMISSION",
+        "evidence_tier": "indicator",
+        "evidence_type": "manifest_attribute",
+        "finding_type": "requested_permission",
+        "observed_value": "android.permission.ACCESS_NETWORK_STATE",
+        "provenance_refs": [
+          "static_control_evidence_197092dcc7a3791653e412a7"
+        ],
+        "reason_code": "PERMISSION_DECLARATION_ONLY",
+        "source": "AndroidManifest.xml",
+        "standards": {
+          "mastg_test_refs": [],
+          "masvs_category": "MASVS-PRIVACY",
+          "masvs_control_refs": [],
+          "maswe_refs": []
+        }
+      },
+      {
+        "classification": "indicator",
+        "component": "uses-permission",
+        "control_id": "STATIC-PRIVACY-PERMISSION",
+        "evidence_tier": "indicator",
+        "evidence_type": "manifest_attribute",
+        "finding_type": "requested_permission",
+        "observed_value": "android.permission.CAMERA",
+        "provenance_refs": [
+          "static_control_evidence_176c24ee843801a57148d461"
+        ],
+        "reason_code": "PERMISSION_DECLARATION_ONLY",
+        "source": "AndroidManifest.xml",
+        "standards": {
+          "mastg_test_refs": [],
+          "masvs_category": "MASVS-PRIVACY",
+          "masvs_control_refs": [],
+          "maswe_refs": []
+        }
+      },
+      {
+        "classification": "indicator",
+        "component": "uses-permission",
+        "control_id": "STATIC-PRIVACY-PERMISSION",
+        "evidence_tier": "indicator",
+        "evidence_type": "manifest_attribute",
+        "finding_type": "requested_permission",
+        "observed_value": "android.permission.FLASHLIGHT",
+        "provenance_refs": [
+          "static_control_evidence_198598d608c3d0032407881a"
+        ],
+        "reason_code": "PERMISSION_DECLARATION_ONLY",
+        "source": "AndroidManifest.xml",
+        "standards": {
+          "mastg_test_refs": [],
+          "masvs_category": "MASVS-PRIVACY",
+          "masvs_control_refs": [],
+          "maswe_refs": []
+        }
+      },
+      {
+        "classification": "indicator",
+        "component": "uses-permission",
+        "control_id": "STATIC-PRIVACY-PERMISSION",
+        "evidence_tier": "indicator",
+        "evidence_type": "manifest_attribute",
+        "finding_type": "requested_permission",
+        "observed_value": "android.permission.FOREGROUND_SERVICE",
+        "provenance_refs": [
+          "static_control_evidence_e2701dd11a690e17e77a511d"
+        ],
+        "reason_code": "PERMISSION_DECLARATION_ONLY",
+        "source": "AndroidManifest.xml",
+        "standards": {
+          "mastg_test_refs": [],
+          "masvs_category": "MASVS-PRIVACY",
+          "masvs_control_refs": [],
+          "maswe_refs": []
+        }
+      },
+      {
+        "classification": "indicator",
+        "component": "uses-permission",
+        "control_id": "STATIC-PRIVACY-PERMISSION",
+        "evidence_tier": "indicator",
+        "evidence_type": "manifest_attribute",
+        "finding_type": "requested_permission",
+        "observed_value": "android.permission.INTERNET",
+        "provenance_refs": [
+          "static_control_evidence_46be569db9f471c0545c218b"
+        ],
+        "reason_code": "PERMISSION_DECLARATION_ONLY",
+        "source": "AndroidManifest.xml",
+        "standards": {
+          "mastg_test_refs": [],
+          "masvs_category": "MASVS-PRIVACY",
+          "masvs_control_refs": [],
+          "maswe_refs": []
+        }
+      },
+      {
+        "classification": "indicator",
+        "component": "uses-permission",
+        "control_id": "STATIC-PRIVACY-PERMISSION",
+        "evidence_tier": "indicator",
+        "evidence_type": "manifest_attribute",
+        "finding_type": "requested_permission",
+        "observed_value": "android.permission.POST_NOTIFICATIONS",
+        "provenance_refs": [
+          "static_control_evidence_d1cc69773041a5827660e99c"
+        ],
+        "reason_code": "PERMISSION_DECLARATION_ONLY",
+        "source": "AndroidManifest.xml",
+        "standards": {
+          "mastg_test_refs": [],
+          "masvs_category": "MASVS-PRIVACY",
+          "masvs_control_refs": [],
+          "maswe_refs": []
+        }
+      },
+      {
+        "classification": "indicator",
+        "component": "uses-permission",
+        "control_id": "STATIC-PRIVACY-PERMISSION",
+        "evidence_tier": "indicator",
+        "evidence_type": "manifest_attribute",
+        "finding_type": "requested_permission",
+        "observed_value": "android.permission.RECEIVE_BOOT_COMPLETED",
+        "provenance_refs": [
+          "static_control_evidence_08ad95ea559844b2641a05ae"
+        ],
+        "reason_code": "PERMISSION_DECLARATION_ONLY",
+        "source": "AndroidManifest.xml",
+        "standards": {
+          "mastg_test_refs": [],
+          "masvs_category": "MASVS-PRIVACY",
+          "masvs_control_refs": [],
+          "maswe_refs": []
+        }
+      },
+      {
+        "classification": "indicator",
+        "component": "uses-permission",
+        "control_id": "STATIC-PRIVACY-PERMISSION",
+        "evidence_tier": "indicator",
+        "evidence_type": "manifest_attribute",
+        "finding_type": "requested_permission",
+        "observed_value": "android.permission.VIBRATE",
+        "provenance_refs": [
+          "static_control_evidence_0a9e8cc96045132b9f3899cf"
+        ],
+        "reason_code": "PERMISSION_DECLARATION_ONLY",
+        "source": "AndroidManifest.xml",
+        "standards": {
+          "mastg_test_refs": [],
+          "masvs_category": "MASVS-PRIVACY",
+          "masvs_control_refs": [],
+          "maswe_refs": []
+        }
+      },
+      {
+        "classification": "indicator",
+        "component": "uses-permission",
+        "control_id": "STATIC-PRIVACY-PERMISSION",
+        "evidence_tier": "indicator",
+        "evidence_type": "manifest_attribute",
+        "finding_type": "requested_permission",
+        "observed_value": "android.permission.WAKE_LOCK",
+        "provenance_refs": [
+          "static_control_evidence_64439c761f414339eb1de350"
+        ],
+        "reason_code": "PERMISSION_DECLARATION_ONLY",
+        "source": "AndroidManifest.xml",
+        "standards": {
+          "mastg_test_refs": [],
+          "masvs_category": "MASVS-PRIVACY",
+          "masvs_control_refs": [],
+          "maswe_refs": []
+        }
+      },
+      {
+        "classification": "indicator",
+        "component": "uses-permission",
+        "control_id": "STATIC-PRIVACY-PERMISSION",
+        "evidence_tier": "indicator",
+        "evidence_type": "manifest_attribute",
+        "finding_type": "requested_permission",
+        "observed_value": "com.google.android.gms.permission.AD_ID",
+        "provenance_refs": [
+          "static_control_evidence_5f115d56768fe059a58e105c"
+        ],
+        "reason_code": "PERMISSION_DECLARATION_ONLY",
+        "source": "AndroidManifest.xml",
+        "standards": {
+          "mastg_test_refs": [],
+          "masvs_category": "MASVS-PRIVACY",
+          "masvs_control_refs": [],
+          "maswe_refs": []
+        }
+      },
+      {
+        "classification": "indicator",
+        "component": "uses-permission",
+        "control_id": "STATIC-PRIVACY-PERMISSION",
+        "evidence_tier": "indicator",
+        "evidence_type": "manifest_attribute",
+        "finding_type": "requested_permission",
+        "observed_value": "mobi.freeapps.flashlight.free.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION",
+        "provenance_refs": [
+          "static_control_evidence_928fa383f1aa3a137ca3beaa"
+        ],
+        "reason_code": "PERMISSION_DECLARATION_ONLY",
+        "source": "AndroidManifest.xml",
+        "standards": {
+          "mastg_test_refs": [],
+          "masvs_category": "MASVS-PRIVACY",
+          "masvs_control_refs": [],
+          "maswe_refs": []
+        }
+      }
+    ],
+    "risk_score": "CLEAN",
+    "summary": {
+      "critical": 0,
+      "high": 0,
+      "low": 0,
+      "medium": 0,
+      "total": 0
+    }
+  }
+}

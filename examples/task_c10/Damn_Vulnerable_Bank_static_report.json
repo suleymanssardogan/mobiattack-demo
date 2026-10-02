@@ -1,0 +1,1346 @@
+{
+  "acquisition": {
+    "filename": "dvba_v1.1.0.apk",
+    "input_url": "unknown",
+    "platform": "android",
+    "sha256": "76c308fac6a655a3534771777780e004feb1d91be032857768c891b2baf40ba6",
+    "size_bytes": 3784858,
+    "source_type": "existing_local_fixture",
+    "validation": {
+      "dex_files": [
+        "classes.dex"
+      ],
+      "has_android_manifest": true,
+      "has_dex": true,
+      "is_valid_apk": true,
+      "is_zip": true
+    }
+  },
+  "activities": [
+    "com.app.damnvulnerablebank.Myprofile",
+    "com.app.damnvulnerablebank.CurrencyRates",
+    "com.app.damnvulnerablebank.ResetPassword",
+    "com.app.damnvulnerablebank.ViewBeneficiary",
+    "com.app.damnvulnerablebank.ApproveBeneficiary",
+    "com.app.damnvulnerablebank.PendingBeneficiary",
+    "com.app.damnvulnerablebank.AddBeneficiary",
+    "com.app.damnvulnerablebank.SendMoney",
+    "com.app.damnvulnerablebank.ViewBeneficiaryAdmin",
+    "com.app.damnvulnerablebank.GetTransactions",
+    "com.app.damnvulnerablebank.ViewBalance",
+    "com.app.damnvulnerablebank.Dashboard",
+    "com.app.damnvulnerablebank.RegisterBank",
+    "com.app.damnvulnerablebank.BankLogin",
+    "com.app.damnvulnerablebank.MainActivity",
+    "com.app.damnvulnerablebank.SplashScreen",
+    "androidx.biometric.DeviceCredentialHandlerActivity",
+    "com.google.firebase.auth.internal.FederatedSignInActivity",
+    "com.google.android.gms.common.api.GoogleApiActivity"
+  ],
+  "analysis_notes": [
+    "Static network indicators are extracted from application content and do not by themselves prove runtime network usage.",
+    "API candidates are static call-context candidates extracted from Smali register flows and do not represent confirmed runtime endpoints.",
+    "No API candidates were identified by the current call-context extractor.",
+    "Static network indicators may still exist. The current V1 API candidate extractor supports limited framework-specific call patterns. Zero candidates does not mean the application has no APIs.",
+    "No vulnerability exploitation was performed.",
+    "No security verdict was produced."
+  ],
+  "api_candidates": [],
+  "api_discovery": {
+    "bounded_provenance": {
+      "coverage": {
+        "partial": true,
+        "skipped": []
+      },
+      "max_depth": 3,
+      "unresolved": [
+        {
+          "line": 0,
+          "reason": "BRANCH_DEPENDENT_FLOW",
+          "resolution_state": "unresolved",
+          "source_file": "smali/c/a/b/w/f$a.smali",
+          "source_method": "<init>(Ljava/net/HttpURLConnection;)V"
+        },
+        {
+          "line": 0,
+          "reason": "UNSUPPORTED_INVOKE_FORM",
+          "resolution_state": "unresolved",
+          "source_file": "smali/c/a/b/w/f$a.smali",
+          "source_method": "close()V"
+        },
+        {
+          "line": 0,
+          "reason": "BRANCH_DEPENDENT_FLOW",
+          "resolution_state": "unresolved",
+          "source_file": "smali/c/a/b/w/f.smali",
+          "source_method": "a(Lc/a/b/o;Ljava/util/Map;)Lc/a/b/w/e;"
+        },
+        {
+          "line": 0,
+          "reason": "BRANCH_DEPENDENT_FLOW",
+          "resolution_state": "unresolved",
+          "source_file": "smali/c/a/b/w/f.smali",
+          "source_method": "b(Ljava/net/HttpURLConnection;Lc/a/b/o;[B)V"
+        },
+        {
+          "line": 0,
+          "reason": "BRANCH_DEPENDENT_FLOW",
+          "resolution_state": "unresolved",
+          "source_file": "smali/c/a/b/w/f.smali",
+          "source_method": "d(Ljava/net/HttpURLConnection;Lc/a/b/o;)V"
+        }
+      ]
+    },
+    "httpurlconnection": {
+      "coverage": {
+        "partial": true,
+        "skipped": []
+      },
+      "unresolved": [
+        {
+          "framework": "httpurlconnection",
+          "line": 23,
+          "reason": "UNSUPPORTED_CONTROL_FLOW",
+          "resolution_state": "unresolved",
+          "source_component": "Lc/a/b/w/f$a;",
+          "source_file": "smali/c/a/b/w/f$a.smali",
+          "source_method": "<init>(Ljava/net/HttpURLConnection;)V"
+        },
+        {
+          "framework": "httpurlconnection",
+          "line": 58,
+          "reason": "CONNECTION_IDENTITY_UNRESOLVED",
+          "resolution_state": "unresolved",
+          "source_component": "Lc/a/b/w/f$a;",
+          "source_file": "smali/c/a/b/w/f$a.smali",
+          "source_method": "close()V"
+        },
+        {
+          "framework": "httpurlconnection",
+          "line": 38,
+          "reason": "UNSUPPORTED_CONTROL_FLOW",
+          "resolution_state": "unresolved",
+          "source_component": "Lc/a/b/w/f;",
+          "source_file": "smali/c/a/b/w/f.smali",
+          "source_method": "b(Ljava/net/HttpURLConnection;Lc/a/b/o;[B)V"
+        },
+        {
+          "framework": "httpurlconnection",
+          "line": 179,
+          "reason": "UNSUPPORTED_CONTROL_FLOW",
+          "resolution_state": "unresolved",
+          "source_component": "Lc/a/b/w/f;",
+          "source_file": "smali/c/a/b/w/f.smali",
+          "source_method": "d(Ljava/net/HttpURLConnection;Lc/a/b/o;)V"
+        },
+        {
+          "framework": "httpurlconnection",
+          "line": 316,
+          "reason": "UNSUPPORTED_CONTROL_FLOW",
+          "resolution_state": "unresolved",
+          "source_component": "Lc/a/b/w/f;",
+          "source_file": "smali/c/a/b/w/f.smali",
+          "source_method": "a(Lc/a/b/o;Ljava/util/Map;)Lc/a/b/w/e;"
+        }
+      ]
+    },
+    "ktor": {
+      "coverage": {
+        "partial": false,
+        "skipped": []
+      },
+      "unresolved": []
+    },
+    "okhttp": {
+      "coverage": {
+        "partial": false,
+        "skipped": []
+      },
+      "unresolved": []
+    },
+    "retrofit": {
+      "coverage": {
+        "partial": false,
+        "skipped": []
+      },
+      "unresolved": [],
+      "unresolved_declarations": []
+    },
+    "volley": {
+      "coverage": {
+        "partial": false,
+        "skipped": []
+      },
+      "unresolved": []
+    }
+  },
+  "apk_components": [],
+  "application": {
+    "filename": "dvba_v1.1.0.apk",
+    "is_valid_apk": true,
+    "launcher_activity": "com.app.damnvulnerablebank.SplashScreen",
+    "launcher_status": "resolved",
+    "launcher_target_activity": null,
+    "package_name": "com.app.damnvulnerablebank",
+    "sha256": "76c308fac6a655a3534771777780e004feb1d91be032857768c891b2baf40ba6",
+    "size_bytes": 3784858
+  },
+  "limitations": [
+    "Analysis is limited to static heuristics on decoded package contents without runtime execution.",
+    "V1 API candidate extractor only tracks specific call-context register patterns (e.g. Fuel).",
+    "Dynamic instrumentation, traffic interception (MITM/Burp), and deep UI exploration were not performed.",
+    "No security verdict, vulnerability score, or risk classification is provided."
+  ],
+  "manifest": {
+    "activities": [
+      "com.app.damnvulnerablebank.Myprofile",
+      "com.app.damnvulnerablebank.CurrencyRates",
+      "com.app.damnvulnerablebank.ResetPassword",
+      "com.app.damnvulnerablebank.ViewBeneficiary",
+      "com.app.damnvulnerablebank.ApproveBeneficiary",
+      "com.app.damnvulnerablebank.PendingBeneficiary",
+      "com.app.damnvulnerablebank.AddBeneficiary",
+      "com.app.damnvulnerablebank.SendMoney",
+      "com.app.damnvulnerablebank.ViewBeneficiaryAdmin",
+      "com.app.damnvulnerablebank.GetTransactions",
+      "com.app.damnvulnerablebank.ViewBalance",
+      "com.app.damnvulnerablebank.Dashboard",
+      "com.app.damnvulnerablebank.RegisterBank",
+      "com.app.damnvulnerablebank.BankLogin",
+      "com.app.damnvulnerablebank.MainActivity",
+      "com.app.damnvulnerablebank.SplashScreen",
+      "androidx.biometric.DeviceCredentialHandlerActivity",
+      "com.google.firebase.auth.internal.FederatedSignInActivity",
+      "com.google.android.gms.common.api.GoogleApiActivity"
+    ],
+    "application": {
+      "allow_backup": true,
+      "debuggable": null,
+      "enabled": null,
+      "enabled_effective": true,
+      "network_security_config": "@xml/network_security_config",
+      "observed_attributes": {
+        "allowBackup": "true",
+        "debuggable": null,
+        "enabled": null,
+        "usesCleartextTraffic": "true"
+      },
+      "uses_cleartext_traffic": true
+    },
+    "components": [
+      {
+        "enabled": null,
+        "enabled_effective": true,
+        "exported": true,
+        "exported_effective": true,
+        "exported_source": "explicit",
+        "intent_filters": [],
+        "name": "androidx.biometric.DeviceCredentialHandlerActivity",
+        "permission": null,
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "activity",
+        "write_permission": null
+      },
+      {
+        "enabled": null,
+        "enabled_effective": true,
+        "exported": null,
+        "exported_effective": false,
+        "exported_source": "platform_default",
+        "intent_filters": [],
+        "name": "com.app.damnvulnerablebank.AddBeneficiary",
+        "permission": null,
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "activity",
+        "write_permission": null
+      },
+      {
+        "enabled": null,
+        "enabled_effective": true,
+        "exported": null,
+        "exported_effective": false,
+        "exported_source": "platform_default",
+        "intent_filters": [],
+        "name": "com.app.damnvulnerablebank.ApproveBeneficiary",
+        "permission": null,
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "activity",
+        "write_permission": null
+      },
+      {
+        "enabled": null,
+        "enabled_effective": true,
+        "exported": null,
+        "exported_effective": false,
+        "exported_source": "platform_default",
+        "intent_filters": [],
+        "name": "com.app.damnvulnerablebank.BankLogin",
+        "permission": null,
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "activity",
+        "write_permission": null
+      },
+      {
+        "enabled": null,
+        "enabled_effective": true,
+        "exported": null,
+        "exported_effective": true,
+        "exported_source": "platform_default",
+        "intent_filters": [
+          {
+            "actions": [
+              "android.intent.action.VIEW"
+            ],
+            "categories": [
+              "android.intent.category.BROWSABLE",
+              "android.intent.category.DEFAULT"
+            ],
+            "data": [
+              {
+                "{http://schemas.android.com/apk/res/android}host": "xe.com",
+                "{http://schemas.android.com/apk/res/android}scheme": "http"
+              },
+              {
+                "{http://schemas.android.com/apk/res/android}host": "xe.com",
+                "{http://schemas.android.com/apk/res/android}scheme": "https"
+              }
+            ]
+          }
+        ],
+        "name": "com.app.damnvulnerablebank.CurrencyRates",
+        "permission": null,
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "activity",
+        "write_permission": null
+      },
+      {
+        "enabled": null,
+        "enabled_effective": true,
+        "exported": null,
+        "exported_effective": false,
+        "exported_source": "platform_default",
+        "intent_filters": [],
+        "name": "com.app.damnvulnerablebank.Dashboard",
+        "permission": null,
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "activity",
+        "write_permission": null
+      },
+      {
+        "enabled": null,
+        "enabled_effective": true,
+        "exported": null,
+        "exported_effective": false,
+        "exported_source": "platform_default",
+        "intent_filters": [],
+        "name": "com.app.damnvulnerablebank.GetTransactions",
+        "permission": null,
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "activity",
+        "write_permission": null
+      },
+      {
+        "enabled": null,
+        "enabled_effective": true,
+        "exported": null,
+        "exported_effective": false,
+        "exported_source": "platform_default",
+        "intent_filters": [],
+        "name": "com.app.damnvulnerablebank.MainActivity",
+        "permission": null,
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "activity",
+        "write_permission": null
+      },
+      {
+        "enabled": null,
+        "enabled_effective": true,
+        "exported": null,
+        "exported_effective": false,
+        "exported_source": "platform_default",
+        "intent_filters": [],
+        "name": "com.app.damnvulnerablebank.Myprofile",
+        "permission": null,
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "activity",
+        "write_permission": null
+      },
+      {
+        "enabled": null,
+        "enabled_effective": true,
+        "exported": null,
+        "exported_effective": false,
+        "exported_source": "platform_default",
+        "intent_filters": [],
+        "name": "com.app.damnvulnerablebank.PendingBeneficiary",
+        "permission": null,
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "activity",
+        "write_permission": null
+      },
+      {
+        "enabled": null,
+        "enabled_effective": true,
+        "exported": null,
+        "exported_effective": false,
+        "exported_source": "platform_default",
+        "intent_filters": [],
+        "name": "com.app.damnvulnerablebank.RegisterBank",
+        "permission": null,
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "activity",
+        "write_permission": null
+      },
+      {
+        "enabled": null,
+        "enabled_effective": true,
+        "exported": null,
+        "exported_effective": false,
+        "exported_source": "platform_default",
+        "intent_filters": [],
+        "name": "com.app.damnvulnerablebank.ResetPassword",
+        "permission": null,
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "activity",
+        "write_permission": null
+      },
+      {
+        "enabled": null,
+        "enabled_effective": true,
+        "exported": true,
+        "exported_effective": true,
+        "exported_source": "explicit",
+        "intent_filters": [],
+        "name": "com.app.damnvulnerablebank.SendMoney",
+        "permission": null,
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "activity",
+        "write_permission": null
+      },
+      {
+        "enabled": null,
+        "enabled_effective": true,
+        "exported": null,
+        "exported_effective": true,
+        "exported_source": "platform_default",
+        "intent_filters": [
+          {
+            "actions": [
+              "android.intent.action.MAIN"
+            ],
+            "categories": [
+              "android.intent.category.LAUNCHER"
+            ],
+            "data": []
+          }
+        ],
+        "name": "com.app.damnvulnerablebank.SplashScreen",
+        "permission": null,
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "activity",
+        "write_permission": null
+      },
+      {
+        "enabled": null,
+        "enabled_effective": true,
+        "exported": true,
+        "exported_effective": true,
+        "exported_source": "explicit",
+        "intent_filters": [],
+        "name": "com.app.damnvulnerablebank.ViewBalance",
+        "permission": null,
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "activity",
+        "write_permission": null
+      },
+      {
+        "enabled": null,
+        "enabled_effective": true,
+        "exported": null,
+        "exported_effective": false,
+        "exported_source": "platform_default",
+        "intent_filters": [],
+        "name": "com.app.damnvulnerablebank.ViewBeneficiary",
+        "permission": null,
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "activity",
+        "write_permission": null
+      },
+      {
+        "enabled": null,
+        "enabled_effective": true,
+        "exported": null,
+        "exported_effective": false,
+        "exported_source": "platform_default",
+        "intent_filters": [],
+        "name": "com.app.damnvulnerablebank.ViewBeneficiaryAdmin",
+        "permission": null,
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "activity",
+        "write_permission": null
+      },
+      {
+        "enabled": null,
+        "enabled_effective": true,
+        "exported": false,
+        "exported_effective": false,
+        "exported_source": "explicit",
+        "intent_filters": [],
+        "name": "com.google.android.gms.common.api.GoogleApiActivity",
+        "permission": null,
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "activity",
+        "write_permission": null
+      },
+      {
+        "enabled": null,
+        "enabled_effective": true,
+        "exported": true,
+        "exported_effective": true,
+        "exported_source": "explicit",
+        "intent_filters": [],
+        "name": "com.google.firebase.auth.internal.FederatedSignInActivity",
+        "permission": "com.google.firebase.auth.api.gms.permission.LAUNCH_FEDERATED_SIGN_IN",
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "activity",
+        "write_permission": null
+      },
+      {
+        "enabled": null,
+        "enabled_effective": true,
+        "exported": false,
+        "exported_effective": false,
+        "exported_source": "explicit",
+        "intent_filters": [],
+        "name": "com.google.firebase.provider.FirebaseInitProvider",
+        "permission": null,
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "provider",
+        "write_permission": null
+      },
+      {
+        "enabled": null,
+        "enabled_effective": true,
+        "exported": false,
+        "exported_effective": false,
+        "exported_source": "explicit",
+        "intent_filters": [],
+        "name": "com.google.firebase.components.ComponentDiscoveryService",
+        "permission": null,
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "service",
+        "write_permission": null
+      }
+    ],
+    "launcher_activity": "com.app.damnvulnerablebank.SplashScreen",
+    "launcher_status": "resolved",
+    "launcher_target_activity": null,
+    "min_sdk": 21,
+    "network_security_policy": {
+      "cleartext_permissions": [
+        {
+          "component": "base-config",
+          "domains": [],
+          "source": "res/xml/network_security_config.xml",
+          "value": true
+        }
+      ],
+      "status": "resolved"
+    },
+    "package_name": "com.app.damnvulnerablebank",
+    "permission_declarations": [
+      {
+        "max_sdk": null,
+        "name": "android.permission.INTERNET",
+        "source": "AndroidManifest.xml",
+        "tag": "uses-permission"
+      },
+      {
+        "max_sdk": null,
+        "name": "android.permission.USE_BIOMETRIC",
+        "source": "AndroidManifest.xml",
+        "tag": "uses-permission"
+      },
+      {
+        "max_sdk": null,
+        "name": "android.permission.USE_FINGERPRINT",
+        "source": "AndroidManifest.xml",
+        "tag": "uses-permission"
+      }
+    ],
+    "permissions": [
+      "android.permission.INTERNET",
+      "android.permission.USE_BIOMETRIC",
+      "android.permission.USE_FINGERPRINT"
+    ],
+    "providers": [
+      {
+        "enabled": null,
+        "enabled_effective": true,
+        "exported": false,
+        "exported_effective": false,
+        "exported_source": "explicit",
+        "intent_filters": [],
+        "name": "com.google.firebase.provider.FirebaseInitProvider",
+        "permission": null,
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "provider",
+        "write_permission": null
+      }
+    ],
+    "receivers": [],
+    "sdk_evidence": {
+      "min_sdk": "apktool.yml: sdkInfo.minSdkVersion",
+      "target_sdk": "apktool.yml: sdkInfo.targetSdkVersion"
+    },
+    "services": [
+      {
+        "enabled": null,
+        "enabled_effective": true,
+        "exported": false,
+        "exported_effective": false,
+        "exported_source": "explicit",
+        "intent_filters": [],
+        "name": "com.google.firebase.components.ComponentDiscoveryService",
+        "permission": null,
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "service",
+        "write_permission": null
+      }
+    ],
+    "target_sdk": 29,
+    "version_code": null
+  },
+  "manifest_evidence": [],
+  "network_indicators": {
+    "domains": [
+      {
+        "line_number": 59,
+        "source_file": "res/values/strings.xml",
+        "type": "domain",
+        "value": "932398433474-59j4a17sqbf1r9m1f2eqqlreo6a5qsmt.apps.googleusercontent.com"
+      },
+      {
+        "line_number": 77,
+        "source_file": "res/values/strings.xml",
+        "type": "domain",
+        "value": "damn-vulnerable-bank.appspot.com"
+      },
+      {
+        "line_number": 3777,
+        "source_file": "smali/c/c/a/a/c/l/q.smali",
+        "type": "domain",
+        "value": "facebook.com"
+      },
+      {
+        "line_number": 3863,
+        "source_file": "smali/c/c/a/a/c/l/q.smali",
+        "type": "domain",
+        "value": "github.com"
+      },
+      {
+        "line_number": 3734,
+        "source_file": "smali/c/c/a/a/c/l/q.smali",
+        "type": "domain",
+        "value": "google.com"
+      },
+      {
+        "line_number": 3906,
+        "source_file": "smali/c/c/a/a/c/l/q.smali",
+        "type": "domain",
+        "value": "playgames.google.com"
+      },
+      {
+        "line_number": 3820,
+        "source_file": "smali/c/c/a/a/c/l/q.smali",
+        "type": "domain",
+        "value": "twitter.com"
+      },
+      {
+        "line_number": 13,
+        "source_file": "AndroidManifest.xml",
+        "type": "domain",
+        "value": "xe.com"
+      },
+      {
+        "line_number": 14,
+        "source_file": "AndroidManifest.xml",
+        "type": "domain",
+        "value": "xe.com"
+      }
+    ],
+    "ip_addresses": [],
+    "local_file_urls": [],
+    "network_urls": [
+      {
+        "line_number": 11,
+        "source_file": "res/layout/activity_banklogin.xml",
+        "type": "network_url",
+        "value": "http://127.0.0.1:8000"
+      },
+      {
+        "line_number": 95,
+        "source_file": "smali/c/c/a/a/f/c/n1.smali",
+        "type": "network_url",
+        "value": "http://localhost"
+      },
+      {
+        "line_number": 71,
+        "source_file": "res/values/strings.xml",
+        "type": "network_url",
+        "value": "https://damn-vulnerable-bank.firebaseio.com"
+      },
+      {
+        "line_number": 10,
+        "source_file": "smali/c/c/a/a/c/l/f0.smali",
+        "type": "network_url",
+        "value": "https://plus.google.com/"
+      },
+      {
+        "line_number": 68,
+        "source_file": "smali/com/app/damnvulnerablebank/CurrencyRates.smali",
+        "type": "network_url",
+        "value": "https://www.xe.com/"
+      }
+    ],
+    "path_candidates": [
+      {
+        "line_number": 82,
+        "source_file": "smali/com/app/damnvulnerablebank/SendMoney$a.smali",
+        "type": "path_candidate",
+        "value": "/api/balance/transfer"
+      },
+      {
+        "line_number": 64,
+        "source_file": "smali/com/app/damnvulnerablebank/ViewBalance.smali",
+        "type": "path_candidate",
+        "value": "/api/balance/view"
+      },
+      {
+        "line_number": 66,
+        "source_file": "smali/com/app/damnvulnerablebank/AddBeneficiary.smali",
+        "type": "path_candidate",
+        "value": "/api/beneficiary/add"
+      },
+      {
+        "line_number": 113,
+        "source_file": "smali/com/app/damnvulnerablebank/ApproveBeneficiary.smali",
+        "type": "path_candidate",
+        "value": "/api/beneficiary/approve"
+      },
+      {
+        "line_number": 88,
+        "source_file": "smali/com/app/damnvulnerablebank/PendingBeneficiary.smali",
+        "type": "path_candidate",
+        "value": "/api/beneficiary/pending"
+      },
+      {
+        "line_number": 94,
+        "source_file": "smali/com/app/damnvulnerablebank/ViewBeneficiary.smali",
+        "type": "path_candidate",
+        "value": "/api/beneficiary/view"
+      },
+      {
+        "line_number": 118,
+        "source_file": "smali/com/app/damnvulnerablebank/ViewBeneficiaryAdmin.smali",
+        "type": "path_candidate",
+        "value": "/api/beneficiary/view"
+      },
+      {
+        "line_number": 97,
+        "source_file": "smali/com/app/damnvulnerablebank/MainActivity.smali",
+        "type": "path_candidate",
+        "value": "/api/health/check"
+      },
+      {
+        "line_number": 85,
+        "source_file": "smali/com/app/damnvulnerablebank/GetTransactions.smali",
+        "type": "path_candidate",
+        "value": "/api/transactions/view"
+      },
+      {
+        "line_number": 127,
+        "source_file": "smali/com/app/damnvulnerablebank/ResetPassword.smali",
+        "type": "path_candidate",
+        "value": "/api/user/change-password"
+      },
+      {
+        "line_number": 130,
+        "source_file": "smali/com/app/damnvulnerablebank/BankLogin.smali",
+        "type": "path_candidate",
+        "value": "/api/user/login"
+      },
+      {
+        "line_number": 96,
+        "source_file": "smali/com/app/damnvulnerablebank/Myprofile.smali",
+        "type": "path_candidate",
+        "value": "/api/user/profile"
+      },
+      {
+        "line_number": 100,
+        "source_file": "smali/com/app/damnvulnerablebank/RegisterBank.smali",
+        "type": "path_candidate",
+        "value": "/api/user/register"
+      },
+      {
+        "line_number": 1695,
+        "source_file": "smali/a/a/a/a/a.smali",
+        "type": "path_candidate",
+        "value": "/sbin/su"
+      },
+      {
+        "line_number": 1711,
+        "source_file": "smali/a/a/a/a/a.smali",
+        "type": "path_candidate",
+        "value": "/su/bin/su"
+      }
+    ]
+  },
+  "package_layout": "monolithic",
+  "permissions": [
+    "android.permission.INTERNET",
+    "android.permission.USE_BIOMETRIC",
+    "android.permission.USE_FINGERPRINT"
+  ],
+  "platform": "android",
+  "preprocessing": {},
+  "report_type": "static_analysis",
+  "report_version": "1.0",
+  "run_id": "c10_repeat_a",
+  "split_count": 1,
+  "split_structure": [],
+  "status": "completed",
+  "structure": {
+    "assets": [],
+    "dex_count": 1,
+    "dex_files": [
+      "classes.dex"
+    ],
+    "has_kotlin_metadata": false,
+    "has_native_code": true,
+    "is_multidex": false,
+    "native_libraries": [
+      "lib/arm64-v8a/libfrida-check.so",
+      "lib/arm64-v8a/libtool-checker.so",
+      "lib/armeabi-v7a/libfrida-check.so",
+      "lib/armeabi-v7a/libtool-checker.so",
+      "lib/x86/libfrida-check.so",
+      "lib/x86/libtool-checker.so",
+      "lib/x86_64/libfrida-check.so",
+      "lib/x86_64/libtool-checker.so"
+    ],
+    "smali_roots": [
+      "smali"
+    ]
+  },
+  "vulnerabilities": {
+    "candidates": [
+      {
+        "classification": "candidate",
+        "component": "path_candidates",
+        "control_id": "STATIC-RESILIENCE-ROOT",
+        "evidence_tier": "candidate",
+        "evidence_type": "static_string",
+        "finding_type": "root_binary_reference",
+        "observed_value": "/sbin/su",
+        "provenance_refs": [
+          "static_control_evidence_d5b5f4b1b829743caea4e827"
+        ],
+        "reason_code": "EXACT_ROOT_BINARY_PATH",
+        "source": "smali/a/a/a/a/a.smali",
+        "standards": {
+          "mastg_test_refs": [],
+          "masvs_category": "MASVS-RESILIENCE",
+          "masvs_control_refs": [],
+          "maswe_refs": []
+        }
+      },
+      {
+        "classification": "candidate",
+        "component": "path_candidates",
+        "control_id": "STATIC-RESILIENCE-ROOT",
+        "evidence_tier": "candidate",
+        "evidence_type": "static_string",
+        "finding_type": "root_binary_reference",
+        "observed_value": "/su/bin/su",
+        "provenance_refs": [
+          "static_control_evidence_27d19192a69aea3e0b732047"
+        ],
+        "reason_code": "EXACT_ROOT_BINARY_PATH",
+        "source": "smali/a/a/a/a/a.smali",
+        "standards": {
+          "mastg_test_refs": [],
+          "masvs_category": "MASVS-RESILIENCE",
+          "masvs_control_refs": [],
+          "maswe_refs": []
+        }
+      },
+      {
+        "classification": "candidate",
+        "component": "application.android:allowBackup",
+        "control_id": "STATIC-STORAGE-BACKUP",
+        "evidence_tier": "candidate",
+        "evidence_type": "manifest_attribute",
+        "finding_type": "backup_policy",
+        "observed_value": true,
+        "provenance_refs": [
+          "static_control_evidence_dac33f5536c19ddaab869b7e"
+        ],
+        "reason_code": "BACKUP_ENABLED_DATA_SCOPE_UNKNOWN",
+        "source": "AndroidManifest.xml",
+        "standards": {
+          "mastg_test_refs": [],
+          "masvs_category": "MASVS-STORAGE",
+          "masvs_control_refs": [],
+          "maswe_refs": []
+        }
+      },
+      {
+        "classification": "candidate",
+        "component": "androidx.biometric.DeviceCredentialHandlerActivity",
+        "control_id": "STATIC-PLATFORM-EXPORT",
+        "evidence_tier": "candidate",
+        "evidence_type": "manifest_component",
+        "finding_type": "exported_component",
+        "observed_value": true,
+        "provenance_refs": [
+          "static_control_evidence_3d9ea89f8510b1e6bbc91b44"
+        ],
+        "reason_code": "EXPORTED_COMPONENT_REQUIRES_USAGE_REVIEW",
+        "source": "AndroidManifest.xml",
+        "standards": {
+          "mastg_test_refs": [],
+          "masvs_category": "MASVS-PLATFORM",
+          "masvs_control_refs": [],
+          "maswe_refs": []
+        }
+      },
+      {
+        "classification": "candidate",
+        "component": "com.app.damnvulnerablebank.CurrencyRates",
+        "control_id": "STATIC-PLATFORM-EXPORT",
+        "evidence_tier": "candidate",
+        "evidence_type": "manifest_component",
+        "finding_type": "exported_component",
+        "observed_value": true,
+        "provenance_refs": [
+          "static_control_evidence_c70d486058fdbf9ebc6e25d5"
+        ],
+        "reason_code": "EXPORTED_COMPONENT_REQUIRES_USAGE_REVIEW",
+        "source": "AndroidManifest.xml",
+        "standards": {
+          "mastg_test_refs": [],
+          "masvs_category": "MASVS-PLATFORM",
+          "masvs_control_refs": [],
+          "maswe_refs": []
+        }
+      },
+      {
+        "classification": "candidate",
+        "component": "com.app.damnvulnerablebank.SendMoney",
+        "control_id": "STATIC-PLATFORM-EXPORT",
+        "evidence_tier": "candidate",
+        "evidence_type": "manifest_component",
+        "finding_type": "exported_component",
+        "observed_value": true,
+        "provenance_refs": [
+          "static_control_evidence_88aa2b9e9fe292a928631ae2"
+        ],
+        "reason_code": "EXPORTED_COMPONENT_REQUIRES_USAGE_REVIEW",
+        "source": "AndroidManifest.xml",
+        "standards": {
+          "mastg_test_refs": [],
+          "masvs_category": "MASVS-PLATFORM",
+          "masvs_control_refs": [],
+          "maswe_refs": []
+        }
+      },
+      {
+        "classification": "candidate",
+        "component": "com.app.damnvulnerablebank.SplashScreen",
+        "control_id": "STATIC-PLATFORM-EXPORT",
+        "evidence_tier": "candidate",
+        "evidence_type": "manifest_component",
+        "finding_type": "exported_component",
+        "observed_value": true,
+        "provenance_refs": [
+          "static_control_evidence_0371031c016fab2d8840820e"
+        ],
+        "reason_code": "EXPORTED_COMPONENT_REQUIRES_USAGE_REVIEW",
+        "source": "AndroidManifest.xml",
+        "standards": {
+          "mastg_test_refs": [],
+          "masvs_category": "MASVS-PLATFORM",
+          "masvs_control_refs": [],
+          "maswe_refs": []
+        }
+      },
+      {
+        "classification": "candidate",
+        "component": "com.app.damnvulnerablebank.ViewBalance",
+        "control_id": "STATIC-PLATFORM-EXPORT",
+        "evidence_tier": "candidate",
+        "evidence_type": "manifest_component",
+        "finding_type": "exported_component",
+        "observed_value": true,
+        "provenance_refs": [
+          "static_control_evidence_104731869eb81c715819c1da"
+        ],
+        "reason_code": "EXPORTED_COMPONENT_REQUIRES_USAGE_REVIEW",
+        "source": "AndroidManifest.xml",
+        "standards": {
+          "mastg_test_refs": [],
+          "masvs_category": "MASVS-PLATFORM",
+          "masvs_control_refs": [],
+          "maswe_refs": []
+        }
+      }
+    ],
+    "control_catalog_version": "static_controls_v1",
+    "control_coverage": [
+      {
+        "assessment_state": "not_evaluated",
+        "control_id": "STATIC-AUTH-SIGNAL",
+        "coverage_reason": "No deterministic static authentication bypass evaluator.",
+        "coverage_state": "unsupported",
+        "evidence_refs": [],
+        "masvs_category": "MASVS-AUTH"
+      },
+      {
+        "assessment_state": "unknown",
+        "control_id": "STATIC-CODE-DEBUG",
+        "coverage_reason": "Explicit packaged manifest attribute supported; unresolved resources not guessed.",
+        "coverage_state": "supported",
+        "evidence_refs": [],
+        "masvs_category": "MASVS-CODE"
+      },
+      {
+        "assessment_state": "not_evaluated",
+        "control_id": "STATIC-CODE-DEV",
+        "coverage_reason": "Artifact names alone do not prove unsafe release configuration.",
+        "coverage_state": "unsupported",
+        "evidence_refs": [],
+        "masvs_category": "MASVS-CODE"
+      },
+      {
+        "assessment_state": "not_evaluated",
+        "control_id": "STATIC-CRYPTO-KEY",
+        "coverage_reason": "No structural key-to-crypto-call evidence evaluator; strings are insufficient.",
+        "coverage_state": "unsupported",
+        "evidence_refs": [],
+        "masvs_category": "MASVS-CRYPTO"
+      },
+      {
+        "assessment_state": "not_evaluated",
+        "control_id": "STATIC-CRYPTO-WEAK",
+        "coverage_reason": "No exact crypto call/context evaluator; algorithm names alone are insufficient.",
+        "coverage_state": "unsupported",
+        "evidence_refs": [],
+        "masvs_category": "MASVS-CRYPTO"
+      },
+      {
+        "assessment_state": "finding_present",
+        "control_id": "STATIC-NET-CLEARTEXT",
+        "coverage_reason": "Explicit manifest or resolved network security configuration only.",
+        "coverage_state": "supported",
+        "evidence_refs": [
+          "static_control_evidence_e10415c76da7f9f0ffefdeb6"
+        ],
+        "masvs_category": "MASVS-NETWORK"
+      },
+      {
+        "assessment_state": "unknown",
+        "control_id": "STATIC-NET-CONFIG",
+        "coverage_reason": "Resolved cleartext policies supported; unresolved policies require review.",
+        "coverage_state": "partial",
+        "evidence_refs": [],
+        "masvs_category": "MASVS-NETWORK"
+      },
+      {
+        "assessment_state": "unknown",
+        "control_id": "STATIC-NET-HTTP-CALL",
+        "coverage_reason": "Direct canonical call provenance supported; runtime use and sensitive data remain unknown.",
+        "coverage_state": "partial",
+        "evidence_refs": [],
+        "masvs_category": "MASVS-NETWORK"
+      },
+      {
+        "assessment_state": "unknown",
+        "control_id": "STATIC-PLATFORM-DEEPLINK",
+        "coverage_reason": "Manifest intent filters available; unsafe routing/data flow not evaluated.",
+        "coverage_state": "partial",
+        "evidence_refs": [],
+        "masvs_category": "MASVS-PLATFORM"
+      },
+      {
+        "assessment_state": "requires_review",
+        "control_id": "STATIC-PLATFORM-EXPORT",
+        "coverage_reason": "Manifest exposure supported; usage and permission enforcement not proven.",
+        "coverage_state": "partial",
+        "evidence_refs": [
+          "static_control_evidence_0371031c016fab2d8840820e",
+          "static_control_evidence_104731869eb81c715819c1da",
+          "static_control_evidence_3d9ea89f8510b1e6bbc91b44",
+          "static_control_evidence_88aa2b9e9fe292a928631ae2",
+          "static_control_evidence_c70d486058fdbf9ebc6e25d5"
+        ],
+        "masvs_category": "MASVS-PLATFORM"
+      },
+      {
+        "assessment_state": "not_evaluated",
+        "control_id": "STATIC-PLATFORM-WEBVIEW",
+        "coverage_reason": "No deterministic WebView security call/configuration evaluator.",
+        "coverage_state": "unsupported",
+        "evidence_refs": [],
+        "masvs_category": "MASVS-PLATFORM"
+      },
+      {
+        "assessment_state": "not_evaluated",
+        "control_id": "STATIC-PRIVACY-EXPOSURE",
+        "coverage_reason": "No deterministic sensitive-data exposure flow evaluator; names are insufficient.",
+        "coverage_state": "unsupported",
+        "evidence_refs": [],
+        "masvs_category": "MASVS-PRIVACY"
+      },
+      {
+        "assessment_state": "requires_review",
+        "control_id": "STATIC-PRIVACY-PERMISSION",
+        "coverage_reason": "Requested permissions supported as indicators; data use/exposure not proven.",
+        "coverage_state": "partial",
+        "evidence_refs": [
+          "static_control_evidence_03f22c81abd34eafb23ac5ac",
+          "static_control_evidence_46be569db9f471c0545c218b",
+          "static_control_evidence_856d2448adddd9ca7b2d4039"
+        ],
+        "masvs_category": "MASVS-PRIVACY"
+      },
+      {
+        "assessment_state": "requires_review",
+        "control_id": "STATIC-RESILIENCE-ROOT",
+        "coverage_reason": "Exact root binary strings supported as candidates; actual checks not proven.",
+        "coverage_state": "partial",
+        "evidence_refs": [
+          "static_control_evidence_27d19192a69aea3e0b732047",
+          "static_control_evidence_d5b5f4b1b829743caea4e827"
+        ],
+        "masvs_category": "MASVS-RESILIENCE"
+      },
+      {
+        "assessment_state": "not_evaluated",
+        "control_id": "STATIC-STORAGE-API",
+        "coverage_reason": "No exact storage call plus sensitive-data flow evaluator.",
+        "coverage_state": "unsupported",
+        "evidence_refs": [],
+        "masvs_category": "MASVS-STORAGE"
+      },
+      {
+        "assessment_state": "requires_review",
+        "control_id": "STATIC-STORAGE-BACKUP",
+        "coverage_reason": "Backup flag supported; sensitive data scope/exclusion unknown.",
+        "coverage_state": "partial",
+        "evidence_refs": [
+          "static_control_evidence_dac33f5536c19ddaab869b7e"
+        ],
+        "masvs_category": "MASVS-STORAGE"
+      }
+    ],
+    "coverage_note": "No findings does not establish security. Indicators and candidates require additional evidence.",
+    "findings": [
+      {
+        "affected_items": [
+          "base-config"
+        ],
+        "classification": "finding",
+        "component": "base-config",
+        "control_id": "STATIC-NET-CLEARTEXT",
+        "cwe_id": "",
+        "description": "The network security configuration explicitly permits cleartext for its declared scope.",
+        "evidence": "res/xml/network_security_config.xml: base-config = True.",
+        "evidence_tier": "finding_eligible",
+        "evidence_type": "network_security_configuration",
+        "finding_instance_id": "static_finding_2c2f75965073e6f3d7d20e21",
+        "finding_type": "SEC-NET-01",
+        "id": "SEC-NET-01",
+        "impact": "The network security configuration explicitly permits cleartext for its declared scope.",
+        "masvs_id": "MASVS-NETWORK-1",
+        "observed_value": true,
+        "owasp_category": "M3: Insecure Communication",
+        "provenance_refs": [
+          "static_control_evidence_e10415c76da7f9f0ffefdeb6"
+        ],
+        "reason_code": "NETWORK_CONFIG_CLEARTEXT_ALLOWED",
+        "remediation": "Disable cleartextTrafficPermitted for the affected configuration and require HTTPS.",
+        "severity": "HIGH",
+        "source": "res/xml/network_security_config.xml",
+        "standards": {
+          "cwe_refs": [],
+          "mastg_test_refs": [],
+          "masvs_category": "MASVS-NETWORK",
+          "masvs_control_refs": [
+            "MASVS-NETWORK-1"
+          ],
+          "maswe_refs": []
+        },
+        "supporting_evidence": [
+          {
+            "component": "base-config",
+            "evidence_type": "network_security_configuration",
+            "observed_value": true,
+            "ownership": null,
+            "provenance_refs": [
+              "static_control_evidence_e10415c76da7f9f0ffefdeb6"
+            ],
+            "reason_code": "NETWORK_CONFIG_CLEARTEXT_ALLOWED",
+            "source": "res/xml/network_security_config.xml"
+          }
+        ],
+        "supporting_provenance_refs": [
+          "static_control_evidence_e10415c76da7f9f0ffefdeb6"
+        ],
+        "title": "Cleartext HTTP Traffic Permitted"
+      }
+    ],
+    "indicators": [
+      {
+        "classification": "indicator",
+        "component": "network_urls",
+        "evidence_tier": "indicator",
+        "evidence_type": "static_string",
+        "finding_type": "http_string",
+        "observed_value": "http://127.0.0.1/",
+        "provenance_refs": [
+          "static_control_evidence_4d8c52b296ff6fbd0d4ea7a0"
+        ],
+        "reason_code": "HTTP_STRING_ONLY",
+        "source": "res/layout/activity_banklogin.xml"
+      },
+      {
+        "classification": "indicator",
+        "component": "network_urls",
+        "evidence_tier": "indicator",
+        "evidence_type": "static_string",
+        "finding_type": "http_string",
+        "observed_value": "http://localhost/",
+        "provenance_refs": [
+          "static_control_evidence_ef7e03666ca0315b1ee36fab"
+        ],
+        "reason_code": "HTTP_STRING_ONLY",
+        "source": "smali/c/c/a/a/f/c/n1.smali"
+      },
+      {
+        "classification": "indicator",
+        "component": "uses-permission",
+        "control_id": "STATIC-PRIVACY-PERMISSION",
+        "evidence_tier": "indicator",
+        "evidence_type": "manifest_attribute",
+        "finding_type": "requested_permission",
+        "observed_value": "android.permission.INTERNET",
+        "provenance_refs": [
+          "static_control_evidence_46be569db9f471c0545c218b"
+        ],
+        "reason_code": "PERMISSION_DECLARATION_ONLY",
+        "source": "AndroidManifest.xml",
+        "standards": {
+          "mastg_test_refs": [],
+          "masvs_category": "MASVS-PRIVACY",
+          "masvs_control_refs": [],
+          "maswe_refs": []
+        }
+      },
+      {
+        "classification": "indicator",
+        "component": "uses-permission",
+        "control_id": "STATIC-PRIVACY-PERMISSION",
+        "evidence_tier": "indicator",
+        "evidence_type": "manifest_attribute",
+        "finding_type": "requested_permission",
+        "observed_value": "android.permission.USE_BIOMETRIC",
+        "provenance_refs": [
+          "static_control_evidence_856d2448adddd9ca7b2d4039"
+        ],
+        "reason_code": "PERMISSION_DECLARATION_ONLY",
+        "source": "AndroidManifest.xml",
+        "standards": {
+          "mastg_test_refs": [],
+          "masvs_category": "MASVS-PRIVACY",
+          "masvs_control_refs": [],
+          "maswe_refs": []
+        }
+      },
+      {
+        "classification": "indicator",
+        "component": "uses-permission",
+        "control_id": "STATIC-PRIVACY-PERMISSION",
+        "evidence_tier": "indicator",
+        "evidence_type": "manifest_attribute",
+        "finding_type": "requested_permission",
+        "observed_value": "android.permission.USE_FINGERPRINT",
+        "provenance_refs": [
+          "static_control_evidence_03f22c81abd34eafb23ac5ac"
+        ],
+        "reason_code": "PERMISSION_DECLARATION_ONLY",
+        "source": "AndroidManifest.xml",
+        "standards": {
+          "mastg_test_refs": [],
+          "masvs_category": "MASVS-PRIVACY",
+          "masvs_control_refs": [],
+          "maswe_refs": []
+        }
+      }
+    ],
+    "risk_score": "HIGH",
+    "summary": {
+      "critical": 0,
+      "high": 1,
+      "low": 0,
+      "medium": 0,
+      "total": 1
+    }
+  }
+}

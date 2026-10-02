@@ -44,7 +44,7 @@ class LocalLabAuthenticationPresence:
     Receipts originate from the local HTTP handler, not model or tool text.
     The caller must validate canonical baseline artifacts before constructing it.
     """
-    def __init__(self, *, server, receipts, baseline, context, session_id):
+    def __init__(self, *, server, receipts, baseline, context, session_id, baseline_receipts=None, session_evidence=None):
         if not isinstance(server, HTTPServer):
             raise ValueError('A bound local lab server is required')
         host, port = server.server_address[:2]
@@ -65,6 +65,9 @@ class LocalLabAuthenticationPresence:
             raise ValueError('Canonical authenticated evidence missing')
         if not resp or resp.get('status_code') != 200 or resp.get('body', {}).get('authenticated') is not True or resp.get('body', {}).get('purpose') != 'read_only_training_profile' or not resp.get('headers', {}).get('x-lab-trace-id'):
             raise ValueError('Authenticated lab baseline response missing')
+        self._context = deepcopy(context)
+        self._session = deepcopy(session_evidence or {'session_id': session_id})
+        self._baseline_receipts = deepcopy(baseline_receipts or [])
         self.host, self.port = host, port
         self.context_id, self.session_id = context.endpoint_context_id, session_id
         self.baseline = deepcopy(baseline)
@@ -150,12 +153,14 @@ class LocalLabAuthenticationPresence:
     def validate(self, request, execution):
         if not self.comparison or execution.execution_status != 'completed' or self.execution_ref not in execution.tool_refs:
             raise ValueError('This execution has no verified comparison')
-        enforced = self.comparison['expected_auth_enforcement_observed']
-        result = DynamicValidationResult(
-            test_id=request.test_id, endpoint_context_id=self.context_id, session_id=self.session_id,
-            outcome='validated' if enforced else 'inconclusive',
-            criterion='controlled_behavior_check' if enforced else 'insufficient_evidence',
-            coverage='available' if enforced else 'partial', evidence_refs=execution.evidence_refs,
-            created_at=utc_now_iso())
-        validate_result(request, execution, result, self.evidence)
+        from src.dynamic.security.validation import AuthPresenceEvidence, validate_authentication_presence
+        evidence = AuthPresenceEvidence(
+            context=self._context, session=self._session, baseline=self.baseline,
+            variant=self.transaction.to_dict() if self.transaction else None,
+            baseline_receipts=self._baseline_receipts, variant_receipts=self.receipts,
+            execution_ref=self.execution_ref, control_ref=self.comparison.get('control_ref'),
+            comparison_ref=self.comparison.get('comparison_ref'))
+        result = validate_authentication_presence(request, execution, self.evidence, evidence)
+        if result.outcome == 'validated':
+            validate_result(request, execution, result, self.evidence, auth_evidence=evidence)
         return result

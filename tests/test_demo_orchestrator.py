@@ -254,7 +254,8 @@ class TestDemoOrchestratorUnit(unittest.TestCase):
 
         with self.assertRaises(DemoOrchestrationError) as ctx:
             run_demo("http://example.com/app.apk", self.output_root)
-        self.assertEqual(ctx.exception.stage, "static_analysis")
+        self.assertEqual(ctx.exception.stage, "runtime")
+        self.assertEqual(ctx.exception.reason_code, "LAUNCHER_UNRESOLVED")
         self.assertIn("launcher_activity", str(ctx.exception))
 
     @patch("src.demo_orchestrator.acquire_apk")

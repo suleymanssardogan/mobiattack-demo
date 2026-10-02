@@ -49,6 +49,15 @@ def _validate_dynamic_analysis_report(report: dict[str, Any], scan_id: str | Non
         raise DynamicReportError("No dynamic execution evidence")
     if not isinstance(report.get("endpoint_contexts"), list) or any(not isinstance(row, dict) or not row.get("endpoint_context_id") for row in report["endpoint_contexts"]):
         raise DynamicReportError("Invalid endpoint rows")
+    if 'security_results' in report:
+        from src.dynamic.security.reporting import validate_security_section
+        try:
+            validate_security_section(report['security_results'], report['session']['session_id'],
+                                      {row['endpoint_context_id'] for row in report['endpoint_contexts']})
+        except ValueError as exc:
+            raise DynamicReportError('Invalid security results section') from exc
+        if report['security_results']['coverage'] != 'available' and report['analysis_coverage'] != 'partial':
+            raise DynamicReportError('Incomplete security coverage cannot be complete')
     count_fields = {
         "routes": ("node_count", "edge_count", "action_count", "self_loop_count", "system_boundary_count", "external_boundary_count"),
         "runtime": ("action_evidence_count", "correlated_action_count", "pid_change_count", "process_death_count", "activity_change_count", "fatal_count", "crash_count"),

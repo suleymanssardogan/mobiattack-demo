@@ -1,0 +1,10 @@
+{
+  "additional_requests_sent": false,
+  "baseline_source": "examples/auth_lab_d10_2",
+  "exploration_projection": "existing_action_timeline_only",
+  "finding_created": false,
+  "route_graph_projection": "recorded_route_refs_only",
+  "runtime_action_delta_evidence": "unavailable",
+  "security_execution_source": "examples/auth_presence_d10_3",
+  "validation_source": "examples/auth_validation_d11"
+}

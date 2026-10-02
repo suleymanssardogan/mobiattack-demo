@@ -250,7 +250,7 @@ def write_package_set_json(
     return json_path
 
 
-def acquire_split_package_set(
+def _acquire_split_package_set(
     package_name: str,
     output_dir: Path | str,
     serial: str,
@@ -303,6 +303,13 @@ def acquire_split_package_set(
             package_layout="none",
         )
 
+    from src.android_identity import AndroidIdentityError
+    names = [Path(value).name for value in remote_paths]
+    if len(set(remote_paths)) != len(remote_paths) or len(set(names)) != len(names):
+        raise PlayStoreAcquisitionError('Duplicate split paths/names.', reason_code='SPLIT_SET_INCOMPLETE')
+    if len(names) > 1 and names.count('base.apk') != 1:
+        raise PlayStoreAcquisitionError('Authoritative base.apk missing.', reason_code='BASE_APK_NOT_FOUND')
+    remote_paths = sorted(remote_paths, key=lambda value: (Path(value).name != 'base.apk', Path(value).name))
     used_filenames: set[str] = set()
     components: list[dict] = []
 
@@ -341,7 +348,7 @@ def acquire_split_package_set(
             except Exception:
                 zip_entries = None
 
-        role = classify_split_component(filename=candidate_name, zip_entries=zip_entries)
+        role = "base" if len(remote_paths) == 1 else classify_split_component(filename=candidate_name, zip_entries=zip_entries)
         validation = validate_split_apk(local_apk_path, role=role)
 
         if not validation["is_valid"]:
@@ -394,3 +401,31 @@ def acquire_split_package_set(
         "components": components,
         "remote_paths": remote_paths,
     }
+
+
+def acquire_split_package_set(package_name, output_dir, serial, adb_bin=None, timeout_seconds=60.0, remote_paths=None):
+    """Commit only a complete acquisition; never reuse or overwrite prior artifacts."""
+    import tempfile
+    from src.play_store_acquirer import PlayStoreAcquisitionError
+    destination = Path(output_dir).resolve()
+    destination.mkdir(parents=True, exist_ok=True)
+    if (destination / 'package_set').exists():
+        raise PlayStoreAcquisitionError('Package-set workspace already exists.', reason_code='SPLIT_SET_INCOMPLETE')
+    with tempfile.TemporaryDirectory(prefix='.acquire_', dir=destination) as temporary:
+        try:
+            result = _acquire_split_package_set(package_name, temporary, serial, adb_bin, timeout_seconds, remote_paths)
+        except PlayStoreAcquisitionError as error:
+            if not error.reason_code:
+                error.reason_code = 'SPLIT_SET_INCOMPLETE'
+            raise
+        def relocate(value):
+            if isinstance(value, str):
+                return value.replace(str(temporary), str(destination)) if value.startswith(str(temporary)) else value
+            if isinstance(value, list):return [relocate(item) for item in value]
+            if isinstance(value, dict):return {key:relocate(item) for key,item in value.items()}
+            return value
+        result = relocate(result)
+        package_set = relocate(json.loads((Path(temporary)/'package_set/package_set.json').read_text()))
+        (Path(temporary)/'package_set/package_set.json').write_text(json.dumps(package_set, indent=2))
+        os.replace(Path(temporary)/'package_set', destination/'package_set')
+        return result

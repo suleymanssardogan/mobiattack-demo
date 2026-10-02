@@ -1,0 +1,9 @@
+{
+  "additional_security_requests_sent": false,
+  "compliance_certification_claimed": false,
+  "exact_mastg_maswe_mapping_established": false,
+  "mapping_version": "dynamic_security_standards_v1",
+  "reviewed_at": "2026-10-02",
+  "source_report": "examples/auth_security_report_d12/dynamic_analysis_report.json",
+  "standards_scope": "descriptive_traceability_only"
+}

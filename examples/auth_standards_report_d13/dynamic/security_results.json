@@ -1,0 +1,465 @@
+{
+  "records": [
+    {
+      "evidence": {
+        "baseline": {
+          "attribution": {
+            "confidence": "UNKNOWN",
+            "method": "session_time_window",
+            "note": "Attribution is probabilistic based on session observation window; system services may traverse device proxy.",
+            "package_name": "com.android.chrome"
+          },
+          "capture_id": "691e7b9b-4dc3-4243-8051-2bbe8fcd896b",
+          "correlation": {
+            "nearest_marker_before": {
+              "delta_ms": 85.7,
+              "event_id": "e0f3ce92-cd1a-4058-afb3-887c1624d532",
+              "name": "LAB_LOGIN_PROFILE_STARTED"
+            }
+          },
+          "duration_ms": 0.79,
+          "flow_id": "78c36664-8c71-43f9-a869-bea66a4584bf",
+          "request": {
+            "body": null,
+            "body_metadata": {
+              "binary": false,
+              "size": 0,
+              "truncated": false
+            },
+            "headers": {
+              "accept": "*/*",
+              "accept-encoding": "gzip, deflate",
+              "accept-language": "tr-TR,tr;q=0.9,en-US;q=0.8,en;q=0.7",
+              "authorization": "[REDACTED]",
+              "host": "192.168.1.154:18081",
+              "proxy-connection": "keep-alive",
+              "referer": "http://192.168.1.154:18081/",
+              "user-agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Mobile Safari/537.36",
+              "x-lab-run-id": "463eae39-8c7c-42b9-92bb-d0b34d467cbf"
+            },
+            "host": "192.168.1.154",
+            "method": "GET",
+            "path": "/profile",
+            "port": 18081,
+            "query": {},
+            "request_id": "45f4469d-c8fb-4bdc-92ec-5c866d1596ef",
+            "scheme": "http",
+            "timestamp": "2026-10-02T12:03:16.072656+00:00"
+          },
+          "response": {
+            "body": {
+              "authenticated": true,
+              "profile": {
+                "display_name": "Training User"
+              },
+              "purpose": "read_only_training_profile"
+            },
+            "body_metadata": {
+              "binary": false,
+              "content_type": "application/json",
+              "size": 110,
+              "truncated": false
+            },
+            "headers": {
+              "cache-control": "no-store",
+              "content-length": "110",
+              "content-type": "application/json",
+              "date": "Fri, 02 Oct 2026 12:03:16 GMT",
+              "server": "BaseHTTP/0.6 Python/3.11.7",
+              "x-lab-trace-id": "lab_ce4771d18855479aae0afae5bf00eb38"
+            },
+            "status_code": 200,
+            "timestamp": "2026-10-02T12:03:16.073451+00:00"
+          },
+          "scope": "IN_SCOPE",
+          "session_id": "463eae39-8c7c-42b9-92bb-d0b34d467cbf",
+          "transaction_id": "e4446540-d4eb-40a3-9624-30e30cecc494"
+        },
+        "baseline_receipts": [
+          {
+            "auth_present": false,
+            "auth_valid": false,
+            "method": "POST",
+            "path": "/login",
+            "run_id": "463eae39-8c7c-42b9-92bb-d0b34d467cbf",
+            "source": "local_training_backend_actual_response",
+            "status": 200,
+            "trace_id": "lab_3bfbe4182c47461aaf25211eec9aca5c"
+          },
+          {
+            "auth_present": true,
+            "auth_valid": true,
+            "method": "GET",
+            "path": "/profile",
+            "run_id": "463eae39-8c7c-42b9-92bb-d0b34d467cbf",
+            "source": "local_training_backend_actual_response",
+            "status": 200,
+            "trace_id": "lab_ce4771d18855479aae0afae5bf00eb38"
+          }
+        ],
+        "comparison_ref": "comparison_e9edff7b2cdcd2b6e8e6",
+        "context": {
+          "action_context": [
+            {
+              "action_id": "act_4d3a12f998f2a6a3",
+              "source_node_id": "node_ae5d067cf204c0d4",
+              "target_node_id": "node_ae5d067cf204c0d4"
+            }
+          ],
+          "auth": {
+            "api_key_header_present": false,
+            "authorization_header_present": true,
+            "bearer_token_present": null,
+            "cookie_present": false,
+            "session_cookie_present": false
+          },
+          "dynamic": {
+            "available_transaction_count": 1,
+            "first_observed_at": "2026-10-02T12:03:16.072656+00:00",
+            "last_observed_at": "2026-10-02T12:03:16.072656+00:00",
+            "missing_transaction_ids": [],
+            "observation_count": 1,
+            "observed": true,
+            "observed_methods": [
+              "GET"
+            ],
+            "observed_status_codes": [
+              200
+            ],
+            "schemes": [
+              "http"
+            ],
+            "transaction_ids": [
+              "e4446540-d4eb-40a3-9624-30e30cecc494"
+            ]
+          },
+          "endpoint_context_id": "ctx_598671b778f7846b",
+          "evidence_refs": {
+            "action_ids": [
+              "act_4d3a12f998f2a6a3"
+            ],
+            "correlation_ids": [
+              "corr_fbc99d01745b5819"
+            ],
+            "runtime_action_ids": [],
+            "static_candidate_ids": [],
+            "transaction_ids": [
+              "e4446540-d4eb-40a3-9624-30e30cecc494"
+            ]
+          },
+          "host": "192.168.1.154",
+          "methods": [
+            "GET"
+          ],
+          "path": "/profile",
+          "port": 18081,
+          "request": {
+            "body_keys": [],
+            "body_present": false,
+            "body_shapes": [],
+            "body_sizes": [
+              0
+            ],
+            "body_types": [],
+            "content_types": [],
+            "header_names": [
+              "accept",
+              "accept-encoding",
+              "accept-language",
+              "authorization",
+              "host",
+              "proxy-connection",
+              "referer",
+              "user-agent",
+              "x-lab-run-id"
+            ],
+            "methods": [
+              "GET"
+            ],
+            "query_keys": []
+          },
+          "response": {
+            "body_keys": [
+              "authenticated",
+              "profile",
+              "purpose"
+            ],
+            "body_present": true,
+            "body_shapes": [
+              {
+                "authenticated": "boolean",
+                "profile": {
+                  "display_name": "string"
+                },
+                "purpose": "string"
+              }
+            ],
+            "body_sizes": [
+              110
+            ],
+            "body_types": [
+              "json"
+            ],
+            "content_types": [
+              "application/json"
+            ],
+            "header_names": [
+              "cache-control",
+              "content-length",
+              "content-type",
+              "date",
+              "server",
+              "x-lab-trace-id"
+            ],
+            "observed_status_codes": [
+              200
+            ],
+            "status_code_counts": {
+              "200": 1
+            }
+          },
+          "route_context": [
+            {
+              "action_id": "act_4d3a12f998f2a6a3",
+              "source_node_id": "node_ae5d067cf204c0d4",
+              "target_node_id": "node_ae5d067cf204c0d4"
+            }
+          ],
+          "runtime_context": {
+            "activity_changes_observed": false,
+            "crash_observed": false,
+            "evidence_available": false,
+            "fatal_observed": false,
+            "pid_changed_observed": false,
+            "process_death_observed": false
+          },
+          "scheme": "http",
+          "static": {},
+          "visibility": {
+            "http_visibility": "available",
+            "https_visibility": "unavailable",
+            "https_visibility_reason": "certificate_trust_unknown"
+          }
+        },
+        "control_ref": "control_e9edff7b2cdcd2b6e8e6",
+        "execution_ref": "execution_e9edff7b2cdcd2b6e8e6",
+        "session": {
+          "session_id": "463eae39-8c7c-42b9-92bb-d0b34d467cbf"
+        },
+        "variant": {
+          "attribution": {
+            "baseline_transaction_ref": "e4446540-d4eb-40a3-9624-30e30cecc494",
+            "historical_baseline": true,
+            "method": "deterministic_local_executor"
+          },
+          "capture_id": "capture_206e80e2293945ba9246290d93764eb5",
+          "correlation": {},
+          "duration_ms": 0.0,
+          "flow_id": null,
+          "request": {
+            "body": null,
+            "body_metadata": {
+              "binary": false,
+              "size": 0,
+              "truncated": false
+            },
+            "headers": {
+              "accept": "*/*",
+              "accept-encoding": "gzip, deflate",
+              "accept-language": "tr-TR,tr;q=0.9,en-US;q=0.8,en;q=0.7",
+              "host": "192.168.1.154:18081",
+              "proxy-connection": "keep-alive",
+              "referer": "http://192.168.1.154:18081/",
+              "user-agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Mobile Safari/537.36",
+              "x-lab-run-id": "463eae39-8c7c-42b9-92bb-d0b34d467cbf"
+            },
+            "host": "192.168.1.154",
+            "method": "GET",
+            "path": "/profile",
+            "port": 18081,
+            "query": {},
+            "request_id": "c1f157ca-d607-4c89-9854-a193ca5f9fce",
+            "scheme": "http",
+            "timestamp": "2026-10-02T13:00:30.565169+00:00"
+          },
+          "response": {
+            "body": {
+              "error": "authentication_required"
+            },
+            "body_metadata": {
+              "binary": false,
+              "content_type": "application/json",
+              "size": 36,
+              "truncated": false
+            },
+            "headers": {
+              "cache-control": "no-store",
+              "content-length": "36",
+              "content-type": "application/json",
+              "date": "Fri, 02 Oct 2026 13:00:30 GMT",
+              "server": "BaseHTTP/0.6 Python/3.11.7",
+              "x-lab-trace-id": "lab_54e318c6ab834d88b3e11974e9c95ea8"
+            },
+            "status_code": 401,
+            "timestamp": "2026-10-02T13:00:30.566633+00:00"
+          },
+          "scope": "IN_SCOPE",
+          "session_id": "463eae39-8c7c-42b9-92bb-d0b34d467cbf",
+          "transaction_id": "a675d9f3-9cb0-4705-be02-2011479baba7"
+        },
+        "variant_receipts": [
+          {
+            "auth_present": false,
+            "auth_valid": false,
+            "method": "GET",
+            "path": "/profile",
+            "run_id": "463eae39-8c7c-42b9-92bb-d0b34d467cbf",
+            "source": "local_training_backend_actual_response",
+            "status": 401,
+            "trace_id": "lab_54e318c6ab834d88b3e11974e9c95ea8"
+          }
+        ]
+      },
+      "execution": {
+        "endpoint_context_id": "ctx_598671b778f7846b",
+        "evidence_refs": [
+          "45f4469d-c8fb-4bdc-92ec-5c866d1596ef",
+          "463eae39-8c7c-42b9-92bb-d0b34d467cbf",
+          "c1f157ca-d607-4c89-9854-a193ca5f9fce",
+          "comparison_e9edff7b2cdcd2b6e8e6",
+          "control_e9edff7b2cdcd2b6e8e6",
+          "ctx_598671b778f7846b",
+          "execution_e9edff7b2cdcd2b6e8e6",
+          "lab_54e318c6ab834d88b3e11974e9c95ea8",
+          "lab_ce4771d18855479aae0afae5bf00eb38"
+        ],
+        "execution_status": "completed",
+        "failure_reason": null,
+        "finished_at": "2026-10-02T13:00:30.566832+00:00",
+        "observed_request_ref": "c1f157ca-d607-4c89-9854-a193ca5f9fce",
+        "observed_response_ref": "lab_54e318c6ab834d88b3e11974e9c95ea8",
+        "schema_version": "1.0",
+        "session_id": "463eae39-8c7c-42b9-92bb-d0b34d467cbf",
+        "started_at": "2026-10-02T13:00:30.565169+00:00",
+        "test_id": "AUTHENTICATION_PRESENCE",
+        "tool_refs": [
+          "execution_e9edff7b2cdcd2b6e8e6"
+        ]
+      },
+      "registry": {
+        "45f4469d-c8fb-4bdc-92ec-5c866d1596ef": {
+          "endpoint_context_id": "ctx_598671b778f7846b",
+          "kind": "request",
+          "ref": "45f4469d-c8fb-4bdc-92ec-5c866d1596ef",
+          "session_id": "463eae39-8c7c-42b9-92bb-d0b34d467cbf"
+        },
+        "463eae39-8c7c-42b9-92bb-d0b34d467cbf": {
+          "endpoint_context_id": "ctx_598671b778f7846b",
+          "kind": "runtime",
+          "ref": "463eae39-8c7c-42b9-92bb-d0b34d467cbf",
+          "session_id": "463eae39-8c7c-42b9-92bb-d0b34d467cbf"
+        },
+        "c1f157ca-d607-4c89-9854-a193ca5f9fce": {
+          "endpoint_context_id": "ctx_598671b778f7846b",
+          "kind": "request",
+          "ref": "c1f157ca-d607-4c89-9854-a193ca5f9fce",
+          "session_id": "463eae39-8c7c-42b9-92bb-d0b34d467cbf"
+        },
+        "comparison_e9edff7b2cdcd2b6e8e6": {
+          "endpoint_context_id": "ctx_598671b778f7846b",
+          "kind": "comparison",
+          "ref": "comparison_e9edff7b2cdcd2b6e8e6",
+          "session_id": "463eae39-8c7c-42b9-92bb-d0b34d467cbf"
+        },
+        "control_e9edff7b2cdcd2b6e8e6": {
+          "endpoint_context_id": "ctx_598671b778f7846b",
+          "kind": "control",
+          "ref": "control_e9edff7b2cdcd2b6e8e6",
+          "session_id": "463eae39-8c7c-42b9-92bb-d0b34d467cbf"
+        },
+        "ctx_598671b778f7846b": {
+          "endpoint_context_id": "ctx_598671b778f7846b",
+          "kind": "context",
+          "ref": "ctx_598671b778f7846b",
+          "session_id": "463eae39-8c7c-42b9-92bb-d0b34d467cbf"
+        },
+        "execution_e9edff7b2cdcd2b6e8e6": {
+          "endpoint_context_id": "ctx_598671b778f7846b",
+          "kind": "tool",
+          "ref": "execution_e9edff7b2cdcd2b6e8e6",
+          "session_id": "463eae39-8c7c-42b9-92bb-d0b34d467cbf"
+        },
+        "lab_54e318c6ab834d88b3e11974e9c95ea8": {
+          "endpoint_context_id": "ctx_598671b778f7846b",
+          "kind": "response",
+          "ref": "lab_54e318c6ab834d88b3e11974e9c95ea8",
+          "session_id": "463eae39-8c7c-42b9-92bb-d0b34d467cbf"
+        },
+        "lab_acquisition_463eae398c7c42b992bbd0b34d467cbf": {
+          "endpoint_context_id": "ctx_598671b778f7846b",
+          "kind": "tool",
+          "ref": "lab_acquisition_463eae398c7c42b992bbd0b34d467cbf",
+          "session_id": "463eae39-8c7c-42b9-92bb-d0b34d467cbf"
+        },
+        "lab_ce4771d18855479aae0afae5bf00eb38": {
+          "endpoint_context_id": "ctx_598671b778f7846b",
+          "kind": "response",
+          "ref": "lab_ce4771d18855479aae0afae5bf00eb38",
+          "session_id": "463eae39-8c7c-42b9-92bb-d0b34d467cbf"
+        }
+      },
+      "request": {
+        "endpoint_context_id": "ctx_598671b778f7846b",
+        "purpose": "Check expected authentication enforcement in the local training fixture",
+        "requested_action": "validate_authentication_presence",
+        "required_evidence_refs": [
+          "45f4469d-c8fb-4bdc-92ec-5c866d1596ef",
+          "463eae39-8c7c-42b9-92bb-d0b34d467cbf",
+          "ctx_598671b778f7846b",
+          "lab_acquisition_463eae398c7c42b992bbd0b34d467cbf",
+          "lab_ce4771d18855479aae0afae5bf00eb38"
+        ],
+        "risk_class": "low",
+        "schema_version": "1.0",
+        "session_id": "463eae39-8c7c-42b9-92bb-d0b34d467cbf",
+        "test_category": "authentication_presence",
+        "test_id": "AUTHENTICATION_PRESENCE"
+      },
+      "standards": {
+        "mastg_test_refs": [],
+        "masvs_category": "MASVS-AUTH",
+        "masvs_control_refs": [
+          "MASVS-AUTH-1"
+        ],
+        "maswe_refs": []
+      },
+      "validation": {
+        "coverage": "available",
+        "created_at": "2026-10-02T14:15:14.219944+00:00",
+        "criterion": "controlled_behavior_check",
+        "endpoint_context_id": "ctx_598671b778f7846b",
+        "evidence_refs": [
+          "45f4469d-c8fb-4bdc-92ec-5c866d1596ef",
+          "463eae39-8c7c-42b9-92bb-d0b34d467cbf",
+          "c1f157ca-d607-4c89-9854-a193ca5f9fce",
+          "comparison_e9edff7b2cdcd2b6e8e6",
+          "control_e9edff7b2cdcd2b6e8e6",
+          "ctx_598671b778f7846b",
+          "execution_e9edff7b2cdcd2b6e8e6",
+          "lab_54e318c6ab834d88b3e11974e9c95ea8",
+          "lab_acquisition_463eae398c7c42b992bbd0b34d467cbf",
+          "lab_ce4771d18855479aae0afae5bf00eb38"
+        ],
+        "outcome": "validated",
+        "reason_codes": [
+          "AUTH_ENFORCEMENT_CONFIRMED"
+        ],
+        "schema_version": "1.0",
+        "session_id": "463eae39-8c7c-42b9-92bb-d0b34d467cbf",
+        "test_id": "AUTHENTICATION_PRESENCE"
+      }
+    }
+  ],
+  "schema_version": "1.0",
+  "session_id": "463eae39-8c7c-42b9-92bb-d0b34d467cbf"
+}

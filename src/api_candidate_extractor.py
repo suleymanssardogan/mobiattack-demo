@@ -1,11 +1,13 @@
 """Call-Context-Aware Static API Candidate Extractor.
 
 Performs local call-context and direct register-flow analysis on Smali files to identify
-static API candidates used in Fuel networking calls.
+static API candidates with directly attributable networking-call provenance.
 
-Supported Framework:
+Supported Frameworks:
 - Fuel (GET, POST, PUT, DELETE, PATCH)
 - Retrofit method annotations with independently verified literal builder/service binding.
+- OkHttp direct same-method Request.Builder flows (see okhttp_candidate_extractor).
+- Volley standard constructors and explicit-method HttpURLConnection direct flows.
 
 Supported Signatures & Parameter Mapping:
 1. FuelKt extension functions:
@@ -200,9 +202,15 @@ def extract_api_candidates(analysis_root: str | Path) -> dict:
         singleton_receivers: set[str] = set()
         singleton_base: BaseUrlEvidence | None = None
         pending_singleton = False
+        source_component = None
+        source_method = None
 
         for line_num, raw_line in enumerate(lines, start=1):
             line = raw_line.strip()
+            if line.startswith(".class "):
+                source_component = line.split()[-1]
+            if line.startswith(".method "):
+                source_method = line.split()[-1]
             if not line or line.startswith("#"):
                 continue
 
@@ -366,6 +374,7 @@ def extract_api_candidates(analysis_root: str | Path) -> dict:
                 "path_register": path_reg,
                 "path_line": tracked_path.line_number,
                 "request_call_line": line_num,
+                "source_method": source_method,
                 "base_url_value": base_url_val,
                 "base_url_register": base.register if base else None,
                 "base_url_line": base.line_number if base else None,
@@ -380,6 +389,7 @@ def extract_api_candidates(analysis_root: str | Path) -> dict:
                 "full_url": full_url_val,
                 "status": "static_api_candidate",
                 "source_file": rel_source_path,
+                "source_component": source_component,
                 "request_line": line_num,
                 "evidence": evidence_dict,
             })
@@ -388,8 +398,27 @@ def extract_api_candidates(analysis_root: str | Path) -> dict:
         return (item["source_file"], item["request_line"], item["method"], item["path"])
 
     from src.retrofit_candidate_extractor import extract_retrofit
-    api_candidates.extend(extract_retrofit(root_path)["api_candidates"])
+    retrofit = extract_retrofit(root_path)
+    api_candidates.extend(retrofit["api_candidates"])
+    from src.okhttp_candidate_extractor import extract_okhttp
+    okhttp = extract_okhttp(root_path)
+    api_candidates.extend(okhttp["api_candidates"])
+    from src.volley_urlconnection_extractor import extract_volley_urlconnection
+    direct = extract_volley_urlconnection(root_path)
+    api_candidates.extend(direct["api_candidates"])
+    from src.bounded_api_provenance import extract_bounded_candidates
+    from src.android_identity import canonical_candidates
+    bounded = extract_bounded_candidates(root_path)
+    existing_ids = {row["candidate_id"] for row in canonical_candidates(api_candidates)}
+    api_candidates.extend(row for row in bounded["api_candidates"] if row["candidate_id"] not in existing_ids)
 
+    from src.api_candidate_canonicalizer import canonicalize_api_candidates
+    declarations = [dict(d, resolution_state="unresolved") for d in retrofit["declarations"]
+                    if not any(c["evidence"]["service_class"] == d["service"] and c["request_line"] == d["annotation_line"] for c in retrofit["api_candidates"])]
     return {
-        "api_candidates": sorted(api_candidates, key=sort_key),
+        "api_candidates": canonicalize_api_candidates(canonical_candidates(api_candidates)),
+        "discovery_diagnostics": {"okhttp": {"unresolved": okhttp["unresolved"], "coverage": okhttp["coverage"]},
+            "retrofit": {"unresolved": retrofit["unresolved_flow"], "unresolved_declarations": declarations,
+                         "coverage": {"skipped": retrofit["skipped"], "partial": bool(declarations or retrofit["unresolved_flow"] or retrofit["skipped"])}},
+            **direct["discovery_diagnostics"], **bounded["discovery_diagnostics"]},
     }

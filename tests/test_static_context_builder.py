@@ -97,8 +97,10 @@ class TestStaticContextBuilderUnit(unittest.TestCase):
         c = ctx["api_candidates"][0]
         self.assertEqual(c["method"], "GET")
         self.assertEqual(c["path"], "/api/data")
-        self.assertEqual(c["base_url"], "http://10.0.0.1")
-        self.assertEqual(c["full_url"], "http://10.0.0.1/api/data")
+        # FuelKt has no proven link to the manager in v1 (S2 receiver isolation).
+        # Keep the independently supported relative candidate without guessing a base.
+        self.assertIsNone(c["base_url"])
+        self.assertIsNone(c["full_url"])
         self.assertEqual(c["framework"], "Fuel")
 
     def test_05_source_file_canonical_relative_to_apktool_root(self):
@@ -129,11 +131,11 @@ class TestStaticContextBuilderUnit(unittest.TestCase):
         ctx = build_static_context(self.manifest_path, self.raw_apk, self.apktool)
         top_keys = set(ctx.keys())
         expected_top_keys = {
-            "app", "permissions", "activities", "structure", "network_indicators", "api_candidates"
+            "app", "manifest", "permissions", "activities", "structure", "network_indicators", "api_candidates", "api_discovery"
         }
         self.assertEqual(top_keys, expected_top_keys)
         app_keys = set(ctx["app"].keys())
-        self.assertEqual(app_keys, {"package_name", "launcher_activity"})
+        self.assertEqual(app_keys, {"package_name", "launcher_activity", "launcher_target_activity", "launcher_status"})
 
     def test_10_deterministic_output(self):
         ctx1 = build_static_context(self.manifest_path, self.raw_apk, self.apktool)

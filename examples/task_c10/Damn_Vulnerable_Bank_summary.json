@@ -1,0 +1,97 @@
+{
+  "dynamic_security_report": {
+    "coverage_limitations": [
+      "Dynamic report is unavailable.",
+      "HTTP visibility is unavailable.",
+      "HTTPS visibility is unavailable.",
+      "Runtime observation is unavailable.",
+      "Exploration is unavailable.",
+      "No security validation results are available; security was not established."
+    ],
+    "results": [],
+    "runtime_status": "unavailable"
+  },
+  "dynamic_summary": {
+    "actions_attempted": null,
+    "actions_succeeded": null,
+    "coverage_limitations": [
+      "Dynamic report is unavailable.",
+      "HTTP visibility is unavailable.",
+      "HTTPS visibility is unavailable.",
+      "Runtime observation is unavailable.",
+      "Exploration is unavailable.",
+      "No security validation results are available; security was not established."
+    ],
+    "launch_status": "Unknown",
+    "observed_endpoints": null,
+    "routes_explored": null,
+    "runtime_status": "unavailable",
+    "security_tests_executed": 0,
+    "status": "unavailable",
+    "traffic_visibility": {
+      "http_visibility": "unavailable",
+      "https_visibility": "unavailable"
+    },
+    "validation_outcomes": {
+      "blocked": 0,
+      "inconclusive": 0,
+      "rejected": 0,
+      "validated": 0
+    }
+  },
+  "security_note": "Validated auth enforcement is expected security behavior, not a vulnerability finding.",
+  "security_validation_summary": [],
+  "static_security_report": {
+    "coverage_limitations": [
+      "Additional static coverage limits are recorded in the full evidence.",
+      "API discovery covers supported code patterns; it is not a complete endpoint inventory.",
+      "Static API candidates are not runtime confirmation.",
+      "Static control coverage is partial or unavailable for: MASVS-AUTH, MASVS-CODE, MASVS-CRYPTO, MASVS-NETWORK, MASVS-PLATFORM, MASVS-PRIVACY, MASVS-RESILIENCE, MASVS-STORAGE.",
+      "API discovery is bounded; unresolved networking is not absence of networking."
+    ],
+    "findings": [
+      {
+        "component": "base-config",
+        "evidence": "res/xml/network_security_config.xml: base-config = True.",
+        "impact": "The network security configuration explicitly permits cleartext for its declared scope.",
+        "remediation": "Disable cleartextTrafficPermitted for the affected configuration and require HTTPS.",
+        "severity": "HIGH",
+        "standards": "MASVS-NETWORK-1",
+        "title": "Cleartext HTTP Traffic Permitted"
+      }
+    ],
+    "status": "completed"
+  },
+  "static_summary": {
+    "api_candidates_count": 0,
+    "app": "dvba_v1.1.0.apk",
+    "coverage_limitations": [
+      "Additional static coverage limits are recorded in the full evidence.",
+      "API discovery covers supported code patterns; it is not a complete endpoint inventory.",
+      "Static API candidates are not runtime confirmation.",
+      "Static control coverage is partial or unavailable for: MASVS-AUTH, MASVS-CODE, MASVS-CRYPTO, MASVS-NETWORK, MASVS-PLATFORM, MASVS-PRIVACY, MASVS-RESILIENCE, MASVS-STORAGE.",
+      "API discovery is bounded; unresolved networking is not absence of networking."
+    ],
+    "frameworks_detected": [],
+    "key_permissions": [
+      "INTERNET"
+    ],
+    "network_indicators": {
+      "domains": 9,
+      "hosts": [
+        "127.0.0.1",
+        "damn-vulnerable-bank.firebaseio.com",
+        "localhost",
+        "plus.google.com",
+        "www.xe.com"
+      ],
+      "ips": 0,
+      "local_file_urls": 0,
+      "paths": 15,
+      "urls": 5
+    },
+    "package": "com.app.damnvulnerablebank",
+    "status": "completed"
+  },
+  "summary_version": "1.0"
+}

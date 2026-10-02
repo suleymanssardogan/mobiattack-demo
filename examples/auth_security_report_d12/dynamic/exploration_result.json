@@ -1,0 +1,11 @@
+{
+  "actions_failed": 0,
+  "actions_succeeded": 1,
+  "duration_seconds": null,
+  "screens_observed": 0,
+  "source": "existing_recorded_action_timeline_only",
+  "status": "partial",
+  "steps_attempted": 1,
+  "stop_reason": "recorded_single_action",
+  "transitions_recorded": 0
+}

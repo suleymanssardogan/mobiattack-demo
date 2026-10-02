@@ -121,11 +121,18 @@ def preprocess_package_set(
             f"(Specified: '{jadx_executable or 'jadx'}')"
         )
 
-    components = package_set.get("components", [])
+    import copy
+    from src.android_identity import canonical_components
+    package_set = copy.deepcopy(package_set)
+    components = canonical_components(package_set.get("components", []), require_base=False)
+    package_set['components'] = components
     if not components:
         raise ApkPreprocessingError("Package set does not contain any components to preprocess.")
 
-    package_name = package_set.get("package_name", "unknown_package")
+    package_name = package_set.get("package_name")
+    if not package_name:
+        from src.android_identity import AndroidIdentityError
+        raise AndroidIdentityError("PACKAGE_MISMATCH", "Package identity is missing.")
     package_layout = package_set.get("package_layout", "split")
     all_warnings: list[str] = []
     processed_summaries: list[dict] = []
@@ -157,7 +164,9 @@ def preprocess_package_set(
 
         comp_folder_name = sanitize_workspace_name(Path(fname).stem)
         comp_workspace = processed_dir / comp_folder_name
-        comp_workspace.mkdir(parents=True, exist_ok=True)
+        if comp_workspace.exists():
+            raise ApkPreprocessingError('Preprocessing workspace already exists; stale artifacts cannot be reused.')
+        comp_workspace.mkdir(parents=True, exist_ok=False)
 
         raw_apk_dir = comp_workspace / "raw_apk"
         apktool_dir = comp_workspace / "apktool_out"

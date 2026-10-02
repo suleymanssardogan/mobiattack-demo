@@ -1,0 +1,85 @@
+{
+  "AntennaPod": {
+    "candidates_by_framework": {},
+    "canonical_candidates": 0,
+    "coverage": {
+      "partial": true,
+      "skipped": []
+    },
+    "deterministic": true,
+    "okhttp_candidates": [],
+    "provenance_verified": true,
+    "retrofit_unchanged": true,
+    "unresolved_reason_counts": {
+      "BUILDER_IDENTITY_UNRESOLVED": 1,
+      "REQUEST_URL_OR_METHOD_UNRESOLVED": 1,
+      "UNSUPPORTED_BUILDER_OPERATION": 1,
+      "UNSUPPORTED_CONTROL_FLOW": 37,
+      "UNSUPPORTED_FIELD_OR_ARRAY_FLOW": 5
+    }
+  },
+  "OWASP MSTG Kotlin": {
+    "candidates_by_framework": {
+      "Fuel": 1
+    },
+    "canonical_candidates": 1,
+    "coverage": {
+      "partial": true,
+      "skipped": [
+        {
+          "reason": "source_or_size_boundary",
+          "source_file": "smali/kotlin/collections/ArraysKt___ArraysKt.smali"
+        }
+      ]
+    },
+    "deterministic": true,
+    "okhttp_candidates": [],
+    "provenance_verified": true,
+    "retrofit_unchanged": true,
+    "unresolved_reason_counts": {}
+  },
+  "VulnBank": {
+    "candidates_by_framework": {},
+    "canonical_candidates": 0,
+    "coverage": {
+      "partial": true,
+      "skipped": [
+        {
+          "reason": "source_or_size_boundary",
+          "source_file": "smali/kotlin/collections/ArraysKt___ArraysKt.smali"
+        }
+      ]
+    },
+    "deterministic": true,
+    "okhttp_candidates": [],
+    "provenance_verified": true,
+    "retrofit_unchanged": true,
+    "unresolved_reason_counts": {
+      "BUILDER_IDENTITY_UNRESOLVED": 1,
+      "REQUEST_URL_OR_METHOD_UNRESOLVED": 3,
+      "UNSUPPORTED_BUILDER_OPERATION": 1,
+      "UNSUPPORTED_CONTROL_FLOW": 22,
+      "UNSUPPORTED_FIELD_OR_ARRAY_FLOW": 11,
+      "UNSUPPORTED_INVOKE_FORM": 2
+    }
+  },
+  "Wikipedia": {
+    "candidates_by_framework": {},
+    "canonical_candidates": 0,
+    "coverage": {
+      "partial": true,
+      "skipped": []
+    },
+    "deterministic": true,
+    "okhttp_candidates": [],
+    "provenance_verified": true,
+    "retrofit_unchanged": true,
+    "unresolved_reason_counts": {
+      "BUILDER_ESCAPED_TO_UNSUPPORTED_CALL": 8,
+      "BUILDER_IDENTITY_UNRESOLVED": 138,
+      "UNSUPPORTED_CONTROL_FLOW": 264,
+      "UNSUPPORTED_FIELD_OR_ARRAY_FLOW": 374,
+      "UNSUPPORTED_INVOKE_FORM": 5
+    }
+  }
+}

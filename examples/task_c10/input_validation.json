@@ -1,0 +1,288 @@
+[
+  {
+    "apk": "/tmp/mobiattack-c1-real-final/owasp_1/downloads/MSTG-Android-Kotlin.apk",
+    "package_component_role": "base",
+    "sha256": "86c059775aa09e4794defd40f81e69751a81019b1b1f285b30b8f7c5bb5e8b68",
+    "split_aware_validation": {
+      "dex_count": 1,
+      "dex_files": [
+        "classes.dex"
+      ],
+      "error": null,
+      "has_android_manifest": true,
+      "has_dex": true,
+      "is_valid": true,
+      "is_valid_zip": true
+    },
+    "validation": {
+      "dex_files": [
+        "classes.dex"
+      ],
+      "has_android_manifest": true,
+      "has_dex": true,
+      "is_valid_apk": true,
+      "is_zip": true
+    }
+  },
+  {
+    "apk": "/tmp/mobiattack-c1-real-final/wikipedia/downloads/package_set/apks/base.apk",
+    "package_component_role": "base",
+    "sha256": "45f864ab953c2d1516397c5ee44476bcb44b1393373ed60246e1333986551eab",
+    "split_aware_validation": {
+      "dex_count": 2,
+      "dex_files": [
+        "classes.dex",
+        "classes2.dex"
+      ],
+      "error": null,
+      "has_android_manifest": true,
+      "has_dex": true,
+      "is_valid": true,
+      "is_valid_zip": true
+    },
+    "validation": {
+      "dex_files": [
+        "classes.dex",
+        "classes2.dex"
+      ],
+      "has_android_manifest": true,
+      "has_dex": true,
+      "is_valid_apk": true,
+      "is_zip": true
+    }
+  },
+  {
+    "apk": "/tmp/mobiattack-c1-real-final/wikipedia/downloads/package_set/apks/split_config.arm64_v8a.apk",
+    "package_component_role": "config",
+    "sha256": "7aa9eb0c74e0be180a422297eced4bc295744fcdaf74169e0e6ceb9bac13787d",
+    "split_aware_validation": {
+      "dex_count": 0,
+      "dex_files": [],
+      "error": null,
+      "has_android_manifest": true,
+      "has_dex": false,
+      "is_valid": true,
+      "is_valid_zip": true
+    },
+    "validation": {
+      "dex_files": [],
+      "has_android_manifest": true,
+      "has_dex": false,
+      "is_valid_apk": false,
+      "is_zip": true
+    }
+  },
+  {
+    "apk": "/tmp/mobiattack-c1-real-final/wikipedia/downloads/package_set/apks/split_config.xxhdpi.apk",
+    "package_component_role": "config",
+    "sha256": "e22041404485ed5470ed334ab5b4faec6e158a18c0a74a82ab044f8ff5f70391",
+    "split_aware_validation": {
+      "dex_count": 0,
+      "dex_files": [],
+      "error": null,
+      "has_android_manifest": true,
+      "has_dex": false,
+      "is_valid": true,
+      "is_valid_zip": true
+    },
+    "validation": {
+      "dex_files": [],
+      "has_android_manifest": true,
+      "has_dex": false,
+      "is_valid_apk": false,
+      "is_zip": true
+    }
+  },
+  {
+    "apk": "/tmp/mobiattack-c1-real-final/flashlight/downloads/package_set/apks/base.apk",
+    "package_component_role": "base",
+    "sha256": "ae4d6a84ab9a112add4604f05a836c85a541d7d1cb6f89151da3810a62b4451c",
+    "split_aware_validation": {
+      "dex_count": 1,
+      "dex_files": [
+        "classes.dex"
+      ],
+      "error": null,
+      "has_android_manifest": true,
+      "has_dex": true,
+      "is_valid": true,
+      "is_valid_zip": true
+    },
+    "validation": {
+      "dex_files": [
+        "classes.dex"
+      ],
+      "has_android_manifest": true,
+      "has_dex": true,
+      "is_valid_apk": true,
+      "is_zip": true
+    }
+  },
+  {
+    "apk": "/tmp/mobiattack-c1-real-final/flashlight/downloads/package_set/apks/split_config.ar.apk",
+    "package_component_role": "config",
+    "sha256": "de4216a688ca250d53ee9e9024850194029df8b9fb40b69c9bb4f9a1412e3239",
+    "split_aware_validation": {
+      "dex_count": 0,
+      "dex_files": [],
+      "error": null,
+      "has_android_manifest": true,
+      "has_dex": false,
+      "is_valid": true,
+      "is_valid_zip": true
+    },
+    "validation": {
+      "dex_files": [],
+      "has_android_manifest": true,
+      "has_dex": false,
+      "is_valid_apk": false,
+      "is_zip": true
+    }
+  },
+  {
+    "apk": "/tmp/mobiattack-c1-real-final/flashlight/downloads/package_set/apks/split_config.en.apk",
+    "package_component_role": "config",
+    "sha256": "c93eec8bcfe2b8408becaf80b06cf10d29d29de81e0750ec0cb045ae29af3815",
+    "split_aware_validation": {
+      "dex_count": 0,
+      "dex_files": [],
+      "error": null,
+      "has_android_manifest": true,
+      "has_dex": false,
+      "is_valid": true,
+      "is_valid_zip": true
+    },
+    "validation": {
+      "dex_files": [],
+      "has_android_manifest": true,
+      "has_dex": false,
+      "is_valid_apk": false,
+      "is_zip": true
+    }
+  },
+  {
+    "apk": "/tmp/mobiattack-c1-real-final/flashlight/downloads/package_set/apks/split_config.tr.apk",
+    "package_component_role": "config",
+    "sha256": "0779601ef61ed58caeb11ab0088b124450e7115954a63f3967a4b0b81bbddc2f",
+    "split_aware_validation": {
+      "dex_count": 0,
+      "dex_files": [],
+      "error": null,
+      "has_android_manifest": true,
+      "has_dex": false,
+      "is_valid": true,
+      "is_valid_zip": true
+    },
+    "validation": {
+      "dex_files": [],
+      "has_android_manifest": true,
+      "has_dex": false,
+      "is_valid_apk": false,
+      "is_zip": true
+    }
+  },
+  {
+    "apk": "/tmp/mobiattack-c1-real-final/flashlight/downloads/package_set/apks/split_config.xxhdpi.apk",
+    "package_component_role": "config",
+    "sha256": "49e0bceed466ec77f71cc410157557fa69cbf0189396da9c3ebca8a3883e7882",
+    "split_aware_validation": {
+      "dex_count": 0,
+      "dex_files": [],
+      "error": null,
+      "has_android_manifest": true,
+      "has_dex": false,
+      "is_valid": true,
+      "is_valid_zip": true
+    },
+    "validation": {
+      "dex_files": [],
+      "has_android_manifest": true,
+      "has_dex": false,
+      "is_valid_apk": false,
+      "is_zip": true
+    }
+  },
+  {
+    "apk": "demo_runs/task_9_5_3_app_011/downloads/de.danoeh.antennapod.apk",
+    "package_component_role": "base",
+    "sha256": "95a97f4e88a1df248a2806d420da459b1d6db540d6e1a97fdbeb73c25ae1d80b",
+    "split_aware_validation": {
+      "dex_count": 4,
+      "dex_files": [
+        "classes.dex",
+        "classes2.dex",
+        "classes3.dex",
+        "classes4.dex"
+      ],
+      "error": null,
+      "has_android_manifest": true,
+      "has_dex": true,
+      "is_valid": true,
+      "is_valid_zip": true
+    },
+    "validation": {
+      "dex_files": [
+        "classes.dex",
+        "classes2.dex",
+        "classes3.dex",
+        "classes4.dex"
+      ],
+      "has_android_manifest": true,
+      "has_dex": true,
+      "is_valid_apk": true,
+      "is_zip": true
+    }
+  },
+  {
+    "apk": "demo_runs/task_9_5_3_app_005/downloads/vulnbank3.apk",
+    "package_component_role": "base",
+    "sha256": "b9f87d81498671560e6c83a354aac35fd8407d0f63457f71a9b37b04ee97a827",
+    "split_aware_validation": {
+      "dex_count": 2,
+      "dex_files": [
+        "classes.dex",
+        "classes2.dex"
+      ],
+      "error": null,
+      "has_android_manifest": true,
+      "has_dex": true,
+      "is_valid": true,
+      "is_valid_zip": true
+    },
+    "validation": {
+      "dex_files": [
+        "classes.dex",
+        "classes2.dex"
+      ],
+      "has_android_manifest": true,
+      "has_dex": true,
+      "is_valid_apk": true,
+      "is_zip": true
+    }
+  },
+  {
+    "apk": "demo_runs/task_9_5_3_app_006/downloads/dvba_v1.1.0.apk",
+    "package_component_role": "base",
+    "sha256": "76c308fac6a655a3534771777780e004feb1d91be032857768c891b2baf40ba6",
+    "split_aware_validation": {
+      "dex_count": 1,
+      "dex_files": [
+        "classes.dex"
+      ],
+      "error": null,
+      "has_android_manifest": true,
+      "has_dex": true,
+      "is_valid": true,
+      "is_valid_zip": true
+    },
+    "validation": {
+      "dex_files": [
+        "classes.dex"
+      ],
+      "has_android_manifest": true,
+      "has_dex": true,
+      "is_valid_apk": true,
+      "is_zip": true
+    }
+  }
+]

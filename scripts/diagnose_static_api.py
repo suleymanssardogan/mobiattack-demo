@@ -76,8 +76,11 @@ def inventory(app_id: str, workspace: Path, *, max_file_bytes: int = 2_000_000,
         for items in extract_network_indicators(root).values():
             for item in items:
                 found_indicators.add((component + '/' + item['source_file'], item['line_number'], item['value']))
-        for item in extract_api_candidates(root)['api_candidates']:
-            found_candidates.add((component + '/' + item['source_file'], item['evidence']['path_line'], item['path']))
+        for candidate in extract_api_candidates(root)['api_candidates']:
+            for item in candidate.get('provenance') or [candidate]:
+                original = item.get('extractor_identity') or item
+                value = original.get('full_url') or original.get('path')
+                found_candidates.add((component + '/' + item['source_file'], item['evidence']['path_line'], value))
     signals, inspected, skipped = [], Counter(), Counter()
     used = 0
     # Prefer canonical decoded files, then JADX; avoid raw/JADX duplicate resources.

@@ -1,0 +1,90 @@
+{
+  "AntennaPod": {
+    "candidates_by_framework": {},
+    "canonical_candidates": 0,
+    "deterministic": true,
+    "diagnostics": {
+      "httpurlconnection": {
+        "coverage": {
+          "partial": true,
+          "skipped": []
+        },
+        "unresolved_reason_counts": {
+          "UNSUPPORTED_CONTROL_FLOW": 54
+        }
+      },
+      "volley": {
+        "coverage": {
+          "partial": false,
+          "skipped": []
+        },
+        "unresolved_reason_counts": {}
+      }
+    },
+    "framework_signal_files": {
+      "httpurlconnection": 7
+    },
+    "new_framework_candidates": [],
+    "okhttp_unchanged": true,
+    "retrofit_unchanged": true
+  },
+  "Damn Vulnerable Bank": {
+    "candidates_by_framework": {},
+    "canonical_candidates": 0,
+    "deterministic": true,
+    "diagnostics": {
+      "httpurlconnection": {
+        "coverage": {
+          "partial": true,
+          "skipped": []
+        },
+        "unresolved_reason_counts": {
+          "CONNECTION_IDENTITY_UNRESOLVED": 1,
+          "UNSUPPORTED_CONTROL_FLOW": 4
+        }
+      },
+      "volley": {
+        "coverage": {
+          "partial": false,
+          "skipped": []
+        },
+        "unresolved_reason_counts": {}
+      }
+    },
+    "framework_signal_files": {
+      "httpurlconnection": 2
+    },
+    "new_framework_candidates": [],
+    "okhttp_unchanged": true,
+    "retrofit_unchanged": true
+  },
+  "Flashlight": {
+    "candidates_by_framework": {},
+    "canonical_candidates": 0,
+    "deterministic": true,
+    "diagnostics": {
+      "httpurlconnection": {
+        "coverage": {
+          "partial": true,
+          "skipped": []
+        },
+        "unresolved_reason_counts": {
+          "UNSUPPORTED_CONTROL_FLOW": 4
+        }
+      },
+      "volley": {
+        "coverage": {
+          "partial": false,
+          "skipped": []
+        },
+        "unresolved_reason_counts": {}
+      }
+    },
+    "framework_signal_files": {
+      "httpurlconnection": 3
+    },
+    "new_framework_candidates": [],
+    "okhttp_unchanged": true,
+    "retrofit_unchanged": true
+  }
+}

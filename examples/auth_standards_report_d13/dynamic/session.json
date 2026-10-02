@@ -1,0 +1,67 @@
+{
+  "device_serial": "emulator-5554",
+  "ended_at": "2026-10-02T12:03:19.580799+00:00",
+  "errors": [],
+  "flows": [
+    {
+      "description": "",
+      "ended_at": "2026-10-02T12:03:19.580710+00:00",
+      "events": [
+        {
+          "event_id": "e0f3ce92-cd1a-4058-afb3-887c1624d532",
+          "flow_id": "78c36664-8c71-43f9-a869-bea66a4584bf",
+          "metadata": {
+            "action_id": "act_4d3a12f998f2a6a3",
+            "route_id": "node_ae5d067cf204c0d4"
+          },
+          "name": "LAB_LOGIN_PROFILE_STARTED",
+          "session_id": "463eae39-8c7c-42b9-92bb-d0b34d467cbf",
+          "timestamp": "2026-10-02T12:03:15.986936+00:00",
+          "type": "MARKER"
+        },
+        {
+          "event_id": "3a4e3eff-67b5-4175-9926-6cbcf4d077a6",
+          "flow_id": "78c36664-8c71-43f9-a869-bea66a4584bf",
+          "metadata": {
+            "action_id": "act_4d3a12f998f2a6a3",
+            "action_type": "click",
+            "attempts": 1,
+            "bounds": [
+              21,
+              638,
+              740,
+              829
+            ],
+            "center": [
+              380,
+              733
+            ],
+            "resource_id": "start",
+            "route_id": "node_ae5d067cf204c0d4",
+            "status": "succeeded"
+          },
+          "name": "ACTION_EXECUTED",
+          "session_id": "463eae39-8c7c-42b9-92bb-d0b34d467cbf",
+          "timestamp": "2026-10-02T12:03:16.048416+00:00",
+          "type": "USER_ACTION"
+        }
+      ],
+      "flow_id": "78c36664-8c71-43f9-a869-bea66a4584bf",
+      "name": "Local authenticated baseline acquisition",
+      "started_at": "2026-10-02T12:03:10.878923+00:00",
+      "status": "COMPLETED"
+    }
+  ],
+  "metadata": {
+    "controlled_local_training_lab": true,
+    "dynamic_analysis_completed": false,
+    "security_test_executed": false
+  },
+  "package_name": "com.android.chrome",
+  "preflight_status": "NOT_EVALUATED",
+  "session_id": "463eae39-8c7c-42b9-92bb-d0b34d467cbf",
+  "stage": "dynamic_session",
+  "started_at": "2026-10-02T12:03:10.878411+00:00",
+  "status": "COMPLETED",
+  "warnings": []
+}

@@ -218,9 +218,10 @@ def _parse_file(text: str, source: str) -> tuple[list[dict], list[dict]]:
                 value_line, value = annotation["values"][0]
                 path = _safe_path(value)
                 if path and service_interface and method_is_abstract:
+                    from src.api_candidate_canonicalizer import literal_query_metadata
                     method_declarations.append(dict(service=service, source_file=source, source_method=method,
                         method=annotation["method"], path=path, annotation_line=annotation["annotation_line"],
-                        path_line=value_line, query_values_removed="?" in value))
+                        path_line=value_line, query_values_removed="?" in value, **literal_query_metadata(value)))
             annotation = None
         elif annotation and line:
             value = VALUE.fullmatch(line)
@@ -283,6 +284,7 @@ def extract_retrofit(analysis_root: str | Path) -> dict:
             if not _safe_base(base["value"]) or urlsplit(full).netloc != urlsplit(base["value"]).netloc:
                 continue
             candidates.append(dict(framework="Retrofit", method=declaration["method"], base_url=base["value"],
+                query_keys=declaration["query_keys"], query_shape=declaration["query_shape"], query_shape_known=declaration["query_shape_known"],
                 path=declaration["path"], full_url=full, status="static_api_candidate",
                 source_file=declaration["source_file"], request_line=declaration["annotation_line"],
                 evidence=dict(path_value=declaration["path"], path_line=declaration["path_line"],

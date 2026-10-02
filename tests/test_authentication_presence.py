@@ -1,6 +1,7 @@
 from copy import deepcopy
 from http.server import HTTPServer
 import json
+from pathlib import Path
 from unittest.mock import Mock, patch
 
 import pytest
@@ -18,7 +19,8 @@ def setup_case():
     server = object.__new__(HTTPServer)
     server.server_address = (context.host, 18081)
     records = []
-    backend = LocalLabAuthenticationPresence(server=server, receipts=records, baseline=baseline, context=context, session_id=session['session_id'])
+    backend = LocalLabAuthenticationPresence(server=server, receipts=records, baseline=baseline, context=context, session_id=session['session_id'],
+        baseline_receipts=json.loads((Path(BASE)/'lab_receipts.json').read_text()), session_evidence=session)
     registry = {ref: EvidenceReference(ref, context.endpoint_context_id, kind, session['session_id']) for ref,kind in [
         (manifest['protected_request_ref'], 'request'), (manifest['protected_response_ref'], 'response'),
         (context.endpoint_context_id, 'context'), (session['session_id'], 'runtime')]}
@@ -206,7 +208,12 @@ def test_persisted_live_run_has_complete_bound_evidence():
     execution=DynamicTestExecutionResult.from_dict(data)
     result=DynamicValidationResult.from_dict(read('validation_result.json'))
     registry={k:EvidenceReference(**v) for k,v in read('evidence_registry.json').items()}
-    validate_result(request,execution,result,registry)
+    from src.dynamic.security.validation import load_recorded_auth_presence_case, validate_authentication_presence
+    _,_,_,bundle=load_recorded_auth_presence_case(root,BASE)
+    with pytest.raises(ValueError):
+        validate_result(request,execution,result,registry)  # Legacy summary alone cannot validate.
+    result=validate_authentication_presence(request,execution,registry,bundle)
+    validate_result(request,execution,result,registry,auth_evidence=bundle)
     assert execution_ref in result.evidence_refs and execution_ref in execution.tool_refs
     baseline=read('baseline_transaction.json'); variant=read('variant_transaction.json')
     context=EndpointContext(**read('endpoint_context.json'))

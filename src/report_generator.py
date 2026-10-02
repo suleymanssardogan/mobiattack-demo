@@ -69,7 +69,8 @@ def build_report_dict(
     prep_comps = prep.get("components") or []
     acq_map = {c.get("filename"): c for c in acq_comps}
     prep_map = {c.get("filename"): c for c in prep_comps}
-    all_filenames = list(dict.fromkeys([c.get("filename") for c in acq_comps + prep_comps if c.get("filename")]))
+    all_filenames = sorted({c.get("filename") for c in acq_comps + prep_comps if c.get("filename")},
+                           key=lambda name: (name != "base.apk", name))
 
     for fn in all_filenames:
         c_acq = dict(acq_map.get(fn, {}))
@@ -112,7 +113,7 @@ def build_report_dict(
 
     # Application overview data
     package_name = app.get("package_name") or acq.get("package_name") or "unknown"
-    launcher_activity = app.get("launcher_activity") or "unknown"
+    launcher_activity = app.get("launcher_activity")
     filename = acq.get("filename") or "unknown"
     sha256 = acq.get("sha256") or "unknown"
     size_bytes = acq.get("size_bytes")
@@ -157,6 +158,8 @@ def build_report_dict(
         application_data = {
             "package_name": package_name,
             "launcher_activity": launcher_activity,
+            "launcher_target_activity": app.get("launcher_target_activity"),
+            "launcher_status": app.get("launcher_status") or ("resolved" if launcher_activity else "LAUNCHER_UNRESOLVED"),
             "filename": filename,
             "sha256": sha256,
             "size_bytes": size_bytes,
@@ -216,6 +219,7 @@ def build_report_dict(
         "split_count": split_count,
         "apk_components": apk_components,
         "split_structure": split_structure,
+        "manifest": static.get("manifest", {}),
         "manifest_evidence": manifest_evidence,
         "application": application_data,
         "acquisition": acq,
@@ -225,6 +229,7 @@ def build_report_dict(
         "activities": static.get("activities") or [],
         "network_indicators": net,
         "api_candidates": candidates,
+        "api_discovery": static.get("api_discovery", {}),
         "runtime": runtime,
         "connectivity_probe": connectivity_probe or {},
         "analysis_notes": analysis_notes,
@@ -347,7 +352,7 @@ def sanitize_acquisition_for_canonical_report(acq: dict[str, Any] | None) -> dic
                     clean_comps.append(c)
                 else:
                     clean_comps.append(comp)
-            pkg_set["components"] = clean_comps
+            pkg_set["components"] = sorted(clean_comps, key=lambda c: (c.get("role") != "base", c.get("filename", "")) if isinstance(c, dict) else (True, str(c)))
         clean["package_set"] = pkg_set
 
     if "components" in clean and isinstance(clean["components"], list):
@@ -361,7 +366,7 @@ def sanitize_acquisition_for_canonical_report(acq: dict[str, Any] | None) -> dic
                 clean_comps.append(c)
             else:
                 clean_comps.append(comp)
-        clean["components"] = clean_comps
+        clean["components"] = sorted(clean_comps, key=lambda c: (c.get("filename") != "base.apk", c.get("filename", "")) if isinstance(c, dict) else (True, str(c)))
 
     return clean
 
@@ -428,7 +433,7 @@ def sanitize_preprocessing_for_canonical_report(prep: dict[str, Any] | None) -> 
                 if "warnings" in comp and isinstance(comp["warnings"], list):
                     c["warnings"] = [sanitize_text_host_paths(w) for w in comp["warnings"]]
                 clean_comps.append(c)
-        clean["components"] = clean_comps
+        clean["components"] = sorted(clean_comps, key=lambda c: (c.get("filename") != "base.apk", c.get("filename", "")) if isinstance(c, dict) else (True, str(c)))
 
     # iOS preprocessing fields: strip app_bundle_dir and host workspace
     if "app_bundle" in prep:
@@ -467,7 +472,7 @@ def sanitize_apk_components_for_canonical_report(apk_components: list[Any] | Non
                 c_prep["warnings"] = [sanitize_text_host_paths(w) for w in c_prep["warnings"]]
             c["preprocessing"] = c_prep
         clean_list.append(c)
-    return clean_list
+    return sorted(clean_list, key=lambda c: (c.get("role") != "base", c.get("filename", "")))
 
 
 def sanitize_structure_for_canonical_report(struct: dict[str, Any] | None) -> dict[str, Any]:
@@ -525,7 +530,14 @@ def sanitize_api_candidates_for_canonical_report(candidates: list[Any] | None) -
             clean_candidates.append(clean_cand)
         else:
             clean_candidates.append(cand)
-    return clean_candidates
+    from src.api_candidate_canonicalizer import canonicalize_api_candidates
+    def paths(value):
+        if isinstance(value, dict):
+            return {key: sanitize_evidence_path(str(item)) if key.endswith("source_file") and item else paths(item) for key, item in value.items()}
+        if isinstance(value, list):
+            return [paths(item) for item in value]
+        return value
+    return canonicalize_api_candidates(paths(clean_candidates))
 
 
 def sanitize_vulnerabilities_for_canonical_report(vulns: dict[str, Any] | None) -> dict[str, Any]:
@@ -640,6 +652,9 @@ def build_static_analysis_report(
 
     # Ensure vulnerabilities block is present
     vulns = base_report.get("vulnerabilities")
+    if base_report.get("platform", "android") == "android":
+        from src.vulnerability_evaluator import evaluate_vulnerabilities
+        vulns = evaluate_vulnerabilities({key: value for key, value in base_report.items() if key != "runtime"})
     if not vulns:
         try:
             from src.vulnerability_evaluator import evaluate_vulnerabilities
@@ -670,9 +685,11 @@ def build_static_analysis_report(
         "activities": base_report.get("activities", []),
         "network_indicators": sanitize_network_indicators_for_canonical_report(base_report.get("network_indicators")),
         "api_candidates": sanitize_api_candidates_for_canonical_report(base_report.get("api_candidates")),
+        "api_discovery": base_report.get("api_discovery", {}),
         "vulnerabilities": sanitize_vulnerabilities_for_canonical_report(vulns),
         "apk_components": sanitize_apk_components_for_canonical_report(base_report.get("apk_components")),
         "split_structure": base_report.get("split_structure", []),
+        "manifest": base_report.get("manifest", {}),
         "manifest_evidence": base_report.get("manifest_evidence", []),
         "analysis_notes": static_notes,
         "limitations": static_limitations,

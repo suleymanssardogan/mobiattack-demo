@@ -468,7 +468,7 @@ def acquire_play_store_app(
                 raise PlayStoreAcquisitionError(
                     f"Play Store installation blocked: {block_reason}",
                     package_name=package_name,
-                    reason_code=block_reason,
+                    reason_code="PLAYSTORE_UI_AUTOMATION_FAILED" if block_reason == "ui_automation_failed" else block_reason,
                     diagnostics=ui_res.get("diagnostics", []),
                 )
             if ui_res.get("status") == "failed":
@@ -476,7 +476,7 @@ def acquire_play_store_app(
                 raise PlayStoreAcquisitionError(
                     f"Play Store UI automation failed: {fail_reason}",
                     package_name=package_name,
-                    reason_code=fail_reason,
+                    reason_code="PLAYSTORE_UI_AUTOMATION_FAILED",
                     diagnostics=ui_res.get("diagnostics", []),
                 )
 
@@ -550,12 +550,8 @@ def acquire_play_store_app(
     local_filename = f"{package_name}.apk"
     local_apk_path = out_dir / local_filename
 
-    # If file exists, remove or overwrite cleanly in isolated run workspace
     if local_apk_path.exists():
-        try:
-            local_apk_path.unlink()
-        except OSError:
-            pass
+        raise PlayStoreAcquisitionError('Acquisition destination already exists; refusing stale/overwritten artifacts.', reason_code='SPLIT_SET_INCOMPLETE')
 
     pull_device_apk(
         adb_bin=resolved_adb,

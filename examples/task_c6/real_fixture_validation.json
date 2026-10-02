@@ -1,0 +1,137 @@
+{
+  "AntennaPod": {
+    "candidates": [],
+    "candidates_by_framework": {},
+    "canonical_candidates": 0,
+    "diagnostics": {
+      "bounded_provenance": {
+        "coverage": {
+          "partial": true,
+          "skipped": [
+            {
+              "reason": "INDEX_METHOD_LIMIT",
+              "source_file": "smali/com/google/android/material/badge/BadgeDrawable.smali"
+            }
+          ]
+        },
+        "unresolved_reason_counts": {
+          "INCOMPLETE_INDEX": 74
+        }
+      },
+      "ktor": {
+        "coverage": {
+          "partial": true,
+          "skipped": [
+            {
+              "reason": "INDEX_METHOD_LIMIT",
+              "source_file": "smali/com/google/android/material/badge/BadgeDrawable.smali"
+            }
+          ]
+        },
+        "unresolved_reason_counts": {}
+      }
+    },
+    "direct_behavior_unchanged": true
+  },
+  "Damn Vulnerable Bank": {
+    "candidates": [],
+    "candidates_by_framework": {},
+    "canonical_candidates": 0,
+    "diagnostics": {
+      "bounded_provenance": {
+        "coverage": {
+          "partial": true,
+          "skipped": []
+        },
+        "unresolved_reason_counts": {
+          "BRANCH_DEPENDENT_FLOW": 4,
+          "UNSUPPORTED_INVOKE_FORM": 1
+        }
+      },
+      "ktor": {
+        "coverage": {
+          "partial": false,
+          "skipped": []
+        },
+        "unresolved_reason_counts": {}
+      }
+    },
+    "direct_behavior_unchanged": true
+  },
+  "VulnBank": {
+    "candidates": [],
+    "candidates_by_framework": {},
+    "canonical_candidates": 0,
+    "diagnostics": {
+      "bounded_provenance": {
+        "coverage": {
+          "partial": true,
+          "skipped": [
+            {
+              "reason": "INDEX_SOURCE_BOUNDARY",
+              "source_file": "smali/kotlin/collections/ArraysKt___ArraysKt.smali"
+            },
+            {
+              "reason": "INDEX_METHOD_LIMIT",
+              "source_file": "smali/okhttp3/Headers$Builder.smali"
+            }
+          ]
+        },
+        "unresolved_reason_counts": {
+          "INCOMPLETE_INDEX": 512
+        }
+      },
+      "ktor": {
+        "coverage": {
+          "partial": true,
+          "skipped": [
+            {
+              "reason": "INDEX_SOURCE_BOUNDARY",
+              "source_file": "smali/kotlin/collections/ArraysKt___ArraysKt.smali"
+            },
+            {
+              "reason": "INDEX_METHOD_LIMIT",
+              "source_file": "smali/okhttp3/Headers$Builder.smali"
+            }
+          ]
+        },
+        "unresolved_reason_counts": {}
+      }
+    },
+    "direct_behavior_unchanged": true
+  },
+  "Wikipedia": {
+    "candidates": [],
+    "candidates_by_framework": {},
+    "canonical_candidates": 0,
+    "diagnostics": {
+      "bounded_provenance": {
+        "coverage": {
+          "partial": true,
+          "skipped": [
+            {
+              "reason": "INDEX_METHOD_LIMIT",
+              "source_file": "smali/org/wikipedia/views/ReadingListsOverflowView$$ExternalSyntheticLambda0.smali"
+            }
+          ]
+        },
+        "unresolved_reason_counts": {
+          "INCOMPLETE_INDEX": 512
+        }
+      },
+      "ktor": {
+        "coverage": {
+          "partial": true,
+          "skipped": [
+            {
+              "reason": "INDEX_METHOD_LIMIT",
+              "source_file": "smali/org/wikipedia/views/ReadingListsOverflowView$$ExternalSyntheticLambda0.smali"
+            }
+          ]
+        },
+        "unresolved_reason_counts": {}
+      }
+    },
+    "direct_behavior_unchanged": true
+  }
+}

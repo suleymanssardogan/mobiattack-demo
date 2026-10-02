@@ -1886,7 +1886,7 @@
         </div>
 
         <div class="sidebar-section">
-          <label for="apkUrl" class="sidebar-label" style="font-weight:700;">Target Application</label>
+          <label for="apkUrl" class="sidebar-label" style="font-weight:700;">Target Application URL</label>
           <input type="text" id="apkUrl" placeholder="Paste APK or Play Store URL..."
             oninput="handleUrlInput()" />
           <div id="urlClassificationBadge"
@@ -1923,21 +1923,6 @@
             <span class="advanced-options-summary-icon">▸</span>
           </summary>
           <div class="advanced-options-content">
-            <!-- Install Mode -->
-            <div class="advanced-subgroup" id="installModeSection">
-              <div class="advanced-subgroup-title">Install Mode</div>
-              <div class="segmented-group">
-                <label class="radio-option">
-                  <input type="radio" name="installMode" value="manual" checked />
-                  Manual
-                </label>
-                <label class="radio-option radio-option-secondary">
-                  <input type="radio" name="installMode" value="ui_automation" />
-                  Auto
-                </label>
-              </div>
-            </div>
-
             <!-- Analysis Options -->
             <div class="advanced-subgroup" id="androidAnalysisOptions">
               <div class="advanced-subgroup-title">Analysis Options</div>
@@ -1945,17 +1930,8 @@
                 <label class="checkbox-row">
                   <input type="checkbox" id="reinstall" checked /> Reinstall existing
                 </label>
-                <label class="checkbox-row">
-                  <input type="checkbox" id="grantPermissions" /> Grant permissions
-                </label>
-              </div>
-            </div>
 
-            <!-- Runtime Device -->
-            <div class="advanced-subgroup" id="adbTargetSection">
-              <div class="advanced-subgroup-title">Runtime Device</div>
-              <input type="text" id="adbSerial" value="emulator-5554" readonly aria-readonly="true" />
-              <div class="advanced-hint">Fixed local Android emulator target (emulator-5554).</div>
+              </div>
             </div>
 
             <!-- Connectivity Diagnostics -->
@@ -1982,7 +1958,7 @@
 
         <div class="sidebar-section">
           <button class="btn btn-primary" id="startBtn" onclick="startDemo()" data-action="START DEMO"
-            title="Start Scan">Start Scan</button>
+            title="Start Analysis">Start Analysis</button>
           <button class="btn btn-secondary" id="resetBtn" onclick="resetDashboardToInitial()"
             style="margin-top:8px; width:100%; font-size:12px;">↺ Reset View</button>
           <button class="btn btn-stop" id="stopBtn" onclick="stopDemo()"
@@ -2130,11 +2106,15 @@
               <div style="font-size:12px; color:var(--text-3); margin-top:1px;">Deterministic evidence from pipeline
                 execution</div>
             </div>
-            <span class="tag" id="analysisRunIdBadge">RUN ID: -</span>
+            <span class="tag" id="analysisRunIdBadge" style="display:none">RUN ID: -</span>
           </div>
 
           <div class="tabs-nav">
-            <button class="tab-btn active" id="tab-btn-overview" onclick="switchTab('overview')">Overview</button>
+            <button class="tab-btn active" id="tab-btn-summary" onclick="switchTab('summary')">Summary</button>
+            <button class="tab-btn" id="tab-btn-static_security" onclick="switchTab('static_security')">Static Analysis Report</button>
+            <button class="tab-btn" id="tab-btn-dynamic_security" onclick="switchTab('dynamic_security')">Dynamic Analysis Report</button>
+            <details id="detailedReportNavigation"><summary style="padding:12px;cursor:pointer;">Detailed evidence</summary><div style="display:flex;flex-wrap:wrap;">
+            <button class="tab-btn" id="tab-btn-overview" onclick="switchTab('overview')">Overview</button>
             <button class="tab-btn" id="tab-btn-api_candidates" onclick="switchTab('api_candidates')">Structured
               Inventory <span class="tag" id="inventoryCountTag"
                 style="margin-left:4px; font-size:10px; background:#eff6ff; color:#1d4ed8; font-weight:700;">0</span></button>
@@ -2151,10 +2131,17 @@
             <button class="tab-btn" id="tab-btn-structure" onclick="switchTab('structure')">Structure</button>
             <button class="tab-btn" id="tab-btn-network" onclick="switchTab('network')">Raw Indicators</button>
             <button class="tab-btn" id="tab-btn-report" onclick="switchTab('report')">Report</button>
+            </div></details>
           </div>
 
+          <div class="tab-pane active" id="tab-pane-summary">
+            <div id="compactReportSummary" aria-live="polite">Summary unavailable.</div>
+          </div>
+
+          <div class="tab-pane" id="tab-pane-static_security"><div id="staticSecurityReport">Static report unavailable.</div></div>
+          <div class="tab-pane" id="tab-pane-dynamic_security"><div id="dynamicSecurityReport">Dynamic report unavailable.</div></div>
           <!-- Tab: Overview -->
-          <div class="tab-pane active" id="tab-pane-overview">
+          <div class="tab-pane" id="tab-pane-overview">
             <div class="scan-summary-grid" id="scanSummaryBar">
               <div class="summary-cell">
                 <div class="summary-label">Scan Status</div>
@@ -3381,179 +3368,10 @@
           message: "iOS vulnerability evaluation is not implemented in Phase 1."
         };
       }
-      const stat = result.static_analysis || result || {};
-      const net = stat.network_indicators || {};
-      const app = stat.app || result.application || {};
-      const perms = stat.permissions || [];
-      const acts = stat.activities || [];
-      const cands = stat.api_candidates || [];
-
-      const findings = [];
-
-      // 1. Debuggable
-      const manifest = stat.manifest || result.manifest_evidence || {};
-      const rawApp = manifest.application || app;
-      const isDebuggable = rawApp.debuggable === true || String(rawApp.debuggable).toLowerCase() === 'true';
-      if (isDebuggable) {
-        findings.push({
-          id: 'SEC-CODE-01',
-          title: 'Application Is Marked Debuggable',
-          severity: 'CRITICAL',
-          owasp_category: 'M7: Client Code Quality',
-          masvs_id: 'MASVS-CODE-2',
-          cwe_id: 'CWE-215: Insertion of Sensitive Information Into Debugging Code',
-          description: 'The application has android:debuggable="true" enabled. Attackers can connect JDWP debuggers via ADB, dump memory, inspect encryption keys, bypass security controls, and execute arbitrary code in app context.',
-          evidence: 'android:debuggable="true" is declared in AndroidManifest.xml under <application>.',
-          remediation: 'Ensure android:debuggable="false" is set in production release builds.',
-          affected_items: ['AndroidManifest.xml: android:debuggable="true"']
-        });
-      }
-
-      // 2. Cleartext HTTP
-      const rawUrls = net.network_urls || [];
-      const httpUrls = [];
-      rawUrls.forEach(u => {
-        const s = typeof u === 'string' ? u : (u.url || u.value || '');
-        if (s.startsWith('http://')) httpUrls.push(s);
-      });
-      cands.forEach(c => {
-        const u = c.full_url || c.base_url || c.value || '';
-        if (typeof u === 'string' && u.startsWith('http://') && !httpUrls.includes(u)) {
-          httpUrls.push(u);
-        }
-      });
-
-      const cleartextFlag = String(rawApp.uses_cleartext_traffic || rawApp.usesCleartextTraffic || '').toLowerCase() === 'true';
-      if (cleartextFlag || httpUrls.length > 0) {
-        const ev = [];
-        if (cleartextFlag) ev.push('android:usesCleartextTraffic="true" enabled');
-        if (httpUrls.length > 0) ev.push(httpUrls.length + ' unencrypted HTTP URLs in code (e.g. ' + httpUrls.slice(0, 5).join(', ') + ')');
-        findings.push({
-          id: 'SEC-NET-01',
-          title: 'Cleartext HTTP Traffic Permitted',
-          severity: 'HIGH',
-          owasp_category: 'M3: Insecure Communication',
-          masvs_id: 'MASVS-NETWORK-1',
-          cwe_id: 'CWE-319: Cleartext Transmission of Sensitive Information',
-          description: 'The application allows unencrypted HTTP network communication. Traffic sent over plaintext HTTP can be intercepted, read, or modified by adversaries via Man-in-the-Middle (MitM) attacks.',
-          evidence: ev.join(' • '),
-          remediation: 'Enforce HTTPS for all network endpoints. Configure Android Network Security Configuration (res/xml/network_security_config.xml) with cleartextTrafficPermitted="false".',
-          affected_items: httpUrls.slice(0, 20)
-        });
-      }
-
-      // 3. Insecure Local File URLs
-      const rawFiles = net.local_file_urls || [];
-      const fileUrls = [];
-      rawFiles.forEach(f => {
-        const s = typeof f === 'string' ? f : (f.url || f.value || '');
-        if (s) fileUrls.push(s);
-      });
-      if (fileUrls.length > 0) {
-        findings.push({
-          id: 'SEC-PLAT-02',
-          title: 'Insecure file:// Local URL Schemes Detected',
-          severity: 'LOW',
-          owasp_category: 'M1: Improper Platform Usage',
-          masvs_id: 'MASVS-PLATFORM-2',
-          cwe_id: 'CWE-749: Exposed Dangerous Method or Function',
-          description: 'The application references local file:// URI schemes. If passed to WebViews with allowFileAccess enabled, this can lead to arbitrary local file disclosure and Cross-App Scripting.',
-          evidence: 'Detected file:// scheme references in code: ' + fileUrls.slice(0, 5).join(', '),
-          remediation: 'Avoid using file:// schemes. Use content:// URIs with FileProvider or modern WebViewAssetLoader to restrict file system access securely.',
-          affected_items: fileUrls.slice(0, 15)
-        });
-      }
-
-      // 4. Root Detection / SU Paths
-      const rawPaths = net.path_candidates || [];
-      const suPaths = [];
-      rawPaths.forEach(p => {
-        const s = typeof p === 'string' ? p : (p.value || p.path || '');
-        if (s && (s.includes('/su') || s.endsWith('/su'))) suPaths.push(s);
-      });
-      if (suPaths.length > 0) {
-        findings.push({
-          id: 'SEC-RESI-01',
-          title: 'Client-Side Root Detection Binary Checks Detected',
-          severity: 'LOW',
-          owasp_category: 'M8: Code Tampering',
-          masvs_id: 'MASVS-RESILIENCE-1',
-          cwe_id: 'CWE-693: Protection Mechanism Failure',
-          description: 'The application inspects standard root binary paths (/sbin/su, /su/bin/su) to detect rooted devices. Standard file-existence checks are easily bypassed via Frida hooking or root-hiding modules.',
-          evidence: 'Root execution paths inspected: ' + suPaths.slice(0, 5).join(', '),
-          remediation: 'Supplement client-side file checks with hardware-backed Play Integrity API verification and anti-tampering controls.',
-          affected_items: suPaths.slice(0, 10)
-        });
-      }
-
-      // 5. Dangerous Permissions
-      const dangerousPerms = ['android.permission.RECORD_AUDIO', 'android.permission.CAMERA', 'android.permission.READ_EXTERNAL_STORAGE', 'android.permission.WRITE_EXTERNAL_STORAGE', 'android.permission.SYSTEM_ALERT_WINDOW', 'android.permission.ACCESS_FINE_LOCATION'];
-      const detectedDangerous = [];
-      perms.forEach(p => {
-        const s = typeof p === 'string' ? p : (p.name || '');
-        if (dangerousPerms.includes(s) && !detectedDangerous.includes(s)) detectedDangerous.push(s);
-      });
-      if (detectedDangerous.length > 0) {
-        findings.push({
-          id: 'SEC-PERM-01',
-          title: 'High-Risk Sensitive Permissions Requested',
-          severity: 'MEDIUM',
-          owasp_category: 'M1: Improper Platform Usage',
-          masvs_id: 'MASVS-PLATFORM-1',
-          cwe_id: 'CWE-250: Execution with Unnecessary Privileges',
-          description: 'The application requests ' + detectedDangerous.length + ' sensitive high-risk permission(s). Overprivileged applications increase the attack surface.',
-          evidence: 'Dangerous permissions requested: ' + detectedDangerous.join(', '),
-          remediation: 'Apply the Principle of Least Privilege. Audit permission usage and remove unnecessary declarations.',
-          affected_items: detectedDangerous
-        });
-      }
-
-      // 6. Hardcoded Secret Key Candidates
-      const secretRegex = /(?:api[_-]?key|secret|access[_-]?token|bearer\\s+[a-zA-Z0-9_\\-\\.]+?|auth[_-]?token)/i;
-      const secretCandidates = [];
-      cands.forEach(c => {
-        const val = typeof c === 'string' ? c : (c.value || c.matched_string || c.api_call || '');
-        if (val && secretRegex.test(val) && val.length > 12) secretCandidates.push(val);
-      });
-      rawUrls.forEach(u => {
-        const s = typeof u === 'string' ? u : (u.url || u.value || '');
-        if (s && (s.toLowerCase().includes('api_key=') || s.toLowerCase().includes('token='))) secretCandidates.push(s);
-      });
-      if (secretCandidates.length > 0) {
-        findings.push({
-          id: 'SEC-CRYPTO-01',
-          title: 'Hardcoded API Key or Authentication Token Detected',
-          severity: 'HIGH',
-          owasp_category: 'M9: Insecure Reverse Engineering',
-          masvs_id: 'MASVS-CRYPTO-1',
-          cwe_id: 'CWE-798: Use of Hard-coded Credentials',
-          description: 'Potential API keys, access tokens, or authorization parameters were detected hardcoded in compiled assets or source smali files.',
-          evidence: 'Detected credential patterns: ' + secretCandidates.slice(0, 3).join(', '),
-          remediation: 'Never embed static secret keys or backend tokens inside client APK binaries. Use temporary scoped tokens via OAuth2 PKCE.',
-          affected_items: secretCandidates.slice(0, 10)
-        });
-      }
-
-      const severityOrder = { CRITICAL: 4, HIGH: 3, MEDIUM: 2, LOW: 1 };
-      findings.sort((a, b) => (severityOrder[b.severity] || 0) - (severityOrder[a.severity] || 0));
-
-      const counts = { critical: 0, high: 0, medium: 0, low: 0, total: findings.length };
-      findings.forEach(f => {
-        const s = (f.severity || 'LOW').toLowerCase();
-        if (counts[s] !== undefined) counts[s]++;
-      });
-
-      let riskScore = 'CLEAN';
-      if (counts.critical > 0) riskScore = 'CRITICAL';
-      else if (counts.high > 0) riskScore = 'HIGH';
-      else if (counts.medium > 0) riskScore = 'MEDIUM';
-      else if (counts.low > 0) riskScore = 'LOW';
-
-      return {
-        risk_score: riskScore,
-        summary: counts,
-        findings: findings
-      };
+      // Only the deterministic backend evaluator may emit findings.
+      return { status: 'not_evaluated', risk_score: 'NOT_EVALUATED',
+        summary: { critical: 0, high: 0, medium: 0, low: 0, total: 0 }, findings: [],
+        message: 'Canonical security evaluation is unavailable.' };
     }
 
     function renderFindings(findingsData) {
@@ -3739,6 +3557,7 @@
 
     function switchTab(tabId) {
       if (tabId === 'notes') tabId = 'analysis_details';
+      if (!['summary','static_security','dynamic_security'].includes(tabId)) document.getElementById('detailedReportNavigation').open = true;
       document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
       document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
       const btn = document.getElementById('tab-btn-' + tabId);
@@ -3754,11 +3573,112 @@
       }
     }
 
+    let compactSummaryRequest = 0;
+    let compactSummaryData = null;
+    let compactSummaryPage = 0;
+
+    async function loadCompactSummary(runId) {
+      const request = ++compactSummaryRequest;
+      const target = document.getElementById('compactReportSummary');
+      target.textContent = 'Loading summary…';
+      for (const id of ['staticSecurityReport', 'dynamicSecurityReport']) { const pane = document.getElementById(id); if (pane) pane.textContent = 'Loading report…'; }
+      try {
+        const response = await fetch(backendUrl('/api/summary/' + encodeURIComponent(runId)));
+        if (!response.ok) throw new Error('Summary unavailable');
+        const summary = await response.json();
+        if (request !== compactSummaryRequest) return;
+        compactSummaryData = summary;
+        compactSummaryPage = 0;
+        renderCompactSummary(runId);
+      } catch (_) {
+        if (request === compactSummaryRequest) { target.textContent = 'Summary unavailable. Canonical evidence remains accessible.'; for (const id of ['staticSecurityReport', 'dynamicSecurityReport']) { const pane = document.getElementById(id); if (pane) pane.textContent = 'Report unavailable.'; } }
+      }
+    }
+
+    function renderCompactSummary(runId) {
+      const data = compactSummaryData;
+      if (!data) return;
+      const stat = data.static_summary, dyn = data.dynamic_summary;
+      const show = value => escapeHtml(value === null || value === undefined ? 'Unknown' : String(value));
+      const list = values => values.length ? values.map(show).join(', ') : 'None recorded';
+      const limits = values => '<ul>' + values.map(value => '<li>' + show(value) + '</li>').join('') + '</ul>';
+      const pair = (name, value) => '<div><strong>' + name + ':</strong> ' + show(value) + '</div>';
+      const indicators = stat.network_indicators;
+      const rows = data.security_validation_summary;
+      const pageSize = 10;
+      const start = compactSummaryPage * pageSize;
+      const visible = rows.slice(start, start + pageSize);
+      const outcome = row => row.outcome === 'validated' && row.evidence_available !== 'YES' ? 'Inconclusive — linked evidence unavailable' : row.outcome === 'validated' && row.reason_code.split(', ').includes('AUTH_ENFORCEMENT_CONFIRMED')
+        ? 'Validated — auth enforcement confirmed' : row.outcome;
+      let html = '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;line-height:1.8;">';
+      html += '<section><h3>Static Summary</h3>' + pair('App', stat.app) + pair('Package', stat.package) + pair('Coverage', stat.status);
+      html += pair('Key permissions', list(stat.key_permissions)) + pair('API candidates', stat.api_candidates_count) + pair('Frameworks', list(stat.frameworks_detected));
+      html += pair('Network indicators', 'URLs ' + (indicators.urls ?? 'Unknown') + ' · domains ' + (indicators.domains ?? 'Unknown') + ' · IPs ' + (indicators.ips ?? 'Unknown') + ' · paths ' + (indicators.paths ?? 'Unknown') + ' · local files ' + (indicators.local_file_urls ?? 'Unknown'));
+      html += pair('Network hosts', list(indicators.hosts)) + limits(stat.coverage_limitations) + '</section>';
+      html += '<section><h3>Dynamic Summary</h3>' + pair('Coverage', dyn.status) + pair('Launch', dyn.launch_status) + pair('Runtime', dyn.runtime_status);
+      html += pair('Routes explored', dyn.routes_explored) + pair('Actions attempted / succeeded', (dyn.actions_attempted ?? 'Unknown') + ' / ' + (dyn.actions_succeeded ?? 'Unknown'));
+      html += pair('HTTP visibility', dyn.traffic_visibility.http_visibility) + pair('HTTPS visibility', dyn.traffic_visibility.https_visibility) + pair('Observed endpoints', dyn.observed_endpoints);
+      html += pair('Security tests completed', dyn.security_tests_executed) + pair('Validation outcomes', Object.entries(dyn.validation_outcomes).map(([key, count]) => key + ': ' + count).join(' · '));
+      html += limits(dyn.coverage_limitations) + '</section></div>';
+      html += '<section><h3>Security Validation Summary</h3><p>' + show(data.security_note) + '</p>';
+      if (!rows.length) html += '<p>No security validation results recorded.</p>';
+      else {
+        html += '<div style="overflow-x:auto;"><table style="width:100%;text-align:left;"><thead><tr>' + ['Endpoint', 'Test category', 'Outcome', 'Reason code', 'Standards', 'Evidence available'].map(name => '<th>' + name + '</th>').join('') + '</tr></thead><tbody>';
+        html += visible.map(row => '<tr>' + [row.endpoint, row.test_category, outcome(row), row.reason_code, row.standard_mapping, row.evidence_available].map(value => '<td style="padding:8px;">' + show(value) + '</td>').join('') + '</tr>').join('');
+        html += '</tbody></table></div>';
+        if (rows.length > pageSize) html += '<p>Showing ' + (start + 1) + '–' + Math.min(start + pageSize, rows.length) + ' of ' + rows.length + ' <button id="summaryPrevious">Previous</button> <button id="summaryNext">Next</button></p>';
+      }
+      html += '</section><details><summary>Evidence</summary><p>';
+      for (const kind of ['static', 'dynamic']) {
+        if (data.canonical_artifacts[kind]) html += '<a style="margin-right:16px;" href="' + escapeHtml(backendUrl('/reports/' + encodeURIComponent(runId) + '/' + kind + '_analysis_report.json')) + '" target="_blank" rel="noopener">Full ' + kind + ' evidence (JSON)</a>';
+      }
+      document.getElementById('compactReportSummary').innerHTML = html + '</p></details>';
+      renderStageReports(data);
+      for (const [id, delta] of [['summaryPrevious', -1], ['summaryNext', 1]]) {
+        const button = document.getElementById(id);
+        if (button) {
+          button.disabled = delta < 0 ? start === 0 : start + pageSize >= rows.length;
+          button.onclick = () => { compactSummaryPage += delta; renderCompactSummary(runId); };
+        }
+      }
+    }
+
+    function renderStageReports(data) {
+      const show = value => escapeHtml(value == null ? 'Unknown' : String(value));
+      const field = (name, value) => '<p><strong>' + name + ':</strong> ' + show(value) + '</p>';
+      const limits = values => '<ul>' + values.map(v => '<li>' + show(v) + '</li>').join('') + '</ul>';
+      const stat = document.getElementById('staticSecurityReport');
+      const dyn = document.getElementById('dynamicSecurityReport');
+      if (stat && data.static_security_report) {
+        const report = data.static_security_report;
+        stat.innerHTML = '<h3>Static Analysis Report</h3>' + field('Coverage', report.status)
+          + (report.findings.length ? report.findings.map(row => '<section><h4>' + show(row.title) + '</h4>'
+            + field('Severity', row.severity) + field('Affected component', row.component)
+            + field('Standards', row.standards) + field('Impact', row.impact)
+            + field('Remediation', row.remediation) + '<details><summary>Evidence</summary>'
+            + field('Evidence', row.evidence) + '</details></section>').join('') : '<p>No findings recorded. This does not establish security.</p>')
+          + limits(report.coverage_limitations);
+      }
+      if (dyn && data.dynamic_security_report) {
+        const report = data.dynamic_security_report;
+        dyn.innerHTML = '<h3>Dynamic Analysis Report</h3>' + field('Runtime', report.runtime_status)
+          + '<p>' + show(data.security_note) + '</p>'
+          + (report.results.length ? report.results.map(row => '<section><h4>' + show(row.endpoint) + '</h4>'
+            + field('Test', row.test_category) + field('Outcome', row.outcome)
+            + field('Reason', row.reason_code) + field('Standards', row.standard_mapping)
+            + field('Finding created', 'NO') + (row.comparison ? field('Baseline / controlled status', row.comparison) : '')
+            + '<details><summary>Evidence</summary>' + field('Evidence available', row.evidence_available)
+            + '</details></section>').join('') : '<p>No security validation results available.</p>')
+          + limits(report.coverage_limitations);
+      }
+    }
+
     function renderAnalysisResults(result, runId) {
       const sec = document.getElementById("analysisSection");
       if (!sec) return;
       sec.style.display = "block";
       document.getElementById("analysisRunIdBadge").textContent = "RUN: " + (runId || "-");
+      loadCompactSummary(runId);
 
       const acq = result.acquisition || {};
       const prep = result.preprocessing || {};
@@ -4472,7 +4392,7 @@
       document.getElementById("quickTargetsIos").style.display = isIos ? "grid" : "none";
       document.getElementById("androidAnalysisOptions").style.display = isIos ? "none" : "block";
       document.getElementById("adbTargetSection").style.display = isIos ? "none" : "block";
-      document.getElementById("installModeSection").style.display = isIos ? "none" : "block";
+
       if (urlInput) urlInput.value = "";
 
       startBtn.disabled = false;
@@ -4493,7 +4413,7 @@
         const scopeCard = document.getElementById("iosScopeCard");
         if (scopeCard) scopeCard.style.display = "none";
         iosNotice.style.display = "none";
-        if (urlLabel) urlLabel.textContent = "Target Application";
+        if (urlLabel) urlLabel.textContent = "Target Application URL";
         if (urlInput) urlInput.placeholder = "https://play.google.com/store/apps/details?id=... or direct .apk URL";
         handleUrlInput();
       }
@@ -4562,7 +4482,7 @@
     async function runProbe() {
       const btn = document.getElementById("probeBtn");
       const details = document.getElementById("probeDetails");
-      const adbSerial = document.getElementById("adbSerial").value.trim();
+      const adbSerial = null;
       btn.disabled = true;
       btn.textContent = "Probing...";
 
@@ -4609,7 +4529,13 @@
         const productStages = deriveProductStages(stages, status);
         for (const [stage, pInfo] of Object.entries(productStages)) {
           setBadge(stage, pInfo.state);
-          setMessage(stage, pInfo.message);
+          const stageMessage = stage === 'agent_analysis' ? 'Not available in this scan' : ({
+            running: 'Analysis in progress.', success: 'Stage completed.', completed: 'Stage completed.',
+            failed: 'Stage could not complete. See coverage limitations.', warning: 'Partial coverage. See report limitations.',
+            partial: 'Partial coverage. See report limitations.', unavailable: 'Unavailable in this scan.',
+            not_available: 'Not available in this scan', waiting_for_installation: 'Waiting for automatic installation.'
+          }[pInfo.state] || 'Pending');
+          setMessage(stage, stageMessage);
         }
 
         const acqInfo = stages.acquisition || {};
@@ -4652,7 +4578,7 @@
           const stopBtn = document.getElementById("stopBtn");
           if (stopBtn) stopBtn.style.display = "none";
 
-          const errMsg = status.error || "Stage execution failed.";
+          const errMsg = status.current_stage === "acquisition" ? "Acquisition failed. Verify the APK URL or Play Store availability." : "Analysis could not complete. See coverage limitations.";
           let openStoreBtnHtml = "";
           if (errMsg.includes("not installed on the connected Android device")) {
             openStoreBtnHtml = `
@@ -4716,9 +4642,9 @@
     async function startDemo() {
       const platform = getSelectedPlatform();
       const url = document.getElementById("apkUrl").value.trim();
-      const adbSerial = document.getElementById("adbSerial").value.trim();
+      const adbSerial = null;
       const reinstall = document.getElementById("reinstall").checked;
-      const grantPermissions = document.getElementById("grantPermissions").checked;
+
 
       if (!url) {
         alert("Please enter a valid target URL.");
@@ -4729,8 +4655,7 @@
         const localPage = new URL("http://127.0.0.1:8082/");
         localPage.searchParams.set("target", url);
         localPage.searchParams.set("platform", platform);
-        const selectedMode = document.querySelector('input[name="installMode"]:checked');
-        localPage.searchParams.set("install_mode", selectedMode ? selectedMode.value : "manual");
+
         window.location.assign(localPage.toString());
         return;
       }
@@ -4752,8 +4677,7 @@
       const stopBtn = document.getElementById("stopBtn");
       if (stopBtn) stopBtn.style.display = "inline-flex";
 
-      const installModeEl = document.querySelector('input[name="installMode"]:checked');
-      const installMode = installModeEl ? installModeEl.value : "manual";
+
 
       try {
         const resp = await fetch(backendUrl("/api/run"), {
@@ -4762,10 +4686,7 @@
           body: JSON.stringify({
             url,
             platform,
-            adb_serial: adbSerial,
             reinstall,
-            grant_permissions: grantPermissions,
-            install_mode: installMode,
           })
         });
         const data = await resp.json();

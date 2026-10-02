@@ -1,0 +1,90 @@
+{
+  "correlations": [
+    {
+      "confidence": "low",
+      "correlation_id": "corr_0e63987f264c7b52",
+      "first_observed_at": "2026-10-02T12:03:16.062409+00:00",
+      "host": "192.168.1.154",
+      "last_observed_at": "2026-10-02T12:03:16.062409+00:00",
+      "match_type": "dynamic_only",
+      "notes": "observed in runtime traffic; not identified in static analysis candidates",
+      "observation_count": 1,
+      "observed_action_ids": [
+        "act_4d3a12f998f2a6a3"
+      ],
+      "observed_methods": [
+        "POST"
+      ],
+      "observed_query_keys": [],
+      "observed_status_codes": [
+        200
+      ],
+      "path": "/login",
+      "port": 18081,
+      "provenance": {},
+      "route_context": [
+        {
+          "action_id": "act_4d3a12f998f2a6a3",
+          "source_node_id": "node_ae5d067cf204c0d4",
+          "target_node_id": "node_ae5d067cf204c0d4"
+        }
+      ],
+      "scheme": "http",
+      "static_candidate_id": null,
+      "static_method": null,
+      "transaction_ids": [
+        "48f20224-c947-4a2b-bb2c-b20576d18665"
+      ]
+    },
+    {
+      "confidence": "low",
+      "correlation_id": "corr_fbc99d01745b5819",
+      "first_observed_at": "2026-10-02T12:03:16.072656+00:00",
+      "host": "192.168.1.154",
+      "last_observed_at": "2026-10-02T12:03:16.072656+00:00",
+      "match_type": "dynamic_only",
+      "notes": "observed in runtime traffic; not identified in static analysis candidates",
+      "observation_count": 1,
+      "observed_action_ids": [
+        "act_4d3a12f998f2a6a3"
+      ],
+      "observed_methods": [
+        "GET"
+      ],
+      "observed_query_keys": [],
+      "observed_status_codes": [
+        200
+      ],
+      "path": "/profile",
+      "port": 18081,
+      "provenance": {},
+      "route_context": [
+        {
+          "action_id": "act_4d3a12f998f2a6a3",
+          "source_node_id": "node_ae5d067cf204c0d4",
+          "target_node_id": "node_ae5d067cf204c0d4"
+        }
+      ],
+      "scheme": "http",
+      "static_candidate_id": null,
+      "static_method": null,
+      "transaction_ids": [
+        "e4446540-d4eb-40a3-9624-30e30cecc494"
+      ]
+    }
+  ],
+  "created_at": "2026-10-02T12:03:19Z",
+  "schema_version": "1.0",
+  "session_id": "463eae39-8c7c-42b9-92bb-d0b34d467cbf",
+  "summary": {
+    "correlated_count": 0,
+    "dynamic_endpoint_count": 2,
+    "dynamic_only_count": 2,
+    "http_visibility": "available",
+    "https_visibility": "unavailable",
+    "https_visibility_reason": "certificate_trust_unknown",
+    "static_candidate_count": 0,
+    "static_only_count": 0,
+    "visibility_note": "HTTPS traffic visibility was unavailable (certificate_trust_unknown). Unobserved static HTTPS candidates were not observable in runtime traffic."
+  }
+}

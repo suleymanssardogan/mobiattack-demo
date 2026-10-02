@@ -71,7 +71,8 @@ def execute(baseline_dir='examples/auth_lab_d10_2', out='examples/auth_presence_
         required_evidence_refs=tuple(registry), requested_action='validate_authentication_presence', risk_class='low', session_id=session_id)
     lab = TrainingAuthLab(session_id)  # No token regenerated, login or baseline replay.
     server = make_server(context.host, 18081, lab)
-    backend = LocalLabAuthenticationPresence(server=server, receipts=lab.receipts, baseline=baseline, context=context, session_id=session_id)
+    backend = LocalLabAuthenticationPresence(server=server, receipts=lab.receipts, baseline=baseline, context=context, session_id=session_id,
+        baseline_receipts=json.loads((Path(baseline_dir)/'lab_receipts.json').read_text()), session_evidence=session)
     thread = threading.Thread(target=server.serve_forever, daemon=True)
     thread.start()
     try:

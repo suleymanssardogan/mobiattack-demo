@@ -23,7 +23,7 @@ from src.system_env import ensure_system_paths, resolve_executable
 
 ensure_system_paths()
 
-from src.constants import PRESENTATION_ADB_SERIAL
+from src.android_runtime_launcher import select_target_device
 from src.demo_orchestrator import DemoOrchestrationError, run_demo
 from src.html_probe_server import (
     ProbeServer,
@@ -128,6 +128,12 @@ class _DemoRequestHandler(BaseHTTPRequestHandler):
         vuln_api_match = re.match(r"^/api/vulnerabilities/([a-zA-Z0-9_\-]+)$", path)
         if vuln_api_match:
             self._handle_vulnerabilities(vuln_api_match.group(1), server)
+            return
+
+        # GET /api/summary/<run_id> — read-only compact canonical projection.
+        summary_match = re.match(r"^/api/summary/([a-zA-Z0-9_\-]+)$", path)
+        if summary_match:
+            self._handle_summary_api(summary_match.group(1), server)
             return
 
         # GET /api/report/<run_id>
@@ -314,6 +320,17 @@ class _DemoRequestHandler(BaseHTTPRequestHandler):
         vulns = res.get("vulnerabilities") or evaluate_vulnerabilities(res)
         self._send_json(200, vulns)
 
+    def _handle_summary_api(self, run_id: str, server: DemoWebServer) -> None:
+        from src.web.report_summary import load_report_summary
+        directory = server.get_run_dir(run_id)
+        if directory is None:
+            self._send_json(404, {"status": "error", "message": "Run not found."})
+            return
+        try:
+            self._send_json(200, load_report_summary(directory))
+        except (ValueError, TypeError, KeyError, AttributeError):
+            self._send_json(500, {"status": "error", "message": "Summary unavailable."})
+
     def _handle_report_api(self, run_id: str, server: DemoWebServer) -> None:
         """Handles GET /api/report/<run_id> — returns report.json as JSON API."""
         target_dir = server.get_run_dir(run_id)
@@ -351,14 +368,14 @@ class _DemoRequestHandler(BaseHTTPRequestHandler):
         except ValueError:
             payload = {}
 
-        adb_serial = PRESENTATION_ADB_SERIAL
+        adb_serial = os.environ.get('MOBIATTACK_ADB_SERIAL') or None
         url = payload.get("url")
         package_name = payload.get("package_name")
         try:
-            res = open_play_store_on_device(serial=adb_serial, package_name=package_name, play_store_url=url)
+            res = open_play_store_on_device(serial=select_target_device(adb_serial=adb_serial), package_name=package_name, play_store_url=url)
             self._send_json(200, res)
         except Exception as err:
-            self._send_json(500, {"status": "error", "message": str(err)})
+            self._send_json(500, {"status": "error", "message": "Runtime operation unavailable. Check the connected Android device."})
 
     def _handle_run(self, server: DemoWebServer) -> None:
         """Handles POST /api/run — starts a new analysis run."""
@@ -376,7 +393,7 @@ class _DemoRequestHandler(BaseHTTPRequestHandler):
         platform = payload.get("platform", "android")
         classification = classify_input_url(url=url.strip(), platform=platform)
         if classification.get("type") in ("not_implemented", "unsupported"):
-            reason = classification.get("message") or classification.get("reason") or "Unsupported URL or platform."
+            reason = "Unsupported Android application URL. Use a direct APK URL or Google Play Store application URL." if platform == "android" else classification.get("message") or classification.get("reason") or "Unsupported application URL."
             self._send_json(400, {
                 "status": "error",
                 "error": reason,
@@ -384,16 +401,14 @@ class _DemoRequestHandler(BaseHTTPRequestHandler):
             })
             return
 
-        adb_serial = PRESENTATION_ADB_SERIAL
-        reinstall = bool(payload.get("reinstall", True))
-        grant_permissions = bool(payload.get("grant_permissions", False))
-        install_mode = str(payload.get("install_mode", "manual")).strip().lower()
-        if install_mode not in ("manual", "ui_automation"):
-            install_mode = "manual"
+        adb_serial = os.environ.get('MOBIATTACK_ADB_SERIAL') or None
+        reinstall = bool(payload.get('reinstall', True))
+        grant_permissions = True
+        install_mode = 'ui_automation'
 
         try:
             run_id = server.start_run(
-                url=url.strip(),
+                url=classification["normalized_url"],
                 platform=platform,
                 adb_serial=adb_serial,
                 reinstall=reinstall,
@@ -411,7 +426,7 @@ class _DemoRequestHandler(BaseHTTPRequestHandler):
         except ValueError:
             pass
 
-        adb_serial = PRESENTATION_ADB_SERIAL
+        adb_serial = os.environ.get('MOBIATTACK_ADB_SERIAL') or None
         probe_res = server.execute_connectivity_probe(adb_serial=adb_serial)
         self._send_json(200 if probe_res.get("hit") else 500, probe_res)
 
@@ -471,8 +486,8 @@ class DemoWebServer:
         platform: str = "android",
         adb_serial: str | None = None,
         reinstall: bool = True,
-        grant_permissions: bool = False,
-        install_mode: str = "manual",
+        grant_permissions: bool = True,
+        install_mode: str = "ui_automation",
     ) -> str:
         """Schedules a new demo run. Automatically uses presentation demo mode in cloud/Vercel or when binaries are unavailable."""
         is_vercel = bool(os.environ.get("VERCEL") or os.environ.get("VERCEL_ENV"))
@@ -530,8 +545,8 @@ class DemoWebServer:
         platform: str = "android",
         adb_serial: str | None = None,
         reinstall: bool = True,
-        grant_permissions: bool = False,
-        install_mode: str = "manual",
+        grant_permissions: bool = True,
+        install_mode: str = "ui_automation",
     ) -> str:
         """Starts a deterministic presentation demo run using pre-verified baseline data."""
         with self._lock:
@@ -695,7 +710,7 @@ class DemoWebServer:
         adb_serial: str | None,
         reinstall: bool,
         grant_permissions: bool,
-        install_mode: str = "manual",
+        install_mode: str = "ui_automation",
     ) -> None:
         run_dir = self.runs_root / run_id
         run_dir.mkdir(parents=True, exist_ok=True)
@@ -780,23 +795,11 @@ class DemoWebServer:
                         "api_url": f"/api/report/{run_id}",
                     }
         except Exception as exc:
-            err_str = str(exc).lower()
-            if "not found on system path" in err_str or "required executable" in err_str or "no connected android devices" in err_str:
-                self._fallback_to_presentation_run(run_id, url, platform, run_dir, callback)
-                checkpointer.on_reports_generated()
-                checkpointer.on_demo_completed()
-            else:
-                self._handle_run_failure(
-                    run_id=run_id,
-                    url=url,
-                    platform=platform,
-                    adb_serial=adb_serial,
-                    reinstall=reinstall,
-                    grant_permissions=grant_permissions,
-                    run_dir=run_dir,
-                    exc=exc,
-                    checkpointer=checkpointer,
-                )
+            self._handle_run_failure(
+                run_id=run_id, url=url, platform=platform, adb_serial=adb_serial,
+                reinstall=reinstall, grant_permissions=grant_permissions,
+                run_dir=run_dir, exc=exc, checkpointer=checkpointer,
+            )
 
     def _handle_run_failure(
         self,
@@ -1162,7 +1165,7 @@ class DemoWebServer:
 
         return light_data
 
-    def execute_connectivity_probe(self, adb_serial: str = PRESENTATION_ADB_SERIAL, timeout: float = 12.0) -> dict:
+    def execute_connectivity_probe(self, adb_serial: str | None = None, timeout: float = 12.0) -> dict:
         """Executes a standalone Task 10 emulator connectivity check."""
         probe_server = ProbeServer(host="127.0.0.1", port=0)
         reverse_configured = False
@@ -1170,6 +1173,7 @@ class DemoWebServer:
         run_id = f"probe_{int(time.time())}"
 
         try:
+            adb_serial = select_target_device(adb_serial=adb_serial)
             probe_server.start()
             port = probe_server.port
             configure_adb_reverse(adb_serial=adb_serial, device_port=port, host_port=port)

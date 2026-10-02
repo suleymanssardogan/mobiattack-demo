@@ -14,7 +14,7 @@ from pathlib import Path
 ANDROID_PACKAGE_RE = re.compile(r"^[a-zA-Z][a-zA-Z0-9_]*(?:\.[a-zA-Z][a-zA-Z0-9_]*)+$")
 
 
-def classify_input_url(url: str, platform: str = "android") -> dict:
+def _classify_input_url(url: str, platform: str = "android") -> dict:
     """Classifies an input URL and determines the target acquisition strategy.
 
     Args:
@@ -95,22 +95,29 @@ def classify_input_url(url: str, platform: str = "android") -> dict:
             "reason": "Malformed URL format.",
         }
 
+    try:
+        if not parsed.hostname or parsed.username is not None or parsed.password is not None or re.search(r'[\s\x00-\x1f\x7f]', raw_url):
+            raise ValueError('Invalid host')
+        parsed.port
+    except ValueError:
+        return {'platform': 'android', 'type': 'unsupported', 'normalized_url': raw_url,
+                'package_name': None, 'reason': 'Invalid Android URL.', 'reason_code': 'INVALID_ANDROID_URL'}
     host = (parsed.hostname or "").lower()
     path = parsed.path or ""
 
     # Strategy A: Google Play Store URL
     # Matches play.google.com/store/apps/details?id=<package_name>
     if host == "play.google.com" or host.endswith(".play.google.com"):
-        if path.rstrip("/").startswith("/store/apps/details"):
+        if path.rstrip("/") == "/store/apps/details":
             query_params = urllib.parse.parse_qs(parsed.query)
             package_ids = query_params.get("id")
-            if package_ids and package_ids[0].strip():
+            if package_ids and len(set(package_ids)) == 1 and package_ids[0].strip():
                 package_name = package_ids[0].strip()
                 if ANDROID_PACKAGE_RE.match(package_name):
                     return {
                         "platform": "android",
                         "type": "play_store",
-                        "normalized_url": raw_url,
+                        "normalized_url": "https://play.google.com/store/apps/details?id=" + package_name,
                         "package_name": package_name,
                     }
                 else:
@@ -149,3 +156,10 @@ def classify_input_url(url: str, platform: str = "android") -> dict:
         "package_name": None,
         "reason": "Unsupported Android URL. Provide a direct APK URL or a Google Play Store application URL.",
     }
+
+
+def classify_input_url(url: str, platform: str = 'android') -> dict:
+    result = _classify_input_url(url, platform)
+    if result.get('platform') == 'android' and result.get('type') == 'unsupported':
+        result['reason_code'] = 'INVALID_ANDROID_URL'
+    return result

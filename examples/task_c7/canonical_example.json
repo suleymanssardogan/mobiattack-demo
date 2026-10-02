@@ -1,0 +1,300 @@
+[
+  {
+    "base_url": "https://api.example.com",
+    "candidate_id": "static_5bcf6973596596d2bc5c5370",
+    "evidence": {
+      "request_call_line": 10
+    },
+    "evidence_refs": [
+      "static_evidence_62453ac8fb2c4e36c36c3beb",
+      "static_evidence_947dc16d190430deadc291d5",
+      "static_evidence_132ece4dfaa3ecede031b93c",
+      "static_evidence_df52aabc4e4da48ead46681e",
+      "static_evidence_d36b842bdbc2ea993971e425",
+      "static_evidence_47c9df455020d0f495f86e38"
+    ],
+    "extractor_identity": {
+      "base_url": null,
+      "full_url": "https://api.example.com:443/search",
+      "method": "GET",
+      "path": "/search"
+    },
+    "framework": "Fuel",
+    "frameworks": [
+      "Fuel",
+      "Retrofit",
+      "httpurlconnection",
+      "ktor",
+      "okhttp",
+      "volley"
+    ],
+    "full_url": "https://api.example.com/search",
+    "host": "api.example.com",
+    "method": "GET",
+    "path": "/search",
+    "port": 443,
+    "provenance": [
+      {
+        "base_url": "https://api.example.com",
+        "evidence": {
+          "request_call_line": 10
+        },
+        "evidence_ref": "static_evidence_62453ac8fb2c4e36c36c3beb",
+        "extractor_identity": {
+          "base_url": null,
+          "full_url": "https://api.example.com:443/search",
+          "method": "GET",
+          "path": "/search"
+        },
+        "framework": "Fuel",
+        "full_url": "https://api.example.com/search",
+        "host": "api.example.com",
+        "method": "GET",
+        "path": "/search",
+        "port": 443,
+        "query_keys": [
+          "q",
+          "token"
+        ],
+        "query_shape": {
+          "q": {
+            "count": 1,
+            "value_present": true
+          },
+          "token": {
+            "count": 1,
+            "value_present": true
+          }
+        },
+        "query_shape_known": true,
+        "request_line": 10,
+        "resolution_state": "resolved",
+        "scheme": "https",
+        "source_component": "Ltraining/Fuel;",
+        "source_file": "smali/training/Fuel.smali",
+        "status": "static_api_candidate"
+      },
+      {
+        "base_url": "https://api.example.com",
+        "evidence": {
+          "request_call_line": 11
+        },
+        "evidence_ref": "static_evidence_947dc16d190430deadc291d5",
+        "extractor_identity": {
+          "base_url": null,
+          "full_url": "https://api.example.com:443/search",
+          "method": "GET",
+          "path": "/search"
+        },
+        "framework": "Retrofit",
+        "full_url": "https://api.example.com/search",
+        "host": "api.example.com",
+        "method": "GET",
+        "path": "/search",
+        "port": 443,
+        "query_keys": [
+          "q",
+          "token"
+        ],
+        "query_shape": {
+          "q": {
+            "count": 1,
+            "value_present": true
+          },
+          "token": {
+            "count": 1,
+            "value_present": true
+          }
+        },
+        "query_shape_known": true,
+        "request_line": 11,
+        "resolution_state": "resolved",
+        "scheme": "https",
+        "source_component": "Ltraining/Retrofit;",
+        "source_file": "smali/training/Retrofit.smali",
+        "status": "static_api_candidate"
+      },
+      {
+        "base_url": "https://api.example.com",
+        "evidence": {
+          "request_call_line": 14
+        },
+        "evidence_ref": "static_evidence_132ece4dfaa3ecede031b93c",
+        "extractor_identity": {
+          "base_url": null,
+          "full_url": "https://api.example.com:443/search",
+          "method": "GET",
+          "path": "/search"
+        },
+        "framework": "httpurlconnection",
+        "full_url": "https://api.example.com/search",
+        "host": "api.example.com",
+        "method": "GET",
+        "path": "/search",
+        "port": 443,
+        "query_keys": [
+          "q",
+          "token"
+        ],
+        "query_shape": {
+          "q": {
+            "count": 1,
+            "value_present": true
+          },
+          "token": {
+            "count": 1,
+            "value_present": true
+          }
+        },
+        "query_shape_known": true,
+        "request_line": 14,
+        "resolution_state": "resolved",
+        "scheme": "https",
+        "source_component": "Ltraining/httpurlconnection;",
+        "source_file": "smali/training/httpurlconnection.smali",
+        "status": "static_api_candidate"
+      },
+      {
+        "base_url": "https://api.example.com",
+        "evidence": {
+          "request_call_line": 15
+        },
+        "evidence_ref": "static_evidence_df52aabc4e4da48ead46681e",
+        "extractor_identity": {
+          "base_url": null,
+          "full_url": "https://api.example.com:443/search",
+          "method": "GET",
+          "path": "/search"
+        },
+        "framework": "ktor",
+        "full_url": "https://api.example.com/search",
+        "host": "api.example.com",
+        "method": "GET",
+        "path": "/search",
+        "port": 443,
+        "query_keys": [
+          "q",
+          "token"
+        ],
+        "query_shape": {
+          "q": {
+            "count": 1,
+            "value_present": true
+          },
+          "token": {
+            "count": 1,
+            "value_present": true
+          }
+        },
+        "query_shape_known": true,
+        "request_line": 15,
+        "resolution_state": "resolved",
+        "scheme": "https",
+        "source_component": "Ltraining/ktor;",
+        "source_file": "smali/training/ktor.smali",
+        "status": "static_api_candidate"
+      },
+      {
+        "base_url": "https://api.example.com",
+        "evidence": {
+          "request_call_line": 12
+        },
+        "evidence_ref": "static_evidence_d36b842bdbc2ea993971e425",
+        "extractor_identity": {
+          "base_url": null,
+          "full_url": "https://api.example.com:443/search",
+          "method": "GET",
+          "path": "/search"
+        },
+        "framework": "okhttp",
+        "full_url": "https://api.example.com/search",
+        "host": "api.example.com",
+        "method": "GET",
+        "path": "/search",
+        "port": 443,
+        "query_keys": [
+          "q",
+          "token"
+        ],
+        "query_shape": {
+          "q": {
+            "count": 1,
+            "value_present": true
+          },
+          "token": {
+            "count": 1,
+            "value_present": true
+          }
+        },
+        "query_shape_known": true,
+        "request_line": 12,
+        "resolution_state": "resolved",
+        "scheme": "https",
+        "source_component": "Ltraining/okhttp;",
+        "source_file": "smali/training/okhttp.smali",
+        "status": "static_api_candidate"
+      },
+      {
+        "base_url": "https://api.example.com",
+        "evidence": {
+          "request_call_line": 13
+        },
+        "evidence_ref": "static_evidence_47c9df455020d0f495f86e38",
+        "extractor_identity": {
+          "base_url": null,
+          "full_url": "https://api.example.com:443/search",
+          "method": "GET",
+          "path": "/search"
+        },
+        "framework": "volley",
+        "full_url": "https://api.example.com/search",
+        "host": "api.example.com",
+        "method": "GET",
+        "path": "/search",
+        "port": 443,
+        "query_keys": [
+          "q",
+          "token"
+        ],
+        "query_shape": {
+          "q": {
+            "count": 1,
+            "value_present": true
+          },
+          "token": {
+            "count": 1,
+            "value_present": true
+          }
+        },
+        "query_shape_known": true,
+        "request_line": 13,
+        "resolution_state": "resolved",
+        "scheme": "https",
+        "source_component": "Ltraining/volley;",
+        "source_file": "smali/training/volley.smali",
+        "status": "static_api_candidate"
+      }
+    ],
+    "query_keys": [
+      "q",
+      "token"
+    ],
+    "query_shape": {
+      "q": {
+        "count": 1,
+        "value_present": true
+      },
+      "token": {
+        "count": 1,
+        "value_present": true
+      }
+    },
+    "query_shape_known": true,
+    "request_line": 10,
+    "resolution_state": "resolved",
+    "scheme": "https",
+    "source_component": "Ltraining/Fuel;",
+    "source_file": "smali/training/Fuel.smali",
+    "status": "static_api_candidate"
+  }
+]

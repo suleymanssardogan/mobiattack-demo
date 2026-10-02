@@ -169,15 +169,11 @@ def normalize_component_name(package_name: str, activity_name: str) -> str:
     if not act:
         raise AndroidRuntimeError("Launcher activity must be a non-empty string.")
 
-    # Ensure fully-qualified activity representation
-    if act.startswith("."):
-        full_act = f"{pkg}{act}"
-    elif "." not in act:
-        full_act = f"{pkg}.{act}"
-    else:
-        full_act = act
-
-    return f"{pkg}/{full_act}"
+    from src.android_identity import launch_component, AndroidIdentityError
+    try:
+        return launch_component(pkg, act)
+    except AndroidIdentityError as error:
+        raise AndroidRuntimeError(error.reason_code + ': ' + str(error)) from error
 
 
 def install_apk(
@@ -489,6 +485,11 @@ def launch_android_app(
             timeout_seconds=timeout_seconds,
         )
 
+    permissions = None
+    if grant_permissions:
+        from src.runtime_permissions import grant_runtime_permissions
+        permissions = grant_runtime_permissions(adb_bin, serial, package_name, min(timeout_seconds, 10))
+
     # 3. Start launcher activity
     launch_meta = launch_activity(
         adb_bin=adb_bin,
@@ -586,6 +587,9 @@ def launch_android_app(
         "status": status,
     }
 
+    if permissions is not None:
+        result_dict['runtime_permissions'] = permissions
+
     # 6. Canonical Preflight Artifact persistence if run_dir is provided
     if run_dir is not None:
         try:
@@ -610,7 +614,7 @@ def launch_android_app(
                     package_name=package_name,
                     installed=True,
                     launchable=True,
-                    main_activity=observed_act or launcher_activity,
+                    main_activity=launcher_activity,
                     process_running=True,
                     foreground=foreground_verified,
                 ),

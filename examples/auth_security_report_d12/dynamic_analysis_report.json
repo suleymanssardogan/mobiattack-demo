@@ -1,0 +1,312 @@
+{
+  "schema_version": "1.0",
+  "report_type": "dynamic_analysis",
+  "scan_id": "auth_security_report_d12",
+  "generated_at": "2026-10-02T14:15:14.221856+00:00",
+  "report_status": "completed",
+  "analysis_coverage": "partial",
+  "target": {
+    "package_name": "com.android.chrome",
+    "platform": "android"
+  },
+  "coverage": {
+    "ui_exploration": "partial",
+    "runtime_observation": "unavailable",
+    "http_visibility": "available",
+    "https_visibility": "unavailable",
+    "api_correlation": "available",
+    "endpoint_contexts": "available"
+  },
+  "preflight": {
+    "status": "unavailable",
+    "launch_success": null,
+    "process_running": null,
+    "diagnostic_codes": []
+  },
+  "session": {
+    "session_id": "463eae39-8c7c-42b9-92bb-d0b34d467cbf",
+    "status": "COMPLETED",
+    "started_at": "2026-10-02T12:03:10.878411+00:00",
+    "ended_at": "2026-10-02T12:03:19.580799+00:00"
+  },
+  "exploration": {
+    "status": "partial",
+    "stop_reason": "recorded_single_action",
+    "steps_attempted": 1,
+    "actions_succeeded": 1,
+    "actions_failed": 0,
+    "screens_observed": 0,
+    "transitions_recorded": 0,
+    "duration_seconds": null
+  },
+  "routes": {
+    "node_count": 1,
+    "edge_count": 0,
+    "root_node_id": "node_ae5d067cf204c0d4",
+    "current_node_id": "node_ae5d067cf204c0d4",
+    "action_count": 1,
+    "self_loop_count": 0,
+    "system_boundary_count": 0,
+    "external_boundary_count": 0
+  },
+  "runtime": {
+    "action_evidence_count": 0,
+    "correlated_action_count": 0,
+    "pid_change_count": 0,
+    "process_death_count": 0,
+    "activity_change_count": 0,
+    "fatal_count": 0,
+    "crash_count": 0
+  },
+  "traffic": {
+    "backend": null,
+    "total_transactions": 3,
+    "http_count": 3,
+    "https_count": 0,
+    "hosts": [
+      "192.168.1.154"
+    ],
+    "hosts_count": 1,
+    "http_visibility": "available",
+    "https_visibility": "unavailable",
+    "https_visibility_reason": "cleartext_http_only_backend",
+    "proxy_restored": true,
+    "visibility_note": "Traffic visibility is incomplete; unobserved requests may exist."
+  },
+  "traffic_correlation": {
+    "actions_with_evidence": 1,
+    "transaction_correlated_action_count": 1,
+    "partial_correlation_count": 1,
+    "unavailable_correlation_count": 0
+  },
+  "api_correlation": {
+    "static_candidate_count": 0,
+    "dynamic_endpoint_count": 2,
+    "correlated_count": 0,
+    "static_only_count": 0,
+    "dynamic_only_count": 2,
+    "exact_count": 0,
+    "template_count": 0,
+    "method_mismatch_count": 0,
+    "visibility_note": "HTTPS traffic visibility was unavailable (certificate_trust_unknown). Unobserved static HTTPS candidates were not observable in runtime traffic."
+  },
+  "endpoint_context_summary": {
+    "endpoint_context_count": 2,
+    "runtime_observed_count": 2,
+    "static_only_count": 0,
+    "dynamic_only_count": 2
+  },
+  "endpoint_contexts": [
+    {
+      "endpoint_context_id": "ctx_7fdfba255b00cc37",
+      "host": "192.168.1.154",
+      "path": "/login",
+      "static_method": null,
+      "observed_methods": [
+        "POST"
+      ],
+      "match_type": "dynamic_only",
+      "confidence": "low",
+      "observation_count": 1,
+      "observed_status_codes": [
+        200
+      ],
+      "auth": {
+        "api_key_header_present": false,
+        "authorization_header_present": false,
+        "bearer_token_present": false,
+        "cookie_present": false,
+        "session_cookie_present": false
+      },
+      "evidence_refs": {
+        "action_ids": [
+          "act_4d3a12f998f2a6a3"
+        ],
+        "correlation_ids": [
+          "corr_0e63987f264c7b52"
+        ],
+        "runtime_action_ids": [],
+        "static_candidate_ids": [],
+        "transaction_ids": [
+          "48f20224-c947-4a2b-bb2c-b20576d18665"
+        ]
+      },
+      "action_ids": [
+        "act_4d3a12f998f2a6a3"
+      ]
+    },
+    {
+      "endpoint_context_id": "ctx_598671b778f7846b",
+      "host": "192.168.1.154",
+      "path": "/profile",
+      "static_method": null,
+      "observed_methods": [
+        "GET"
+      ],
+      "match_type": "dynamic_only",
+      "confidence": "low",
+      "observation_count": 1,
+      "observed_status_codes": [
+        200
+      ],
+      "auth": {
+        "api_key_header_present": false,
+        "authorization_header_present": true,
+        "bearer_token_present": null,
+        "cookie_present": false,
+        "session_cookie_present": false
+      },
+      "evidence_refs": {
+        "action_ids": [
+          "act_4d3a12f998f2a6a3"
+        ],
+        "correlation_ids": [
+          "corr_fbc99d01745b5819"
+        ],
+        "runtime_action_ids": [],
+        "static_candidate_ids": [],
+        "transaction_ids": [
+          "e4446540-d4eb-40a3-9624-30e30cecc494"
+        ]
+      },
+      "action_ids": [
+        "act_4d3a12f998f2a6a3"
+      ]
+    }
+  ],
+  "evidence": {
+    "api_correlation": "dynamic/api_correlation.json",
+    "endpoint_contexts": "dynamic/endpoint_contexts.json",
+    "exploration": "dynamic/exploration_result.json",
+    "routes": "dynamic/route_graph.json",
+    "security_results": "dynamic/security_results.json",
+    "session": "dynamic/session.json",
+    "traffic": "dynamic/traffic.json",
+    "traffic_correlation": "dynamic/traffic_evidence.json"
+  },
+  "evidence_status": {
+    "api_correlation": "available",
+    "endpoint_contexts": "available",
+    "exploration": "available",
+    "preflight": "missing",
+    "routes": "available",
+    "runtime": "missing",
+    "security_results": "available",
+    "session": "available",
+    "traffic": "available",
+    "traffic_correlation": "available"
+  },
+  "security_results": {
+    "schema_version": "1.0",
+    "coverage": "available",
+    "limitations": [],
+    "result_count": 1,
+    "results": [
+      {
+        "test_id": "AUTHENTICATION_PRESENCE",
+        "endpoint_context_id": "ctx_598671b778f7846b",
+        "test_category": "authentication_presence",
+        "execution_status": "completed",
+        "validation_outcome": "validated",
+        "reason_codes": [
+          "AUTH_ENFORCEMENT_CONFIRMED"
+        ],
+        "baseline_evidence_refs": {
+          "request": "45f4469d-c8fb-4bdc-92ec-5c866d1596ef",
+          "response": "lab_ce4771d18855479aae0afae5bf00eb38"
+        },
+        "variant_evidence_refs": {
+          "request": "c1f157ca-d607-4c89-9854-a193ca5f9fce",
+          "response": "lab_54e318c6ab834d88b3e11974e9c95ea8"
+        },
+        "evidence_refs": [
+          "45f4469d-c8fb-4bdc-92ec-5c866d1596ef",
+          "463eae39-8c7c-42b9-92bb-d0b34d467cbf",
+          "c1f157ca-d607-4c89-9854-a193ca5f9fce",
+          "comparison_e9edff7b2cdcd2b6e8e6",
+          "control_e9edff7b2cdcd2b6e8e6",
+          "ctx_598671b778f7846b",
+          "execution_e9edff7b2cdcd2b6e8e6",
+          "lab_54e318c6ab834d88b3e11974e9c95ea8",
+          "lab_acquisition_463eae398c7c42b992bbd0b34d467cbf",
+          "lab_ce4771d18855479aae0afae5bf00eb38"
+        ],
+        "execution_result_ref": "execution_e9edff7b2cdcd2b6e8e6",
+        "session_id": "463eae39-8c7c-42b9-92bb-d0b34d467cbf",
+        "risk_class": "low",
+        "timestamps": {
+          "started_at": "2026-10-02T13:00:30.565169+00:00",
+          "finished_at": "2026-10-02T13:00:30.566832+00:00",
+          "validated_at": "2026-10-02T14:15:14.219944+00:00"
+        },
+        "coverage": "available",
+        "limitations": [
+          "HISTORICAL_BASELINE"
+        ],
+        "finding_created": false
+      }
+    ],
+    "evidence_index": {
+      "45f4469d-c8fb-4bdc-92ec-5c866d1596ef": {
+        "ref": "45f4469d-c8fb-4bdc-92ec-5c866d1596ef",
+        "endpoint_context_id": "ctx_598671b778f7846b",
+        "kind": "request",
+        "session_id": "463eae39-8c7c-42b9-92bb-d0b34d467cbf"
+      },
+      "463eae39-8c7c-42b9-92bb-d0b34d467cbf": {
+        "ref": "463eae39-8c7c-42b9-92bb-d0b34d467cbf",
+        "endpoint_context_id": "ctx_598671b778f7846b",
+        "kind": "runtime",
+        "session_id": "463eae39-8c7c-42b9-92bb-d0b34d467cbf"
+      },
+      "c1f157ca-d607-4c89-9854-a193ca5f9fce": {
+        "ref": "c1f157ca-d607-4c89-9854-a193ca5f9fce",
+        "endpoint_context_id": "ctx_598671b778f7846b",
+        "kind": "request",
+        "session_id": "463eae39-8c7c-42b9-92bb-d0b34d467cbf"
+      },
+      "comparison_e9edff7b2cdcd2b6e8e6": {
+        "ref": "comparison_e9edff7b2cdcd2b6e8e6",
+        "endpoint_context_id": "ctx_598671b778f7846b",
+        "kind": "comparison",
+        "session_id": "463eae39-8c7c-42b9-92bb-d0b34d467cbf"
+      },
+      "control_e9edff7b2cdcd2b6e8e6": {
+        "ref": "control_e9edff7b2cdcd2b6e8e6",
+        "endpoint_context_id": "ctx_598671b778f7846b",
+        "kind": "control",
+        "session_id": "463eae39-8c7c-42b9-92bb-d0b34d467cbf"
+      },
+      "ctx_598671b778f7846b": {
+        "ref": "ctx_598671b778f7846b",
+        "endpoint_context_id": "ctx_598671b778f7846b",
+        "kind": "context",
+        "session_id": "463eae39-8c7c-42b9-92bb-d0b34d467cbf"
+      },
+      "execution_e9edff7b2cdcd2b6e8e6": {
+        "ref": "execution_e9edff7b2cdcd2b6e8e6",
+        "endpoint_context_id": "ctx_598671b778f7846b",
+        "kind": "tool",
+        "session_id": "463eae39-8c7c-42b9-92bb-d0b34d467cbf"
+      },
+      "lab_54e318c6ab834d88b3e11974e9c95ea8": {
+        "ref": "lab_54e318c6ab834d88b3e11974e9c95ea8",
+        "endpoint_context_id": "ctx_598671b778f7846b",
+        "kind": "response",
+        "session_id": "463eae39-8c7c-42b9-92bb-d0b34d467cbf"
+      },
+      "lab_acquisition_463eae398c7c42b992bbd0b34d467cbf": {
+        "ref": "lab_acquisition_463eae398c7c42b992bbd0b34d467cbf",
+        "endpoint_context_id": "ctx_598671b778f7846b",
+        "kind": "tool",
+        "session_id": "463eae39-8c7c-42b9-92bb-d0b34d467cbf"
+      },
+      "lab_ce4771d18855479aae0afae5bf00eb38": {
+        "ref": "lab_ce4771d18855479aae0afae5bf00eb38",
+        "endpoint_context_id": "ctx_598671b778f7846b",
+        "kind": "response",
+        "session_id": "463eae39-8c7c-42b9-92bb-d0b34d467cbf"
+      }
+    }
+  }
+}

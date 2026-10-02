@@ -457,7 +457,11 @@ class TestStaticAnalysisReportContract(unittest.TestCase):
             self.assertEqual(api_cands[0]["source_file"], "smali/com/synthetic/sample/DebugNet.smali")
 
             # 8. AndroidManifest.xml evidence is preserved
-            finding = canonical_report["vulnerabilities"]["findings"][0]
+            # C2 revalidates cached findings; URL strings alone are not findings.
+            self.assertEqual(canonical_report["vulnerabilities"]["findings"], [])
+            # Verify the path sanitizer independently with the legacy payload.
+            from src.report_generator import sanitize_vulnerabilities_for_canonical_report
+            finding = sanitize_vulnerabilities_for_canonical_report(synthetic_input["vulnerabilities"])["findings"][0]
             self.assertIn("AndroidManifest.xml: android:debuggable=\"true\"", finding["affected_items"])
 
             # Device-side inspection paths (/sbin/su) are preserved as target evidence
@@ -616,5 +620,4 @@ class TestStaticAnalysisReportContract(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-
 

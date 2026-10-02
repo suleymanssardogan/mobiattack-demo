@@ -17,7 +17,7 @@ from .models import (COVERAGE_STATES, DynamicReportError, DynamicReportUnavailab
 ARTIFACTS = {"preflight": "preflight_result.json", "session": "session.json", "exploration": "exploration_result.json",
              "routes": "route_graph.json", "runtime": "runtime_evidence.json", "traffic": "traffic.json",
              "traffic_correlation": "traffic_evidence.json", "api_correlation": "api_correlation.json",
-             "endpoint_contexts": "endpoint_contexts.json"}
+             "endpoint_contexts": "endpoint_contexts.json", "security_results": "security_results.json"}
 LIST_FIELDS = {"routes": ("nodes", "edges"), "runtime": ("actions",), "traffic": ("transactions",),
                "traffic_correlation": ("actions",), "api_correlation": ("correlations",), "endpoint_contexts": ("endpoints",)}
 
@@ -233,6 +233,15 @@ def build_dynamic_analysis_report(scan_id: str, artifacts: dict[str, dict], targ
               "api_correlation": api_summary, "endpoint_context_summary": context_summary, "endpoint_contexts": rows,
               "evidence": {name: f"dynamic/{ARTIFACTS[name]}" for name in sorted(valid)},
               "evidence_status": {name: "available" if name in valid else "corrupt" if name in source_errors else "missing" for name in sorted(ARTIFACTS)}}
+    if 'security_results' in artifacts or 'security_results' in source_errors:
+        from src.dynamic.security.reporting import build_security_section, unavailable_security_section
+        security = (build_security_section(valid['security_results'], session['session_id'], contexts.get('endpoints', []))
+                    if 'security_results' in valid else unavailable_security_section('SECURITY_SOURCE_INVALID'))
+        report['security_results'] = security
+        if security['coverage'] != 'available':
+            report['analysis_coverage'] = 'partial'
+        if 'security_results' in valid and security['limitations'] == ['SECURITY_SOURCE_INVALID']:
+            report['evidence_status']['security_results'] = 'corrupt'
     validate_dynamic_analysis_report(report)
     return report
 

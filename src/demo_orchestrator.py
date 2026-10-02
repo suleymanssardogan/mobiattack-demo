@@ -117,6 +117,9 @@ def _ensure_preflight_persisted_from_meta(
     adb_serial: str | None = None,
 ) -> None:
     """Persists preflight artifact from runtime_meta with hardened blocker/warning semantics."""
+    if runtime_meta.get('runtime_permissions') is not None:
+        from src.runtime_permissions import save_permission_observation
+        save_permission_observation(root_path, runtime_meta['runtime_permissions'])
     preflight_file = root_path / "dynamic" / "preflight_result.json"
     if preflight_file.is_file():
         return
@@ -1079,8 +1082,9 @@ def run_demo(
     if classification.get("type") == "unsupported":
         err_msg = classification.get("reason") or "Unsupported Android URL. Provide a direct APK URL or a Google Play Store application URL."
         _emit_progress(progress_callback, "acquisition", "failed", err_msg)
-        raise DemoOrchestrationError(message=err_msg, stage="acquisition")
+        raise DemoOrchestrationError(message=err_msg, stage="acquisition", reason_code="INVALID_ANDROID_URL")
 
+    url = classification.get("normalized_url", url)
     if classification.get("type") == "play_store":
         pkg = classification.get("package_name") or "unknown"
         _emit_progress(
@@ -1209,8 +1213,12 @@ def run_demo(
             raise DemoOrchestrationError(message=str(exc), stage="static_analysis", cause=exc) from exc
 
         app_info = static_context.get("app", {})
-        package_name = app_info.get("package_name") or acq_meta.get("package_name") or "unknown"
-        launcher_activity = app_info.get("launcher_activity") or "unknown"
+        package_name = app_info.get("package_name")
+        launcher_activity = app_info.get("launcher_activity")
+        if not launcher_activity:
+            _emit_progress(progress_callback, 'static_analysis', 'success', 'Static context available; launcher unresolved.', static_context)
+            _persist_preflight_fallback(root_path, package_name, None, PreflightStatus.WARN, 'LAUNCHER_UNRESOLVED', adb_serial=adb_serial)
+            raise DemoOrchestrationError('No declared enabled launcher.', 'runtime', reason_code='LAUNCHER_UNRESOLVED')
 
         _emit_progress(
             progress_callback,
@@ -1496,10 +1504,12 @@ def run_demo(
         )
     if not isinstance(launcher_activity, str) or not launcher_activity.strip():
         err_msg = "Static analysis did not discover a valid non-empty launcher_activity in AndroidManifest.xml."
-        _emit_progress(progress_callback, "static_analysis", "failed", err_msg)
+        _emit_progress(progress_callback, "static_analysis", "success", "Static context available; launcher unresolved.", static_context)
+        _persist_preflight_fallback(root_path, package_name, None, PreflightStatus.WARN, "LAUNCHER_UNRESOLVED", adb_serial=adb_serial)
         raise DemoOrchestrationError(
             message=err_msg,
-            stage="static_analysis",
+            stage="runtime",
+            reason_code="LAUNCHER_UNRESOLVED",
         )
 
     _emit_progress(

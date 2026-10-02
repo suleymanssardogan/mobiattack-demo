@@ -46,3 +46,7 @@ ENV/
 
 # Development-only Agent benchmark outputs
 benchmark_results/
+
+# Generated C10 repeat workspaces (retain checkpoint fingerprints/reports)
+examples/task_c10/repeat_a/
+examples/task_c10/repeat_b/

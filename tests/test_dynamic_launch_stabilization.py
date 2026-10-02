@@ -275,23 +275,16 @@ class TestDynamicLaunchStabilization(unittest.TestCase):
         self.assertIsNone(err_code)
         self.assertEqual(baseline.pid, 4321)
 
-    # 10. Monkey fallback in launch_application when main activity cannot be resolved
+    # 10. An unresolved launcher must never be converted to monkey-launch success.
     @patch("src.dynamic.preflight.app_launcher.resolve_launchable_activity", return_value=None)
     @patch("src.dynamic.preflight.app_launcher.run_adb_cmd")
-    def test_10_monkey_fallback_when_activity_not_resolved(
-        self, mock_run, mock_resolve
-    ):
-        mock_run.return_value = (0, "Events injected: 1", "")
-
+    def test_10_unresolved_launcher_is_explicit_without_fallback(self, mock_run, mock_resolve):
         ok, act, err_code, err_msg = launch_application(
-            adb_bin="/mock/adb",
-            serial="dev1",
-            package_name="com.example.app",
-        )
-
-        self.assertTrue(ok)
-        self.assertIsNone(err_code)
+            adb_bin="/mock/adb", serial="dev1", package_name="com.example.app")
+        self.assertFalse(ok)
+        self.assertEqual(err_code.value, "LAUNCHER_UNRESOLVED")
         self.assertIsNone(act)
+        mock_run.assert_not_called()
 
     # 11. Preflight result atomic persistence to demo_runs/<run_id>/dynamic/preflight_result.json
     def test_11_preflight_artifact_atomic_persistence(self):

@@ -1,0 +1,32 @@
+{
+  "focused": {
+    "passed": 558,
+    "failed": 0
+  },
+  "affected": {
+    "passed": 104,
+    "failed": 0
+  },
+  "real_fixture_checks": {
+    "passed": 6,
+    "failed": 0,
+    "not_run": 0
+  },
+  "deterministic_repeat_checks": {
+    "passed": 6,
+    "failed": 0
+  },
+  "full_regression": {
+    "passed": 2576,
+    "failed": 0,
+    "skipped": 3,
+    "subtests_passed": 33
+  },
+  "ui_summary_privacy_checks": {
+    "passed": 6,
+    "failed": 0
+  },
+  "local_apk_components_valid": 12,
+  "dynamic_behavior_changed": false,
+  "agent_changed": false
+}

@@ -1,0 +1,1583 @@
+{
+  "acquisition": {
+    "filename": "MSTG-Android-Kotlin.apk",
+    "input_url": "unknown",
+    "platform": "android",
+    "sha256": "86c059775aa09e4794defd40f81e69751a81019b1b1f285b30b8f7c5bb5e8b68",
+    "size_bytes": 2914676,
+    "source_type": "existing_local_fixture",
+    "validation": {
+      "dex_files": [
+        "classes.dex"
+      ],
+      "has_android_manifest": true,
+      "has_dex": true,
+      "is_valid_apk": true,
+      "is_zip": true
+    }
+  },
+  "activities": [
+    "sg.vantagepoint.mstgkotlin.MainActivity",
+    "sg.vantagepoint.mstgkotlin.RegisterActivity",
+    "sg.vantagepoint.mstgkotlin.MenuActivity",
+    "sg.vantagepoint.mstgkotlin.SecureWebViewActivity",
+    "sg.vantagepoint.mstgkotlin.InsecureWebViewActivity"
+  ],
+  "analysis_notes": [
+    "Static network indicators are extracted from application content and do not by themselves prove runtime network usage.",
+    "API candidates are static call-context candidates extracted from Smali register flows and do not represent confirmed runtime endpoints.",
+    "No vulnerability exploitation was performed.",
+    "No security verdict was produced."
+  ],
+  "api_candidates": [
+    {
+      "base_url": "http://127.0.0.1",
+      "candidate_id": "static_d4973f3cd81f6e7bdc0af8f9",
+      "evidence": {
+        "base_url_call_line": 99,
+        "base_url_line": 97,
+        "base_url_register": "v1",
+        "base_url_value": "http://127.0.0.1",
+        "path_line": 102,
+        "path_register": "v0",
+        "path_value": "/signup",
+        "request_call_line": 214,
+        "source_method": "onClick(Landroid/view/View;)V"
+      },
+      "evidence_refs": [
+        "static_evidence_48f9a01929283d0867589d72"
+      ],
+      "extractor_identity": {
+        "base_url": "http://127.0.0.1",
+        "full_url": "http://127.0.0.1/signup",
+        "method": "POST",
+        "path": "/signup"
+      },
+      "framework": "Fuel",
+      "frameworks": [
+        "Fuel"
+      ],
+      "full_url": "http://127.0.0.1/signup",
+      "host": "127.0.0.1",
+      "method": "POST",
+      "path": "/signup",
+      "port": 80,
+      "provenance": [
+        {
+          "base_url": "http://127.0.0.1",
+          "evidence": {
+            "base_url_call_line": 99,
+            "base_url_line": 97,
+            "base_url_register": "v1",
+            "base_url_value": "http://127.0.0.1",
+            "path_line": 102,
+            "path_register": "v0",
+            "path_value": "/signup",
+            "request_call_line": 214,
+            "source_method": "onClick(Landroid/view/View;)V"
+          },
+          "evidence_ref": "static_evidence_48f9a01929283d0867589d72",
+          "extractor_identity": {
+            "base_url": "http://127.0.0.1",
+            "full_url": "http://127.0.0.1/signup",
+            "method": "POST",
+            "path": "/signup"
+          },
+          "framework": "Fuel",
+          "full_url": "http://127.0.0.1/signup",
+          "host": "127.0.0.1",
+          "method": "POST",
+          "path": "/signup",
+          "port": 80,
+          "query_keys": [],
+          "query_shape": {},
+          "query_shape_known": true,
+          "request_line": 214,
+          "resolution_state": "resolved",
+          "scheme": "http",
+          "source_candidate_id": "static_551e70ab4aa166d364d27318",
+          "source_component": "Lsg/vantagepoint/mstgkotlin/RegisterActivity$onCreate$2;",
+          "source_file": "smali/sg/vantagepoint/mstgkotlin/RegisterActivity$onCreate$2.smali",
+          "status": "static_api_candidate"
+        }
+      ],
+      "query_keys": [],
+      "query_shape": {},
+      "query_shape_known": true,
+      "request_line": 214,
+      "resolution_state": "resolved",
+      "scheme": "http",
+      "source_component": "Lsg/vantagepoint/mstgkotlin/RegisterActivity$onCreate$2;",
+      "source_file": "smali/sg/vantagepoint/mstgkotlin/RegisterActivity$onCreate$2.smali",
+      "status": "static_api_candidate"
+    }
+  ],
+  "api_discovery": {
+    "bounded_provenance": {
+      "coverage": {
+        "partial": true,
+        "skipped": [
+          {
+            "reason": "INDEX_SOURCE_BOUNDARY",
+            "source_file": "smali/kotlin/collections/ArraysKt___ArraysKt.smali"
+          }
+        ]
+      },
+      "max_depth": 3,
+      "unresolved": [
+        {
+          "line": 0,
+          "reason": "INCOMPLETE_INDEX",
+          "resolution_state": "unresolved",
+          "source_file": "smali/com/github/kittinunf/fuel/core/DeserializableKt$response$5$1.smali",
+          "source_method": "invoke()Ljava/lang/Object;"
+        },
+        {
+          "line": 0,
+          "reason": "INCOMPLETE_INDEX",
+          "resolution_state": "unresolved",
+          "source_file": "smali/com/github/kittinunf/fuel/core/DeserializableKt$response$5$1.smali",
+          "source_method": "invoke()V"
+        },
+        {
+          "line": 0,
+          "reason": "INCOMPLETE_INDEX",
+          "resolution_state": "unresolved",
+          "source_file": "smali/com/github/kittinunf/fuel/core/Encoding$encoder$1.smali",
+          "source_method": "invoke(Lcom/github/kittinunf/fuel/core/Method;Ljava/lang/String;Ljava/util/List;)Lcom/github/kittinunf/fuel/core/Request;"
+        },
+        {
+          "line": 0,
+          "reason": "INCOMPLETE_INDEX",
+          "resolution_state": "unresolved",
+          "source_file": "smali/com/github/kittinunf/fuel/core/Encoding$encoder$1.smali",
+          "source_method": "invoke(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;"
+        },
+        {
+          "line": 0,
+          "reason": "INCOMPLETE_INDEX",
+          "resolution_state": "unresolved",
+          "source_file": "smali/com/github/kittinunf/fuel/core/Encoding.smali",
+          "source_method": "access$createUrl(Lcom/github/kittinunf/fuel/core/Encoding;Ljava/lang/String;)Ljava/net/URL;"
+        },
+        {
+          "line": 0,
+          "reason": "INCOMPLETE_INDEX",
+          "resolution_state": "unresolved",
+          "source_file": "smali/com/github/kittinunf/fuel/core/Encoding.smali",
+          "source_method": "createUrl(Ljava/lang/String;)Ljava/net/URL;"
+        },
+        {
+          "line": 0,
+          "reason": "INCOMPLETE_INDEX",
+          "resolution_state": "unresolved",
+          "source_file": "smali/com/github/kittinunf/fuel/core/FuelError.smali",
+          "source_method": "<init>(Ljava/lang/Exception;[BLcom/github/kittinunf/fuel/core/Response;ILkotlin/jvm/internal/DefaultConstructorMarker;)V"
+        },
+        {
+          "line": 0,
+          "reason": "INCOMPLETE_INDEX",
+          "resolution_state": "unresolved",
+          "source_file": "smali/com/github/kittinunf/fuel/core/FuelManager$hostnameVerifier$2.smali",
+          "source_method": "invoke()Ljava/lang/Object;"
+        },
+        {
+          "line": 0,
+          "reason": "INCOMPLETE_INDEX",
+          "resolution_state": "unresolved",
+          "source_file": "smali/com/github/kittinunf/fuel/core/FuelManager$hostnameVerifier$2.smali",
+          "source_method": "invoke()Ljavax/net/ssl/HostnameVerifier;"
+        },
+        {
+          "line": 0,
+          "reason": "INCOMPLETE_INDEX",
+          "resolution_state": "unresolved",
+          "source_file": "smali/com/github/kittinunf/fuel/core/FuelManager$socketFactory$2.smali",
+          "source_method": "invoke()Ljava/lang/Object;"
+        },
+        {
+          "line": 0,
+          "reason": "INCOMPLETE_INDEX",
+          "resolution_state": "unresolved",
+          "source_file": "smali/com/github/kittinunf/fuel/core/FuelManager$socketFactory$2.smali",
+          "source_method": "invoke()Ljavax/net/ssl/SSLSocketFactory;"
+        },
+        {
+          "line": 0,
+          "reason": "INCOMPLETE_INDEX",
+          "resolution_state": "unresolved",
+          "source_file": "smali/com/github/kittinunf/fuel/core/Request$blob$1.smali",
+          "source_method": "invoke(Lcom/github/kittinunf/fuel/core/Request;Ljava/net/URL;)Ljava/util/List;"
+        },
+        {
+          "line": 0,
+          "reason": "INCOMPLETE_INDEX",
+          "resolution_state": "unresolved",
+          "source_file": "smali/com/github/kittinunf/fuel/core/Request$blob$1.smali",
+          "source_method": "invoke(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;"
+        },
+        {
+          "line": 0,
+          "reason": "INCOMPLETE_INDEX",
+          "resolution_state": "unresolved",
+          "source_file": "smali/com/github/kittinunf/fuel/core/Request$dataParts$3.smali",
+          "source_method": "invoke(Lcom/github/kittinunf/fuel/core/Request;Ljava/net/URL;)Ljava/util/List;"
+        },
+        {
+          "line": 0,
+          "reason": "INCOMPLETE_INDEX",
+          "resolution_state": "unresolved",
+          "source_file": "smali/com/github/kittinunf/fuel/core/Request$dataParts$3.smali",
+          "source_method": "invoke(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;"
+        },
+        {
+          "line": 0,
+          "reason": "INCOMPLETE_INDEX",
+          "resolution_state": "unresolved",
+          "source_file": "smali/com/github/kittinunf/fuel/core/Request$source$1.smali",
+          "source_method": "invoke(Lcom/github/kittinunf/fuel/core/Request;Ljava/net/URL;)Ljava/util/List;"
+        },
+        {
+          "line": 0,
+          "reason": "INCOMPLETE_INDEX",
+          "resolution_state": "unresolved",
+          "source_file": "smali/com/github/kittinunf/fuel/core/Request$source$1.smali",
+          "source_method": "invoke(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;"
+        },
+        {
+          "line": 0,
+          "reason": "INCOMPLETE_INDEX",
+          "resolution_state": "unresolved",
+          "source_file": "smali/com/github/kittinunf/fuel/core/Request$sources$1.smali",
+          "source_method": "invoke(Lcom/github/kittinunf/fuel/core/Request;Ljava/net/URL;)Ljava/util/List;"
+        },
+        {
+          "line": 0,
+          "reason": "INCOMPLETE_INDEX",
+          "resolution_state": "unresolved",
+          "source_file": "smali/com/github/kittinunf/fuel/core/Request$sources$1.smali",
+          "source_method": "invoke(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;"
+        },
+        {
+          "line": 0,
+          "reason": "INCOMPLETE_INDEX",
+          "resolution_state": "unresolved",
+          "source_file": "smali/com/github/kittinunf/fuel/core/Request.smali",
+          "source_method": "<init>(Lcom/github/kittinunf/fuel/core/Method;Ljava/lang/String;Ljava/net/URL;Lcom/github/kittinunf/fuel/core/Request$Type;Ljava/util/Map;Ljava/util/List;Ljava/lang/String;Ljava/util/List;Ljava/util/List;II)V"
+        },
+        {
+          "line": 0,
+          "reason": "INCOMPLETE_INDEX",
+          "resolution_state": "unresolved",
+          "source_file": "smali/com/github/kittinunf/fuel/core/Request.smali",
+          "source_method": "<init>(Lcom/github/kittinunf/fuel/core/Method;Ljava/lang/String;Ljava/net/URL;Lcom/github/kittinunf/fuel/core/Request$Type;Ljava/util/Map;Ljava/util/List;Ljava/lang/String;Ljava/util/List;Ljava/util/List;IIILkotlin/jvm/internal/DefaultConstructorMarker;)V"
+        },
+        {
+          "line": 0,
+          "reason": "INCOMPLETE_INDEX",
+          "resolution_state": "unresolved",
+          "source_file": "smali/com/github/kittinunf/fuel/core/Request.smali",
+          "source_method": "blob(Lkotlin/jvm/functions/Function2;)Lcom/github/kittinunf/fuel/core/Request;"
+        },
+        {
+          "line": 0,
+          "reason": "INCOMPLETE_INDEX",
+          "resolution_state": "unresolved",
+          "source_file": "smali/com/github/kittinunf/fuel/core/Request.smali",
+          "source_method": "blobs(Lkotlin/jvm/functions/Function2;)Lcom/github/kittinunf/fuel/core/Request;"
+        },
+        {
+          "line": 0,
+          "reason": "INCOMPLETE_INDEX",
+          "resolution_state": "unresolved",
+          "source_file": "smali/com/github/kittinunf/fuel/core/Request.smali",
+          "source_method": "cUrlString()Ljava/lang/String;"
+        },
+        {
+          "line": 0,
+          "reason": "INCOMPLETE_INDEX",
+          "resolution_state": "unresolved",
+          "source_file": "smali/com/github/kittinunf/fuel/core/Request.smali",
+          "source_method": "dataParts(Lkotlin/jvm/functions/Function2;)Lcom/github/kittinunf/fuel/core/Request;"
+        },
+        {
+          "line": 0,
+          "reason": "INCOMPLETE_INDEX",
+          "resolution_state": "unresolved",
+          "source_file": "smali/com/github/kittinunf/fuel/core/Request.smali",
+          "source_method": "destination(Lkotlin/jvm/functions/Function2;)Lcom/github/kittinunf/fuel/core/Request;"
+        },
+        {
+          "line": 0,
+          "reason": "INCOMPLETE_INDEX",
+          "resolution_state": "unresolved",
+          "source_file": "smali/com/github/kittinunf/fuel/core/Request.smali",
+          "source_method": "getUrl()Ljava/net/URL;"
+        },
+        {
+          "line": 0,
+          "reason": "INCOMPLETE_INDEX",
+          "resolution_state": "unresolved",
+          "source_file": "smali/com/github/kittinunf/fuel/core/Request.smali",
+          "source_method": "source(Lkotlin/jvm/functions/Function2;)Lcom/github/kittinunf/fuel/core/Request;"
+        },
+        {
+          "line": 0,
+          "reason": "INCOMPLETE_INDEX",
+          "resolution_state": "unresolved",
+          "source_file": "smali/com/github/kittinunf/fuel/core/Request.smali",
+          "source_method": "sources(Lkotlin/jvm/functions/Function2;)Lcom/github/kittinunf/fuel/core/Request;"
+        },
+        {
+          "line": 0,
+          "reason": "INCOMPLETE_INDEX",
+          "resolution_state": "unresolved",
+          "source_file": "smali/com/github/kittinunf/fuel/core/Response$Companion.smali",
+          "source_method": "error()Lcom/github/kittinunf/fuel/core/Response;"
+        },
+        {
+          "line": 0,
+          "reason": "INCOMPLETE_INDEX",
+          "resolution_state": "unresolved",
+          "source_file": "smali/com/github/kittinunf/fuel/core/Response.smali",
+          "source_method": "<init>(Ljava/net/URL;ILjava/lang/String;Ljava/util/Map;JLjava/io/InputStream;)V"
+        },
+        {
+          "line": 0,
+          "reason": "INCOMPLETE_INDEX",
+          "resolution_state": "unresolved",
+          "source_file": "smali/com/github/kittinunf/fuel/core/Response.smali",
+          "source_method": "<init>(Ljava/net/URL;ILjava/lang/String;Ljava/util/Map;JLjava/io/InputStream;ILkotlin/jvm/internal/DefaultConstructorMarker;)V"
+        },
+        {
+          "line": 0,
+          "reason": "INCOMPLETE_INDEX",
+          "resolution_state": "unresolved",
+          "source_file": "smali/com/github/kittinunf/fuel/core/Response.smali",
+          "source_method": "getUrl()Ljava/net/URL;"
+        },
+        {
+          "line": 0,
+          "reason": "INCOMPLETE_INDEX",
+          "resolution_state": "unresolved",
+          "source_file": "smali/com/github/kittinunf/fuel/core/Response.smali",
+          "source_method": "toString()Ljava/lang/String;"
+        },
+        {
+          "line": 0,
+          "reason": "INCOMPLETE_INDEX",
+          "resolution_state": "unresolved",
+          "source_file": "smali/com/github/kittinunf/fuel/core/interceptors/LoggingInterceptorsKt$cUrlLoggingRequestInterceptor$1$1.smali",
+          "source_method": "invoke(Lcom/github/kittinunf/fuel/core/Request;)Lcom/github/kittinunf/fuel/core/Request;"
+        },
+        {
+          "line": 0,
+          "reason": "INCOMPLETE_INDEX",
+          "resolution_state": "unresolved",
+          "source_file": "smali/com/github/kittinunf/fuel/core/interceptors/LoggingInterceptorsKt$cUrlLoggingRequestInterceptor$1$1.smali",
+          "source_method": "invoke(Ljava/lang/Object;)Ljava/lang/Object;"
+        },
+        {
+          "line": 0,
+          "reason": "INCOMPLETE_INDEX",
+          "resolution_state": "unresolved",
+          "source_file": "smali/com/github/kittinunf/fuel/core/interceptors/LoggingInterceptorsKt$loggingResponseInterceptor$1.smali",
+          "source_method": "invoke(Lcom/github/kittinunf/fuel/core/Request;Lcom/github/kittinunf/fuel/core/Response;)Lcom/github/kittinunf/fuel/core/Response;"
+        },
+        {
+          "line": 0,
+          "reason": "INCOMPLETE_INDEX",
+          "resolution_state": "unresolved",
+          "source_file": "smali/com/github/kittinunf/fuel/core/interceptors/LoggingInterceptorsKt$loggingResponseInterceptor$1.smali",
+          "source_method": "invoke(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;"
+        },
+        {
+          "line": 0,
+          "reason": "INCOMPLETE_INDEX",
+          "resolution_state": "unresolved",
+          "source_file": "smali/com/github/kittinunf/fuel/core/interceptors/RedirectionInterceptorKt$redirectResponseInterceptor$1$1.smali",
+          "source_method": "invoke(Lcom/github/kittinunf/fuel/core/Request;Lcom/github/kittinunf/fuel/core/Response;)Lcom/github/kittinunf/fuel/core/Response;"
+        },
+        {
+          "line": 0,
+          "reason": "INCOMPLETE_INDEX",
+          "resolution_state": "unresolved",
+          "source_file": "smali/com/github/kittinunf/fuel/core/interceptors/RedirectionInterceptorKt$redirectResponseInterceptor$1$1.smali",
+          "source_method": "invoke(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;"
+        },
+        {
+          "line": 0,
+          "reason": "INCOMPLETE_INDEX",
+          "resolution_state": "unresolved",
+          "source_file": "smali/com/github/kittinunf/fuel/core/requests/AsyncTaskRequest.smali",
+          "source_method": "call()Lcom/github/kittinunf/fuel/core/Response;"
+        },
+        {
+          "line": 0,
+          "reason": "INCOMPLETE_INDEX",
+          "resolution_state": "unresolved",
+          "source_file": "smali/com/github/kittinunf/fuel/core/requests/AsyncTaskRequest.smali",
+          "source_method": "call()Ljava/lang/Object;"
+        },
+        {
+          "line": 0,
+          "reason": "INCOMPLETE_INDEX",
+          "resolution_state": "unresolved",
+          "source_file": "smali/com/github/kittinunf/fuel/core/requests/AsyncTaskRequest.smali",
+          "source_method": "errorResponse()Lcom/github/kittinunf/fuel/core/Response;"
+        },
+        {
+          "line": 0,
+          "reason": "INCOMPLETE_INDEX",
+          "resolution_state": "unresolved",
+          "source_file": "smali/com/github/kittinunf/fuel/core/requests/DownloadTaskRequest.smali",
+          "source_method": "call()Lcom/github/kittinunf/fuel/core/Response;"
+        },
+        {
+          "line": 0,
+          "reason": "INCOMPLETE_INDEX",
+          "resolution_state": "unresolved",
+          "source_file": "smali/com/github/kittinunf/fuel/core/requests/DownloadTaskRequest.smali",
+          "source_method": "call()Ljava/lang/Object;"
+        },
+        {
+          "line": 0,
+          "reason": "INCOMPLETE_INDEX",
+          "resolution_state": "unresolved",
+          "source_file": "smali/com/github/kittinunf/fuel/core/requests/DownloadTaskRequest.smali",
+          "source_method": "getDestinationCallback()Lkotlin/jvm/functions/Function2;"
+        },
+        {
+          "line": 0,
+          "reason": "INCOMPLETE_INDEX",
+          "resolution_state": "unresolved",
+          "source_file": "smali/com/github/kittinunf/fuel/core/requests/DownloadTaskRequest.smali",
+          "source_method": "setDestinationCallback(Lkotlin/jvm/functions/Function2;)V"
+        },
+        {
+          "line": 0,
+          "reason": "INCOMPLETE_INDEX",
+          "resolution_state": "unresolved",
+          "source_file": "smali/com/github/kittinunf/fuel/core/requests/UploadTaskRequest$bodyCallBack$1.smali",
+          "source_method": "invoke(Lcom/github/kittinunf/fuel/core/Request;Ljava/io/OutputStream;J)J"
+        },
+        {
+          "line": 0,
+          "reason": "INCOMPLETE_INDEX",
+          "resolution_state": "unresolved",
+          "source_file": "smali/com/github/kittinunf/fuel/core/requests/UploadTaskRequest$bodyCallBack$1.smali",
+          "source_method": "invoke(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;"
+        },
+        {
+          "line": 0,
+          "reason": "INCOMPLETE_INDEX",
+          "resolution_state": "unresolved",
+          "source_file": "smali/com/github/kittinunf/fuel/core/requests/UploadTaskRequest.smali",
+          "source_method": "getSourceCallback()Lkotlin/jvm/functions/Function2;"
+        },
+        {
+          "line": 0,
+          "reason": "INCOMPLETE_INDEX",
+          "resolution_state": "unresolved",
+          "source_file": "smali/com/github/kittinunf/fuel/core/requests/UploadTaskRequest.smali",
+          "source_method": "setSourceCallback(Lkotlin/jvm/functions/Function2;)V"
+        },
+        {
+          "line": 0,
+          "reason": "INCOMPLETE_INDEX",
+          "resolution_state": "unresolved",
+          "source_file": "smali/com/github/kittinunf/fuel/toolbox/HttpClient.smali",
+          "source_method": "establishConnection(Lcom/github/kittinunf/fuel/core/Request;)Ljava/net/URLConnection;"
+        },
+        {
+          "line": 0,
+          "reason": "INCOMPLETE_INDEX",
+          "resolution_state": "unresolved",
+          "source_file": "smali/com/github/kittinunf/fuel/toolbox/HttpClient.smali",
+          "source_method": "executeRequest(Lcom/github/kittinunf/fuel/core/Request;)Lcom/github/kittinunf/fuel/core/Response;"
+        },
+        {
+          "line": 0,
+          "reason": "INCOMPLETE_INDEX",
+          "resolution_state": "unresolved",
+          "source_file": "smali/com/github/kittinunf/fuel/toolbox/HttpClient.smali",
+          "source_method": "setBodyIfDoOutput(Ljava/net/HttpURLConnection;Lcom/github/kittinunf/fuel/core/Request;)V"
+        },
+        {
+          "line": 0,
+          "reason": "INCOMPLETE_INDEX",
+          "resolution_state": "unresolved",
+          "source_file": "smali/com/github/kittinunf/fuel/toolbox/HttpClient.smali",
+          "source_method": "setDoOutput(Ljava/net/HttpURLConnection;Lcom/github/kittinunf/fuel/core/Method;)V"
+        },
+        {
+          "line": 0,
+          "reason": "INCOMPLETE_INDEX",
+          "resolution_state": "unresolved",
+          "source_file": "smali/com/google/gson/internal/bind/TypeAdapters$21.smali",
+          "source_method": "read(Lcom/google/gson/stream/JsonReader;)Ljava/lang/Object;"
+        },
+        {
+          "line": 0,
+          "reason": "INCOMPLETE_INDEX",
+          "resolution_state": "unresolved",
+          "source_file": "smali/com/google/gson/internal/bind/TypeAdapters$21.smali",
+          "source_method": "read(Lcom/google/gson/stream/JsonReader;)Ljava/net/URL;"
+        },
+        {
+          "line": 0,
+          "reason": "INCOMPLETE_INDEX",
+          "resolution_state": "unresolved",
+          "source_file": "smali/com/google/gson/internal/bind/TypeAdapters$21.smali",
+          "source_method": "write(Lcom/google/gson/stream/JsonWriter;Ljava/lang/Object;)V"
+        },
+        {
+          "line": 0,
+          "reason": "INCOMPLETE_INDEX",
+          "resolution_state": "unresolved",
+          "source_file": "smali/com/google/gson/internal/bind/TypeAdapters$21.smali",
+          "source_method": "write(Lcom/google/gson/stream/JsonWriter;Ljava/net/URL;)V"
+        },
+        {
+          "line": 0,
+          "reason": "INCOMPLETE_INDEX",
+          "resolution_state": "unresolved",
+          "source_file": "smali/com/google/gson/internal/bind/TypeAdapters.smali",
+          "source_method": "<clinit>()V"
+        },
+        {
+          "line": 0,
+          "reason": "INCOMPLETE_INDEX",
+          "resolution_state": "unresolved",
+          "source_file": "smali/kotlin/io/TextStreamsKt.smali",
+          "source_method": "readBytes(Ljava/net/URL;)[B"
+        },
+        {
+          "line": 0,
+          "reason": "INCOMPLETE_INDEX",
+          "resolution_state": "unresolved",
+          "source_file": "smali/kotlin/io/TextStreamsKt.smali",
+          "source_method": "readText$default(Ljava/net/URL;Ljava/nio/charset/Charset;ILjava/lang/Object;)Ljava/lang/String;"
+        },
+        {
+          "line": 0,
+          "reason": "INCOMPLETE_INDEX",
+          "resolution_state": "unresolved",
+          "source_file": "smali/kotlin/io/TextStreamsKt.smali",
+          "source_method": "readText(Ljava/net/URL;Ljava/nio/charset/Charset;)Ljava/lang/String;"
+        }
+      ]
+    },
+    "httpurlconnection": {
+      "coverage": {
+        "partial": true,
+        "skipped": [
+          {
+            "reason": "source_or_size_boundary",
+            "source_file": "smali/kotlin/collections/ArraysKt___ArraysKt.smali"
+          }
+        ]
+      },
+      "unresolved": [
+        {
+          "framework": "httpurlconnection",
+          "line": 93,
+          "reason": "UNSUPPORTED_CONTROL_FLOW",
+          "resolution_state": "unresolved",
+          "source_component": "Lcom/github/kittinunf/fuel/core/Encoding$encoder$1;",
+          "source_file": "smali/com/github/kittinunf/fuel/core/Encoding$encoder$1.smali",
+          "source_method": "invoke(Lcom/github/kittinunf/fuel/core/Method;Ljava/lang/String;Ljava/util/List;)Lcom/github/kittinunf/fuel/core/Request;"
+        },
+        {
+          "framework": "httpurlconnection",
+          "line": 420,
+          "reason": "UNSUPPORTED_CONTROL_FLOW",
+          "resolution_state": "unresolved",
+          "source_component": "Lcom/github/kittinunf/fuel/core/Encoding;",
+          "source_file": "smali/com/github/kittinunf/fuel/core/Encoding.smali",
+          "source_method": "createUrl(Ljava/lang/String;)Ljava/net/URL;"
+        },
+        {
+          "framework": "httpurlconnection",
+          "line": 96,
+          "reason": "CONNECTION_IDENTITY_UNRESOLVED",
+          "resolution_state": "unresolved",
+          "source_component": "Lcom/github/kittinunf/fuel/core/FuelManager$hostnameVerifier$2;",
+          "source_file": "smali/com/github/kittinunf/fuel/core/FuelManager$hostnameVerifier$2.smali",
+          "source_method": "invoke()Ljavax/net/ssl/HostnameVerifier;"
+        },
+        {
+          "framework": "httpurlconnection",
+          "line": 87,
+          "reason": "UNSUPPORTED_CONTROL_FLOW",
+          "resolution_state": "unresolved",
+          "source_component": "Lcom/github/kittinunf/fuel/core/FuelManager$socketFactory$2;",
+          "source_file": "smali/com/github/kittinunf/fuel/core/FuelManager$socketFactory$2.smali",
+          "source_method": "invoke()Ljavax/net/ssl/SSLSocketFactory;"
+        },
+        {
+          "framework": "httpurlconnection",
+          "line": 99,
+          "reason": "UNSUPPORTED_CONTROL_FLOW",
+          "resolution_state": "unresolved",
+          "source_component": "Lcom/github/kittinunf/fuel/core/Request$dataParts$3;",
+          "source_file": "smali/com/github/kittinunf/fuel/core/Request$dataParts$3.smali",
+          "source_method": "invoke(Lcom/github/kittinunf/fuel/core/Request;Ljava/net/URL;)Ljava/util/List;"
+        },
+        {
+          "framework": "httpurlconnection",
+          "line": 99,
+          "reason": "UNSUPPORTED_CONTROL_FLOW",
+          "resolution_state": "unresolved",
+          "source_component": "Lcom/github/kittinunf/fuel/core/Request$sources$1;",
+          "source_file": "smali/com/github/kittinunf/fuel/core/Request$sources$1.smali",
+          "source_method": "invoke(Lcom/github/kittinunf/fuel/core/Request;Ljava/net/URL;)Ljava/util/List;"
+        },
+        {
+          "framework": "httpurlconnection",
+          "line": 589,
+          "reason": "UNSUPPORTED_CONTROL_FLOW",
+          "resolution_state": "unresolved",
+          "source_component": "Lcom/github/kittinunf/fuel/core/Request;",
+          "source_file": "smali/com/github/kittinunf/fuel/core/Request.smali",
+          "source_method": "<init>(Lcom/github/kittinunf/fuel/core/Method;Ljava/lang/String;Ljava/net/URL;Lcom/github/kittinunf/fuel/core/Request$Type;Ljava/util/Map;Ljava/util/List;Ljava/lang/String;Ljava/util/List;Ljava/util/List;IIILkotlin/jvm/internal/DefaultConstructorMarker;)V"
+        },
+        {
+          "framework": "httpurlconnection",
+          "line": 1053,
+          "reason": "UNSUPPORTED_CONTROL_FLOW",
+          "resolution_state": "unresolved",
+          "source_component": "Lcom/github/kittinunf/fuel/core/Request;",
+          "source_file": "smali/com/github/kittinunf/fuel/core/Request.smali",
+          "source_method": "blobs(Lkotlin/jvm/functions/Function2;)Lcom/github/kittinunf/fuel/core/Request;"
+        },
+        {
+          "framework": "httpurlconnection",
+          "line": 1182,
+          "reason": "UNSUPPORTED_CONTROL_FLOW",
+          "resolution_state": "unresolved",
+          "source_component": "Lcom/github/kittinunf/fuel/core/Request;",
+          "source_file": "smali/com/github/kittinunf/fuel/core/Request.smali",
+          "source_method": "cUrlString()Ljava/lang/String;"
+        },
+        {
+          "framework": "httpurlconnection",
+          "line": 1477,
+          "reason": "UNSUPPORTED_CONTROL_FLOW",
+          "resolution_state": "unresolved",
+          "source_component": "Lcom/github/kittinunf/fuel/core/Request;",
+          "source_file": "smali/com/github/kittinunf/fuel/core/Request.smali",
+          "source_method": "dataParts(Lkotlin/jvm/functions/Function2;)Lcom/github/kittinunf/fuel/core/Request;"
+        },
+        {
+          "framework": "httpurlconnection",
+          "line": 1774,
+          "reason": "UNSUPPORTED_CONTROL_FLOW",
+          "resolution_state": "unresolved",
+          "source_component": "Lcom/github/kittinunf/fuel/core/Request;",
+          "source_file": "smali/com/github/kittinunf/fuel/core/Request.smali",
+          "source_method": "destination(Lkotlin/jvm/functions/Function2;)Lcom/github/kittinunf/fuel/core/Request;"
+        },
+        {
+          "framework": "httpurlconnection",
+          "line": 3390,
+          "reason": "UNSUPPORTED_CONTROL_FLOW",
+          "resolution_state": "unresolved",
+          "source_component": "Lcom/github/kittinunf/fuel/core/Request;",
+          "source_file": "smali/com/github/kittinunf/fuel/core/Request.smali",
+          "source_method": "sources(Lkotlin/jvm/functions/Function2;)Lcom/github/kittinunf/fuel/core/Request;"
+        },
+        {
+          "framework": "httpurlconnection",
+          "line": 94,
+          "reason": "UNSUPPORTED_FIELD_OR_INVOKE_FLOW",
+          "resolution_state": "unresolved",
+          "source_component": "Lcom/github/kittinunf/fuel/core/Response$Companion;",
+          "source_file": "smali/com/github/kittinunf/fuel/core/Response$Companion.smali",
+          "source_method": "error()Lcom/github/kittinunf/fuel/core/Response;"
+        },
+        {
+          "framework": "httpurlconnection",
+          "line": 270,
+          "reason": "UNSUPPORTED_CONTROL_FLOW",
+          "resolution_state": "unresolved",
+          "source_component": "Lcom/github/kittinunf/fuel/core/Response;",
+          "source_file": "smali/com/github/kittinunf/fuel/core/Response.smali",
+          "source_method": "<init>(Ljava/net/URL;ILjava/lang/String;Ljava/util/Map;JLjava/io/InputStream;ILkotlin/jvm/internal/DefaultConstructorMarker;)V"
+        },
+        {
+          "framework": "httpurlconnection",
+          "line": 863,
+          "reason": "UNSUPPORTED_CONTROL_FLOW",
+          "resolution_state": "unresolved",
+          "source_component": "Lcom/github/kittinunf/fuel/core/Response;",
+          "source_file": "smali/com/github/kittinunf/fuel/core/Response.smali",
+          "source_method": "toString()Ljava/lang/String;"
+        },
+        {
+          "framework": "httpurlconnection",
+          "line": 80,
+          "reason": "UNSUPPORTED_CONTROL_FLOW",
+          "resolution_state": "unresolved",
+          "source_component": "Lcom/github/kittinunf/fuel/core/interceptors/RedirectionInterceptorKt$redirectResponseInterceptor$1$1;",
+          "source_file": "smali/com/github/kittinunf/fuel/core/interceptors/RedirectionInterceptorKt$redirectResponseInterceptor$1$1.smali",
+          "source_method": "invoke(Lcom/github/kittinunf/fuel/core/Request;Lcom/github/kittinunf/fuel/core/Response;)Lcom/github/kittinunf/fuel/core/Response;"
+        },
+        {
+          "framework": "httpurlconnection",
+          "line": 110,
+          "reason": "UNSUPPORTED_CONTROL_FLOW",
+          "resolution_state": "unresolved",
+          "source_component": "Lcom/github/kittinunf/fuel/core/requests/DownloadTaskRequest;",
+          "source_file": "smali/com/github/kittinunf/fuel/core/requests/DownloadTaskRequest.smali",
+          "source_method": "call()Lcom/github/kittinunf/fuel/core/Response;"
+        },
+        {
+          "framework": "httpurlconnection",
+          "line": 231,
+          "reason": "UNSUPPORTED_CONTROL_FLOW",
+          "resolution_state": "unresolved",
+          "source_component": "Lcom/github/kittinunf/fuel/core/requests/DownloadTaskRequest;",
+          "source_file": "smali/com/github/kittinunf/fuel/core/requests/DownloadTaskRequest.smali",
+          "source_method": "getDestinationCallback()Lkotlin/jvm/functions/Function2;"
+        },
+        {
+          "framework": "httpurlconnection",
+          "line": 83,
+          "reason": "UNSUPPORTED_CONTROL_FLOW",
+          "resolution_state": "unresolved",
+          "source_component": "Lcom/github/kittinunf/fuel/core/requests/UploadTaskRequest$bodyCallBack$1;",
+          "source_file": "smali/com/github/kittinunf/fuel/core/requests/UploadTaskRequest$bodyCallBack$1.smali",
+          "source_method": "invoke(Lcom/github/kittinunf/fuel/core/Request;Ljava/io/OutputStream;J)J"
+        },
+        {
+          "framework": "httpurlconnection",
+          "line": 184,
+          "reason": "UNSUPPORTED_CONTROL_FLOW",
+          "resolution_state": "unresolved",
+          "source_component": "Lcom/github/kittinunf/fuel/core/requests/UploadTaskRequest;",
+          "source_file": "smali/com/github/kittinunf/fuel/core/requests/UploadTaskRequest.smali",
+          "source_method": "getSourceCallback()Lkotlin/jvm/functions/Function2;"
+        },
+        {
+          "framework": "httpurlconnection",
+          "line": 104,
+          "reason": "UNSUPPORTED_CONTROL_FLOW",
+          "resolution_state": "unresolved",
+          "source_component": "Lcom/github/kittinunf/fuel/toolbox/HttpClient;",
+          "source_file": "smali/com/github/kittinunf/fuel/toolbox/HttpClient.smali",
+          "source_method": "establishConnection(Lcom/github/kittinunf/fuel/core/Request;)Ljava/net/URLConnection;"
+        },
+        {
+          "framework": "httpurlconnection",
+          "line": 228,
+          "reason": "UNSUPPORTED_CONTROL_FLOW",
+          "resolution_state": "unresolved",
+          "source_component": "Lcom/github/kittinunf/fuel/toolbox/HttpClient;",
+          "source_file": "smali/com/github/kittinunf/fuel/toolbox/HttpClient.smali",
+          "source_method": "setBodyIfDoOutput(Ljava/net/HttpURLConnection;Lcom/github/kittinunf/fuel/core/Request;)V"
+        },
+        {
+          "framework": "httpurlconnection",
+          "line": 362,
+          "reason": "UNSUPPORTED_CONTROL_FLOW",
+          "resolution_state": "unresolved",
+          "source_component": "Lcom/github/kittinunf/fuel/toolbox/HttpClient;",
+          "source_file": "smali/com/github/kittinunf/fuel/toolbox/HttpClient.smali",
+          "source_method": "setDoOutput(Ljava/net/HttpURLConnection;Lcom/github/kittinunf/fuel/core/Method;)V"
+        },
+        {
+          "framework": "httpurlconnection",
+          "line": 417,
+          "reason": "UNSUPPORTED_CONTROL_FLOW",
+          "resolution_state": "unresolved",
+          "source_component": "Lcom/github/kittinunf/fuel/toolbox/HttpClient;",
+          "source_file": "smali/com/github/kittinunf/fuel/toolbox/HttpClient.smali",
+          "source_method": "executeRequest(Lcom/github/kittinunf/fuel/core/Request;)Lcom/github/kittinunf/fuel/core/Response;"
+        },
+        {
+          "framework": "httpurlconnection",
+          "line": 54,
+          "reason": "UNSUPPORTED_CONTROL_FLOW",
+          "resolution_state": "unresolved",
+          "source_component": "Lcom/google/gson/internal/bind/TypeAdapters$21;",
+          "source_file": "smali/com/google/gson/internal/bind/TypeAdapters$21.smali",
+          "source_method": "read(Lcom/google/gson/stream/JsonReader;)Ljava/net/URL;"
+        },
+        {
+          "framework": "httpurlconnection",
+          "line": 123,
+          "reason": "UNSUPPORTED_CONTROL_FLOW",
+          "resolution_state": "unresolved",
+          "source_component": "Lcom/google/gson/internal/bind/TypeAdapters$21;",
+          "source_file": "smali/com/google/gson/internal/bind/TypeAdapters$21.smali",
+          "source_method": "write(Lcom/google/gson/stream/JsonWriter;Ljava/net/URL;)V"
+        },
+        {
+          "framework": "httpurlconnection",
+          "line": 502,
+          "reason": "UNSUPPORTED_CONTROL_FLOW",
+          "resolution_state": "unresolved",
+          "source_component": "Lkotlin/io/TextStreamsKt;",
+          "source_file": "smali/kotlin/io/TextStreamsKt.smali",
+          "source_method": "readBytes(Ljava/net/URL;)[B"
+        },
+        {
+          "framework": "httpurlconnection",
+          "line": 698,
+          "reason": "UNSUPPORTED_CONTROL_FLOW",
+          "resolution_state": "unresolved",
+          "source_component": "Lkotlin/io/TextStreamsKt;",
+          "source_file": "smali/kotlin/io/TextStreamsKt.smali",
+          "source_method": "readText$default(Ljava/net/URL;Ljava/nio/charset/Charset;ILjava/lang/Object;)Ljava/lang/String;"
+        }
+      ]
+    },
+    "ktor": {
+      "coverage": {
+        "partial": true,
+        "skipped": [
+          {
+            "reason": "INDEX_SOURCE_BOUNDARY",
+            "source_file": "smali/kotlin/collections/ArraysKt___ArraysKt.smali"
+          }
+        ]
+      },
+      "unresolved": []
+    },
+    "okhttp": {
+      "coverage": {
+        "partial": true,
+        "skipped": [
+          {
+            "reason": "source_or_size_boundary",
+            "source_file": "smali/kotlin/collections/ArraysKt___ArraysKt.smali"
+          }
+        ]
+      },
+      "unresolved": []
+    },
+    "retrofit": {
+      "coverage": {
+        "partial": true,
+        "skipped": [
+          {
+            "reason": "size_or_source_boundary",
+            "source_file": "smali/kotlin/collections/ArraysKt___ArraysKt.smali"
+          }
+        ]
+      },
+      "unresolved": [],
+      "unresolved_declarations": []
+    },
+    "volley": {
+      "coverage": {
+        "partial": true,
+        "skipped": [
+          {
+            "reason": "source_or_size_boundary",
+            "source_file": "smali/kotlin/collections/ArraysKt___ArraysKt.smali"
+          }
+        ]
+      },
+      "unresolved": []
+    }
+  },
+  "apk_components": [],
+  "application": {
+    "filename": "MSTG-Android-Kotlin.apk",
+    "is_valid_apk": true,
+    "launcher_activity": "sg.vantagepoint.mstgkotlin.MainActivity",
+    "launcher_status": "resolved",
+    "launcher_target_activity": null,
+    "package_name": "sg.vantagepoint.mstgkotlin",
+    "sha256": "86c059775aa09e4794defd40f81e69751a81019b1b1f285b30b8f7c5bb5e8b68",
+    "size_bytes": 2914676
+  },
+  "limitations": [
+    "Analysis is limited to static heuristics on decoded package contents without runtime execution.",
+    "V1 API candidate extractor only tracks specific call-context register patterns (e.g. Fuel).",
+    "Dynamic instrumentation, traffic interception (MITM/Burp), and deep UI exploration were not performed.",
+    "No security verdict, vulnerability score, or risk classification is provided."
+  ],
+  "manifest": {
+    "activities": [
+      "sg.vantagepoint.mstgkotlin.MainActivity",
+      "sg.vantagepoint.mstgkotlin.RegisterActivity",
+      "sg.vantagepoint.mstgkotlin.MenuActivity",
+      "sg.vantagepoint.mstgkotlin.SecureWebViewActivity",
+      "sg.vantagepoint.mstgkotlin.InsecureWebViewActivity"
+    ],
+    "application": {
+      "allow_backup": false,
+      "debuggable": true,
+      "enabled": null,
+      "enabled_effective": true,
+      "network_security_config": null,
+      "observed_attributes": {
+        "allowBackup": "false",
+        "debuggable": "true",
+        "enabled": null,
+        "usesCleartextTraffic": null
+      },
+      "uses_cleartext_traffic": null
+    },
+    "components": [
+      {
+        "enabled": null,
+        "enabled_effective": true,
+        "exported": null,
+        "exported_effective": false,
+        "exported_source": "platform_default",
+        "intent_filters": [],
+        "name": "sg.vantagepoint.mstgkotlin.InsecureWebViewActivity",
+        "permission": null,
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "activity",
+        "write_permission": null
+      },
+      {
+        "enabled": null,
+        "enabled_effective": true,
+        "exported": null,
+        "exported_effective": true,
+        "exported_source": "platform_default",
+        "intent_filters": [
+          {
+            "actions": [
+              "android.intent.action.MAIN"
+            ],
+            "categories": [
+              "android.intent.category.LAUNCHER"
+            ],
+            "data": []
+          }
+        ],
+        "name": "sg.vantagepoint.mstgkotlin.MainActivity",
+        "permission": null,
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "activity",
+        "write_permission": null
+      },
+      {
+        "enabled": null,
+        "enabled_effective": true,
+        "exported": null,
+        "exported_effective": false,
+        "exported_source": "platform_default",
+        "intent_filters": [],
+        "name": "sg.vantagepoint.mstgkotlin.MenuActivity",
+        "permission": null,
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "activity",
+        "write_permission": null
+      },
+      {
+        "enabled": null,
+        "enabled_effective": true,
+        "exported": null,
+        "exported_effective": false,
+        "exported_source": "platform_default",
+        "intent_filters": [],
+        "name": "sg.vantagepoint.mstgkotlin.RegisterActivity",
+        "permission": null,
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "activity",
+        "write_permission": null
+      },
+      {
+        "enabled": null,
+        "enabled_effective": true,
+        "exported": null,
+        "exported_effective": false,
+        "exported_source": "platform_default",
+        "intent_filters": [],
+        "name": "sg.vantagepoint.mstgkotlin.SecureWebViewActivity",
+        "permission": null,
+        "read_permission": null,
+        "source": "AndroidManifest.xml",
+        "target_activity": null,
+        "type": "activity",
+        "write_permission": null
+      }
+    ],
+    "launcher_activity": "sg.vantagepoint.mstgkotlin.MainActivity",
+    "launcher_status": "resolved",
+    "launcher_target_activity": null,
+    "min_sdk": 19,
+    "network_security_policy": {
+      "cleartext_permissions": [],
+      "status": "not_declared"
+    },
+    "package_name": "sg.vantagepoint.mstgkotlin",
+    "permission_declarations": [
+      {
+        "max_sdk": null,
+        "name": "android.permission.INTERNET",
+        "source": "AndroidManifest.xml",
+        "tag": "uses-permission"
+      }
+    ],
+    "permissions": [
+      "android.permission.INTERNET"
+    ],
+    "providers": [],
+    "receivers": [],
+    "sdk_evidence": {
+      "min_sdk": "apktool.yml: sdkInfo.minSdkVersion",
+      "target_sdk": "apktool.yml: sdkInfo.targetSdkVersion"
+    },
+    "services": [],
+    "target_sdk": 26,
+    "version_code": null
+  },
+  "manifest_evidence": [],
+  "network_indicators": {
+    "domains": [
+      {
+        "line_number": 25,
+        "source_file": "smali/io/reactivex/internal/schedulers/IoScheduler.smali",
+        "type": "domain",
+        "value": "rx2.io"
+      },
+      {
+        "line_number": 78,
+        "source_file": "smali/io/reactivex/internal/schedulers/IoScheduler.smali",
+        "type": "domain",
+        "value": "rx2.io"
+      }
+    ],
+    "ip_addresses": [],
+    "local_file_urls": [
+      {
+        "line_number": 130,
+        "source_file": "smali/sg/vantagepoint/mstgkotlin/InsecureWebViewActivity.smali",
+        "type": "local_file_url",
+        "value": "file:///android_asset/unsafe_content.html"
+      },
+      {
+        "line_number": 130,
+        "source_file": "smali/sg/vantagepoint/mstgkotlin/SecureWebViewActivity.smali",
+        "type": "local_file_url",
+        "value": "file:///android_asset/unsafe_content.html"
+      }
+    ],
+    "network_urls": [
+      {
+        "line_number": 97,
+        "source_file": "smali/sg/vantagepoint/mstgkotlin/RegisterActivity$onCreate$2.smali",
+        "type": "network_url",
+        "value": "http://127.0.0.1"
+      }
+    ],
+    "path_candidates": [
+      {
+        "line_number": 148,
+        "source_file": "smali/sg/vantagepoint/mstgkotlin/MainActivity.smali",
+        "type": "path_candidate",
+        "value": "/sbin/su"
+      },
+      {
+        "line_number": 148,
+        "source_file": "smali/sg/vantagepoint/mstgkotlin/MenuActivity.smali",
+        "type": "path_candidate",
+        "value": "/sbin/su"
+      },
+      {
+        "line_number": 102,
+        "source_file": "smali/sg/vantagepoint/mstgkotlin/RegisterActivity$onCreate$2.smali",
+        "type": "path_candidate",
+        "value": "/signup"
+      },
+      {
+        "line_number": 164,
+        "source_file": "smali/sg/vantagepoint/mstgkotlin/MainActivity.smali",
+        "type": "path_candidate",
+        "value": "/su/bin/su"
+      },
+      {
+        "line_number": 164,
+        "source_file": "smali/sg/vantagepoint/mstgkotlin/MenuActivity.smali",
+        "type": "path_candidate",
+        "value": "/su/bin/su"
+      }
+    ]
+  },
+  "package_layout": "monolithic",
+  "permissions": [
+    "android.permission.INTERNET"
+  ],
+  "platform": "android",
+  "preprocessing": {},
+  "report_type": "static_analysis",
+  "report_version": "1.0",
+  "run_id": "c10_repeat_a",
+  "split_count": 1,
+  "split_structure": [],
+  "status": "completed",
+  "structure": {
+    "assets": [
+      "assets/unsafe_content.html"
+    ],
+    "dex_count": 1,
+    "dex_files": [
+      "classes.dex"
+    ],
+    "has_kotlin_metadata": true,
+    "has_native_code": false,
+    "is_multidex": false,
+    "native_libraries": [],
+    "smali_roots": [
+      "smali"
+    ]
+  },
+  "vulnerabilities": {
+    "candidates": [
+      {
+        "classification": "candidate",
+        "component": "path_candidates",
+        "control_id": "STATIC-RESILIENCE-ROOT",
+        "evidence_tier": "candidate",
+        "evidence_type": "static_string",
+        "finding_type": "root_binary_reference",
+        "observed_value": "/sbin/su",
+        "provenance_refs": [
+          "static_control_evidence_596aab5c08d8df94208a84c2"
+        ],
+        "reason_code": "EXACT_ROOT_BINARY_PATH",
+        "source": "smali/sg/vantagepoint/mstgkotlin/MainActivity.smali",
+        "standards": {
+          "mastg_test_refs": [],
+          "masvs_category": "MASVS-RESILIENCE",
+          "masvs_control_refs": [],
+          "maswe_refs": []
+        }
+      },
+      {
+        "classification": "candidate",
+        "component": "path_candidates",
+        "control_id": "STATIC-RESILIENCE-ROOT",
+        "evidence_tier": "candidate",
+        "evidence_type": "static_string",
+        "finding_type": "root_binary_reference",
+        "observed_value": "/sbin/su",
+        "provenance_refs": [
+          "static_control_evidence_1b45d4aff1ef1636e6cc108e"
+        ],
+        "reason_code": "EXACT_ROOT_BINARY_PATH",
+        "source": "smali/sg/vantagepoint/mstgkotlin/MenuActivity.smali",
+        "standards": {
+          "mastg_test_refs": [],
+          "masvs_category": "MASVS-RESILIENCE",
+          "masvs_control_refs": [],
+          "maswe_refs": []
+        }
+      },
+      {
+        "classification": "candidate",
+        "component": "path_candidates",
+        "control_id": "STATIC-RESILIENCE-ROOT",
+        "evidence_tier": "candidate",
+        "evidence_type": "static_string",
+        "finding_type": "root_binary_reference",
+        "observed_value": "/su/bin/su",
+        "provenance_refs": [
+          "static_control_evidence_7da6e005c4d1bb6720edfde3"
+        ],
+        "reason_code": "EXACT_ROOT_BINARY_PATH",
+        "source": "smali/sg/vantagepoint/mstgkotlin/MainActivity.smali",
+        "standards": {
+          "mastg_test_refs": [],
+          "masvs_category": "MASVS-RESILIENCE",
+          "masvs_control_refs": [],
+          "maswe_refs": []
+        }
+      },
+      {
+        "classification": "candidate",
+        "component": "path_candidates",
+        "control_id": "STATIC-RESILIENCE-ROOT",
+        "evidence_tier": "candidate",
+        "evidence_type": "static_string",
+        "finding_type": "root_binary_reference",
+        "observed_value": "/su/bin/su",
+        "provenance_refs": [
+          "static_control_evidence_0cc80e0d9057ba8969bed097"
+        ],
+        "reason_code": "EXACT_ROOT_BINARY_PATH",
+        "source": "smali/sg/vantagepoint/mstgkotlin/MenuActivity.smali",
+        "standards": {
+          "mastg_test_refs": [],
+          "masvs_category": "MASVS-RESILIENCE",
+          "masvs_control_refs": [],
+          "maswe_refs": []
+        }
+      },
+      {
+        "classification": "candidate",
+        "component": "sg.vantagepoint.mstgkotlin.MainActivity",
+        "control_id": "STATIC-PLATFORM-EXPORT",
+        "evidence_tier": "candidate",
+        "evidence_type": "manifest_component",
+        "finding_type": "exported_component",
+        "observed_value": true,
+        "provenance_refs": [
+          "static_control_evidence_6c5437347b6eab2112cb3073"
+        ],
+        "reason_code": "EXPORTED_COMPONENT_REQUIRES_USAGE_REVIEW",
+        "source": "AndroidManifest.xml",
+        "standards": {
+          "mastg_test_refs": [],
+          "masvs_category": "MASVS-PLATFORM",
+          "masvs_control_refs": [],
+          "maswe_refs": []
+        }
+      }
+    ],
+    "control_catalog_version": "static_controls_v1",
+    "control_coverage": [
+      {
+        "assessment_state": "not_evaluated",
+        "control_id": "STATIC-AUTH-SIGNAL",
+        "coverage_reason": "No deterministic static authentication bypass evaluator.",
+        "coverage_state": "unsupported",
+        "evidence_refs": [],
+        "masvs_category": "MASVS-AUTH"
+      },
+      {
+        "assessment_state": "finding_present",
+        "control_id": "STATIC-CODE-DEBUG",
+        "coverage_reason": "Explicit packaged manifest attribute supported; unresolved resources not guessed.",
+        "coverage_state": "supported",
+        "evidence_refs": [
+          "static_control_evidence_d680e32b79781103f30808f2"
+        ],
+        "masvs_category": "MASVS-CODE"
+      },
+      {
+        "assessment_state": "not_evaluated",
+        "control_id": "STATIC-CODE-DEV",
+        "coverage_reason": "Artifact names alone do not prove unsafe release configuration.",
+        "coverage_state": "unsupported",
+        "evidence_refs": [],
+        "masvs_category": "MASVS-CODE"
+      },
+      {
+        "assessment_state": "not_evaluated",
+        "control_id": "STATIC-CRYPTO-KEY",
+        "coverage_reason": "No structural key-to-crypto-call evidence evaluator; strings are insufficient.",
+        "coverage_state": "unsupported",
+        "evidence_refs": [],
+        "masvs_category": "MASVS-CRYPTO"
+      },
+      {
+        "assessment_state": "not_evaluated",
+        "control_id": "STATIC-CRYPTO-WEAK",
+        "coverage_reason": "No exact crypto call/context evaluator; algorithm names alone are insufficient.",
+        "coverage_state": "unsupported",
+        "evidence_refs": [],
+        "masvs_category": "MASVS-CRYPTO"
+      },
+      {
+        "assessment_state": "unknown",
+        "control_id": "STATIC-NET-CLEARTEXT",
+        "coverage_reason": "Explicit manifest or resolved network security configuration only.",
+        "coverage_state": "supported",
+        "evidence_refs": [],
+        "masvs_category": "MASVS-NETWORK"
+      },
+      {
+        "assessment_state": "unknown",
+        "control_id": "STATIC-NET-CONFIG",
+        "coverage_reason": "Resolved cleartext policies supported; unresolved policies require review.",
+        "coverage_state": "partial",
+        "evidence_refs": [],
+        "masvs_category": "MASVS-NETWORK"
+      },
+      {
+        "assessment_state": "finding_present",
+        "control_id": "STATIC-NET-HTTP-CALL",
+        "coverage_reason": "Direct canonical call provenance supported; runtime use and sensitive data remain unknown.",
+        "coverage_state": "partial",
+        "evidence_refs": [
+          "static_control_evidence_2d555f5c833339fc0ddc461a"
+        ],
+        "masvs_category": "MASVS-NETWORK"
+      },
+      {
+        "assessment_state": "unknown",
+        "control_id": "STATIC-PLATFORM-DEEPLINK",
+        "coverage_reason": "Manifest intent filters available; unsafe routing/data flow not evaluated.",
+        "coverage_state": "partial",
+        "evidence_refs": [],
+        "masvs_category": "MASVS-PLATFORM"
+      },
+      {
+        "assessment_state": "requires_review",
+        "control_id": "STATIC-PLATFORM-EXPORT",
+        "coverage_reason": "Manifest exposure supported; usage and permission enforcement not proven.",
+        "coverage_state": "partial",
+        "evidence_refs": [
+          "static_control_evidence_6c5437347b6eab2112cb3073"
+        ],
+        "masvs_category": "MASVS-PLATFORM"
+      },
+      {
+        "assessment_state": "not_evaluated",
+        "control_id": "STATIC-PLATFORM-WEBVIEW",
+        "coverage_reason": "No deterministic WebView security call/configuration evaluator.",
+        "coverage_state": "unsupported",
+        "evidence_refs": [],
+        "masvs_category": "MASVS-PLATFORM"
+      },
+      {
+        "assessment_state": "not_evaluated",
+        "control_id": "STATIC-PRIVACY-EXPOSURE",
+        "coverage_reason": "No deterministic sensitive-data exposure flow evaluator; names are insufficient.",
+        "coverage_state": "unsupported",
+        "evidence_refs": [],
+        "masvs_category": "MASVS-PRIVACY"
+      },
+      {
+        "assessment_state": "requires_review",
+        "control_id": "STATIC-PRIVACY-PERMISSION",
+        "coverage_reason": "Requested permissions supported as indicators; data use/exposure not proven.",
+        "coverage_state": "partial",
+        "evidence_refs": [
+          "static_control_evidence_46be569db9f471c0545c218b"
+        ],
+        "masvs_category": "MASVS-PRIVACY"
+      },
+      {
+        "assessment_state": "requires_review",
+        "control_id": "STATIC-RESILIENCE-ROOT",
+        "coverage_reason": "Exact root binary strings supported as candidates; actual checks not proven.",
+        "coverage_state": "partial",
+        "evidence_refs": [
+          "static_control_evidence_0cc80e0d9057ba8969bed097",
+          "static_control_evidence_1b45d4aff1ef1636e6cc108e",
+          "static_control_evidence_596aab5c08d8df94208a84c2",
+          "static_control_evidence_7da6e005c4d1bb6720edfde3"
+        ],
+        "masvs_category": "MASVS-RESILIENCE"
+      },
+      {
+        "assessment_state": "not_evaluated",
+        "control_id": "STATIC-STORAGE-API",
+        "coverage_reason": "No exact storage call plus sensitive-data flow evaluator.",
+        "coverage_state": "unsupported",
+        "evidence_refs": [],
+        "masvs_category": "MASVS-STORAGE"
+      },
+      {
+        "assessment_state": "unknown",
+        "control_id": "STATIC-STORAGE-BACKUP",
+        "coverage_reason": "Backup flag supported; sensitive data scope/exclusion unknown.",
+        "coverage_state": "partial",
+        "evidence_refs": [],
+        "masvs_category": "MASVS-STORAGE"
+      }
+    ],
+    "coverage_note": "No findings does not establish security. Indicators and candidates require additional evidence.",
+    "findings": [
+      {
+        "affected_items": [
+          "application.android:debuggable"
+        ],
+        "classification": "finding",
+        "component": "application.android:debuggable",
+        "control_id": "STATIC-CODE-DEBUG",
+        "cwe_id": "",
+        "description": "The application explicitly enables Android debugging, exposing debug capabilities when installed.",
+        "evidence": "AndroidManifest.xml: application.android:debuggable = True.",
+        "evidence_tier": "finding_eligible",
+        "evidence_type": "manifest_attribute",
+        "finding_instance_id": "static_finding_d20847af70a789a8f9e04066",
+        "finding_type": "SEC-CODE-01",
+        "id": "SEC-CODE-01",
+        "impact": "The application explicitly enables Android debugging, exposing debug capabilities when installed.",
+        "masvs_id": "MASVS-CODE",
+        "observed_value": true,
+        "owasp_category": "M7: Client Code Quality",
+        "provenance_refs": [
+          "static_control_evidence_d680e32b79781103f30808f2"
+        ],
+        "reason_code": "MANIFEST_DEBUGGABLE_TRUE",
+        "remediation": "Set android:debuggable=\"false\" in release builds and verify the packaged manifest.",
+        "severity": "CRITICAL",
+        "source": "AndroidManifest.xml",
+        "standards": {
+          "cwe_refs": [],
+          "mastg_test_refs": [],
+          "masvs_category": "MASVS-CODE",
+          "masvs_control_refs": [],
+          "maswe_refs": []
+        },
+        "supporting_evidence": [
+          {
+            "component": "application.android:debuggable",
+            "evidence_type": "manifest_attribute",
+            "observed_value": true,
+            "ownership": null,
+            "provenance_refs": [
+              "static_control_evidence_d680e32b79781103f30808f2"
+            ],
+            "reason_code": "MANIFEST_DEBUGGABLE_TRUE",
+            "source": "AndroidManifest.xml"
+          }
+        ],
+        "supporting_provenance_refs": [
+          "static_control_evidence_d680e32b79781103f30808f2"
+        ],
+        "title": "Application Is Marked Debuggable"
+      },
+      {
+        "affected_items": [
+          "network call at line 214"
+        ],
+        "classification": "finding",
+        "component": "network call at line 214",
+        "control_id": "STATIC-NET-HTTP-CALL",
+        "cwe_id": "",
+        "description": "A static networking call binds to an HTTP endpoint; runtime use and sensitive data exposure remain unconfirmed.",
+        "evidence": "smali/sg/vantagepoint/mstgkotlin/RegisterActivity$onCreate$2.smali: network call at line 214 = http://127.0.0.1/signup.",
+        "evidence_tier": "finding_eligible",
+        "evidence_type": "static_network_call",
+        "finding_instance_id": "static_finding_16680a29d7913a3030ef0483",
+        "finding_type": "SEC-NET-01",
+        "id": "SEC-NET-01",
+        "impact": "A static networking call binds to an HTTP endpoint; runtime use and sensitive data exposure remain unconfirmed.",
+        "masvs_id": "MASVS-NETWORK-1",
+        "observed_value": "http://127.0.0.1/signup",
+        "owasp_category": "M3: Insecure Communication",
+        "ownership": "unknown",
+        "provenance_refs": [
+          "static_control_evidence_2d555f5c833339fc0ddc461a"
+        ],
+        "reason_code": "HTTP_NETWORK_CALL_CONTEXT",
+        "remediation": "Use HTTPS for this networking endpoint and verify server-side TLS support.",
+        "scope_component": "Lsg/vantagepoint/mstgkotlin/RegisterActivity$onCreate$2;",
+        "severity": "HIGH",
+        "source": "smali/sg/vantagepoint/mstgkotlin/RegisterActivity$onCreate$2.smali",
+        "standards": {
+          "cwe_refs": [],
+          "mastg_test_refs": [],
+          "masvs_category": "MASVS-NETWORK",
+          "masvs_control_refs": [
+            "MASVS-NETWORK-1"
+          ],
+          "maswe_refs": []
+        },
+        "supporting_evidence": [
+          {
+            "classification": "candidate",
+            "component": "network call at line 214",
+            "control_id": "STATIC-NET-HTTP-CALL",
+            "evidence_tier": "candidate",
+            "evidence_type": "static_network_call",
+            "finding_type": "http_network_call",
+            "observed_value": "http://127.0.0.1/signup",
+            "ownership": "unknown",
+            "provenance_refs": [
+              "static_control_evidence_2d555f5c833339fc0ddc461a"
+            ],
+            "reason_code": "HTTP_NETWORK_CALL_CONTEXT",
+            "source": "smali/sg/vantagepoint/mstgkotlin/RegisterActivity$onCreate$2.smali",
+            "source_evidence_refs": [
+              "static_evidence_48f9a01929283d0867589d72"
+            ],
+            "standards": {
+              "mastg_test_refs": [],
+              "masvs_category": "MASVS-NETWORK",
+              "masvs_control_refs": [
+                "MASVS-NETWORK-1"
+              ],
+              "maswe_refs": []
+            }
+          }
+        ],
+        "supporting_provenance_refs": [
+          "static_control_evidence_2d555f5c833339fc0ddc461a"
+        ],
+        "title": "HTTP Endpoint Used by Networking Code"
+      }
+    ],
+    "indicators": [
+      {
+        "classification": "indicator",
+        "component": "network_urls",
+        "evidence_tier": "indicator",
+        "evidence_type": "static_string",
+        "finding_type": "http_string",
+        "observed_value": "http://127.0.0.1/",
+        "provenance_refs": [
+          "static_control_evidence_ff039f83fdf9ec3026f08498"
+        ],
+        "reason_code": "HTTP_STRING_ONLY",
+        "source": "smali/sg/vantagepoint/mstgkotlin/RegisterActivity$onCreate$2.smali"
+      },
+      {
+        "classification": "indicator",
+        "component": "uses-permission",
+        "control_id": "STATIC-PRIVACY-PERMISSION",
+        "evidence_tier": "indicator",
+        "evidence_type": "manifest_attribute",
+        "finding_type": "requested_permission",
+        "observed_value": "android.permission.INTERNET",
+        "provenance_refs": [
+          "static_control_evidence_46be569db9f471c0545c218b"
+        ],
+        "reason_code": "PERMISSION_DECLARATION_ONLY",
+        "source": "AndroidManifest.xml",
+        "standards": {
+          "mastg_test_refs": [],
+          "masvs_category": "MASVS-PRIVACY",
+          "masvs_control_refs": [],
+          "maswe_refs": []
+        }
+      },
+      {
+        "classification": "indicator",
+        "component": "local_file_urls",
+        "evidence_tier": "indicator",
+        "evidence_type": "static_string",
+        "finding_type": "local_file_reference",
+        "observed_value": "file:// reference; content omitted",
+        "provenance_refs": [
+          "static_control_evidence_4a0e493f57636d336be9d091"
+        ],
+        "reason_code": "LOCAL_FILE_STRING_ONLY",
+        "source": "smali/sg/vantagepoint/mstgkotlin/InsecureWebViewActivity.smali"
+      },
+      {
+        "classification": "indicator",
+        "component": "local_file_urls",
+        "evidence_tier": "indicator",
+        "evidence_type": "static_string",
+        "finding_type": "local_file_reference",
+        "observed_value": "file:// reference; content omitted",
+        "provenance_refs": [
+          "static_control_evidence_9d95fafc000c2fcef3ab9abd"
+        ],
+        "reason_code": "LOCAL_FILE_STRING_ONLY",
+        "source": "smali/sg/vantagepoint/mstgkotlin/SecureWebViewActivity.smali"
+      }
+    ],
+    "risk_score": "CRITICAL",
+    "summary": {
+      "critical": 1,
+      "high": 1,
+      "low": 0,
+      "medium": 0,
+      "total": 2
+    }
+  }
+}

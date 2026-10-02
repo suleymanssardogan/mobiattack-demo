@@ -28,6 +28,14 @@ ACTIONS = {
 }
 EXECUTION_STATUSES = frozenset({'completed', 'failed', 'blocked', 'unavailable', 'interrupted'})
 OUTCOMES = frozenset({'validated', 'rejected', 'inconclusive', 'blocked'})
+VALIDATION_REASON_CODES = frozenset({
+    'AUTH_ENFORCEMENT_CONFIRMED', 'MISSING_BASELINE_EVIDENCE', 'MISSING_VARIANT_EVIDENCE',
+    'MISSING_REQUIRED_EVIDENCE', 'MISSING_ENDPOINT_EVIDENCE', 'MISSING_SESSION_EVIDENCE',
+    'MISSING_EXECUTION_EVIDENCE', 'MISSING_COMPARISON_EVIDENCE', 'CROSS_SESSION_EVIDENCE',
+    'CROSS_ENDPOINT_EVIDENCE', 'UNEXPECTED_REQUEST_MUTATION', 'SYNTHETIC_RESPONSE',
+    'INSUFFICIENT_RESPONSE_COMPARISON', 'EXECUTION_NOT_COMPLETED', 'INVALID_EVIDENCE',
+    'ACTION_MISMATCH', 'REFERENCE_MISMATCH', 'UNREDACTED_EVIDENCE',
+})
 EVIDENCE_KINDS = frozenset({'context', 'request', 'response', 'tool', 'runtime', 'control', 'comparison', 'reproduction'})
 _ID = re.compile(r'[A-Za-z0-9_.:-]{1,160}')
 _UNSAFE_TEXT = re.compile(r'https?://|\bcurl\b|\b(?:GET|POST|PUT|PATCH|DELETE)\s+/|\b(?:password|token|cookie|secret|authorization)\s*[:=]', re.I)
@@ -173,8 +181,16 @@ class DynamicValidationResult(StrictContract):
     coverage: str
     created_at: str
     session_id: str | None = None
+    reason_codes: tuple[str, ...] = ()
 
     def __post_init__(self):
+        if not isinstance(self.reason_codes, (tuple, list)) or len(self.reason_codes) > 16 or any(not isinstance(code, str) or code not in VALIDATION_REASON_CODES for code in self.reason_codes):
+            raise ValueError('Invalid validation reason codes')
+        object.__setattr__(self, 'reason_codes', tuple(sorted(set(self.reason_codes))))
+        if 'AUTH_ENFORCEMENT_CONFIRMED' in self.reason_codes and self.outcome != 'validated':
+            raise ValueError('Reason code and outcome mismatch')
+        if self.outcome == 'validated' and set(self.reason_codes) - {'AUTH_ENFORCEMENT_CONFIRMED'}:
+            raise ValueError('Incomplete or invalid evidence cannot be validated')
         _id(self.test_id)
         _endpoint(self.endpoint_context_id)
         _time(self.created_at)
@@ -245,7 +261,7 @@ def validate_execution(request, execution, registry):
         raise ValueError('Invalid tool reference kind')
 
 
-def validate_result(request, execution, result, registry):
+def validate_result(request, execution, result, registry, *, auth_evidence=None):
     """No findings; only explicit controlled behavior evidence can be validated."""
     validate_execution(request, execution, registry)
     if (result.test_id, result.endpoint_context_id, result.session_id) != (
@@ -262,3 +278,11 @@ def validate_result(request, execution, result, registry):
             raise ValueError('Tool output or changed response alone is insufficient')
         if not {execution.observed_request_ref, execution.observed_response_ref}.issubset(result.evidence_refs):
             raise ValueError('Validation must cite this execution observations')
+
+    if request.test_category == 'authentication_presence' and result.outcome in {'validated', 'rejected'}:
+        from src.dynamic.security.validation import inspect_auth_presence
+        inspection = inspect_auth_presence(request, execution, registry, auth_evidence)
+        if inspection.code != 'AUTH_ENFORCEMENT_CONFIRMED' or result.outcome != 'validated':
+            raise ValueError(inspection.code)
+        if result.reason_codes != ('AUTH_ENFORCEMENT_CONFIRMED',) or not inspection.refs.issubset(result.evidence_refs):
+            raise ValueError('MISSING_REQUIRED_EVIDENCE')

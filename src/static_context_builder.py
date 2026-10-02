@@ -100,12 +100,16 @@ def build_static_context(
         "app": {
             "package_name": manifest_data["package_name"],
             "launcher_activity": manifest_data["launcher_activity"],
+            "launcher_target_activity": manifest_data.get("launcher_target_activity"),
+            "launcher_status": manifest_data.get("launcher_status"),
         },
+        "manifest": manifest_data,
         "permissions": manifest_data["permissions"],
         "activities": manifest_data["activities"],
         "structure": structure_data,
         "network_indicators": network_indicators,
         "api_candidates": api_data["api_candidates"],
+        "api_discovery": api_data.get("discovery_diagnostics", {}),
     }
 
 

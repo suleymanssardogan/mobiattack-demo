@@ -1,0 +1,729 @@
+{
+  "AntennaPod": {
+    "audit_skipped_files": 0,
+    "candidate_identity_fields": [],
+    "candidate_missing_provenance": 0,
+    "candidates_by_framework": {},
+    "canonical_candidates": 0,
+    "framework_signals": {
+      "Fuel": {
+        "app_owned_invoke_lines": 0,
+        "files": 0,
+        "invoke_lines": 0,
+        "samples": [],
+        "string_marker_files": 0
+      },
+      "HttpURLConnection": {
+        "app_owned_invoke_lines": 0,
+        "files": 7,
+        "invoke_lines": 45,
+        "samples": [
+          {
+            "invoke_line": 301,
+            "source_file": "smali/androidx/media3/datasource/DefaultHttpDataSource.smali"
+          },
+          {
+            "invoke_line": null,
+            "source_file": "smali/com/bumptech/glide/load/data/HttpUrlFetcher$DefaultHttpUrlConnectionFactory.smali"
+          },
+          {
+            "invoke_line": null,
+            "source_file": "smali/com/bumptech/glide/load/data/HttpUrlFetcher$HttpUrlConnectionFactory.smali"
+          }
+        ],
+        "string_marker_files": 0
+      },
+      "Ktor": {
+        "app_owned_invoke_lines": 0,
+        "files": 0,
+        "invoke_lines": 0,
+        "samples": [],
+        "string_marker_files": 0
+      },
+      "OkHttp": {
+        "app_owned_invoke_lines": 428,
+        "files": 300,
+        "invoke_lines": 3799,
+        "samples": [
+          {
+            "invoke_line": 61,
+            "source_file": "smali/com/bumptech/glide/integration/okhttp3/OkHttpStreamFetcher.smali"
+          },
+          {
+            "invoke_line": 33,
+            "source_file": "smali/com/bumptech/glide/integration/okhttp3/OkHttpUrlLoader$Factory.smali"
+          },
+          {
+            "invoke_line": 46,
+            "source_file": "smali/com/bumptech/glide/integration/okhttp3/OkHttpUrlLoader.smali"
+          }
+        ],
+        "string_marker_files": 0
+      },
+      "Raw socket": {
+        "app_owned_invoke_lines": 6,
+        "files": 14,
+        "invoke_lines": 58,
+        "samples": [
+          {
+            "invoke_line": 125,
+            "source_file": "smali/androidx/media3/datasource/UdpDataSource.smali"
+          },
+          {
+            "invoke_line": 134,
+            "source_file": "smali_classes2/de/danoeh/antennapod/net/ssl/AntennaPodSslSocketFactory.smali"
+          },
+          {
+            "invoke_line": 569,
+            "source_file": "smali_classes4/okhttp3/internal/Util.smali"
+          }
+        ],
+        "string_marker_files": 0
+      },
+      "Retrofit": {
+        "app_owned_invoke_lines": 0,
+        "files": 0,
+        "invoke_lines": 0,
+        "samples": [],
+        "string_marker_files": 0
+      },
+      "Volley": {
+        "app_owned_invoke_lines": 0,
+        "files": 0,
+        "invoke_lines": 0,
+        "samples": [],
+        "string_marker_files": 0
+      },
+      "WebView": {
+        "app_owned_invoke_lines": 16,
+        "files": 6,
+        "invoke_lines": 23,
+        "samples": [
+          {
+            "invoke_line": 28,
+            "source_file": "smali/androidx/media3/ui/WebViewSubtitleOutput$1.smali"
+          },
+          {
+            "invoke_line": 83,
+            "source_file": "smali/androidx/media3/ui/WebViewSubtitleOutput.smali"
+          },
+          {
+            "invoke_line": 884,
+            "source_file": "smali_classes3/de/danoeh/antennapod/ui/screen/episode/ItemFragment.smali"
+          }
+        ],
+        "string_marker_files": 0
+      }
+    },
+    "native_signals": {
+      "library_load_calls": 1,
+      "native_methods": 8,
+      "shared_libraries": 4
+    },
+    "package": "de.danoeh.antennapod",
+    "retrofit_declarations": 0,
+    "retrofit_skipped_files": 0,
+    "retrofit_unbound_declarations": 0,
+    "retrofit_unresolved_flow_reasons": {},
+    "signals_are_not_runtime_confirmation": true,
+    "unresolved_candidates": 0
+  },
+  "Damn Vulnerable Bank": {
+    "audit_skipped_files": 0,
+    "candidate_identity_fields": [],
+    "candidate_missing_provenance": 0,
+    "candidates_by_framework": {},
+    "canonical_candidates": 0,
+    "framework_signals": {
+      "Fuel": {
+        "app_owned_invoke_lines": 0,
+        "files": 0,
+        "invoke_lines": 0,
+        "samples": [],
+        "string_marker_files": 0
+      },
+      "HttpURLConnection": {
+        "app_owned_invoke_lines": 0,
+        "files": 2,
+        "invoke_lines": 32,
+        "samples": [
+          {
+            "invoke_line": 27,
+            "source_file": "smali/c/a/b/w/f$a.smali"
+          },
+          {
+            "invoke_line": 50,
+            "source_file": "smali/c/a/b/w/f.smali"
+          }
+        ],
+        "string_marker_files": 0
+      },
+      "Ktor": {
+        "app_owned_invoke_lines": 0,
+        "files": 0,
+        "invoke_lines": 0,
+        "samples": [],
+        "string_marker_files": 0
+      },
+      "OkHttp": {
+        "app_owned_invoke_lines": 0,
+        "files": 0,
+        "invoke_lines": 0,
+        "samples": [],
+        "string_marker_files": 0
+      },
+      "Raw socket": {
+        "app_owned_invoke_lines": 0,
+        "files": 0,
+        "invoke_lines": 0,
+        "samples": [],
+        "string_marker_files": 0
+      },
+      "Retrofit": {
+        "app_owned_invoke_lines": 0,
+        "files": 0,
+        "invoke_lines": 0,
+        "samples": [],
+        "string_marker_files": 0
+      },
+      "Volley": {
+        "app_owned_invoke_lines": 0,
+        "files": 0,
+        "invoke_lines": 0,
+        "samples": [],
+        "string_marker_files": 4
+      },
+      "WebView": {
+        "app_owned_invoke_lines": 7,
+        "files": 2,
+        "invoke_lines": 7,
+        "samples": [
+          {
+            "invoke_line": null,
+            "source_file": "smali/c/b/a/x.smali"
+          },
+          {
+            "invoke_line": 50,
+            "source_file": "smali/com/app/damnvulnerablebank/CurrencyRates.smali"
+          }
+        ],
+        "string_marker_files": 0
+      }
+    },
+    "native_signals": {
+      "library_load_calls": 1,
+      "native_methods": 1,
+      "shared_libraries": 8
+    },
+    "package": "com.app.damnvulnerablebank",
+    "retrofit_declarations": 0,
+    "retrofit_skipped_files": 0,
+    "retrofit_unbound_declarations": 0,
+    "retrofit_unresolved_flow_reasons": {},
+    "signals_are_not_runtime_confirmation": true,
+    "unresolved_candidates": 0
+  },
+  "Flashlight": {
+    "audit_skipped_files": 0,
+    "candidate_identity_fields": [],
+    "candidate_missing_provenance": 0,
+    "candidates_by_framework": {},
+    "canonical_candidates": 0,
+    "framework_signals": {
+      "Fuel": {
+        "app_owned_invoke_lines": 0,
+        "files": 0,
+        "invoke_lines": 0,
+        "samples": [],
+        "string_marker_files": 0
+      },
+      "HttpURLConnection": {
+        "app_owned_invoke_lines": 0,
+        "files": 3,
+        "invoke_lines": 11,
+        "samples": [
+          {
+            "invoke_line": 1315,
+            "source_file": "smali/h3.smali"
+          },
+          {
+            "invoke_line": 1868,
+            "source_file": "smali/kd.smali"
+          },
+          {
+            "invoke_line": 7267,
+            "source_file": "smali/nm.smali"
+          }
+        ],
+        "string_marker_files": 0
+      },
+      "Ktor": {
+        "app_owned_invoke_lines": 0,
+        "files": 0,
+        "invoke_lines": 0,
+        "samples": [],
+        "string_marker_files": 0
+      },
+      "OkHttp": {
+        "app_owned_invoke_lines": 0,
+        "files": 0,
+        "invoke_lines": 0,
+        "samples": [],
+        "string_marker_files": 0
+      },
+      "Raw socket": {
+        "app_owned_invoke_lines": 0,
+        "files": 0,
+        "invoke_lines": 0,
+        "samples": [],
+        "string_marker_files": 0
+      },
+      "Retrofit": {
+        "app_owned_invoke_lines": 0,
+        "files": 0,
+        "invoke_lines": 0,
+        "samples": [],
+        "string_marker_files": 0
+      },
+      "Volley": {
+        "app_owned_invoke_lines": 0,
+        "files": 0,
+        "invoke_lines": 0,
+        "samples": [],
+        "string_marker_files": 0
+      },
+      "WebView": {
+        "app_owned_invoke_lines": 0,
+        "files": 5,
+        "invoke_lines": 11,
+        "samples": [
+          {
+            "invoke_line": 68,
+            "source_file": "smali/e0.smali"
+          },
+          {
+            "invoke_line": 23,
+            "source_file": "smali/hq.smali"
+          },
+          {
+            "invoke_line": 266,
+            "source_file": "smali/sn.smali"
+          }
+        ],
+        "string_marker_files": 0
+      }
+    },
+    "native_signals": {
+      "library_load_calls": 0,
+      "native_methods": 0,
+      "shared_libraries": 0
+    },
+    "package": "mobi.freeapps.flashlight.free",
+    "retrofit_declarations": 0,
+    "retrofit_skipped_files": 0,
+    "retrofit_unbound_declarations": 0,
+    "retrofit_unresolved_flow_reasons": {},
+    "signals_are_not_runtime_confirmation": true,
+    "unresolved_candidates": 0
+  },
+  "OWASP MSTG Kotlin": {
+    "audit_skipped_files": 1,
+    "candidate_identity_fields": [
+      "base_url",
+      "candidate_id",
+      "evidence",
+      "framework",
+      "full_url",
+      "method",
+      "path",
+      "request_line",
+      "source_file",
+      "status"
+    ],
+    "candidate_missing_provenance": 0,
+    "candidates_by_framework": {
+      "Fuel": 1
+    },
+    "canonical_candidates": 1,
+    "framework_signals": {
+      "Fuel": {
+        "app_owned_invoke_lines": 7,
+        "files": 120,
+        "invoke_lines": 693,
+        "samples": [
+          {
+            "invoke_line": 63,
+            "source_file": "smali/com/github/kittinunf/fuel/Fuel$Companion$regularMode$1.smali"
+          },
+          {
+            "invoke_line": 63,
+            "source_file": "smali/com/github/kittinunf/fuel/Fuel$Companion$testMode$1.smali"
+          },
+          {
+            "invoke_line": 91,
+            "source_file": "smali/com/github/kittinunf/fuel/Fuel$Companion.smali"
+          }
+        ],
+        "string_marker_files": 0
+      },
+      "HttpURLConnection": {
+        "app_owned_invoke_lines": 0,
+        "files": 3,
+        "invoke_lines": 28,
+        "samples": [
+          {
+            "invoke_line": 96,
+            "source_file": "smali/com/github/kittinunf/fuel/core/FuelManager$hostnameVerifier$2.smali"
+          },
+          {
+            "invoke_line": 157,
+            "source_file": "smali/com/github/kittinunf/fuel/core/FuelManager$socketFactory$2.smali"
+          },
+          {
+            "invoke_line": 182,
+            "source_file": "smali/com/github/kittinunf/fuel/toolbox/HttpClient.smali"
+          }
+        ],
+        "string_marker_files": 0
+      },
+      "Ktor": {
+        "app_owned_invoke_lines": 0,
+        "files": 0,
+        "invoke_lines": 0,
+        "samples": [],
+        "string_marker_files": 0
+      },
+      "OkHttp": {
+        "app_owned_invoke_lines": 0,
+        "files": 0,
+        "invoke_lines": 0,
+        "samples": [],
+        "string_marker_files": 0
+      },
+      "Raw socket": {
+        "app_owned_invoke_lines": 0,
+        "files": 5,
+        "invoke_lines": 15,
+        "samples": [
+          {
+            "invoke_line": 27,
+            "source_file": "smali/android/support/v4/net/DatagramSocketWrapper$DatagramSocketImplWrapper.smali"
+          },
+          {
+            "invoke_line": 28,
+            "source_file": "smali/android/support/v4/net/DatagramSocketWrapper.smali"
+          },
+          {
+            "invoke_line": 43,
+            "source_file": "smali/android/support/v4/net/TrafficStatsCompat$TrafficStatsCompatApi24Impl.smali"
+          }
+        ],
+        "string_marker_files": 0
+      },
+      "Retrofit": {
+        "app_owned_invoke_lines": 0,
+        "files": 0,
+        "invoke_lines": 0,
+        "samples": [],
+        "string_marker_files": 0
+      },
+      "Volley": {
+        "app_owned_invoke_lines": 0,
+        "files": 0,
+        "invoke_lines": 0,
+        "samples": [],
+        "string_marker_files": 0
+      },
+      "WebView": {
+        "app_owned_invoke_lines": 15,
+        "files": 3,
+        "invoke_lines": 16,
+        "samples": [
+          {
+            "invoke_line": 1051,
+            "source_file": "smali/android/support/v4/text/util/LinkifyCompat.smali"
+          },
+          {
+            "invoke_line": 183,
+            "source_file": "smali/sg/vantagepoint/mstgkotlin/InsecureWebViewActivity.smali"
+          },
+          {
+            "invoke_line": 173,
+            "source_file": "smali/sg/vantagepoint/mstgkotlin/SecureWebViewActivity.smali"
+          }
+        ],
+        "string_marker_files": 0
+      }
+    },
+    "native_signals": {
+      "library_load_calls": 0,
+      "native_methods": 0,
+      "shared_libraries": 0
+    },
+    "package": "sg.vantagepoint.mstgkotlin",
+    "retrofit_declarations": 0,
+    "retrofit_skipped_files": 1,
+    "retrofit_unbound_declarations": 0,
+    "retrofit_unresolved_flow_reasons": {},
+    "signals_are_not_runtime_confirmation": true,
+    "unresolved_candidates": 0
+  },
+  "VulnBank": {
+    "audit_skipped_files": 1,
+    "candidate_identity_fields": [],
+    "candidate_missing_provenance": 0,
+    "candidates_by_framework": {},
+    "canonical_candidates": 0,
+    "framework_signals": {
+      "Fuel": {
+        "app_owned_invoke_lines": 0,
+        "files": 0,
+        "invoke_lines": 0,
+        "samples": [],
+        "string_marker_files": 0
+      },
+      "HttpURLConnection": {
+        "app_owned_invoke_lines": 0,
+        "files": 1,
+        "invoke_lines": 13,
+        "samples": [
+          {
+            "invoke_line": 207,
+            "source_file": "smali/com/facebook/imagepipeline/producers/HttpUrlConnectionNetworkFetcher.smali"
+          }
+        ],
+        "string_marker_files": 0
+      },
+      "Ktor": {
+        "app_owned_invoke_lines": 0,
+        "files": 0,
+        "invoke_lines": 0,
+        "samples": [],
+        "string_marker_files": 0
+      },
+      "OkHttp": {
+        "app_owned_invoke_lines": 0,
+        "files": 376,
+        "invoke_lines": 4517,
+        "samples": [
+          {
+            "invoke_line": 82,
+            "source_file": "smali/com/facebook/imagepipeline/backends/okhttp3/OkHttpImagePipelineConfigFactory.smali"
+          },
+          {
+            "invoke_line": 33,
+            "source_file": "smali/com/facebook/imagepipeline/backends/okhttp3/OkHttpNetworkFetcher$fetchWithRequest$1$$ExternalSyntheticLambda0.smali"
+          },
+          {
+            "invoke_line": 47,
+            "source_file": "smali/com/facebook/imagepipeline/backends/okhttp3/OkHttpNetworkFetcher$fetchWithRequest$1.smali"
+          }
+        ],
+        "string_marker_files": 0
+      },
+      "Raw socket": {
+        "app_owned_invoke_lines": 0,
+        "files": 19,
+        "invoke_lines": 71,
+        "samples": [
+          {
+            "invoke_line": 25,
+            "source_file": "smali/androidx/core/net/DatagramSocketWrapper$DatagramSocketImplWrapper.smali"
+          },
+          {
+            "invoke_line": 26,
+            "source_file": "smali/androidx/core/net/DatagramSocketWrapper.smali"
+          },
+          {
+            "invoke_line": 36,
+            "source_file": "smali/androidx/core/net/TrafficStatsCompat$Api24Impl.smali"
+          }
+        ],
+        "string_marker_files": 0
+      },
+      "Retrofit": {
+        "app_owned_invoke_lines": 0,
+        "files": 0,
+        "invoke_lines": 0,
+        "samples": [],
+        "string_marker_files": 0
+      },
+      "Volley": {
+        "app_owned_invoke_lines": 0,
+        "files": 0,
+        "invoke_lines": 0,
+        "samples": [],
+        "string_marker_files": 0
+      },
+      "WebView": {
+        "app_owned_invoke_lines": 0,
+        "files": 1,
+        "invoke_lines": 1,
+        "samples": [
+          {
+            "invoke_line": 740,
+            "source_file": "smali/androidx/core/text/util/LinkifyCompat.smali"
+          }
+        ],
+        "string_marker_files": 0
+      }
+    },
+    "native_signals": {
+      "library_load_calls": 5,
+      "native_methods": 341,
+      "shared_libraries": 40
+    },
+    "package": "com.vulnerablebankapp",
+    "retrofit_declarations": 0,
+    "retrofit_skipped_files": 1,
+    "retrofit_unbound_declarations": 0,
+    "retrofit_unresolved_flow_reasons": {},
+    "signals_are_not_runtime_confirmation": true,
+    "unresolved_candidates": 0
+  },
+  "Wikipedia": {
+    "audit_skipped_files": 0,
+    "candidate_identity_fields": [],
+    "candidate_missing_provenance": 0,
+    "candidates_by_framework": {},
+    "canonical_candidates": 0,
+    "framework_signals": {
+      "Fuel": {
+        "app_owned_invoke_lines": 0,
+        "files": 0,
+        "invoke_lines": 0,
+        "samples": [],
+        "string_marker_files": 0
+      },
+      "HttpURLConnection": {
+        "app_owned_invoke_lines": 0,
+        "files": 3,
+        "invoke_lines": 27,
+        "samples": [
+          {
+            "invoke_line": 200,
+            "source_file": "smali/androidx/activity/OnBackPressedDispatcher$OnBackPressedEventInput$$ExternalSyntheticLambda0.smali"
+          },
+          {
+            "invoke_line": 621,
+            "source_file": "smali/com/google/firebase/installations/FirebaseInstallations.smali"
+          },
+          {
+            "invoke_line": 204,
+            "source_file": "smali/com/google/firebase/installations/remote/FirebaseInstallationServiceClient.smali"
+          }
+        ],
+        "string_marker_files": 0
+      },
+      "Ktor": {
+        "app_owned_invoke_lines": 0,
+        "files": 0,
+        "invoke_lines": 0,
+        "samples": [],
+        "string_marker_files": 0
+      },
+      "OkHttp": {
+        "app_owned_invoke_lines": 3035,
+        "files": 1989,
+        "invoke_lines": 8624,
+        "samples": [
+          {
+            "invoke_line": 165,
+            "source_file": "smali/_COROUTINE/ArtificialStackFramesUnsafe.smali"
+          },
+          {
+            "invoke_line": 638,
+            "source_file": "smali/androidx/activity/ComponentActivity$activityResultRegistry$1.smali"
+          },
+          {
+            "invoke_line": 488,
+            "source_file": "smali/androidx/activity/ComponentActivity.smali"
+          }
+        ],
+        "string_marker_files": 0
+      },
+      "Raw socket": {
+        "app_owned_invoke_lines": 1,
+        "files": 15,
+        "invoke_lines": 57,
+        "samples": [
+          {
+            "invoke_line": 200,
+            "source_file": "smali/okhttp3/internal/_UtilJvmKt.smali"
+          },
+          {
+            "invoke_line": 403,
+            "source_file": "smali/okhttp3/internal/concurrent/TaskQueue$execute$1.smali"
+          },
+          {
+            "invoke_line": 152,
+            "source_file": "smali/okhttp3/internal/connection/ConnectInterceptor.smali"
+          }
+        ],
+        "string_marker_files": 0
+      },
+      "Retrofit": {
+        "app_owned_invoke_lines": 69,
+        "files": 143,
+        "invoke_lines": 517,
+        "samples": [
+          {
+            "invoke_line": 120,
+            "source_file": "smali/androidx/appcompat/widget/ResourceManagerInternal$ColorFilterLruCache.smali"
+          },
+          {
+            "invoke_line": 2658,
+            "source_file": "smali/androidx/cardview/widget/CardView$1.smali"
+          },
+          {
+            "invoke_line": 877,
+            "source_file": "smali/androidx/core/graphics/TypefaceCompat.smali"
+          }
+        ],
+        "string_marker_files": 0
+      },
+      "Volley": {
+        "app_owned_invoke_lines": 0,
+        "files": 0,
+        "invoke_lines": 0,
+        "samples": [],
+        "string_marker_files": 0
+      },
+      "WebView": {
+        "app_owned_invoke_lines": 59,
+        "files": 26,
+        "invoke_lines": 79,
+        "samples": [
+          {
+            "invoke_line": 855,
+            "source_file": "smali/androidx/work/impl/Processor$$ExternalSyntheticLambda2.smali"
+          },
+          {
+            "invoke_line": 747,
+            "source_file": "smali/coil3/ImageLoader$Builder.smali"
+          },
+          {
+            "invoke_line": 1029,
+            "source_file": "smali/coil3/disk/DiskLruCache$$ExternalSyntheticLambda0.smali"
+          }
+        ],
+        "string_marker_files": 0
+      }
+    },
+    "native_signals": {
+      "library_load_calls": 3,
+      "native_methods": 578,
+      "shared_libraries": 0
+    },
+    "package": "org.wikipedia",
+    "retrofit_declarations": 127,
+    "retrofit_skipped_files": 0,
+    "retrofit_unbound_declarations": 127,
+    "retrofit_unresolved_flow_reasons": {
+      "UNSUPPORTED_BRANCH_FLOW": 23,
+      "UNSUPPORTED_FIELD_FLOW": 9
+    },
+    "signals_are_not_runtime_confirmation": true,
+    "unresolved_candidates": 0
+  }
+}

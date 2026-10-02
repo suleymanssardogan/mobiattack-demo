@@ -220,32 +220,15 @@ class TestSplitAcquirer(unittest.TestCase):
             self.assertTrue(c_en["is_valid"])
 
     @patch("src.play_store_acquirer.pull_device_apk")
-    def test_no_filename_collision(self, mock_pull):
-        def fake_pull(adb_bin, serial, remote_path, local_path, timeout_seconds):
-            _create_mock_apk(local_path, has_manifest=True, dex_names=["classes.dex"])
-
-        mock_pull.side_effect = fake_pull
-
-        # Two distinct remote paths with same filename
-        remote_paths = [
-            "/data/app/dir1/split_module.apk",
-            "/data/app/dir2/split_module.apk",
-        ]
-
+    def test_duplicate_filename_rejected_without_partial_artifacts(self, mock_pull):
+        from src.play_store_acquirer import PlayStoreAcquisitionError
         with tempfile.TemporaryDirectory() as tmpdir:
-            out_root = Path(tmpdir)
-            result = acquire_split_package_set(
-                package_name="com.example.collision",
-                output_dir=out_root,
-                serial="127.0.0.1:5555",
-                adb_bin="adb",
-                remote_paths=remote_paths,
-            )
-            filenames = [c["filename"] for c in result["components"]]
-            self.assertEqual(len(filenames), 2)
-            self.assertEqual(len(set(filenames)), 2, "All local filenames must be distinct without collision")
-            self.assertIn("split_module.apk", filenames)
-            self.assertIn("split_module_1.apk", filenames)
+            with self.assertRaises(PlayStoreAcquisitionError) as error:
+                acquire_split_package_set('com.example.collision', tmpdir, 'device', adb_bin='adb',
+                    remote_paths=['/data/app/one/split_module.apk', '/data/app/two/split_module.apk'])
+            self.assertEqual(error.exception.reason_code, 'SPLIT_SET_INCOMPLETE')
+            self.assertFalse((Path(tmpdir)/'package_set').exists())
+            mock_pull.assert_not_called()
 
     @patch("src.play_store_acquirer.pull_device_apk")
     def test_malformed_apk_in_package_set_raises_error(self, mock_pull):

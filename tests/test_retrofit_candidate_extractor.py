@@ -47,7 +47,8 @@ def test_supported_methods_structural_binding_and_provenance(tmp_path, method):
     candidate = candidates[0]
     assert candidate["method"] == method
     assert candidate["framework"] == "Retrofit"
-    assert candidate["path"] == "orders/{id}"
+    assert candidate["path"] == "/v1/orders/{id}"
+    assert candidate["provenance"][0]["extractor_identity"]["path"] == "orders/{id}"
     assert candidate["full_url"] == "https://api.example.com/v1/orders/{id}"
     assert candidate["source_file"] == "Orders.smali"
     assert candidate["request_line"] == 4

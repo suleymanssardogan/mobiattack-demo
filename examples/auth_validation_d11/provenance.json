@@ -1,0 +1,11 @@
+{
+  "additional_requests_sent": false,
+  "baseline_source": "examples/auth_lab_d10_2",
+  "execution_result_ref": "execution_e9edff7b2cdcd2b6e8e6",
+  "finding_generated": false,
+  "reason_codes": [
+    "AUTH_ENFORCEMENT_CONFIRMED"
+  ],
+  "source_case": "examples/auth_presence_d10_3",
+  "validation_mode": "offline_evidence_revalidation"
+}

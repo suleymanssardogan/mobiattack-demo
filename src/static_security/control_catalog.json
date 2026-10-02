@@ -1,0 +1,397 @@
+{
+  "schema_version": "1.0",
+  "catalog_version": "static_controls_v1",
+  "controls": [
+    {
+      "control_id": "STATIC-AUTH-SIGNAL",
+      "title": "Static authentication signals",
+      "masvs_category": "MASVS-AUTH",
+      "standards": {
+        "masvs_category": "MASVS-AUTH",
+        "masvs_control_refs": [],
+        "maswe_refs": [],
+        "mastg_test_refs": []
+      },
+      "official_sources": [
+        "https://mas.owasp.org/MASVS/"
+      ],
+      "evidence_requirements": [
+        "code_call"
+      ],
+      "finding_eligibility_rule": "never",
+      "default_severity_guidance": null,
+      "reason_code": "AUTH_BEHAVIOR_NOT_EVALUATED",
+      "remediation_template": "Verify authentication and authorization using appropriate behavioral evidence.",
+      "analysis_type": "static",
+      "coverage_state": "unsupported",
+      "coverage_reason": "No deterministic static authentication bypass evaluator."
+    },
+    {
+      "control_id": "STATIC-CODE-DEBUG",
+      "title": "Debuggable application",
+      "masvs_category": "MASVS-CODE",
+      "standards": {
+        "masvs_category": "MASVS-CODE",
+        "masvs_control_refs": [],
+        "maswe_refs": [],
+        "mastg_test_refs": []
+      },
+      "official_sources": [
+        "https://mas.owasp.org/MASVS/"
+      ],
+      "evidence_requirements": [
+        "manifest_attribute"
+      ],
+      "finding_eligibility_rule": "explicit_debuggable",
+      "default_severity_guidance": "CRITICAL",
+      "reason_code": "MANIFEST_DEBUGGABLE_TRUE",
+      "remediation_template": "Disable android:debuggable in release builds.",
+      "analysis_type": "static",
+      "coverage_state": "supported",
+      "coverage_reason": "Explicit packaged manifest attribute supported; unresolved resources not guessed."
+    },
+    {
+      "control_id": "STATIC-CODE-DEV",
+      "title": "Development and test artifacts",
+      "masvs_category": "MASVS-CODE",
+      "standards": {
+        "masvs_category": "MASVS-CODE",
+        "masvs_control_refs": [],
+        "maswe_refs": [],
+        "mastg_test_refs": []
+      },
+      "official_sources": [
+        "https://mas.owasp.org/MASVS/"
+      ],
+      "evidence_requirements": [
+        "code_call"
+      ],
+      "finding_eligibility_rule": "never",
+      "default_severity_guidance": null,
+      "reason_code": "DEVELOPMENT_CONTEXT_NOT_EVALUATED",
+      "remediation_template": "Remove verified development-only functionality from release builds.",
+      "analysis_type": "static",
+      "coverage_state": "unsupported",
+      "coverage_reason": "Artifact names alone do not prove unsafe release configuration."
+    },
+    {
+      "control_id": "STATIC-CRYPTO-KEY",
+      "title": "Hardcoded cryptographic key",
+      "masvs_category": "MASVS-CRYPTO",
+      "standards": {
+        "masvs_category": "MASVS-CRYPTO",
+        "masvs_control_refs": [],
+        "maswe_refs": [],
+        "mastg_test_refs": []
+      },
+      "official_sources": [
+        "https://mas.owasp.org/MASVS/"
+      ],
+      "evidence_requirements": [
+        "code_call"
+      ],
+      "finding_eligibility_rule": "never",
+      "default_severity_guidance": null,
+      "reason_code": "CRYPTO_KEY_FLOW_NOT_EVALUATED",
+      "remediation_template": "Protect verified cryptographic keys with platform key storage.",
+      "analysis_type": "static",
+      "coverage_state": "unsupported",
+      "coverage_reason": "No structural key-to-crypto-call evidence evaluator; strings are insufficient."
+    },
+    {
+      "control_id": "STATIC-CRYPTO-WEAK",
+      "title": "Weak cryptographic usage",
+      "masvs_category": "MASVS-CRYPTO",
+      "standards": {
+        "masvs_category": "MASVS-CRYPTO",
+        "masvs_control_refs": [],
+        "maswe_refs": [],
+        "mastg_test_refs": []
+      },
+      "official_sources": [
+        "https://mas.owasp.org/MASVS/"
+      ],
+      "evidence_requirements": [
+        "code_call"
+      ],
+      "finding_eligibility_rule": "never",
+      "default_severity_guidance": null,
+      "reason_code": "CRYPTO_CALL_CONTEXT_NOT_EVALUATED",
+      "remediation_template": "Use suitable modern algorithms for the verified cryptographic purpose.",
+      "analysis_type": "static",
+      "coverage_state": "unsupported",
+      "coverage_reason": "No exact crypto call/context evaluator; algorithm names alone are insufficient."
+    },
+    {
+      "control_id": "STATIC-NET-CLEARTEXT",
+      "title": "Cleartext traffic policy",
+      "masvs_category": "MASVS-NETWORK",
+      "standards": {
+        "masvs_category": "MASVS-NETWORK",
+        "masvs_control_refs": [
+          "MASVS-NETWORK-1"
+        ],
+        "maswe_refs": [],
+        "mastg_test_refs": []
+      },
+      "official_sources": [
+        "https://mas.owasp.org/MASVS/",
+        "https://mas.owasp.org/MASVS/controls/MASVS-NETWORK-1/"
+      ],
+      "evidence_requirements": [
+        "manifest_attribute",
+        "network_security_configuration"
+      ],
+      "finding_eligibility_rule": "explicit_cleartext_policy",
+      "default_severity_guidance": "HIGH",
+      "reason_code": "MANIFEST_CLEARTEXT_ALLOWED",
+      "remediation_template": "Require HTTPS and disable cleartext traffic.",
+      "analysis_type": "static",
+      "coverage_state": "supported",
+      "coverage_reason": "Explicit manifest or resolved network security configuration only."
+    },
+    {
+      "control_id": "STATIC-NET-CONFIG",
+      "title": "Network security configuration review",
+      "masvs_category": "MASVS-NETWORK",
+      "standards": {
+        "masvs_category": "MASVS-NETWORK",
+        "masvs_control_refs": [],
+        "maswe_refs": [],
+        "mastg_test_refs": []
+      },
+      "official_sources": [
+        "https://mas.owasp.org/MASVS/"
+      ],
+      "evidence_requirements": [
+        "manifest_attribute"
+      ],
+      "finding_eligibility_rule": "never",
+      "default_severity_guidance": null,
+      "reason_code": "NETWORK_CONFIG_REQUIRES_REVIEW",
+      "remediation_template": "Resolve and review the referenced network security configuration.",
+      "analysis_type": "static",
+      "coverage_state": "partial",
+      "coverage_reason": "Resolved cleartext policies supported; unresolved policies require review."
+    },
+    {
+      "control_id": "STATIC-NET-HTTP-CALL",
+      "title": "Proven HTTP networking call",
+      "masvs_category": "MASVS-NETWORK",
+      "standards": {
+        "masvs_category": "MASVS-NETWORK",
+        "masvs_control_refs": [
+          "MASVS-NETWORK-1"
+        ],
+        "maswe_refs": [],
+        "mastg_test_refs": []
+      },
+      "official_sources": [
+        "https://mas.owasp.org/MASVS/",
+        "https://mas.owasp.org/MASVS/controls/MASVS-NETWORK-1/"
+      ],
+      "evidence_requirements": [
+        "static_network_call"
+      ],
+      "finding_eligibility_rule": "proven_http_call",
+      "default_severity_guidance": "HIGH",
+      "reason_code": "HTTP_NETWORK_CALL_CONTEXT",
+      "remediation_template": "Use HTTPS and verify server TLS support.",
+      "analysis_type": "static",
+      "coverage_state": "partial",
+      "coverage_reason": "Direct canonical call provenance supported; runtime use and sensitive data remain unknown."
+    },
+    {
+      "control_id": "STATIC-PLATFORM-DEEPLINK",
+      "title": "Deep-link and intent-filter exposure",
+      "masvs_category": "MASVS-PLATFORM",
+      "standards": {
+        "masvs_category": "MASVS-PLATFORM",
+        "masvs_control_refs": [],
+        "maswe_refs": [],
+        "mastg_test_refs": []
+      },
+      "official_sources": [
+        "https://mas.owasp.org/MASVS/"
+      ],
+      "evidence_requirements": [
+        "manifest_component"
+      ],
+      "finding_eligibility_rule": "never",
+      "default_severity_guidance": null,
+      "reason_code": "DEEPLINK_USAGE_NOT_EVALUATED",
+      "remediation_template": "Validate deep-link routing and caller trust.",
+      "analysis_type": "static",
+      "coverage_state": "partial",
+      "coverage_reason": "Manifest intent filters available; unsafe routing/data flow not evaluated."
+    },
+    {
+      "control_id": "STATIC-PLATFORM-EXPORT",
+      "title": "Unprotected exported component",
+      "masvs_category": "MASVS-PLATFORM",
+      "standards": {
+        "masvs_category": "MASVS-PLATFORM",
+        "masvs_control_refs": [],
+        "maswe_refs": [],
+        "mastg_test_refs": []
+      },
+      "official_sources": [
+        "https://mas.owasp.org/MASVS/"
+      ],
+      "evidence_requirements": [
+        "manifest_component"
+      ],
+      "finding_eligibility_rule": "never",
+      "default_severity_guidance": null,
+      "reason_code": "EXPORTED_COMPONENT_REQUIRES_USAGE_REVIEW",
+      "remediation_template": "Review component access and protect sensitive operations with permissions.",
+      "analysis_type": "static",
+      "coverage_state": "partial",
+      "coverage_reason": "Manifest exposure supported; usage and permission enforcement not proven."
+    },
+    {
+      "control_id": "STATIC-PLATFORM-WEBVIEW",
+      "title": "WebView security configuration",
+      "masvs_category": "MASVS-PLATFORM",
+      "standards": {
+        "masvs_category": "MASVS-PLATFORM",
+        "masvs_control_refs": [],
+        "maswe_refs": [],
+        "mastg_test_refs": []
+      },
+      "official_sources": [
+        "https://mas.owasp.org/MASVS/"
+      ],
+      "evidence_requirements": [
+        "code_call"
+      ],
+      "finding_eligibility_rule": "never",
+      "default_severity_guidance": null,
+      "reason_code": "WEBVIEW_CONFIGURATION_NOT_EVALUATED",
+      "remediation_template": "Review exact WebView configuration with content trust context.",
+      "analysis_type": "static",
+      "coverage_state": "unsupported",
+      "coverage_reason": "No deterministic WebView security call/configuration evaluator."
+    },
+    {
+      "control_id": "STATIC-PRIVACY-EXPOSURE",
+      "title": "Sensitive-data exposure",
+      "masvs_category": "MASVS-PRIVACY",
+      "standards": {
+        "masvs_category": "MASVS-PRIVACY",
+        "masvs_control_refs": [],
+        "maswe_refs": [],
+        "mastg_test_refs": []
+      },
+      "official_sources": [
+        "https://mas.owasp.org/MASVS/"
+      ],
+      "evidence_requirements": [
+        "code_call"
+      ],
+      "finding_eligibility_rule": "never",
+      "default_severity_guidance": null,
+      "reason_code": "PRIVACY_DATA_FLOW_NOT_EVALUATED",
+      "remediation_template": "Reduce verified sensitive-data collection and exposure.",
+      "analysis_type": "static",
+      "coverage_state": "unsupported",
+      "coverage_reason": "No deterministic sensitive-data exposure flow evaluator; names are insufficient."
+    },
+    {
+      "control_id": "STATIC-PRIVACY-PERMISSION",
+      "title": "Requested permission review",
+      "masvs_category": "MASVS-PRIVACY",
+      "standards": {
+        "masvs_category": "MASVS-PRIVACY",
+        "masvs_control_refs": [],
+        "maswe_refs": [],
+        "mastg_test_refs": []
+      },
+      "official_sources": [
+        "https://mas.owasp.org/MASVS/"
+      ],
+      "evidence_requirements": [
+        "manifest_attribute"
+      ],
+      "finding_eligibility_rule": "never",
+      "default_severity_guidance": null,
+      "reason_code": "PERMISSION_DECLARATION_ONLY",
+      "remediation_template": "Minimize permissions based on verified application data use.",
+      "analysis_type": "static",
+      "coverage_state": "partial",
+      "coverage_reason": "Requested permissions supported as indicators; data use/exposure not proven."
+    },
+    {
+      "control_id": "STATIC-RESILIENCE-ROOT",
+      "title": "Root binary reference",
+      "masvs_category": "MASVS-RESILIENCE",
+      "standards": {
+        "masvs_category": "MASVS-RESILIENCE",
+        "masvs_control_refs": [],
+        "maswe_refs": [],
+        "mastg_test_refs": []
+      },
+      "official_sources": [
+        "https://mas.owasp.org/MASVS/"
+      ],
+      "evidence_requirements": [
+        "static_string"
+      ],
+      "finding_eligibility_rule": "never",
+      "default_severity_guidance": null,
+      "reason_code": "EXACT_ROOT_BINARY_PATH",
+      "remediation_template": "Review actual resilience checks and threat model; presence is not protection.",
+      "analysis_type": "static",
+      "coverage_state": "partial",
+      "coverage_reason": "Exact root binary strings supported as candidates; actual checks not proven."
+    },
+    {
+      "control_id": "STATIC-STORAGE-API",
+      "title": "Insecure storage API usage",
+      "masvs_category": "MASVS-STORAGE",
+      "standards": {
+        "masvs_category": "MASVS-STORAGE",
+        "masvs_control_refs": [],
+        "maswe_refs": [],
+        "mastg_test_refs": []
+      },
+      "official_sources": [
+        "https://mas.owasp.org/MASVS/"
+      ],
+      "evidence_requirements": [
+        "code_call"
+      ],
+      "finding_eligibility_rule": "never",
+      "default_severity_guidance": null,
+      "reason_code": "STORAGE_DATA_FLOW_NOT_EVALUATED",
+      "remediation_template": "Use private storage with protections appropriate to verified sensitive data.",
+      "analysis_type": "static",
+      "coverage_state": "unsupported",
+      "coverage_reason": "No exact storage call plus sensitive-data flow evaluator."
+    },
+    {
+      "control_id": "STATIC-STORAGE-BACKUP",
+      "title": "Backup exposure review",
+      "masvs_category": "MASVS-STORAGE",
+      "standards": {
+        "masvs_category": "MASVS-STORAGE",
+        "masvs_control_refs": [],
+        "maswe_refs": [],
+        "mastg_test_refs": []
+      },
+      "official_sources": [
+        "https://mas.owasp.org/MASVS/"
+      ],
+      "evidence_requirements": [
+        "manifest_attribute"
+      ],
+      "finding_eligibility_rule": "never",
+      "default_severity_guidance": null,
+      "reason_code": "BACKUP_ENABLED_DATA_SCOPE_UNKNOWN",
+      "remediation_template": "Review sensitive data scope and backup exclusions.",
+      "analysis_type": "static",
+      "coverage_state": "partial",
+      "coverage_reason": "Backup flag supported; sensitive data scope/exclusion unknown."
+    }
+  ]
+}
