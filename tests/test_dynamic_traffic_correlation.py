@@ -145,7 +145,7 @@ class TestDynamicTrafficCorrelation(unittest.TestCase):
         with patch("src.dynamic.ui.observer.observe_screen", side_effect=[obs1, obs2]), \
              patch("src.dynamic.action.executor.ActionExecutor.click", return_value=_make_action_result("act_1", success=True)), \
              patch("src.dynamic.runtime.observer.AndroidRuntimeObserver.observe", return_value=RuntimeSnapshot(package_name=self.pkg, pid=1001, process_running=True)), \
-             patch("src.dynamic.traffic.service.DynamicTrafficService.check_readiness", return_value=ProxyReadinessResult(backend_available=True, adb_available=True, status=TrafficReadinessStatus.PASS)), \
+             patch("src.dynamic.traffic.service.DynamicTrafficService.check_readiness", return_value=ProxyReadinessResult(backend_available=True, adb_available=True, port_available=True, status=TrafficReadinessStatus.PASS)), \
              patch("src.dynamic.traffic.service.DynamicTrafficService.start_capture") as mock_start, \
              patch("src.dynamic.traffic.service.DynamicTrafficService.stop_capture", return_value=CaptureSummary(total_transactions=0)):
             _wire_dynamic_exploration(self.base_dir, package_name=self.pkg, limits=ExplorationLimits(max_steps=1))
@@ -175,7 +175,7 @@ class TestDynamicTrafficCorrelation(unittest.TestCase):
         with patch("src.dynamic.ui.observer.observe_screen", side_effect=[obs1, obs2]), \
              patch("src.dynamic.action.executor.ActionExecutor.click", return_value=_make_action_result("act_1", success=True)), \
              patch("src.dynamic.runtime.observer.AndroidRuntimeObserver.observe", return_value=RuntimeSnapshot(package_name=self.pkg, pid=1001, process_running=True)), \
-             patch("src.dynamic.traffic.service.DynamicTrafficService.check_readiness", return_value=ProxyReadinessResult(backend_available=True, adb_available=True, status=TrafficReadinessStatus.PASS)), \
+             patch("src.dynamic.traffic.service.DynamicTrafficService.check_readiness", return_value=ProxyReadinessResult(backend_available=True, adb_available=True, port_available=True, status=TrafficReadinessStatus.PASS)), \
              patch("src.dynamic.traffic.service.DynamicTrafficService.start_capture"), \
              patch("src.dynamic.traffic.service.DynamicTrafficService.stop_capture", return_value=CaptureSummary(total_transactions=0)) as mock_stop:
             _wire_dynamic_exploration(self.base_dir, package_name=self.pkg, limits=ExplorationLimits(max_steps=1))
@@ -200,7 +200,7 @@ class TestDynamicTrafficCorrelation(unittest.TestCase):
         }))
 
         with patch("src.dynamic.ui.observer.observe_screen", side_effect=RuntimeError("Simulated loop crash")), \
-             patch("src.dynamic.traffic.service.DynamicTrafficService.check_readiness", return_value=ProxyReadinessResult(backend_available=True, adb_available=True, status=TrafficReadinessStatus.PASS)), \
+             patch("src.dynamic.traffic.service.DynamicTrafficService.check_readiness", return_value=ProxyReadinessResult(backend_available=True, adb_available=True, port_available=True, status=TrafficReadinessStatus.PASS)), \
              patch("src.dynamic.traffic.service.DynamicTrafficService.start_capture"), \
              patch("src.dynamic.traffic.service.DynamicTrafficService.stop_capture", return_value=CaptureSummary(total_transactions=0)) as mock_stop:
             try:
@@ -219,13 +219,15 @@ class TestDynamicTrafficCorrelation(unittest.TestCase):
         mock_adb.side_effect = [
             (0, "192.168.1.1:8080", ""),
             (0, "", ""),
+            (0, "10.0.2.2:8080", ""),
             (0, "", ""),
+            (0, "192.168.1.1:8080", ""),
         ]
         mgr = DeviceProxyManager(adb_bin="/mock/adb", serial="dev-1", proxy_host="10.0.2.2", proxy_port=8080)
         mgr.apply_proxy()
         restored = mgr.restore_proxy()
         self.assertTrue(restored)
-        last_call_cmd = mock_adb.call_args_list[-1][0][1]
+        last_call_cmd = mock_adb.call_args_list[-2][0][1]
         self.assertIn("192.168.1.1:8080", last_call_cmd)
 
     # 5. PASS preflight permits traffic start
@@ -247,7 +249,7 @@ class TestDynamicTrafficCorrelation(unittest.TestCase):
 
         obs1 = self._create_mock_observation("screen_1")
         with patch("src.dynamic.ui.observer.observe_screen", return_value=obs1), \
-             patch("src.dynamic.traffic.service.DynamicTrafficService.check_readiness", return_value=ProxyReadinessResult(backend_available=True, adb_available=True, status=TrafficReadinessStatus.PASS)), \
+             patch("src.dynamic.traffic.service.DynamicTrafficService.check_readiness", return_value=ProxyReadinessResult(backend_available=True, adb_available=True, port_available=True, status=TrafficReadinessStatus.PASS)), \
              patch("src.dynamic.traffic.service.DynamicTrafficService.start_capture") as mock_start, \
              patch("src.dynamic.traffic.service.DynamicTrafficService.stop_capture", return_value=CaptureSummary(total_transactions=0)):
             _wire_dynamic_exploration(self.base_dir, package_name=self.pkg, limits=ExplorationLimits(max_steps=0))
@@ -275,7 +277,7 @@ class TestDynamicTrafficCorrelation(unittest.TestCase):
     def test_07_action_creates_traffic_marker_window(self):
         mock_traffic = MagicMock(spec=DynamicTrafficService)
         mock_traffic.get_current_marker.return_value = 5
-        mock_traffic.get_transactions_since.return_value = [_make_transaction("tx_1")]
+        mock_traffic.wait_transactions_since.return_value = [_make_transaction("tx_1")]
 
         mock_executor = MagicMock(spec=ActionExecutor)
         mock_executor.click.return_value = _make_action_result("act_1", success=True)
@@ -295,14 +297,14 @@ class TestDynamicTrafficCorrelation(unittest.TestCase):
         )
 
         mock_traffic.get_current_marker.assert_called_once()
-        mock_traffic.get_transactions_since.assert_called_once_with(5)
+        mock_traffic.wait_transactions_since.assert_called_once_with(5)
 
     # 8. transaction observed during action window correlated
     def test_08_transaction_observed_during_action_window_correlated(self):
         tx = _make_transaction("tx_abc_123", method="POST", host="api.test.com", path="/login", status_code=200)
         mock_traffic = MagicMock(spec=DynamicTrafficService)
         mock_traffic.get_current_marker.return_value = 0
-        mock_traffic.get_transactions_since.return_value = [tx]
+        mock_traffic.wait_transactions_since.return_value = [tx]
 
         mock_executor = MagicMock(spec=ActionExecutor)
         mock_executor.click.return_value = _make_action_result("act_1", success=True)
@@ -354,7 +356,7 @@ class TestDynamicTrafficCorrelation(unittest.TestCase):
 
         mock_traffic = MagicMock(spec=DynamicTrafficService)
         mock_traffic.get_current_marker.return_value = 0
-        mock_traffic.get_transactions_since.return_value = [tx1, tx2, tx3]
+        mock_traffic.wait_transactions_since.return_value = [tx1, tx2, tx3]
 
         mock_executor = MagicMock(spec=ActionExecutor)
         mock_executor.click.return_value = _make_action_result("act_1", success=True)
@@ -385,7 +387,7 @@ class TestDynamicTrafficCorrelation(unittest.TestCase):
 
         mock_traffic = MagicMock(spec=DynamicTrafficService)
         mock_traffic.get_current_marker.side_effect = [0, 1]
-        mock_traffic.get_transactions_since.side_effect = [[tx1], [tx2]]
+        mock_traffic.wait_transactions_since.side_effect = [[tx1], [tx2]]
 
         mock_executor = MagicMock(spec=ActionExecutor)
         mock_executor.click.side_effect = [
@@ -430,7 +432,7 @@ class TestDynamicTrafficCorrelation(unittest.TestCase):
     def test_14_route_edge_gets_compact_traffic_metadata(self):
         mock_traffic = MagicMock(spec=DynamicTrafficService)
         mock_traffic.get_current_marker.return_value = 0
-        mock_traffic.get_transactions_since.return_value = [_make_transaction("tx_1"), _make_transaction("tx_2")]
+        mock_traffic.wait_transactions_since.return_value = [_make_transaction("tx_1"), _make_transaction("tx_2")]
 
         mock_executor = MagicMock(spec=ActionExecutor)
         mock_executor.click.return_value = _make_action_result("act_1", success=True)
@@ -458,7 +460,7 @@ class TestDynamicTrafficCorrelation(unittest.TestCase):
     def test_15_existing_runtime_metadata_remains_intact(self):
         mock_traffic = MagicMock(spec=DynamicTrafficService)
         mock_traffic.get_current_marker.return_value = 0
-        mock_traffic.get_transactions_since.return_value = [_make_transaction("tx_1")]
+        mock_traffic.wait_transactions_since.return_value = [_make_transaction("tx_1")]
 
         mock_runtime = MagicMock(spec=AndroidRuntimeObserver)
         mock_runtime.observe.side_effect = [
@@ -494,7 +496,7 @@ class TestDynamicTrafficCorrelation(unittest.TestCase):
     def test_16_self_loop_can_have_traffic_metadata(self):
         mock_traffic = MagicMock(spec=DynamicTrafficService)
         mock_traffic.get_current_marker.return_value = 0
-        mock_traffic.get_transactions_since.return_value = [_make_transaction("tx_refresh")]
+        mock_traffic.wait_transactions_since.return_value = [_make_transaction("tx_refresh")]
 
         mock_executor = MagicMock(spec=ActionExecutor)
         mock_executor.click.return_value = _make_action_result("act_1", success=True)
@@ -511,6 +513,7 @@ class TestDynamicTrafficCorrelation(unittest.TestCase):
             initial_observation=obs1,
             traffic_service=mock_traffic,
             traffic_evidence_file=self.evidence_file,
+            no_navigation_postcondition=lambda obs: True,
             limits=ExplorationLimits(max_steps=1),
         )
 
@@ -523,7 +526,7 @@ class TestDynamicTrafficCorrelation(unittest.TestCase):
     def test_17_ui_observation_failure_preserves_traffic_evidence_without_fake_edge(self):
         mock_traffic = MagicMock(spec=DynamicTrafficService)
         mock_traffic.get_current_marker.return_value = 0
-        mock_traffic.get_transactions_since.return_value = [_make_transaction("tx_fail")]
+        mock_traffic.wait_transactions_since.return_value = [_make_transaction("tx_fail")]
 
         mock_executor = MagicMock(spec=ActionExecutor)
         mock_executor.click.return_value = _make_action_result("act_1", success=True)
@@ -682,7 +685,7 @@ class TestDynamicTrafficCorrelation(unittest.TestCase):
 
         mock_traffic = MagicMock(spec=DynamicTrafficService)
         mock_traffic.get_current_marker.return_value = 0
-        mock_traffic.get_transactions_since.return_value = [tx]
+        mock_traffic.wait_transactions_since.return_value = [tx]
 
         mock_executor = MagicMock(spec=ActionExecutor)
         mock_executor.click.return_value = _make_action_result("act_1", success=True)
@@ -714,7 +717,7 @@ class TestDynamicTrafficCorrelation(unittest.TestCase):
         tx = _make_transaction("tx_1", method="POST", host="api.app.com")
         mock_traffic = MagicMock(spec=DynamicTrafficService)
         mock_traffic.get_current_marker.return_value = 0
-        mock_traffic.get_transactions_since.return_value = [tx]
+        mock_traffic.wait_transactions_since.return_value = [tx]
 
         mock_executor = MagicMock(spec=ActionExecutor)
         mock_executor.click.return_value = _make_action_result("act_1", success=True)
@@ -778,7 +781,7 @@ class TestDynamicTrafficCorrelation(unittest.TestCase):
 
         mock_traffic = MagicMock(spec=DynamicTrafficService)
         mock_traffic.get_current_marker.return_value = 0
-        mock_traffic.get_transactions_since.return_value = [_make_transaction("tx_1")]
+        mock_traffic.wait_transactions_since.return_value = [_make_transaction("tx_1")]
 
         mock_executor = MagicMock(spec=ActionExecutor)
         mock_executor.click.return_value = _make_action_result("act_1", success=True)
@@ -822,7 +825,7 @@ class TestDynamicTrafficCorrelation(unittest.TestCase):
         with patch("src.dynamic.ui.observer.observe_screen", side_effect=[obs1, obs2]), \
              patch("src.dynamic.action.executor.ActionExecutor.click", return_value=_make_action_result("act_1", success=True)), \
              patch("src.dynamic.runtime.observer.AndroidRuntimeObserver.observe", return_value=RuntimeSnapshot(package_name=self.pkg, pid=1001, process_running=True)), \
-             patch("src.dynamic.traffic.service.DynamicTrafficService.check_readiness", return_value=ProxyReadinessResult(backend_available=True, adb_available=True, status=TrafficReadinessStatus.PASS)), \
+             patch("src.dynamic.traffic.service.DynamicTrafficService.check_readiness", return_value=ProxyReadinessResult(backend_available=True, adb_available=True, port_available=True, status=TrafficReadinessStatus.PASS)), \
              patch("src.dynamic.traffic.service.DynamicTrafficService.start_capture") as mock_start, \
              patch("src.dynamic.traffic.service.DynamicTrafficService.stop_capture", return_value=CaptureSummary(total_transactions=0)) as mock_stop:
             _wire_dynamic_exploration(self.base_dir, package_name=self.pkg, limits=ExplorationLimits(max_steps=1))
@@ -853,7 +856,7 @@ class TestDynamicTrafficCorrelation(unittest.TestCase):
         with patch("src.dynamic.ui.observer.observe_screen", side_effect=[obs1, obs2]), \
              patch("src.dynamic.action.executor.ActionExecutor.click", return_value=_make_action_result("act_1", success=True)), \
              patch("src.dynamic.runtime.observer.AndroidRuntimeObserver.observe", return_value=RuntimeSnapshot(package_name=self.pkg, pid=1001, process_running=True)), \
-             patch("src.dynamic.traffic.service.DynamicTrafficService.check_readiness", return_value=ProxyReadinessResult(backend_available=True, adb_available=True, status=TrafficReadinessStatus.PASS)), \
+             patch("src.dynamic.traffic.service.DynamicTrafficService.check_readiness", return_value=ProxyReadinessResult(backend_available=True, adb_available=True, port_available=True, status=TrafficReadinessStatus.PASS)), \
              patch("src.dynamic.traffic.service.DynamicTrafficService.start_capture") as mock_start, \
              patch("src.dynamic.traffic.service.DynamicTrafficService.stop_capture", return_value=CaptureSummary(total_transactions=0)) as mock_stop:
             _wire_dynamic_exploration(self.base_dir, package_name=self.pkg, limits=ExplorationLimits(max_steps=1))
@@ -884,7 +887,7 @@ class TestDynamicTrafficCorrelation(unittest.TestCase):
         with patch("src.dynamic.ui.observer.observe_screen", side_effect=[obs1, obs2]), \
              patch("src.dynamic.action.executor.ActionExecutor.click", return_value=_make_action_result("act_1", success=True)), \
              patch("src.dynamic.runtime.observer.AndroidRuntimeObserver.observe", return_value=RuntimeSnapshot(package_name=self.pkg, pid=1001, process_running=True)), \
-             patch("src.dynamic.traffic.service.DynamicTrafficService.check_readiness", return_value=ProxyReadinessResult(backend_available=True, adb_available=True, status=TrafficReadinessStatus.PASS)), \
+             patch("src.dynamic.traffic.service.DynamicTrafficService.check_readiness", return_value=ProxyReadinessResult(backend_available=True, adb_available=True, port_available=True, status=TrafficReadinessStatus.PASS)), \
              patch("src.dynamic.traffic.service.DynamicTrafficService.start_capture") as mock_start, \
              patch("src.dynamic.traffic.service.DynamicTrafficService.stop_capture", return_value=CaptureSummary(total_transactions=0)) as mock_stop:
             _wire_dynamic_exploration(self.base_dir, package_name=self.pkg, limits=ExplorationLimits(max_steps=1))
@@ -910,7 +913,7 @@ class TestDynamicTrafficCorrelation(unittest.TestCase):
         }))
 
         with patch("src.dynamic.ui.observer.observe_screen", side_effect=Exception("Exploration fatal crash")), \
-             patch("src.dynamic.traffic.service.DynamicTrafficService.check_readiness", return_value=ProxyReadinessResult(backend_available=True, adb_available=True, status=TrafficReadinessStatus.PASS)), \
+             patch("src.dynamic.traffic.service.DynamicTrafficService.check_readiness", return_value=ProxyReadinessResult(backend_available=True, adb_available=True, port_available=True, status=TrafficReadinessStatus.PASS)), \
              patch("src.dynamic.traffic.service.DynamicTrafficService.start_capture"), \
              patch("src.dynamic.traffic.service.DynamicTrafficService.stop_capture") as mock_stop:
             try:
@@ -986,7 +989,7 @@ class TestDynamicTrafficCorrelation(unittest.TestCase):
         with patch("src.dynamic.ui.observer.observe_screen", side_effect=[obs1, obs2]), \
              patch("src.dynamic.action.executor.ActionExecutor.click", return_value=_make_action_result("act_1", success=True)), \
              patch("src.dynamic.runtime.observer.AndroidRuntimeObserver.observe", return_value=RuntimeSnapshot(package_name=self.pkg, pid=1001, process_running=True)), \
-             patch("src.dynamic.traffic.service.DynamicTrafficService.check_readiness", return_value=ProxyReadinessResult(backend_available=True, adb_available=True, status=TrafficReadinessStatus.PASS)), \
+             patch("src.dynamic.traffic.service.DynamicTrafficService.check_readiness", return_value=ProxyReadinessResult(backend_available=True, adb_available=True, port_available=True, status=TrafficReadinessStatus.PASS)), \
              patch("src.dynamic.traffic.service.DynamicTrafficService.start_capture"), \
              patch("src.dynamic.traffic.service.DynamicTrafficService.stop_capture", return_value=CaptureSummary(total_transactions=0)):
             _wire_dynamic_exploration(self.base_dir, package_name=self.pkg, limits=ExplorationLimits(max_steps=1))
@@ -1025,7 +1028,7 @@ class TestDynamicTrafficCorrelation(unittest.TestCase):
         with patch("src.dynamic.ui.observer.observe_screen", side_effect=[obs1, obs2]), \
              patch("src.dynamic.action.executor.ActionExecutor.click", return_value=_make_action_result("act_1", success=True)), \
              patch("src.dynamic.runtime.observer.AndroidRuntimeObserver.observe", return_value=RuntimeSnapshot(package_name=self.pkg, pid=1001, process_running=True)), \
-             patch("src.dynamic.traffic.service.DynamicTrafficService.check_readiness", return_value=ProxyReadinessResult(backend_available=True, adb_available=True, status=TrafficReadinessStatus.PASS)), \
+             patch("src.dynamic.traffic.service.DynamicTrafficService.check_readiness", return_value=ProxyReadinessResult(backend_available=True, adb_available=True, port_available=True, status=TrafficReadinessStatus.PASS)), \
              patch("src.dynamic.traffic.service.DynamicTrafficService.start_capture") as mock_start, \
              patch("src.dynamic.traffic.service.DynamicTrafficService.stop_capture", return_value=CaptureSummary(total_transactions=0)):
             res = _wire_dynamic_exploration(self.base_dir, package_name=self.pkg, limits=ExplorationLimits(max_steps=1))
@@ -1056,7 +1059,7 @@ class TestDynamicTrafficCorrelation(unittest.TestCase):
         with patch("src.dynamic.ui.observer.observe_screen", side_effect=[obs1, obs2]), \
              patch("src.dynamic.action.executor.ActionExecutor.click", return_value=_make_action_result("act_1", success=True)), \
              patch("src.dynamic.runtime.observer.AndroidRuntimeObserver.observe", return_value=RuntimeSnapshot(package_name=self.pkg, pid=1001, process_running=True)), \
-             patch("src.dynamic.traffic.service.DynamicTrafficService.check_readiness", return_value=ProxyReadinessResult(backend_available=True, adb_available=True, status=TrafficReadinessStatus.PASS)), \
+             patch("src.dynamic.traffic.service.DynamicTrafficService.check_readiness", return_value=ProxyReadinessResult(backend_available=True, adb_available=True, port_available=True, status=TrafficReadinessStatus.PASS)), \
              patch("src.dynamic.traffic.service.DynamicTrafficService.start_capture"), \
              patch("src.dynamic.traffic.service.DynamicTrafficService.stop_capture", return_value=CaptureSummary(total_transactions=0)):
             res = _wire_dynamic_exploration(self.base_dir, package_name=self.pkg, limits=ExplorationLimits(max_steps=1))
@@ -1116,13 +1119,13 @@ class TestDynamicTrafficCorrelation(unittest.TestCase):
         mock_start.assert_not_called()
         self.assertFalse((self.base_dir / "dynamic" / "exploration_result.json").is_file())
 
-    # 46. native backend declares HTTP visibility available
-    def test_46_native_backend_declares_http_visibility_available(self):
+    # 46. Installed native backend alone does not prove active capture
+    def test_46_native_backend_installation_alone_does_not_prove_capture(self):
         from src.dynamic.traffic.native_backend import NativeProxyCaptureBackend
         native_backend = NativeProxyCaptureBackend()
         service = DynamicTrafficService(backend=native_backend)
         vis = service.get_visibility_metadata()
-        self.assertEqual(vis["http_visibility"], "available")
+        self.assertEqual(vis["http_visibility"], "unknown")
 
     # 47. native backend does not claim HTTPS visibility
     def test_47_native_backend_does_not_claim_https_visibility(self):
@@ -1275,7 +1278,7 @@ class TestDynamicTrafficCorrelation(unittest.TestCase):
     def test_56_timeline_correlation_status_reflects_partial_visibility(self):
         mock_traffic = MagicMock(spec=DynamicTrafficService)
         mock_traffic.get_current_marker.return_value = 0
-        mock_traffic.get_transactions_since.return_value = []
+        mock_traffic.wait_transactions_since.return_value = []
         mock_traffic.get_visibility_metadata.return_value = {
             "http_visibility": "available",
             "https_visibility": "unavailable",
@@ -1314,7 +1317,7 @@ class TestDynamicTrafficCorrelation(unittest.TestCase):
     def test_57_route_edge_does_not_imply_full_visibility_when_https_unavailable(self):
         mock_traffic = MagicMock(spec=DynamicTrafficService)
         mock_traffic.get_current_marker.return_value = 0
-        mock_traffic.get_transactions_since.return_value = []
+        mock_traffic.wait_transactions_since.return_value = []
         mock_traffic.get_visibility_metadata.return_value = {
             "http_visibility": "available",
             "https_visibility": "unavailable",
@@ -1373,7 +1376,7 @@ class TestDynamicTrafficCorrelation(unittest.TestCase):
     def test_59_traffic_limitation_does_not_fail_dynamic_exploration(self):
         mock_traffic = MagicMock(spec=DynamicTrafficService)
         mock_traffic.get_current_marker.side_effect = Exception("Proxy connection broken")
-        mock_traffic.get_transactions_since.side_effect = Exception("Proxy connection broken")
+        mock_traffic.wait_transactions_since.side_effect = Exception("Proxy connection broken")
         mock_traffic.get_visibility_metadata.return_value = {
             "http_visibility": "unavailable",
             "https_visibility": "unavailable",
@@ -1440,7 +1443,7 @@ class TestDynamicTrafficCorrelation(unittest.TestCase):
         with patch("src.dynamic.ui.observer.observe_screen", side_effect=[obs1, obs2]), \
              patch("src.dynamic.action.executor.ActionExecutor.click", return_value=_make_action_result("act_1", success=True)), \
              patch("src.dynamic.runtime.observer.AndroidRuntimeObserver.observe", return_value=RuntimeSnapshot(package_name=self.pkg, pid=1001, process_running=True)), \
-             patch("src.dynamic.traffic.service.DynamicTrafficService.check_readiness", return_value=ProxyReadinessResult(backend_available=True, adb_available=True, status=TrafficReadinessStatus.PASS)), \
+             patch("src.dynamic.traffic.service.DynamicTrafficService.check_readiness", return_value=ProxyReadinessResult(backend_available=True, adb_available=True, port_available=True, status=TrafficReadinessStatus.PASS)), \
              patch("src.dynamic.traffic.service.DynamicTrafficService.start_capture"), \
              patch("src.dynamic.traffic.service.DynamicTrafficService.stop_capture", return_value=CaptureSummary(total_transactions=5)):
             _wire_dynamic_exploration(self.base_dir, package_name=self.pkg, limits=ExplorationLimits(max_steps=1))

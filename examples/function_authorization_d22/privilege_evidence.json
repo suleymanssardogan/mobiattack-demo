@@ -1,0 +1,26 @@
+{
+  "evidence_ref": "privilege_bc891e59103718a7e4b8",
+  "function": {
+    "body": {
+      "enabled": true
+    },
+    "disposable": true,
+    "method": "POST",
+    "path": "/lab/admin/toggle",
+    "required_role": "admin"
+  },
+  "host": "127.0.0.1",
+  "port": 59005,
+  "principals": {
+    "user_A": {
+      "credential_ref": "principal_session_0c7943a1304b4501bc6d45ad078a8722",
+      "role": "user"
+    },
+    "user_B": {
+      "credential_ref": "principal_session_d707056ddaa242099b5e8fc89b2a27bf",
+      "role": "admin"
+    }
+  },
+  "session_id": "004d4800-6acf-4d80-81f3-112d0e95dc83",
+  "source": "controlled_local_lab_configuration"
+}

@@ -84,6 +84,7 @@ def _make_candidate(
         resource_id=res_id,
         class_name="android.widget.Button",
         text=text,
+        content_desc="Open informational screen",
         bounds=bounds,
         center_x=cx,
         center_y=cy,
@@ -345,6 +346,7 @@ class TestDynamicExplorationLoop(unittest.TestCase):
             route_graph=graph,
             limits=ExplorationLimits(max_steps=1),
             sleeper=lambda s: None,
+            no_navigation_postcondition=lambda obs: obs.screen_identity == "screen_settings",
         )
 
         self.assertEqual(graph.node_count, 1)
@@ -402,6 +404,7 @@ class TestDynamicExplorationLoop(unittest.TestCase):
             route_graph=graph,
             limits=ExplorationLimits(max_steps=5),
             sleeper=lambda s: None,
+            no_navigation_postcondition=lambda obs: True,
         )
 
         # Should execute btn_once once, then halt because no more unattempted actions
@@ -435,6 +438,7 @@ class TestDynamicExplorationLoop(unittest.TestCase):
             route_graph=graph,
             limits=ExplorationLimits(max_steps=5),
             sleeper=lambda s: None,
+            no_navigation_postcondition=lambda obs: True,
         )
 
         self.assertEqual(executor.click.call_count, 2)
@@ -459,7 +463,7 @@ class TestDynamicExplorationLoop(unittest.TestCase):
         # Input action must NOT be executed in V1
         executor.click.assert_not_called()
         self.assertEqual(res.steps_attempted, 0)
-        self.assertEqual(res.stop_reason, StopReason.NO_ACTIONS.value)
+        self.assertEqual(res.stop_reason, StopReason.UNSAFE_ACTION_BOUNDARY.value)
 
     # 13. destructive labeled action skipped
     def test_13_destructive_labeled_action_skipped(self):
@@ -478,7 +482,7 @@ class TestDynamicExplorationLoop(unittest.TestCase):
         )
 
         executor.click.assert_not_called()
-        self.assertEqual(res.stop_reason, StopReason.NO_ACTIONS.value)
+        self.assertEqual(res.stop_reason, StopReason.UNSAFE_ACTION_BOUNDARY.value)
         # Action remains discovered in graph
         node = graph.get_node_by_identity("screen_danger")
         act = list(node.actions.values())[0]
@@ -522,7 +526,7 @@ class TestDynamicExplorationLoop(unittest.TestCase):
     # 15. system dialog observation accepted
     def test_15_system_dialog_observation_accepted(self):
         graph = RouteGraph()
-        btn_perm = _make_candidate(node_id="btn_allow", text="While using the app")
+        btn_perm = _make_candidate(node_id="btn_allow", text="Cancel")
         obs_dialog = _make_obs(
             screen_identity="s_perm_dialog",
             pkg="com.google.android.permissioncontroller",
@@ -579,6 +583,7 @@ class TestDynamicExplorationLoop(unittest.TestCase):
             route_graph=graph,
             limits=ExplorationLimits(max_steps=3),
             sleeper=lambda s: None,
+            no_navigation_postcondition=lambda obs: True,
         )
 
         self.assertEqual(res.steps_attempted, 3)
@@ -693,7 +698,7 @@ class TestDynamicExplorationLoop(unittest.TestCase):
 
         self.assertEqual(res.actions_failed, 1)
         self.assertEqual(executor.click.call_count, 1)
-        self.assertEqual(res.stop_reason, StopReason.NO_ACTIONS.value)
+        self.assertEqual(res.stop_reason, StopReason.OBSERVATION_FAILED.value)
 
     # 21. observation failure after successful action produces no fake edge
     def test_21_observation_failure_after_successful_action_produces_no_fake_edge(self):
@@ -977,6 +982,7 @@ class TestDynamicExplorationLoop(unittest.TestCase):
             route_graph=graph,
             limits=ExplorationLimits(max_steps=1),
             sleeper=lambda s: None,
+            no_navigation_postcondition=lambda obs: True,
         )
         self.assertIn(res.status, (ExplorationStatus.COMPLETED.value, ExplorationStatus.PARTIAL.value))
         self.assertEqual(res.actions_succeeded, 1)
@@ -1057,6 +1063,7 @@ class TestDynamicExplorationLoop(unittest.TestCase):
             route_graph=graph,
             limits=ExplorationLimits(max_steps=1),
             sleeper=lambda s: None,
+            no_navigation_postcondition=lambda obs: True,
         )
         self.assertEqual(executor.click.call_count, 1)
         self.assertEqual(res.actions_succeeded, 1)
@@ -1095,7 +1102,7 @@ class TestDynamicExplorationLoop(unittest.TestCase):
         btn_req = _make_candidate(node_id="btn_request_perm", text="Allow Camera")
         obs_app = _make_obs(screen_identity="s_app_home", pkg="com.example.app", is_target_pkg=True, actions=[btn_req])
 
-        btn_allow = _make_candidate(node_id="btn_while_using", text="While using the app")
+        btn_allow = _make_candidate(node_id="btn_while_using", text="Cancel")
         obs_dialog = _make_obs(
             screen_identity="s_perm_dialog",
             pkg="com.google.android.permissioncontroller",
@@ -1289,7 +1296,7 @@ class TestDynamicExplorationLoop(unittest.TestCase):
         )
 
         executor.click.assert_not_called()
-        self.assertEqual(res.stop_reason, StopReason.NO_ACTIONS.value)
+        self.assertEqual(res.stop_reason, StopReason.UNSAFE_ACTION_BOUNDARY.value)
         node = graph.get_node_by_identity("s_perm_destructive")
         act = list(node.actions.values())[0]
         self.assertEqual(act.status, ActionStatus.DISCOVERED.value)
@@ -1321,14 +1328,14 @@ class TestDynamicExplorationLoop(unittest.TestCase):
             sleeper=lambda s: None,
         )
 
-        # Action execution succeeded
-        self.assertEqual(res.actions_succeeded, 1)
+        # Dispatch succeeded, but semantic completion is unconfirmed
+        self.assertEqual(res.actions_succeeded, 0)
         # But observation failed, creating NO transition edge
         self.assertEqual(graph.edge_count, 0)
         self.assertEqual(res.stop_reason, StopReason.OBSERVATION_FAILED.value)
         node = graph.get_node_by_identity("s_init_crash")
         act = list(node.actions.values())[0]
-        self.assertEqual(act.status, ActionStatus.SUCCEEDED.value)
+        self.assertEqual(act.status, ActionStatus.FAILED.value)
 
     # 43. canonical route graph serialization schema remains unchanged
     def test_43_canonical_route_graph_serialization_schema_remains_unchanged(self):

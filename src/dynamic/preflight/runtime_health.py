@@ -1,6 +1,7 @@
 """Runtime baseline health check module."""
 
 from __future__ import annotations
+from src.dynamic.deadline import bounded_operation, current_deadline
 
 import re
 import time
@@ -15,6 +16,7 @@ DEFAULT_LAUNCH_POLL_INTERVAL: float = 0.5
 DEFAULT_LAUNCH_DEADLINE_SECONDS: float = 8.0
 
 
+@bounded_operation(8.0, field="deadline_seconds")
 def check_runtime_health(
     adb_bin: str,
     serial: str,
@@ -54,17 +56,31 @@ def check_runtime_health(
         attempt += 1
 
         # 1. Query PID
-        current_pid = _find_process_pid(adb_bin, serial, package_name)
+        try:
+            current_pid = _find_process_pid(adb_bin, serial, package_name)
+        except OSError:
+            baseline.pid = None
+            baseline.launch_attempts = attempt
+            return baseline, False, ErrorCode.RUNTIME_OBSERVATION_UNAVAILABLE, 'Process observation backend unavailable.'
+
+        pid = current_pid
         if current_pid is not None:
-            pid = current_pid
             observed_pid_previously = True
+
+        if current_deadline().remaining() <= 0:
+            baseline.pid = None
+            baseline.launch_attempts = attempt
+            return baseline, False, ErrorCode.COMMAND_TIMEOUT, 'Runtime observation deadline exhausted; state unavailable.'
 
         # 2. Check for fatal crash signatures in logcat
         has_fatal, snippets = _scan_recent_fatal_logs(
-            adb_bin, serial, current_pid or pid, package_name
+            adb_bin, serial, current_pid, package_name
         )
+        if current_deadline().remaining() <= 0:
+            baseline.pid = None
+            return baseline, False, ErrorCode.COMMAND_TIMEOUT, 'Runtime observation deadline exhausted; state unavailable.'
         if has_fatal:
-            baseline.pid = current_pid or pid
+            baseline.pid = current_pid
             baseline.immediate_crash = True
             baseline.fatal_log_detected = True
             baseline.fatal_log_snippets = snippets
@@ -78,21 +94,21 @@ def check_runtime_health(
 
         # 3. Detect sudden process death (was running, now gone)
         if observed_pid_previously and current_pid is None:
-            baseline.pid = pid
-            baseline.immediate_crash = True
+            baseline.pid = None
+            baseline.immediate_crash = False
             baseline.launch_success = False
             baseline.launch_attempts = attempt
             return (
                 baseline,
                 False,
-                ErrorCode.APP_CRASHED,
+                ErrorCode.PROCESS_EXITED,
                 f"Process for package '{package_name}' died immediately after launch.",
             )
 
         # 4. Check foreground state
         if pid is not None:
             is_foreground = _check_foreground_status(adb_bin, serial, package_name)
-            if is_foreground:
+            if is_foreground and current_deadline().remaining() > 0:
                 # Fully stabilized in foreground
                 baseline.launch_success = True
                 baseline.pid = pid
@@ -114,14 +130,14 @@ def check_runtime_health(
         elapsed = clock() - start_time
         remaining_time = deadline_seconds - elapsed
         if attempt < max_attempts and remaining_time > 0:
-            wait_time = min(poll_interval, remaining_time)
+            wait_time = min(poll_interval, remaining_time, current_deadline().remaining())
             if wait_time > 0:
                 sleeper(wait_time)
 
     baseline.launch_attempts = attempt
 
     # If PID is running but not foreground within deadline, accept presence verified
-    if pid is not None:
+    if pid is not None and current_deadline().remaining() > 0:
         baseline.launch_success = True
         baseline.pid = pid
         baseline.immediate_crash = False
@@ -150,6 +166,7 @@ def _find_process_pid(adb_bin: str, serial: str, package_name: str) -> int | Non
                 return int(tok)
 
     # Fallback to 'ps -A'
+    pid_code = code
     code, ps_out, _ = run_adb_cmd(adb_bin, ["shell", "ps", "-A"], serial=serial)
     if code == 0 and ps_out:
         for line in ps_out.splitlines():
@@ -158,6 +175,8 @@ def _find_process_pid(adb_bin: str, serial: str, package_name: str) -> int | Non
                 if len(parts) >= 2 and parts[1].isdigit():
                     return int(parts[1])
 
+    if code != 0 and pid_code != 0:
+        raise OSError('Process observation backend unavailable')
     return None
 
 

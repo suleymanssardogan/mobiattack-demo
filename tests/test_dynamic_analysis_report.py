@@ -112,7 +112,7 @@ def test_preflight_and_session_safe(sources):
 
 def test_exploration_semantics(sources):
     e = report(sources)["exploration"]
-    assert e == {"status": "partial", "stop_reason": "max_steps", "steps_attempted": 10, "actions_succeeded": 8,
+    assert {k: e[k] for k in ("status", "stop_reason", "steps_attempted", "actions_succeeded", "actions_failed", "screens_observed", "transitions_recorded", "duration_seconds")} == {"status": "partial", "stop_reason": "max_steps", "steps_attempted": 10, "actions_succeeded": 8,
                  "actions_failed": 2, "screens_observed": 4, "transitions_recorded": 8, "duration_seconds": 60.0}
 
 
@@ -516,6 +516,9 @@ def test_live_status_handles_corrupt_registered_report(sources, tmp_path):
 
 def test_fully_available_coverage_is_distinct(sources):
     sources["exploration"]["status"] = "completed"
+    sources["exploration"]["stop_reason"] = "no_actions"
+    sources["exploration"]["metadata"] = {"frontier": {"observation_available": True,
+        "safe_frontier_exhausted": True, "safe_actions_discovered": 8, "safe_actions_remaining": 0, "unsafe_skipped": 0}}
     sources["traffic"]["https_visibility"] = "available"
     sources["runtime"]["actions"] = sources["runtime"]["actions"][:1]
     result = report(sources)

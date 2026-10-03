@@ -72,6 +72,7 @@ class TestDynamicTraffic(unittest.TestCase):
         mock_adb.side_effect = [
             (0, "192.168.1.50:8888", ""),
             (0, "", ""),  # settings put
+            (0, "10.0.2.2:8080", ""),  # verified readback
         ]
         mgr = DeviceProxyManager("/mock/adb", "emulator-5554", "10.0.2.2", 8080)
         mgr.apply_proxy()
@@ -84,6 +85,7 @@ class TestDynamicTraffic(unittest.TestCase):
         mock_adb.side_effect = [
             (0, ":0", ""),  # no proxy
             (0, "", ""),  # settings put 10.0.2.2:8080
+            (0, "10.0.2.2:8080", ""),
         ]
         mgr = DeviceProxyManager("/mock/adb", "emulator-5554", "10.0.2.2", 8080)
         mgr.apply_proxy()
@@ -96,11 +98,13 @@ class TestDynamicTraffic(unittest.TestCase):
         mock_adb.side_effect = [
             (0, "old_proxy:8080", ""),
             (0, "", ""),  # put new
+            (0, "10.0.2.2:8080", ""),
             (0, "", ""),  # restore old
+            (0, "old_proxy:8080", ""),
         ]
         with DeviceProxyManager("/mock/adb", "emulator-5554", "10.0.2.2", 8080) as mgr:
             self.assertEqual(mgr.previous_proxy, "old_proxy:8080")
-        restore_call = mock_adb.call_args_list[2]
+        restore_call = mock_adb.call_args_list[3]
         self.assertIn("old_proxy:8080", restore_call[0][1])
 
     # 6. exception sonrası proxy restore edilir
@@ -109,13 +113,15 @@ class TestDynamicTraffic(unittest.TestCase):
         mock_adb.side_effect = [
             (0, ":0", ""),  # get
             (0, "", ""),  # put
+            (0, "10.0.2.2:8080", ""),
             (0, "", ""),  # restore :0
+            (0, ":0", ""),
         ]
         with self.assertRaises(ValueError):
             with DeviceProxyManager("/mock/adb", "emulator-5554", "10.0.2.2", 8080):
                 raise ValueError("Crash during capture!")
 
-        restore_call = mock_adb.call_args_list[2]
+        restore_call = mock_adb.call_args_list[3]
         self.assertIn(":0", restore_call[0][1])
 
     # 7. capture state transition doğru çalışır

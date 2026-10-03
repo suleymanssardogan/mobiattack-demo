@@ -1,0 +1,45 @@
+{
+  "task": "D20",
+  "status": "PARTIAL",
+  "dynamic_core_readiness": "READY_FOR_BOUNDED_PASSIVE_DEMO",
+  "tests": {
+    "focused": {
+      "passed": 715,
+      "failed": 0,
+      "subtests_passed": 18
+    },
+    "integration": {
+      "passed": 207,
+      "failed": 0,
+      "skipped": 1
+    },
+    "dynamic_checkpoint": {
+      "passed": 1295,
+      "failed": 0,
+      "skipped": 1,
+      "subtests_passed": 18
+    },
+    "affected_regressions_after_fixes": {
+      "passed": 181,
+      "failed": 0
+    },
+    "full_repository_final": {
+      "passed": 2672,
+      "failed": 0,
+      "skipped": 3,
+      "subtests_passed": 33
+    }
+  },
+  "confirmed_regressions_fixed": [
+    "Captured transactions must use existing visibility metadata, not nonexistent readiness_result.",
+    "Actual capture backend must retain a safe concise report label."
+  ],
+  "legacy_tests_updated": "D18 unavailable contract and D19 state-aware ADB discovery; historical security execution/validation evidence unchanged.",
+  "fresh_validation": "Two real app launches and one bounded UI action per app, using historical Static artifacts for correlation. No fresh Static scan claimed.",
+  "live_security_tests_sent": 0,
+  "limitations": [
+    "Live HTTPS capture unavailable with the current HTTP-only backend.",
+    "Zero transactions observed in the short live windows; no dynamic absence/security inference.",
+    "Other four apps inspected via local fixtures; no fresh launch. Filesystem/function instrumentation not enabled."
+  ]
+}

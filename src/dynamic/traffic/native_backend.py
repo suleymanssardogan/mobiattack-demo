@@ -7,6 +7,7 @@ and for transparent/local test server forwarders.
 
 from __future__ import annotations
 
+import subprocess
 import http.client
 import http.server
 import json
@@ -18,6 +19,7 @@ import threading
 import time
 from typing import Any, Callable
 from urllib.parse import urlparse
+from src.dynamic.deadline import bounded_operation, current_deadline, Deadline
 
 from src.dynamic.traffic.capture_backend import TrafficCaptureBackend
 from src.dynamic.traffic.mitmproxy_backend import is_port_in_use
@@ -36,6 +38,33 @@ class _ThreadingHTTPServer(ThreadingMixIn, http.server.HTTPServer):
     daemon_threads = True
     allow_reuse_address = True
 
+    def __init__(self, *args, **kwargs):
+        self.ready = threading.Event()
+        self.clients = set()
+        self.clients_lock = threading.Lock()
+        super().__init__(*args, **kwargs)
+
+    def get_request(self):
+        client, address = super().get_request()
+        client.settimeout(3.0)
+        return client, address
+
+    def service_actions(self):
+        self.ready.set()
+
+    def process_request(self, request, address):
+        with self.clients_lock:
+            self.clients.add(request)
+        super().process_request(request, address)
+
+    def process_request_thread(self, request, address):
+        try:
+            super().process_request_thread(request, address)
+        finally:
+            with self.clients_lock:
+                self.clients.discard(request)
+
+
 
 class NativeProxyCaptureBackend:
     """Zero-dependency HTTP proxy capture backend powered by Python standard library."""
@@ -43,6 +72,9 @@ class NativeProxyCaptureBackend:
     def __init__(self) -> None:
         self.server: _ThreadingHTTPServer | None = None
         self.server_thread: threading.Thread | None = None
+        self.cleanup_state = "not_started"
+        self._upstreams = set()
+        self._upstreams_lock = threading.Lock()
         self.running: bool = False
         self.captured_transactions: list[TrafficTransaction] = []
         self._on_transaction: Callable[[TrafficTransaction], None] | None = None
@@ -54,12 +86,14 @@ class NativeProxyCaptureBackend:
         """Always available as it uses Python standard library without external binaries."""
         return True
 
+    @bounded_operation(5.0, field="timeout_seconds")
     def start(
         self,
         listen_host: str = "0.0.0.0",
         listen_port: int = 8080,
         on_transaction_captured: Callable[[TrafficTransaction], None] | None = None,
         capture_id: str | None = None,
+        timeout_seconds: float = 5.0,
     ) -> None:
         """Binds and starts the HTTP proxy server on a background thread."""
         if self.running:
@@ -106,12 +140,26 @@ class NativeProxyCaptureBackend:
                 self._handle_proxy_request("OPTIONS")
 
             def _handle_proxy_request(self, method: str) -> None:
+                request_deadline = Deadline(3.0)
+                self.connection.settimeout(request_deadline.timeout(3.0))
                 start_time = time.time()
                 req_ts = utc_now_iso()
 
                 # Read body if present
                 content_len = int(self.headers.get("Content-Length", 0))
-                req_body = self.rfile.read(content_len) if content_len > 0 else b""
+                body_chunks = []
+                remaining_body = content_len
+                try:
+                    while remaining_body > 0:
+                        self.connection.settimeout(request_deadline.timeout(3.0))
+                        chunk = self.rfile.read1(min(65536, remaining_body))
+                        if not chunk:
+                            return  # incomplete request is not a completed transaction
+                        body_chunks.append(chunk)
+                        remaining_body -= len(chunk)
+                except (OSError, subprocess.TimeoutExpired):
+                    return
+                req_body = b"".join(body_chunks)
 
                 # Parse target URL / Host
                 url_path = self.path
@@ -137,11 +185,25 @@ class NativeProxyCaptureBackend:
                     if parsed.scheme not in ("", "http"):
                         failure_reason = "unsupported_scheme"
                     else:
-                        conn = http.client.HTTPConnection(host, port, timeout=3.0)
+                        conn = http.client.HTTPConnection(host, port, timeout=request_deadline.timeout(3.0))
                         fwd_headers = {k: v for k, v in headers_dict.items() if k.lower() != "proxy-connection"}
+                        with backend_self._upstreams_lock:
+                            backend_self._upstreams.add(conn)
                         conn.request(method, path, body=req_body, headers=fwd_headers)
+                        if conn.sock:
+                            conn.sock.settimeout(request_deadline.timeout(3.0))
                         upstream_resp = conn.getresponse()
-                        upstream_body = upstream_resp.read()
+                        chunks = []
+                        response_socket = conn.sock or getattr(getattr(upstream_resp.fp, 'raw', None), '_sock', None)
+                        while True:
+                            remaining = request_deadline.timeout(3.0)
+                            if response_socket:
+                                response_socket.settimeout(remaining)
+                            chunk = upstream_resp.read1(65536)
+                            if not chunk:
+                                break
+                            chunks.append(chunk)
+                        upstream_body = b''.join(chunks)
                         resp_status = upstream_resp.status
                         resp_headers = dict(upstream_resp.getheaders())
                         resp_body = upstream_body
@@ -151,6 +213,8 @@ class NativeProxyCaptureBackend:
                     failure_reason = "upstream_failure"
                 finally:
                     if conn:
+                        with backend_self._upstreams_lock:
+                            backend_self._upstreams.discard(conn)
                         try:
                             conn.close()
                         except Exception:
@@ -158,6 +222,7 @@ class NativeProxyCaptureBackend:
 
                 # Send response back to emulator / client
                 try:
+                    self.connection.settimeout(request_deadline.timeout(3.0))
                     self.send_response(resp_status)
                     for h_k, h_v in resp_headers.items():
                         self.send_header(h_k, h_v)
@@ -204,37 +269,75 @@ class NativeProxyCaptureBackend:
 
         try:
             self.server = _ThreadingHTTPServer((listen_host, listen_port), ProxyRequestHandler)
-            self.server_thread = threading.Thread(target=self.server.serve_forever, daemon=True)
+            self.server_thread = threading.Thread(target=lambda: self.server.serve_forever(poll_interval=0.05), daemon=True)
             self.server_thread.start()
+            if not self.server.ready.wait(timeout=current_deadline().timeout(timeout_seconds)) or not self.server_thread.is_alive():
+                raise RuntimeError('Native proxy readiness unavailable')
             self.running = True
             logger.info(f"NativeProxyCaptureBackend listening on {listen_host}:{listen_port}")
         except Exception as exc:
+            self.stop()
             raise TrafficException(
                 TrafficErrorCode.CAPTURE_START_FAILED,
                 f"Failed to start native proxy server: {exc}",
             ) from exc
 
+    @property
+    def pending_count(self):
+        if not self.server:
+            return 0
+        with self.server.clients_lock:
+            return len(self.server.clients)
+
+    @bounded_operation(4.0, field="timeout_seconds")
     def stop(self, timeout_seconds: float = 4.0) -> None:
-        """Shuts down the server and waits for thread termination."""
-        if not self.running:
-            return
-
+        deadline = current_deadline()
+        self.cleanup_state = 'completed'
         self.running = False
-        if self.server:
-            try:
-                self.server.shutdown()
-                self.server.server_close()
-            except Exception as e:
-                logger.debug(f"Error shutting down native proxy: {e}")
-            finally:
-                self.server = None
-
-        if self.server_thread and self.server_thread.is_alive():
-            self.server_thread.join(timeout=timeout_seconds)
+        server = self.server
+        if server:
+            with server.clients_lock:
+                clients = list(server.clients)
+            with self._upstreams_lock:
+                upstreams = list(self._upstreams)
+            for client in clients:
+                try:
+                    client.shutdown(socket.SHUT_RDWR)
+                    client.close()
+                except OSError:
+                    pass
+            for connection in upstreams:
+                try:
+                    if connection.sock:
+                        connection.sock.shutdown(socket.SHUT_RDWR)
+                    connection.close()
+                except OSError:
+                    pass
+            done = threading.Event()
+            def shutdown():
+                try:
+                    server.shutdown()
+                    server.server_close()
+                finally:
+                    done.set()
+            thread = threading.Thread(target=shutdown, daemon=True)
+            thread.start()
+            if not done.wait(timeout=deadline.remaining()):
+                self.cleanup_state = 'partial'
+        if self.server_thread and self.server_thread.ident is not None:
+            self.server_thread.join(timeout=deadline.remaining())
+            if self.server_thread.is_alive():
+                self.cleanup_state = 'partial'
+        if server:
+            with server.clients_lock:
+                if server.clients:
+                    self.cleanup_state = 'partial'
+        if self.cleanup_state == 'completed':
+            self.server = None
             self.server_thread = None
 
     def is_alive(self) -> bool:
-        return self.running and self.server is not None
+        return bool(self.running and self.server is not None and self.server_thread and self.server_thread.is_alive())
 
     def get_captured_transactions(self) -> list[TrafficTransaction]:
         return list(self.captured_transactions)

@@ -32,6 +32,8 @@ class UiNode:
     scrollable: bool = False
     checkable: bool = False
     checked: bool = False
+    selected: bool = False
+    visible: bool = True
     bounds: tuple[int, int, int, int] = (0, 0, 0, 0)
     center_x: int = 0
     center_y: int = 0
@@ -55,6 +57,8 @@ class UiNode:
             "scrollable": self.scrollable,
             "checkable": self.checkable,
             "checked": self.checked,
+            "selected": self.selected,
+            "visible": self.visible,
             "bounds": list(self.bounds),
             "center": [self.center_x, self.center_y],
             "dimensions": [self.width, self.height],
@@ -74,6 +78,7 @@ class ActionCandidate:
     center_x: int = 0
     center_y: int = 0
     action_type: str = "click"  # "click", "input"
+    navigation_evidence: dict[str, str] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -85,6 +90,7 @@ class ActionCandidate:
             "bounds": list(self.bounds),
             "center": [self.center_x, self.center_y],
             "action_type": self.action_type,
+            **({"navigation_evidence": dict(self.navigation_evidence)} if self.navigation_evidence else {}),
         }
 
 

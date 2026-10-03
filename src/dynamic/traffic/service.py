@@ -3,6 +3,9 @@
 from __future__ import annotations
 
 import logging
+import threading
+import time
+from src.dynamic.deadline import bounded_operation, current_deadline
 from typing import Any
 
 from src.dynamic.preflight.device_check import check_connected_device, find_adb_binary, run_adb_cmd
@@ -46,8 +49,15 @@ class DynamicTrafficService:
         self.proxy_mgr: DeviceProxyManager | None = None
         self.correlator: TrafficCorrelator | None = None
         self.captured_transactions: list[TrafficTransaction] = []
+        self._transactions_changed = threading.Condition()
+        self.last_traffic_wait = {}
+        self.auth_privacy = False
+        self.cleanup_state = 'not_started'
         self.last_readiness: ProxyReadinessResult | None = None
+        self.http_visibility = "unknown"
+        self.http_reason = "capture_not_started"
 
+    @bounded_operation(15.0)
     def check_readiness(
         self,
         device_serial: str | None = None,
@@ -117,21 +127,12 @@ class DynamicTrafficService:
             result.errors = errors
             return result
 
-        # 5. Device proxy reachability check (for emulators, host is reachable at 10.0.2.2)
-        # Check if device can ping/resolve or query network
-        if dev_info.is_emulator and proxy_host == "10.0.2.2":
-            result.device_reachable_proxy = True
-        else:
-            code, _, _ = run_adb_cmd(
-                self.adb_bin,
-                ["shell", "ping", "-c", "1", "-W", "1", proxy_host],
-                serial=dev_info.serial,
-            )
-            result.device_reachable_proxy = (code == 0)
-            if not result.device_reachable_proxy:
-                warnings.append(
-                    f"Direct ICMP reachability to proxy host '{proxy_host}' from device could not be verified."
-                )
+        # Reachability is observed, never inferred from device type or a host alias.
+        code, _, _ = run_adb_cmd(self.adb_bin,
+            ['shell', 'ping', '-c', '1', '-W', '1', proxy_host], serial=dev_info.serial)
+        result.device_reachable_proxy = code == 0
+        if not result.device_reachable_proxy:
+            warnings.append('Proxy host reachability from the current execution environment could not be verified.')
 
         # Store inspection is read-only and does not prove that a target app trusts user CAs.
         if isinstance(self.backend, MitmproxyCaptureBackend):
@@ -158,12 +159,19 @@ class DynamicTrafficService:
         """Returns protocol visibility metadata based on active backend and readiness."""
         backend_cls_name = self.backend.__class__.__name__
         capture_available = self.active_capture is not None and self.active_capture.status == CaptureStatus.ACTIVE
-        is_backend_available = capture_available or self.backend.check_available()
+        is_backend_available = self.backend.check_available()
+        if capture_available:
+            alive = self.backend.is_alive()
+            self.http_visibility = "available" if alive and self.proxy_mgr and self.proxy_mgr.configured else "unavailable"
+            self.http_reason = "capture_ready" if self.http_visibility == "available" else "capture_backend_or_proxy_unavailable"
+        elif not is_backend_available:
+            self.http_visibility, self.http_reason = "unavailable", "capture_backend_unavailable"
 
         if "Native" in backend_cls_name:
             return {
                 "capture_available": str(capture_available).lower(),
-                "http_visibility": "available" if is_backend_available else "unavailable",
+                "http_visibility": self.http_visibility,
+                "http_reason": self.http_reason,
                 "https_visibility": "unavailable",
                 "https_reason": "cleartext_http_only_backend",
             }
@@ -179,7 +187,7 @@ class DynamicTrafficService:
             https_vis, reason, ca_trust = 'unknown', 'no_https_transaction_available_to_verify', 'unknown'
         return {
             'capture_available': str(capture_available).lower(),
-            'http_visibility': 'available' if is_backend_available else 'unavailable',
+            'http_visibility': self.http_visibility, 'http_reason': self.http_reason,
             'https_visibility': https_vis, 'https_reason': reason, 'ca_trust': ca_trust,
             'ca_trust_reason': self.backend.https.ca_reason if isinstance(self.backend, MitmproxyCaptureBackend) else 'not_applicable',
         }
@@ -191,6 +199,7 @@ class DynamicTrafficService:
             self.backend.https.ca_trust, self.backend.https.ca_reason = state, reason
 
 
+    @bounded_operation(15.0)
     def start_capture(
         self,
         session: DynamicSession | str,
@@ -222,6 +231,7 @@ class DynamicTrafficService:
         )
         self.active_capture = capture
         self.captured_transactions = []
+        self.auth_privacy = False
         self.correlator = TrafficCorrelator(session=session_obj, in_scope_domains=in_scope_domains)
 
         try:
@@ -242,6 +252,8 @@ class DynamicTrafficService:
             )
 
             self.refresh_ca_trust(device_serial)
+            capture.metadata["proxy_readback_verified"] = self.proxy_mgr.readback_verified
+            self.http_visibility, self.http_reason = "available", "capture_ready"
             capture.status = CaptureStatus.ACTIVE
             capture.started_at = utc_now_iso()
             self.storage.save_capture_session(session_id_str, capture)
@@ -250,6 +262,8 @@ class DynamicTrafficService:
 
         except Exception as exc:
             logger.error(f"Failed to start capture: {exc}. Rolling back proxy configuration...")
+            self.http_visibility = "unavailable"
+            self.http_reason = exc.error_code.value if isinstance(exc, TrafficException) else "capture_start_failed"
             self._emergency_cleanup()
             capture.status = CaptureStatus.FAILED
             capture.ended_at = utc_now_iso()
@@ -299,7 +313,35 @@ class DynamicTrafficService:
             return []
         return self.captured_transactions[marker:]
 
-    def stop_capture(self) -> CaptureSummary:
+    @bounded_operation(1.0, field="timeout_seconds")
+    def wait_transactions_since(self, marker, timeout_seconds=1.0, quiet_seconds=0.1):
+        deadline = current_deadline()
+        with self._transactions_changed:
+            last_count = len(self.captured_transactions)
+            last_arrival = deadline.clock()
+            while deadline.remaining() > 0:
+                count = len(self.captured_transactions)
+                if count != last_count:
+                    last_count, last_arrival = count, deadline.clock()
+                has_observed = count > marker
+                quiet_remaining = max(0.0, quiet_seconds - (deadline.clock() - last_arrival))
+                pending = getattr(self.backend, 'pending_count', None)
+                if has_observed and quiet_remaining == 0 and pending == 0:
+                    break
+                wait_time = deadline.remaining()
+                if has_observed and quiet_remaining > 0:
+                    wait_time = min(wait_time, quiet_remaining)
+                self._transactions_changed.wait(timeout=wait_time)
+            txs = list(self.get_transactions_since(marker))
+            pending = getattr(self.backend, 'pending_count', None)
+            self.last_traffic_wait = {'observation': 'observed' if txs else 'not_observed',
+                'pending_count': pending, 'in_flight_state': 'unknown' if pending is None else ('pending' if pending else 'drained'),
+                'late_arrivals_possible': True, 'deadline_exhausted': deadline.remaining() <= 0,
+                'correlation_semantics': 'observed_not_caused'}
+            return txs
+
+    @bounded_operation(5.0, field="timeout_seconds")
+    def stop_capture(self, timeout_seconds=5.0) -> CaptureSummary:
         """Stops backend, restores device proxy, generates capture summary, and persists artifacts."""
         if not self.active_capture:
             raise TrafficException(
@@ -323,6 +365,10 @@ class DynamicTrafficService:
         except Exception as e:
             logger.warning(f"Error stopping backend: {e}")
 
+        self.cleanup_state = getattr(self.backend, 'cleanup_state', 'unknown')
+        if self.cleanup_state != 'completed':
+            self.active_capture.warnings.append('Capture cleanup partial; retained collected evidence.')
+
         # 2. Guaranteed device proxy rollback
         proxy_restored = False
         if self.proxy_mgr:
@@ -332,11 +378,13 @@ class DynamicTrafficService:
             except Exception as e:
                 logger.error(f"Error restoring proxy on device: {e}")
 
+        if self.proxy_mgr and not proxy_restored:
+            self.cleanup_state = 'partial'
+            self.active_capture.warnings.append('Device proxy restore unavailable within cleanup budget.')
         self.active_capture.status = CaptureStatus.COMPLETED
         self.active_capture.ended_at = utc_now_iso()
 
         self.refresh_ca_trust(self.active_capture.device_serial)
-        vis = self.get_visibility_metadata()
 
         # 3. Compile Summary
         http_count = 0
@@ -370,7 +418,8 @@ class DynamicTrafficService:
             correlated_flow_count=correlated_count,
             in_scope_count=in_scope_count,
             proxy_restored=proxy_restored,
-            http_visibility=vis.get("http_visibility", "available"),
+            http_visibility=vis.get("http_visibility", "unknown"),
+            http_visibility_reason=vis.get("http_reason", "unknown"),
             https_visibility=vis.get("https_visibility", "unavailable"),
             https_visibility_reason=vis.get("https_reason", "certificate_trust_unknown"),
             ca_trust_state=vis.get('ca_trust', 'unknown'),
@@ -389,6 +438,7 @@ class DynamicTrafficService:
         )
         return summary
 
+    @bounded_operation(5.0)
     def abort_capture(self, reason: str = "") -> None:
         """Forces immediate cleanup and sets capture status to ABORTED."""
         if not self.active_capture:
@@ -401,17 +451,33 @@ class DynamicTrafficService:
             self.active_capture.warnings.append(f"Capture aborted: {reason}")
         self.storage.save_capture_session(self.active_capture.session_id, self.active_capture)
 
+    def enable_auth_privacy(self, session_id):
+        if self.active_capture is None or self.active_capture.session_id != session_id:
+            raise ValueError('AUTH_TRAFFIC_SESSION_MISMATCH')
+        self.auth_privacy = True  # retained through capture end for late/in-flight login traffic
+        self.active_capture.metadata['auth_intervention_values_withheld'] = True
+
     def _on_transaction_captured(self, transaction: TrafficTransaction) -> None:
         """Persists transaction to transactions.jsonl and keeps memory reference."""
+        if self.auth_privacy:
+            transaction.request.query = {k: '[REDACTED]' for k in transaction.request.query}
+            for message in (transaction.request, transaction.response):
+                if message is not None:
+                    message.headers = {k: '[REDACTED]' for k in message.headers}
+                    message.body = None
+                    message.body_metadata = {'auth_intervention_values_withheld': True}
         if self.correlator and not transaction.correlation:
             transaction = self.correlator.correlate(transaction)
 
-        self.captured_transactions.append(transaction)
         if self.active_capture:
             transaction.capture_id = self.active_capture.capture_id
             transaction.session_id = self.active_capture.session_id
             self.storage.append_transaction(self.active_capture.session_id, transaction)
+        with self._transactions_changed:
+            self.captured_transactions.append(transaction)
+            self._transactions_changed.notify_all()
 
+    @bounded_operation(5.0)
     def _emergency_cleanup(self) -> None:
         """Failsafe method ensuring backend is stopped and proxy is restored."""
         try:

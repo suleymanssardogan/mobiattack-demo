@@ -261,17 +261,10 @@ class TestDynamicSessionPipelineWiring(unittest.TestCase):
         run_demo("http://example.com/app.apk", self.output_root)
 
         session_path = self.output_root / "dynamic" / "session.json"
-        self.assertTrue(session_path.is_file())
-
-        with open(session_path, "r", encoding="utf-8") as f:
-            sess = json.load(f)
-        self.assertEqual(sess["status"], "ABORTED")
-
-        timeline_path = self.output_root / "dynamic" / "timeline.json"
-        with open(timeline_path, "r", encoding="utf-8") as f:
-            events = json.load(f)
-        event_names = [e["name"] for e in events]
-        self.assertIn("SESSION_ABORTED", event_names)
+        self.assertFalse(session_path.is_file())
+        record = json.loads((self.output_root / 'dynamic/runtime_availability.json').read_text())
+        self.assertEqual(record['status'], 'unavailable')
+        self.assertEqual(mock_obs.call_count, 0)
 
     # 7. FAIL preflight does not call UI observation
     @patch("src.dynamic.ui.observer.observe_screen")
@@ -414,6 +407,7 @@ class TestDynamicSessionPipelineWiring(unittest.TestCase):
             "api_candidates": [],
         }
         mock_runtime.return_value = {
+            "adb": {"serial": "emulator-5554"},
             "install": {"success": True, "reinstall": False, "grant_permissions": False},
             "status": "runtime_launch_verified",
             "runtime": {

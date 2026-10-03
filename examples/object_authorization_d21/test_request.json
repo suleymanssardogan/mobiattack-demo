@@ -1,0 +1,17 @@
+{
+  "endpoint_context_id": "ctx_fedbe20e19a01b31",
+  "purpose": "Validate expected cross-principal enforcement in the controlled training lab",
+  "requested_action": "validate_object_access_behavior",
+  "required_evidence_refs": [
+    "7428e410-486d-46b6-90c8-9d8d99e3b9ab",
+    "cb181e62-fd54-47fa-ad20-d0853bb81624",
+    "ctx_fedbe20e19a01b31",
+    "lab_473c90adad63424c9beeaddfc84059c9",
+    "ownership_1fc292f489ee7b6ce5de"
+  ],
+  "risk_class": "low",
+  "schema_version": "1.0",
+  "session_id": "7428e410-486d-46b6-90c8-9d8d99e3b9ab",
+  "test_category": "object_authorization",
+  "test_id": "OBJECT_AUTHORIZATION"
+}

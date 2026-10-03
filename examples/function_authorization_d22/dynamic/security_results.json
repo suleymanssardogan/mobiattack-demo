@@ -1,0 +1,627 @@
+{
+  "records": [
+    {
+      "evidence": {
+        "baseline": {
+          "attribution": {},
+          "capture_id": "capture_c28f342aa1574b8ea93c9f94833534a9",
+          "correlation": {},
+          "duration_ms": 0.0,
+          "flow_id": null,
+          "request": {
+            "body": {
+              "enabled": true
+            },
+            "body_metadata": {
+              "binary": false,
+              "content_type": "application/json",
+              "size": 17,
+              "truncated": false
+            },
+            "headers": {
+              "authorization": "[REDACTED]",
+              "content-length": "17",
+              "content-type": "application/json",
+              "host": "127.0.0.1:59005",
+              "x-lab-run-id": "004d4800-6acf-4d80-81f3-112d0e95dc83"
+            },
+            "host": "127.0.0.1",
+            "method": "POST",
+            "path": "/lab/admin/toggle",
+            "port": 59005,
+            "query": {},
+            "request_id": "dcd6efa6-cca0-4f13-9d86-b1ce269ce336",
+            "scheme": "http",
+            "timestamp": "2026-10-03T08:12:57.942740+00:00"
+          },
+          "response": {
+            "body": {
+              "applied": true,
+              "enabled": true,
+              "function": "training_toggle",
+              "revision": 1
+            },
+            "body_metadata": {
+              "binary": false,
+              "content_type": "application/json",
+              "size": 80,
+              "truncated": false
+            },
+            "headers": {
+              "cache-control": "no-store",
+              "content-length": "80",
+              "content-type": "application/json",
+              "date": "Sat, 03 Oct 2026 08:12:57 GMT",
+              "server": "BaseHTTP/0.6 Python/3.11.7",
+              "x-lab-trace-id": "lab_d101c6e3bf1e425b8e128c1b5add1dfe"
+            },
+            "status_code": 200,
+            "timestamp": "2026-10-03T08:12:57.943026+00:00"
+          },
+          "scope": "UNKNOWN",
+          "session_id": "004d4800-6acf-4d80-81f3-112d0e95dc83",
+          "transaction_id": "11209cb1-72a0-41a7-a9b1-46e6093c9436"
+        },
+        "baseline_receipts": [
+          {
+            "auth_present": false,
+            "auth_valid": false,
+            "method": "POST",
+            "path": "/login",
+            "run_id": "004d4800-6acf-4d80-81f3-112d0e95dc83",
+            "source": "local_training_backend_actual_response",
+            "status": 200,
+            "trace_id": "lab_d3dde876e4e94a2d8f2eba00379fb470"
+          },
+          {
+            "auth_present": false,
+            "auth_valid": false,
+            "method": "POST",
+            "path": "/login",
+            "run_id": "004d4800-6acf-4d80-81f3-112d0e95dc83",
+            "source": "local_training_backend_actual_response",
+            "status": 200,
+            "trace_id": "lab_78c4e8799b054c6bac25e5d9b285b46b"
+          },
+          {
+            "auth_present": true,
+            "auth_valid": true,
+            "credential_ref": "principal_session_d707056ddaa242099b5e8fc89b2a27bf",
+            "method": "POST",
+            "path": "/lab/admin/toggle",
+            "principal_alias": "user_B",
+            "response_sha256": "6ba0054a8ea6e94e37e10f5555c78f7ce5ce451eb2255267f892c129aa5ac227",
+            "role": "admin",
+            "run_id": "004d4800-6acf-4d80-81f3-112d0e95dc83",
+            "source": "local_training_backend_actual_response",
+            "state_after": {
+              "enabled": true,
+              "evidence_ref": "state_lab_d101c6e3bf1e425b8e128c1b5add1dfe_after",
+              "revision": 1,
+              "session_id": "004d4800-6acf-4d80-81f3-112d0e95dc83",
+              "trace_id": "lab_d101c6e3bf1e425b8e128c1b5add1dfe"
+            },
+            "state_before": {
+              "enabled": false,
+              "evidence_ref": "state_lab_d101c6e3bf1e425b8e128c1b5add1dfe_before",
+              "revision": 0,
+              "session_id": "004d4800-6acf-4d80-81f3-112d0e95dc83",
+              "trace_id": "lab_d101c6e3bf1e425b8e128c1b5add1dfe"
+            },
+            "status": 200,
+            "trace_id": "lab_d101c6e3bf1e425b8e128c1b5add1dfe"
+          },
+          {
+            "auth_present": true,
+            "auth_valid": true,
+            "credential_ref": "principal_session_0c7943a1304b4501bc6d45ad078a8722",
+            "method": "POST",
+            "path": "/lab/admin/toggle",
+            "principal_alias": "user_A",
+            "response_sha256": "605b569c8b5029707b572cba86f4188ddf832119d23b9a5a151f50fe08c6fd47",
+            "role": "user",
+            "run_id": "004d4800-6acf-4d80-81f3-112d0e95dc83",
+            "source": "local_training_backend_actual_response",
+            "state_after": {
+              "enabled": true,
+              "evidence_ref": "state_lab_ba442684b33f4fea857eb5a5af0c6678_after",
+              "revision": 1,
+              "session_id": "004d4800-6acf-4d80-81f3-112d0e95dc83",
+              "trace_id": "lab_ba442684b33f4fea857eb5a5af0c6678"
+            },
+            "state_before": {
+              "enabled": true,
+              "evidence_ref": "state_lab_ba442684b33f4fea857eb5a5af0c6678_before",
+              "revision": 1,
+              "session_id": "004d4800-6acf-4d80-81f3-112d0e95dc83",
+              "trace_id": "lab_ba442684b33f4fea857eb5a5af0c6678"
+            },
+            "status": 403,
+            "trace_id": "lab_ba442684b33f4fea857eb5a5af0c6678"
+          }
+        ],
+        "comparison_ref": "comparison_2b9a9e7072ae159b54d3",
+        "context": {
+          "action_context": [],
+          "auth": {
+            "api_key_header_present": false,
+            "authorization_header_present": true,
+            "bearer_token_present": null,
+            "cookie_present": false,
+            "session_cookie_present": false
+          },
+          "dynamic": {
+            "available_transaction_count": 1,
+            "first_observed_at": "2026-10-03T08:12:57.942740+00:00",
+            "last_observed_at": "2026-10-03T08:12:57.942740+00:00",
+            "missing_transaction_ids": [],
+            "observation_count": 1,
+            "observed": true,
+            "observed_methods": [
+              "POST"
+            ],
+            "observed_status_codes": [
+              200
+            ],
+            "schemes": [
+              "http"
+            ],
+            "transaction_ids": [
+              "11209cb1-72a0-41a7-a9b1-46e6093c9436"
+            ]
+          },
+          "endpoint_context_id": "ctx_09deb6fa998c4877",
+          "evidence_refs": {
+            "action_ids": [],
+            "correlation_ids": [
+              "corr_6a00557882b2bd61"
+            ],
+            "runtime_action_ids": [],
+            "static_candidate_ids": [],
+            "transaction_ids": [
+              "11209cb1-72a0-41a7-a9b1-46e6093c9436"
+            ]
+          },
+          "host": "127.0.0.1",
+          "methods": [
+            "POST"
+          ],
+          "path": "/lab/admin/toggle",
+          "port": 59005,
+          "request": {
+            "body_keys": [
+              "enabled"
+            ],
+            "body_present": true,
+            "body_shapes": [
+              {
+                "enabled": "boolean"
+              }
+            ],
+            "body_sizes": [
+              17
+            ],
+            "body_types": [
+              "json"
+            ],
+            "content_types": [
+              "application/json"
+            ],
+            "header_names": [
+              "authorization",
+              "content-length",
+              "content-type",
+              "host",
+              "x-lab-run-id"
+            ],
+            "methods": [
+              "POST"
+            ],
+            "query_keys": []
+          },
+          "response": {
+            "body_keys": [
+              "applied",
+              "enabled",
+              "function",
+              "revision"
+            ],
+            "body_present": true,
+            "body_shapes": [
+              {
+                "applied": "boolean",
+                "enabled": "boolean",
+                "function": "string",
+                "revision": "number"
+              }
+            ],
+            "body_sizes": [
+              80
+            ],
+            "body_types": [
+              "json"
+            ],
+            "content_types": [
+              "application/json"
+            ],
+            "header_names": [
+              "cache-control",
+              "content-length",
+              "content-type",
+              "date",
+              "server",
+              "x-lab-trace-id"
+            ],
+            "observed_status_codes": [
+              200
+            ],
+            "status_code_counts": {
+              "200": 1
+            }
+          },
+          "route_context": [],
+          "runtime_context": {
+            "activity_changes_observed": false,
+            "crash_observed": false,
+            "evidence_available": false,
+            "fatal_observed": false,
+            "pid_changed_observed": false,
+            "process_death_observed": false
+          },
+          "scheme": "http",
+          "static": {},
+          "visibility": {
+            "http_visibility": "available",
+            "https_visibility": "unavailable",
+            "https_visibility_reason": "certificate_trust_unknown"
+          }
+        },
+        "control_ref": "control_2b9a9e7072ae159b54d3",
+        "execution_ref": "execution_2b9a9e7072ae159b54d3",
+        "privileges": {
+          "evidence_ref": "privilege_bc891e59103718a7e4b8",
+          "function": {
+            "body": {
+              "enabled": true
+            },
+            "disposable": true,
+            "method": "POST",
+            "path": "/lab/admin/toggle",
+            "required_role": "admin"
+          },
+          "host": "127.0.0.1",
+          "port": 59005,
+          "principals": {
+            "user_A": {
+              "credential_ref": "principal_session_0c7943a1304b4501bc6d45ad078a8722",
+              "role": "user"
+            },
+            "user_B": {
+              "credential_ref": "principal_session_d707056ddaa242099b5e8fc89b2a27bf",
+              "role": "admin"
+            }
+          },
+          "session_id": "004d4800-6acf-4d80-81f3-112d0e95dc83",
+          "source": "controlled_local_lab_configuration"
+        },
+        "session": {
+          "session_id": "004d4800-6acf-4d80-81f3-112d0e95dc83"
+        },
+        "variant": {
+          "attribution": {
+            "baseline_transaction_ref": "11209cb1-72a0-41a7-a9b1-46e6093c9436",
+            "method": "deterministic_local_executor"
+          },
+          "capture_id": "capture_ca1b6190eb624c4e8730ccfe7597046e",
+          "correlation": {},
+          "duration_ms": 0.0,
+          "flow_id": null,
+          "request": {
+            "body": {
+              "enabled": true
+            },
+            "body_metadata": {
+              "binary": false,
+              "content_type": "application/json",
+              "size": 17,
+              "truncated": false
+            },
+            "headers": {
+              "authorization": "[REDACTED]",
+              "content-length": "17",
+              "content-type": "application/json",
+              "host": "127.0.0.1:59005",
+              "x-lab-run-id": "004d4800-6acf-4d80-81f3-112d0e95dc83"
+            },
+            "host": "127.0.0.1",
+            "method": "POST",
+            "path": "/lab/admin/toggle",
+            "port": 59005,
+            "query": {},
+            "request_id": "db1c27bc-fdc6-47a8-acb2-f2c9130bafab",
+            "scheme": "http",
+            "timestamp": "2026-10-03T08:12:57.943978+00:00"
+          },
+          "response": {
+            "body": {
+              "error": "function_access_denied",
+              "function": "training_toggle"
+            },
+            "body_metadata": {
+              "binary": false,
+              "content_type": "application/json",
+              "size": 66,
+              "truncated": false
+            },
+            "headers": {
+              "cache-control": "no-store",
+              "content-length": "66",
+              "content-type": "application/json",
+              "date": "Sat, 03 Oct 2026 08:12:57 GMT",
+              "server": "BaseHTTP/0.6 Python/3.11.7",
+              "x-lab-trace-id": "lab_ba442684b33f4fea857eb5a5af0c6678"
+            },
+            "status_code": 403,
+            "timestamp": "2026-10-03T08:12:57.944526+00:00"
+          },
+          "scope": "UNKNOWN",
+          "session_id": "004d4800-6acf-4d80-81f3-112d0e95dc83",
+          "transaction_id": "54f2f682-0555-4fc6-8ebf-8c63ebd70f87"
+        },
+        "variant_receipts": [
+          {
+            "auth_present": false,
+            "auth_valid": false,
+            "method": "POST",
+            "path": "/login",
+            "run_id": "004d4800-6acf-4d80-81f3-112d0e95dc83",
+            "source": "local_training_backend_actual_response",
+            "status": 200,
+            "trace_id": "lab_d3dde876e4e94a2d8f2eba00379fb470"
+          },
+          {
+            "auth_present": false,
+            "auth_valid": false,
+            "method": "POST",
+            "path": "/login",
+            "run_id": "004d4800-6acf-4d80-81f3-112d0e95dc83",
+            "source": "local_training_backend_actual_response",
+            "status": 200,
+            "trace_id": "lab_78c4e8799b054c6bac25e5d9b285b46b"
+          },
+          {
+            "auth_present": true,
+            "auth_valid": true,
+            "credential_ref": "principal_session_d707056ddaa242099b5e8fc89b2a27bf",
+            "method": "POST",
+            "path": "/lab/admin/toggle",
+            "principal_alias": "user_B",
+            "response_sha256": "6ba0054a8ea6e94e37e10f5555c78f7ce5ce451eb2255267f892c129aa5ac227",
+            "role": "admin",
+            "run_id": "004d4800-6acf-4d80-81f3-112d0e95dc83",
+            "source": "local_training_backend_actual_response",
+            "state_after": {
+              "enabled": true,
+              "evidence_ref": "state_lab_d101c6e3bf1e425b8e128c1b5add1dfe_after",
+              "revision": 1,
+              "session_id": "004d4800-6acf-4d80-81f3-112d0e95dc83",
+              "trace_id": "lab_d101c6e3bf1e425b8e128c1b5add1dfe"
+            },
+            "state_before": {
+              "enabled": false,
+              "evidence_ref": "state_lab_d101c6e3bf1e425b8e128c1b5add1dfe_before",
+              "revision": 0,
+              "session_id": "004d4800-6acf-4d80-81f3-112d0e95dc83",
+              "trace_id": "lab_d101c6e3bf1e425b8e128c1b5add1dfe"
+            },
+            "status": 200,
+            "trace_id": "lab_d101c6e3bf1e425b8e128c1b5add1dfe"
+          },
+          {
+            "auth_present": true,
+            "auth_valid": true,
+            "credential_ref": "principal_session_0c7943a1304b4501bc6d45ad078a8722",
+            "method": "POST",
+            "path": "/lab/admin/toggle",
+            "principal_alias": "user_A",
+            "response_sha256": "605b569c8b5029707b572cba86f4188ddf832119d23b9a5a151f50fe08c6fd47",
+            "role": "user",
+            "run_id": "004d4800-6acf-4d80-81f3-112d0e95dc83",
+            "source": "local_training_backend_actual_response",
+            "state_after": {
+              "enabled": true,
+              "evidence_ref": "state_lab_ba442684b33f4fea857eb5a5af0c6678_after",
+              "revision": 1,
+              "session_id": "004d4800-6acf-4d80-81f3-112d0e95dc83",
+              "trace_id": "lab_ba442684b33f4fea857eb5a5af0c6678"
+            },
+            "state_before": {
+              "enabled": true,
+              "evidence_ref": "state_lab_ba442684b33f4fea857eb5a5af0c6678_before",
+              "revision": 1,
+              "session_id": "004d4800-6acf-4d80-81f3-112d0e95dc83",
+              "trace_id": "lab_ba442684b33f4fea857eb5a5af0c6678"
+            },
+            "status": 403,
+            "trace_id": "lab_ba442684b33f4fea857eb5a5af0c6678"
+          }
+        ]
+      },
+      "execution": {
+        "endpoint_context_id": "ctx_09deb6fa998c4877",
+        "evidence_refs": [
+          "004d4800-6acf-4d80-81f3-112d0e95dc83",
+          "comparison_2b9a9e7072ae159b54d3",
+          "control_2b9a9e7072ae159b54d3",
+          "ctx_09deb6fa998c4877",
+          "db1c27bc-fdc6-47a8-acb2-f2c9130bafab",
+          "dcd6efa6-cca0-4f13-9d86-b1ce269ce336",
+          "execution_2b9a9e7072ae159b54d3",
+          "lab_ba442684b33f4fea857eb5a5af0c6678",
+          "lab_d101c6e3bf1e425b8e128c1b5add1dfe",
+          "privilege_bc891e59103718a7e4b8",
+          "state_lab_ba442684b33f4fea857eb5a5af0c6678_after",
+          "state_lab_ba442684b33f4fea857eb5a5af0c6678_before",
+          "state_lab_d101c6e3bf1e425b8e128c1b5add1dfe_after",
+          "state_lab_d101c6e3bf1e425b8e128c1b5add1dfe_before"
+        ],
+        "execution_status": "completed",
+        "failure_reason": null,
+        "finished_at": "2026-10-03T08:12:57.944637+00:00",
+        "observed_request_ref": "db1c27bc-fdc6-47a8-acb2-f2c9130bafab",
+        "observed_response_ref": "lab_ba442684b33f4fea857eb5a5af0c6678",
+        "schema_version": "1.0",
+        "session_id": "004d4800-6acf-4d80-81f3-112d0e95dc83",
+        "started_at": "2026-10-03T08:12:57.943978+00:00",
+        "test_id": "FUNCTION_AUTHORIZATION",
+        "tool_refs": [
+          "execution_2b9a9e7072ae159b54d3"
+        ]
+      },
+      "registry": {
+        "004d4800-6acf-4d80-81f3-112d0e95dc83": {
+          "endpoint_context_id": "ctx_09deb6fa998c4877",
+          "kind": "runtime",
+          "ref": "004d4800-6acf-4d80-81f3-112d0e95dc83",
+          "session_id": "004d4800-6acf-4d80-81f3-112d0e95dc83"
+        },
+        "comparison_2b9a9e7072ae159b54d3": {
+          "endpoint_context_id": "ctx_09deb6fa998c4877",
+          "kind": "comparison",
+          "ref": "comparison_2b9a9e7072ae159b54d3",
+          "session_id": "004d4800-6acf-4d80-81f3-112d0e95dc83"
+        },
+        "control_2b9a9e7072ae159b54d3": {
+          "endpoint_context_id": "ctx_09deb6fa998c4877",
+          "kind": "control",
+          "ref": "control_2b9a9e7072ae159b54d3",
+          "session_id": "004d4800-6acf-4d80-81f3-112d0e95dc83"
+        },
+        "ctx_09deb6fa998c4877": {
+          "endpoint_context_id": "ctx_09deb6fa998c4877",
+          "kind": "context",
+          "ref": "ctx_09deb6fa998c4877",
+          "session_id": "004d4800-6acf-4d80-81f3-112d0e95dc83"
+        },
+        "db1c27bc-fdc6-47a8-acb2-f2c9130bafab": {
+          "endpoint_context_id": "ctx_09deb6fa998c4877",
+          "kind": "request",
+          "ref": "db1c27bc-fdc6-47a8-acb2-f2c9130bafab",
+          "session_id": "004d4800-6acf-4d80-81f3-112d0e95dc83"
+        },
+        "dcd6efa6-cca0-4f13-9d86-b1ce269ce336": {
+          "endpoint_context_id": "ctx_09deb6fa998c4877",
+          "kind": "request",
+          "ref": "dcd6efa6-cca0-4f13-9d86-b1ce269ce336",
+          "session_id": "004d4800-6acf-4d80-81f3-112d0e95dc83"
+        },
+        "execution_2b9a9e7072ae159b54d3": {
+          "endpoint_context_id": "ctx_09deb6fa998c4877",
+          "kind": "tool",
+          "ref": "execution_2b9a9e7072ae159b54d3",
+          "session_id": "004d4800-6acf-4d80-81f3-112d0e95dc83"
+        },
+        "lab_ba442684b33f4fea857eb5a5af0c6678": {
+          "endpoint_context_id": "ctx_09deb6fa998c4877",
+          "kind": "response",
+          "ref": "lab_ba442684b33f4fea857eb5a5af0c6678",
+          "session_id": "004d4800-6acf-4d80-81f3-112d0e95dc83"
+        },
+        "lab_d101c6e3bf1e425b8e128c1b5add1dfe": {
+          "endpoint_context_id": "ctx_09deb6fa998c4877",
+          "kind": "response",
+          "ref": "lab_d101c6e3bf1e425b8e128c1b5add1dfe",
+          "session_id": "004d4800-6acf-4d80-81f3-112d0e95dc83"
+        },
+        "privilege_bc891e59103718a7e4b8": {
+          "endpoint_context_id": "ctx_09deb6fa998c4877",
+          "kind": "control",
+          "ref": "privilege_bc891e59103718a7e4b8",
+          "session_id": "004d4800-6acf-4d80-81f3-112d0e95dc83"
+        },
+        "state_lab_ba442684b33f4fea857eb5a5af0c6678_after": {
+          "endpoint_context_id": "ctx_09deb6fa998c4877",
+          "kind": "control",
+          "ref": "state_lab_ba442684b33f4fea857eb5a5af0c6678_after",
+          "session_id": "004d4800-6acf-4d80-81f3-112d0e95dc83"
+        },
+        "state_lab_ba442684b33f4fea857eb5a5af0c6678_before": {
+          "endpoint_context_id": "ctx_09deb6fa998c4877",
+          "kind": "control",
+          "ref": "state_lab_ba442684b33f4fea857eb5a5af0c6678_before",
+          "session_id": "004d4800-6acf-4d80-81f3-112d0e95dc83"
+        },
+        "state_lab_d101c6e3bf1e425b8e128c1b5add1dfe_after": {
+          "endpoint_context_id": "ctx_09deb6fa998c4877",
+          "kind": "control",
+          "ref": "state_lab_d101c6e3bf1e425b8e128c1b5add1dfe_after",
+          "session_id": "004d4800-6acf-4d80-81f3-112d0e95dc83"
+        },
+        "state_lab_d101c6e3bf1e425b8e128c1b5add1dfe_before": {
+          "endpoint_context_id": "ctx_09deb6fa998c4877",
+          "kind": "control",
+          "ref": "state_lab_d101c6e3bf1e425b8e128c1b5add1dfe_before",
+          "session_id": "004d4800-6acf-4d80-81f3-112d0e95dc83"
+        }
+      },
+      "request": {
+        "endpoint_context_id": "ctx_09deb6fa998c4877",
+        "purpose": "Validate role enforcement for a disposable controlled lab function",
+        "requested_action": "validate_function_access_behavior",
+        "required_evidence_refs": [
+          "004d4800-6acf-4d80-81f3-112d0e95dc83",
+          "ctx_09deb6fa998c4877",
+          "dcd6efa6-cca0-4f13-9d86-b1ce269ce336",
+          "lab_d101c6e3bf1e425b8e128c1b5add1dfe",
+          "privilege_bc891e59103718a7e4b8",
+          "state_lab_d101c6e3bf1e425b8e128c1b5add1dfe_after",
+          "state_lab_d101c6e3bf1e425b8e128c1b5add1dfe_before"
+        ],
+        "risk_class": "low",
+        "schema_version": "1.0",
+        "session_id": "004d4800-6acf-4d80-81f3-112d0e95dc83",
+        "test_category": "function_authorization",
+        "test_id": "FUNCTION_AUTHORIZATION"
+      },
+      "standards": {
+        "mastg_test_refs": [],
+        "masvs_category": "MASVS-AUTH",
+        "masvs_control_refs": [
+          "MASVS-AUTH-1"
+        ],
+        "maswe_refs": []
+      },
+      "validation": {
+        "coverage": "available",
+        "created_at": "2026-10-03T08:12:57.944790+00:00",
+        "criterion": "controlled_behavior_check",
+        "endpoint_context_id": "ctx_09deb6fa998c4877",
+        "evidence_refs": [
+          "004d4800-6acf-4d80-81f3-112d0e95dc83",
+          "comparison_2b9a9e7072ae159b54d3",
+          "control_2b9a9e7072ae159b54d3",
+          "ctx_09deb6fa998c4877",
+          "db1c27bc-fdc6-47a8-acb2-f2c9130bafab",
+          "dcd6efa6-cca0-4f13-9d86-b1ce269ce336",
+          "execution_2b9a9e7072ae159b54d3",
+          "lab_ba442684b33f4fea857eb5a5af0c6678",
+          "lab_d101c6e3bf1e425b8e128c1b5add1dfe",
+          "privilege_bc891e59103718a7e4b8",
+          "state_lab_ba442684b33f4fea857eb5a5af0c6678_after",
+          "state_lab_ba442684b33f4fea857eb5a5af0c6678_before",
+          "state_lab_d101c6e3bf1e425b8e128c1b5add1dfe_after",
+          "state_lab_d101c6e3bf1e425b8e128c1b5add1dfe_before"
+        ],
+        "outcome": "validated",
+        "reason_codes": [
+          "FUNCTION_AUTHORIZATION_ENFORCED"
+        ],
+        "schema_version": "1.0",
+        "session_id": "004d4800-6acf-4d80-81f3-112d0e95dc83",
+        "test_id": "FUNCTION_AUTHORIZATION"
+      }
+    }
+  ],
+  "schema_version": "1.0",
+  "session_id": "004d4800-6acf-4d80-81f3-112d0e95dc83"
+}

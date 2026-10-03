@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.0",
+  "session_id": "2cf26134-1e56-445b-99c7-d9f7cd0e1e10",
+  "created_at": "2026-10-03T08:53:52Z",
+  "summary": {
+    "static_candidate_count": 0,
+    "dynamic_endpoint_count": 1,
+    "correlated_count": 0,
+    "static_only_count": 0,
+    "dynamic_only_count": 1,
+    "http_visibility": "available",
+    "https_visibility": "unavailable",
+    "https_visibility_reason": "certificate_trust_unknown",
+    "visibility_note": "HTTPS traffic visibility was unavailable (certificate_trust_unknown). Unobserved static HTTPS candidates were not observable in runtime traffic."
+  },
+  "correlations": [
+    {
+      "correlation_id": "corr_6138b2b341622140",
+      "match_type": "dynamic_only",
+      "confidence": "low",
+      "host": "127.0.0.1",
+      "scheme": "http",
+      "port": 62563,
+      "path": "/profile",
+      "static_candidate_id": null,
+      "transaction_ids": [
+        "00521150-2223-444c-b1c8-a9129928ca11"
+      ],
+      "static_method": null,
+      "observed_methods": [
+        "GET"
+      ],
+      "observed_status_codes": [
+        200
+      ],
+      "first_observed_at": "2026-10-03T08:53:52.204493+00:00",
+      "last_observed_at": "2026-10-03T08:53:52.204493+00:00",
+      "observation_count": 1,
+      "observed_action_ids": [],
+      "observed_query_keys": [],
+      "route_context": [],
+      "provenance": {},
+      "notes": "observed in runtime traffic; not identified in static analysis candidates"
+    }
+  ]
+}

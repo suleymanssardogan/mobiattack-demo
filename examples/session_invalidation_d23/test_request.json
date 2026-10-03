@@ -1,0 +1,23 @@
+{
+  "endpoint_context_id": "ctx_cae05b8c35fbaf4d",
+  "purpose": "Validate old credential rejection after proven local training logout",
+  "requested_action": "validate_session_dependency",
+  "required_evidence_refs": [
+    "2cf26134-1e56-445b-99c7-d9f7cd0e1e10",
+    "9646f3be-4465-4091-90f1-98f649aa98a5",
+    "ctx_cae05b8c35fbaf4d",
+    "d9ddfc96-ede1-4675-be46-41eb64e0b451",
+    "lab_ce5ba4b3966b445ca4c0556e060ed052",
+    "lab_e56823ce7da94d1693a82be0698f3aa1",
+    "lifecycle_cc0ececc47cdcd86f698",
+    "state_lab_ce5ba4b3966b445ca4c0556e060ed052_after",
+    "state_lab_ce5ba4b3966b445ca4c0556e060ed052_before",
+    "state_lab_e56823ce7da94d1693a82be0698f3aa1_after",
+    "state_lab_e56823ce7da94d1693a82be0698f3aa1_before"
+  ],
+  "risk_class": "low",
+  "schema_version": "1.0",
+  "session_id": "2cf26134-1e56-445b-99c7-d9f7cd0e1e10",
+  "test_category": "session_handling",
+  "test_id": "SESSION_HANDLING"
+}

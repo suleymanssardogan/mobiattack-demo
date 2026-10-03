@@ -14,6 +14,14 @@ class PreflightStatus(str, Enum):
 
 
 class ErrorCode(str, Enum):
+    MULTIPLE_DEVICES = "MULTIPLE_DEVICES"
+    PROCESS_EXITED = 'PROCESS_EXITED'
+    RUNTIME_OBSERVATION_UNAVAILABLE = 'RUNTIME_OBSERVATION_UNAVAILABLE'
+    INSTALL_FAILED = 'INSTALL_FAILED'
+    INSTALL_INCOMPATIBLE = 'INSTALL_INCOMPATIBLE'
+    ABI_UNSUPPORTED = 'ABI_UNSUPPORTED'
+    DEVICE_FEATURE_UNAVAILABLE = 'DEVICE_FEATURE_UNAVAILABLE'
+    INTEGRITY_ENVIRONMENT_REJECTED = 'INTEGRITY_ENVIRONMENT_REJECTED'
     ADB_NOT_FOUND = "ADB_NOT_FOUND"
     DEVICE_NOT_FOUND = "DEVICE_NOT_FOUND"
     DEVICE_UNAUTHORIZED = "DEVICE_UNAUTHORIZED"
@@ -81,12 +89,14 @@ class PreflightResult:
     runtime: RuntimeBaseline = field(default_factory=RuntimeBaseline)
     network: NetworkInfo = field(default_factory=NetworkInfo)
     status: PreflightStatus = PreflightStatus.FAIL
+    execution_target: dict | None = None
     warnings: list[str] = field(default_factory=list)
     errors: list[dict[str, str]] = field(default_factory=list)
 
     def to_dict(self) -> dict[str, Any]:
         """Converts result into normalized JSON-serializable dictionary."""
         return {
+            **({"execution_target": self.execution_target} if self.execution_target is not None else {}),
             "stage": self.stage,
             "device": {
                 "connected": self.device.connected,

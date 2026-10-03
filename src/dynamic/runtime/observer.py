@@ -5,6 +5,7 @@ foreground activity, and bounded logcat crash/fatal signatures.
 """
 
 from __future__ import annotations
+from src.dynamic.deadline import bounded_operation, current_deadline, bounded_timeout
 
 import logging
 from pathlib import Path
@@ -355,7 +356,7 @@ class AndroidRuntimeObserver:
                     cmd,
                     capture_output=True,
                     text=True,
-                    timeout=self.timeout_seconds,
+                    timeout=bounded_timeout(self.timeout_seconds),
                     check=False,
                 )
                 if proc.returncode == 0 and proc.stdout:
@@ -386,7 +387,7 @@ class AndroidRuntimeObserver:
                     cmd_fallback,
                     capture_output=True,
                     text=True,
-                    timeout=self.timeout_seconds,
+                    timeout=bounded_timeout(self.timeout_seconds),
                     check=False,
                 )
                 if proc_fb.returncode == 0 and proc_fb.stdout:
@@ -450,6 +451,7 @@ class AndroidRuntimeObserver:
 
         return bounded_events, fatal_detected, crash_detected
 
+    @bounded_operation(5.0, self_field="timeout_seconds")
     def observe(
         self,
         package_name: str,
@@ -466,6 +468,9 @@ class AndroidRuntimeObserver:
 
         # 1. Query PID
         pid = self._query_pid(clean_pkg, adb_bin, diagnostics)
+        if current_deadline().remaining() <= 0:
+            pid = None
+            diagnostics.append('Runtime observation deadline exhausted; PID unavailable.')
         process_running = (pid is not None)
 
         # 2. Query Foreground Activity

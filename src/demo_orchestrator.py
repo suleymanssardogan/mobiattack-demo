@@ -66,6 +66,62 @@ class DemoOrchestrationError(ValueError):
 from typing import Callable
 
 
+def _runtime_with_availability(root_path, package_name, launcher_activity, *, progress_callback=None, **kwargs):
+    """Runtime limitations are isolated; Static and result assembly always continue."""
+    from src.dynamic.runtime.availability import availability, save_availability, RuntimeReason
+    from src.android_runtime_launcher import AndroidRuntimeError
+    try:
+        if not isinstance(launcher_activity, str) or not launcher_activity.strip() or launcher_activity.endswith('.unknown'):
+            raise AndroidRuntimeError('No declared enabled launcher.', 'LAUNCHER_UNRESOLVED',
+                                      evidence={'source': 'launcher_resolution'})
+        metadata = launch_android_app(package_name=package_name.strip(), launcher_activity=launcher_activity.strip(), **kwargs)
+        runtime = metadata.get('runtime', {})
+        pid = runtime.get('pid')
+        if not isinstance(pid, int) or isinstance(pid, bool) or pid <= 0 or runtime.get('process_survived') is False:
+            raise AndroidRuntimeError('Runtime process could not be verified.', 'RUNTIME_OBSERVATION_UNAVAILABLE',
+                                      evidence={'source': 'runtime_observation', 'process_survived': False})
+        foreground = bool(runtime.get('foreground_verified'))
+        record = availability('SUPPORTED', package_name=package_name, target_serial=metadata.get('adb', {}).get('serial') or kwargs.get('adb_serial'), status='available' if foreground else 'partial', evidence={
+            'source': 'runtime_launcher', 'pid': pid, 'process_appeared': True, 'process_survived': True,
+            'foreground_verified': foreground})
+        from src.dynamic.runtime.execution_target import ExecutionTarget, save_target
+        if metadata.get('execution_target'):
+            selected = ExecutionTarget.from_dict(metadata['execution_target'])
+            if selected.adb_serial != record['target_serial']:
+                raise ValueError('TARGET_IDENTITY_MISMATCH')
+            save_target(root_path, selected)
+            record['execution_target_id'] = selected.target_id
+        save_availability(root_path, record)
+        metadata['runtime_availability'] = record
+        _ensure_preflight_persisted_from_meta(root_path, package_name, launcher_activity, metadata, kwargs.get('adb_serial'))
+        _emit_progress(progress_callback, 'runtime', 'success', record['message'], metadata)
+        return metadata
+    except Exception as exc:
+        reason = getattr(exc, 'reason_code', 'UNKNOWN')
+        if isinstance(exc, AndroidDeviceUnavailableError):
+            reason = 'RUNTIME_OBSERVATION_UNAVAILABLE'
+        if reason not in {item.value for item in RuntimeReason}:
+            reason = 'UNKNOWN'
+        backend_reason = getattr(exc, 'backend_reason_code', reason)
+        if isinstance(exc, AndroidDeviceUnavailableError):
+            backend_reason = {'adb_not_found': 'ADB_NOT_FOUND', 'unauthorized': 'DEVICE_UNAUTHORIZED',
+                'offline': 'DEVICE_OFFLINE', 'multiple_devices': 'MULTIPLE_DEVICES'}.get(getattr(exc, 'reason', ''), 'DEVICE_NOT_FOUND')
+        record = availability(reason, package_name=package_name, target_serial=kwargs.get('adb_serial'), backend_reason=backend_reason,
+            evidence=getattr(exc, 'evidence', None) or {'source': 'runtime_boundary', 'exception_type': type(exc).__name__})
+        from src.dynamic.runtime.execution_target import load_target
+        selected = load_target(root_path)
+        if selected:
+            record['target_serial'] = selected.adb_serial
+            record['execution_target_id'] = selected.target_id
+        save_availability(root_path, record)
+        _persist_preflight_fallback(root_path, package_name, launcher_activity, PreflightStatus.FAIL,
+            record['message'], record['reason_code'], adb_serial=kwargs.get('adb_serial'))
+        _emit_progress(progress_callback, 'runtime', 'skipped', record['message'], {'runtime_availability': record})
+        _wire_dynamic_analysis_report(root_path)
+        _update_scan_state_dynamic_stage(root_path, 'not_available', record['message'])
+        return {'status': 'unavailable', 'runtime_availability': record, 'runtime': {'pid': None, 'process_running': False}}
+
+
 def _persist_preflight_fallback(
     root_path: Path,
     package_name: str,
@@ -246,7 +302,10 @@ def _wire_dynamic_session(
         )
 
         pkg = app.get("package_name") or package_name
-        serial = dev.get("serial") or adb_serial or ""
+        from src.dynamic.runtime.execution_target import resolve_run_transport, verify_run_target
+        from src.dynamic.preflight.device_check import run_adb_cmd, find_adb_binary
+        verify_run_target(root_path, lambda args: run_adb_cmd(find_adb_binary() or 'adb', args))
+        serial = resolve_run_transport(root_path, dev.get("serial"), adb_serial)
 
         # Only provide observation function when device is usable
         observe_fn = None
@@ -268,7 +327,8 @@ def _wire_dynamic_session(
             observe_screen_fn=observe_fn,
         )
     except Exception as exc:
-        logger.warning("Dynamic session initialization failed: %s", exc)
+        logger.warning("Dynamic session initialization unavailable.")
+        _wire_dynamic_analysis_report(root_path)
         return None
 
 
@@ -474,7 +534,10 @@ def _wire_dynamic_exploration(
 
         session_id = session_data.get("session_id")
         target_pkg = app.get("package_name") or package_name
-        target_serial = dev.get("serial") or adb_serial or ""
+        from src.dynamic.runtime.execution_target import resolve_run_transport, verify_run_target
+        from src.dynamic.preflight.device_check import run_adb_cmd, find_adb_binary
+        verify_run_target(root_path, lambda args: run_adb_cmd(find_adb_binary() or 'adb', args))
+        target_serial = resolve_run_transport(root_path, dev.get("serial"), adb_serial, session_data.get("device_serial"))
 
         # Update product state: dynamic_analysis becomes running
         _update_scan_state_dynamic_stage(
@@ -534,12 +597,17 @@ def _wire_dynamic_exploration(
 
         traffic_started = False
         try:
-            readiness = traffic_service.check_readiness(device_serial=target_serial, proxy_port=traffic_proxy_port)
-            if readiness.backend_available and readiness.adb_available:
+            from src.dynamic.runtime.execution_target import load_target, record_capabilities
+            current_target = load_target(root_path)
+            proxy_options = {'proxy_host': current_target.proxy_context['host']} if current_target and current_target.proxy_context else {}
+            readiness = traffic_service.check_readiness(device_serial=target_serial, proxy_port=traffic_proxy_port, **proxy_options)
+            record_capabilities(root_path, {'host_reachability': 'available' if readiness.device_reachable_proxy is True else 'unknown'}, 'proxy_readiness')
+            if readiness.backend_available and readiness.adb_available and readiness.port_available:
                 traffic_service.start_capture(
                     session=session_id,
                     device_serial=target_serial,
                     proxy_port=traffic_proxy_port,
+                    **proxy_options,
                 )
                 traffic_started = True
                 timeline_recorder._record_system_event(
@@ -547,16 +615,38 @@ def _wire_dynamic_exploration(
                     {"backend": traffic_backend.__class__.__name__, "proxy_port": traffic_proxy_port},
                 )
             else:
+                traffic_service.http_visibility = "unavailable"
+                traffic_service.http_reason = readiness.errors[0]["code"] if readiness.errors else "proxy_readiness_failed"
                 timeline_recorder._record_system_event(
                     "TRAFFIC_CAPTURE_UNAVAILABLE",
                     {"warnings": readiness.warnings},
                 )
         except Exception as exc:
+            traffic_service.http_visibility = "unavailable"
+            traffic_service.http_reason = getattr(getattr(exc, "error_code", None), "value", "capture_start_failed")
             logger.warning("Traffic capture start skipped/failed: %s", exc)
             timeline_recorder._record_system_event(
                 "TRAFFIC_CAPTURE_UNAVAILABLE",
                 {"error": str(exc)},
             )
+
+        from src.dynamic.runtime.execution_target import record_capabilities
+        visibility = traffic_service.get_visibility_metadata()
+        if not traffic_started:
+            from src.dynamic.traffic.models import CaptureSummary
+            traffic_service.storage.save_traffic_json(
+                target_path=traffic_file, session_id=session_id, transactions=[],
+                capture=traffic_service.active_capture,
+                summary=CaptureSummary(session_id=session_id, http_visibility='unavailable',
+                    http_visibility_reason=visibility.get('http_reason', 'capture_start_failed'),
+                    https_visibility=visibility.get('https_visibility', 'unavailable'),
+                    https_visibility_reason=visibility.get('https_reason', 'capture_backend_unavailable')))
+        record_capabilities(root_path, {
+            'traffic_capture': 'available' if traffic_started else 'unavailable',
+            'proxy_configuration': 'available' if traffic_started else 'unknown',
+            'http_capture': visibility.get('http_visibility', 'unknown') if traffic_started else 'unknown',
+            'https_capture': visibility.get('https_visibility', 'unknown') if visibility.get('https_visibility') in {'available', 'unavailable', 'unknown'} else 'unknown',
+        }, 'traffic_backend')
 
         try:
             # Run bounded exploration loop
@@ -648,6 +738,12 @@ def _wire_dynamic_exploration(
         return res
 
     except Exception as exc:
+        from src.dynamic.runtime.execution_target import load_target
+        selected = load_target(root_path)
+        if selected and selected.availability == 'unavailable':
+            _wire_dynamic_analysis_report(root_path)
+            _update_scan_state_dynamic_stage(root_path, 'not_available', 'Current execution environment unavailable.')
+            return None
         logger.error("Dynamic exploration wiring encountered an error: %s", exc, exc_info=True)
         try:
             _update_scan_state_dynamic_stage(
@@ -706,14 +802,10 @@ def _wire_api_correlation(
         traffic_file = dynamic_dir / "traffic.json"
         if traffic_service and getattr(traffic_service, "captured_transactions", None):
             transactions = list(traffic_service.captured_transactions)
-            if traffic_service.readiness_result:
-                r_res = traffic_service.readiness_result
-                if r_res.https_interception and r_res.https_interception.ca_certificate_installed and not r_res.https_interception.certificate_trust_unknown:
-                    https_vis = "available"
-                    https_reason = ""
-                else:
-                    https_vis = "unavailable"
-                    https_reason = "certificate_trust_unknown"
+            visibility = traffic_service.get_visibility_metadata()
+            http_vis = visibility.get('http_visibility', 'unknown')
+            https_vis = visibility.get('https_visibility', 'unknown')
+            https_reason = visibility.get('https_reason', 'no_https_transaction_available_to_verify')
         elif traffic_file.is_file():
             try:
                 with open(traffic_file, "r", encoding="utf-8") as f:
@@ -1096,16 +1188,18 @@ def run_demo(
         target_serial = adb_serial
         if not target_serial:
             try:
-                connected = get_connected_devices()
+                connected = get_connected_devices(with_states=True)
                 if not connected:
                     err_msg = "No connected Android devices found via ADB for Play Store acquisition."
                     _emit_progress(progress_callback, "acquisition", "failed", err_msg)
                     raise DemoOrchestrationError(message=err_msg, stage="acquisition")
-                target_serial = connected[0]
+                from src.dynamic.runtime.execution_target import select_transport
+                target_serial = select_transport([s if isinstance(s, tuple) else (s, 'device') for s in connected])
             except Exception as exc:
                 _emit_progress(progress_callback, "acquisition", "failed", str(exc))
                 raise DemoOrchestrationError(message=str(exc), stage="acquisition", cause=exc) from exc
 
+        adb_serial = target_serial  # pin acquisition and runtime to the same selected transport
         try:
             acq_meta = acquire_play_store_app(
                 package_name=pkg,
@@ -1215,10 +1309,6 @@ def run_demo(
         app_info = static_context.get("app", {})
         package_name = app_info.get("package_name")
         launcher_activity = app_info.get("launcher_activity")
-        if not launcher_activity:
-            _emit_progress(progress_callback, 'static_analysis', 'success', 'Static context available; launcher unresolved.', static_context)
-            _persist_preflight_fallback(root_path, package_name, None, PreflightStatus.WARN, 'LAUNCHER_UNRESOLVED', adb_serial=adb_serial)
-            raise DemoOrchestrationError('No declared enabled launcher.', 'runtime', reason_code='LAUNCHER_UNRESOLVED')
 
         _emit_progress(
             progress_callback,
@@ -1235,95 +1325,21 @@ def run_demo(
             "running",
             f"Checking ADB connection to verify foreground launch of installed package '{package_name}'...",
         )
-        try:
-            runtime_meta = launch_android_app(
-                apk_path=None,
-                package_name=package_name.strip(),
-                launcher_activity=launcher_activity.strip(),
-                adb_serial=adb_serial,
-                reinstall=reinstall,
-                grant_permissions=grant_permissions,
-                timeout_seconds=min(timeout_seconds, 60.0),
-                skip_install=True,
-            )
-            _ensure_preflight_persisted_from_meta(
-                workspaces_dir.parent,
-                package_name.strip(),
-                launcher_activity.strip(),
-                runtime_meta,
-                adb_serial,
-            )
-            _emit_progress(
-                progress_callback,
-                "runtime",
-                "success",
-                f"App successfully launched (PID {runtime_meta.get('runtime', {}).get('pid')}, status: {runtime_meta.get('status')}).",
-                runtime_meta,
-            )
-        except AndroidDeviceUnavailableError as exc:
-            reason = getattr(exc, "reason", "no_adb_device")
-            if reason in ("unauthorized", "device_unauthorized"):
-                err_code = ErrorCode.DEVICE_UNAUTHORIZED
-                dev_state = "unauthorized"
-            elif reason in ("offline", "device_offline"):
-                err_code = ErrorCode.DEVICE_OFFLINE
-                dev_state = "offline"
-            else:
-                err_code = ErrorCode.DEVICE_NOT_FOUND
-                dev_state = "not_found"
+        runtime_meta = _runtime_with_availability(root_path, package_name, launcher_activity,
+            apk_path=None, adb_serial=adb_serial, reinstall=reinstall, grant_permissions=grant_permissions,
+            timeout_seconds=min(timeout_seconds, 60.0), skip_install=True, progress_callback=progress_callback)
 
-            skip_msg = "No connected Android device or emulator was detected. Runtime launch verification skipped; static analysis completed normally."
-            _persist_preflight_fallback(
-                workspaces_dir.parent,
+        if runtime_meta.get('status') != 'unavailable':
+            session_info = _wire_dynamic_session(root_path, package_name.strip(), adb_serial)
+            init_obs = session_info.get("raw_observation") if isinstance(session_info, dict) else None
+            _wire_dynamic_exploration(
+                root_path,
                 package_name.strip(),
-                launcher_activity.strip(),
-                PreflightStatus.FAIL,
-                error_msg=skip_msg,
-                error_code=err_code,
-                adb_serial=adb_serial,
-                device_state=dev_state,
-            )
-            runtime_meta = {
-                "status": "skipped",
-                "reason": getattr(exc, "reason", "no_adb_device"),
-                "message": skip_msg,
-                "platform": "android",
-                "runtime": {
-                    "pid": None,
-                    "observed_package": None,
-                    "observed_activity": None,
-                },
-            }
-            _emit_progress(
-                progress_callback,
-                "runtime",
-                "skipped",
-                skip_msg,
-                runtime_meta,
-            )
-        except Exception as exc:
-            _persist_preflight_fallback(
-                workspaces_dir.parent,
-                package_name.strip(),
-                launcher_activity.strip(),
-                PreflightStatus.FAIL,
-                str(exc),
                 adb_serial,
+                progress_callback=progress_callback,
+                initial_observation=init_obs,
+                **({"traffic_proxy_port": traffic_proxy_port} if traffic_proxy_port != 8080 else {}),
             )
-            _wire_dynamic_session(root_path, package_name.strip(), adb_serial)
-            _emit_progress(progress_callback, "runtime", "failed", str(exc))
-            raise DemoOrchestrationError(message=str(exc), stage="runtime", cause=exc) from exc
-
-        session_info = _wire_dynamic_session(root_path, package_name.strip(), adb_serial)
-        init_obs = session_info.get("raw_observation") if isinstance(session_info, dict) else None
-        _wire_dynamic_exploration(
-            root_path,
-            package_name.strip(),
-            adb_serial,
-            progress_callback=progress_callback,
-            initial_observation=init_obs,
-            **({"traffic_proxy_port": traffic_proxy_port} if traffic_proxy_port != 8080 else {}),
-        )
 
         # STAGE 5: Result Assembly for Split Package
         demo3_scan = None
@@ -1502,15 +1518,6 @@ def run_demo(
             message=err_msg,
             stage="static_analysis",
         )
-    if not isinstance(launcher_activity, str) or not launcher_activity.strip():
-        err_msg = "Static analysis did not discover a valid non-empty launcher_activity in AndroidManifest.xml."
-        _emit_progress(progress_callback, "static_analysis", "success", "Static context available; launcher unresolved.", static_context)
-        _persist_preflight_fallback(root_path, package_name, None, PreflightStatus.WARN, "LAUNCHER_UNRESOLVED", adb_serial=adb_serial)
-        raise DemoOrchestrationError(
-            message=err_msg,
-            stage="runtime",
-            reason_code="LAUNCHER_UNRESOLVED",
-        )
 
     _emit_progress(
         progress_callback,
@@ -1530,110 +1537,22 @@ def run_demo(
         f"Checking ADB connection to verify foreground launch of '{package_name}'...",
     )
     is_play_store = acq_meta.get("source_type") == "play_store"
-    try:
-        if is_play_store:
-            runtime_meta = launch_android_app(
-                apk_path=None,
-                package_name=package_name.strip(),
-                launcher_activity=launcher_activity.strip(),
-                adb_serial=adb_serial,
-                reinstall=reinstall,
-                grant_permissions=grant_permissions,
-                timeout_seconds=min(timeout_seconds, 60.0),
-                skip_install=True,
-            )
-        else:
-            runtime_meta = launch_android_app(
-                apk_path=concrete_apk_path,
-                package_name=package_name.strip(),
-                launcher_activity=launcher_activity.strip(),
-                adb_serial=adb_serial,
-                reinstall=reinstall,
-                grant_permissions=grant_permissions,
-                timeout_seconds=min(timeout_seconds, 60.0),
-            )
-        _ensure_preflight_persisted_from_meta(
-            root_path,
-            package_name.strip(),
-            launcher_activity.strip(),
-            runtime_meta,
-            adb_serial,
-        )
-        _emit_progress(
-            progress_callback,
-            "runtime",
-            "success",
-            f"App successfully launched (PID {runtime_meta.get('runtime', {}).get('pid')}, status: {runtime_meta.get('status')}).",
-            runtime_meta,
-        )
-    except AndroidDeviceUnavailableError as exc:
-        reason = getattr(exc, "reason", "no_adb_device")
-        if reason in ("unauthorized", "device_unauthorized"):
-            err_code = ErrorCode.DEVICE_UNAUTHORIZED
-            dev_state = "unauthorized"
-        elif reason in ("offline", "device_offline"):
-            err_code = ErrorCode.DEVICE_OFFLINE
-            dev_state = "offline"
-        else:
-            err_code = ErrorCode.DEVICE_NOT_FOUND
-            dev_state = "not_found"
+    runtime_meta = _runtime_with_availability(root_path, package_name, launcher_activity,
+        apk_path=None if is_play_store else concrete_apk_path, adb_serial=adb_serial,
+        reinstall=reinstall, grant_permissions=grant_permissions, timeout_seconds=min(timeout_seconds, 60.0),
+        **({'skip_install': True} if is_play_store else {}), progress_callback=progress_callback)
 
-        skip_msg = "No connected Android device or emulator was detected. Runtime launch verification skipped; static analysis completed normally."
-        _persist_preflight_fallback(
+    if runtime_meta.get('status') != 'unavailable':
+        session_info = _wire_dynamic_session(root_path, package_name.strip(), adb_serial)
+        init_obs = session_info.get("raw_observation") if isinstance(session_info, dict) else None
+        _wire_dynamic_exploration(
             root_path,
             package_name.strip(),
-            launcher_activity.strip(),
-            PreflightStatus.FAIL,
-            error_msg=skip_msg,
-            error_code=err_code,
-            adb_serial=adb_serial,
-            device_state=dev_state,
-        )
-        runtime_meta = {
-            "status": "skipped",
-            "reason": getattr(exc, "reason", "no_adb_device"),
-            "message": skip_msg,
-            "platform": "android",
-            "runtime": {
-                "pid": None,
-                "observed_package": None,
-                "observed_activity": None,
-            },
-        }
-        _emit_progress(
-            progress_callback,
-            "runtime",
-            "skipped",
-            skip_msg,
-            runtime_meta,
-        )
-    except Exception as exc:
-        _persist_preflight_fallback(
-            root_path,
-            package_name.strip(),
-            launcher_activity.strip(),
-            PreflightStatus.FAIL,
-            str(exc),
             adb_serial,
+            progress_callback=progress_callback,
+            initial_observation=init_obs,
+            **({"traffic_proxy_port": traffic_proxy_port} if traffic_proxy_port != 8080 else {}),
         )
-        _wire_dynamic_session(root_path, package_name.strip(), adb_serial)
-        _emit_progress(progress_callback, "runtime", "failed", str(exc))
-        raise DemoOrchestrationError(
-            message=str(exc),
-            stage="runtime",
-            cause=exc,
-        ) from exc
-
-    session_info = _wire_dynamic_session(root_path, package_name.strip(), adb_serial)
-    init_obs = session_info.get("raw_observation") if isinstance(session_info, dict) else None
-    _wire_dynamic_exploration(
-        root_path,
-        package_name.strip(),
-        adb_serial,
-        progress_callback=progress_callback,
-        initial_observation=init_obs,
-        **({"traffic_proxy_port": traffic_proxy_port} if traffic_proxy_port != 8080 else {}),
-    )
 
     # -------------------------------------------------------------
     # STAGE 5: RESULT ASSEMBLY
@@ -1735,7 +1654,7 @@ def format_demo_summary(result: dict) -> str:
 
     # Input
     lines.append(f"Input URL:        {inp.get('url')}")
-    lines.append(f"Target Serial:    {inp.get('adb_serial') or 'Auto-selected'}")
+    lines.append("Target:           Current execution environment")
     lines.append(f"Reinstall Mode:   {inp.get('reinstall')}")
     lines.append(f"Grant Perms:      {inp.get('grant_permissions')}")
     lines.append("-" * 60)

@@ -1,6 +1,7 @@
 """Device and emulator readiness check module."""
 
 from __future__ import annotations
+from src.dynamic.deadline import bounded_timeout
 
 import os
 import shutil
@@ -56,7 +57,7 @@ def run_adb_cmd(
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             text=True,
-            timeout=timeout_seconds,
+            timeout=bounded_timeout(timeout_seconds),
             check=False,
         )
         return proc.returncode, proc.stdout.strip(), proc.stderr.strip()
@@ -93,23 +94,17 @@ def check_connected_device(
             "No devices or emulators attached via ADB",
         )
 
-    chosen_entry: tuple[str, str] | None = None
-    if target_serial:
-        for s, state in device_entries:
-            if s == target_serial:
-                chosen_entry = (s, state)
-                break
-        if not chosen_entry:
-            return (
-                DeviceInfo(connected=False, serial=target_serial, state="not_found"),
-                ErrorCode.DEVICE_NOT_FOUND,
-                f"Requested device serial '{target_serial}' not found in attached devices",
-            )
-    else:
-        # Default to first available device
-        chosen_entry = device_entries[0]
-
-    serial, state = chosen_entry
+    from src.dynamic.runtime.execution_target import select_transport
+    try:
+        serial = select_transport(device_entries, target_serial)
+    except ValueError as exc:
+        reason = str(exc)
+        error = ErrorCode.MULTIPLE_DEVICES if reason == 'MULTIPLE_DEVICES' else ErrorCode(reason)
+        state = {'DEVICE_OFFLINE': 'offline', 'DEVICE_UNAUTHORIZED': 'unauthorized'}.get(reason, 'not_found')
+        return DeviceInfo(connected=False, serial=target_serial, state=state), error, (
+            'Multiple execution targets attached; explicit selection required.' if reason == 'MULTIPLE_DEVICES'
+            else 'Selected execution target is unavailable.')
+    state = 'device'
 
     if state == "unauthorized":
         return (

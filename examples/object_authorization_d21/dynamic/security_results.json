@@ -1,0 +1,493 @@
+{
+  "records": [
+    {
+      "evidence": {
+        "baseline": {
+          "attribution": {},
+          "capture_id": "capture_bdd8fb848b114294b8002c1308e83e5b",
+          "correlation": {},
+          "duration_ms": 0.0,
+          "flow_id": null,
+          "request": {
+            "body": null,
+            "body_metadata": {
+              "binary": false,
+              "size": 0,
+              "truncated": false
+            },
+            "headers": {
+              "authorization": "[REDACTED]",
+              "host": "127.0.0.1:54687",
+              "x-lab-run-id": "7428e410-486d-46b6-90c8-9d8d99e3b9ab"
+            },
+            "host": "127.0.0.1",
+            "method": "GET",
+            "path": "/orders/1001",
+            "port": 54687,
+            "query": {},
+            "request_id": "cb181e62-fd54-47fa-ad20-d0853bb81624",
+            "scheme": "http",
+            "timestamp": "2026-10-03T07:24:28.889554+00:00"
+          },
+          "response": {
+            "body": {
+              "owner_alias": "user_A",
+              "purpose": "protected_training_order",
+              "resource_id": "1001"
+            },
+            "body_metadata": {
+              "binary": false,
+              "content_type": "application/json",
+              "size": 87,
+              "truncated": false
+            },
+            "headers": {
+              "cache-control": "no-store",
+              "content-length": "87",
+              "content-type": "application/json",
+              "date": "Sat, 03 Oct 2026 07:24:28 GMT",
+              "server": "BaseHTTP/0.6 Python/3.11.7",
+              "x-lab-trace-id": "lab_473c90adad63424c9beeaddfc84059c9"
+            },
+            "status_code": 200,
+            "timestamp": "2026-10-03T07:24:28.890151+00:00"
+          },
+          "scope": "UNKNOWN",
+          "session_id": "7428e410-486d-46b6-90c8-9d8d99e3b9ab",
+          "transaction_id": "031007d1-67fc-467c-981a-a864b7c41856"
+        },
+        "baseline_receipts": [
+          {
+            "auth_present": false,
+            "auth_valid": false,
+            "method": "POST",
+            "path": "/login",
+            "run_id": "7428e410-486d-46b6-90c8-9d8d99e3b9ab",
+            "source": "local_training_backend_actual_response",
+            "status": 200,
+            "trace_id": "lab_a03e2506a742479792f1998e675add0a"
+          },
+          {
+            "auth_present": true,
+            "auth_valid": true,
+            "credential_ref": "principal_session_c499012ccd134879a18e54662bac8f00",
+            "method": "GET",
+            "owner_alias": "user_A",
+            "path": "/orders/1001",
+            "principal_alias": "user_A",
+            "resource_id": "1001",
+            "response_owner_alias": "user_A",
+            "response_resource_id": "1001",
+            "response_sha256": "094b69cfacd4f225c92233a8e3f3df3b0e3d1bf2dc95ac633f307f9c1f6cfe58",
+            "run_id": "7428e410-486d-46b6-90c8-9d8d99e3b9ab",
+            "source": "local_training_backend_actual_response",
+            "status": 200,
+            "trace_id": "lab_473c90adad63424c9beeaddfc84059c9"
+          },
+          {
+            "auth_present": true,
+            "auth_valid": true,
+            "credential_ref": "principal_session_c499012ccd134879a18e54662bac8f00",
+            "method": "GET",
+            "owner_alias": "user_B",
+            "path": "/orders/2002",
+            "principal_alias": "user_A",
+            "resource_id": "2002",
+            "response_owner_alias": null,
+            "response_resource_id": "2002",
+            "response_sha256": "d82d3b29730b68edd0a694f3dfbdb191e3ded0d4a005b9ca2ced73fc0dc285cc",
+            "run_id": "7428e410-486d-46b6-90c8-9d8d99e3b9ab",
+            "source": "local_training_backend_actual_response",
+            "status": 403,
+            "trace_id": "lab_8c91ff3e60a94120ad8b41394f89938b"
+          }
+        ],
+        "comparison_ref": "comparison_0dd75ab4f1ff96fec75a",
+        "context": {
+          "action_context": [],
+          "auth": {
+            "api_key_header_present": false,
+            "authorization_header_present": true,
+            "bearer_token_present": null,
+            "cookie_present": false,
+            "session_cookie_present": false
+          },
+          "dynamic": {
+            "available_transaction_count": 1,
+            "first_observed_at": "2026-10-03T07:24:28.889554+00:00",
+            "last_observed_at": "2026-10-03T07:24:28.889554+00:00",
+            "missing_transaction_ids": [],
+            "observation_count": 1,
+            "observed": true,
+            "observed_methods": [
+              "GET"
+            ],
+            "observed_status_codes": [
+              200
+            ],
+            "schemes": [
+              "http"
+            ],
+            "transaction_ids": [
+              "031007d1-67fc-467c-981a-a864b7c41856"
+            ]
+          },
+          "endpoint_context_id": "ctx_fedbe20e19a01b31",
+          "evidence_refs": {
+            "action_ids": [],
+            "correlation_ids": [
+              "corr_3a4da7ac1d5564cd"
+            ],
+            "runtime_action_ids": [],
+            "static_candidate_ids": [],
+            "transaction_ids": [
+              "031007d1-67fc-467c-981a-a864b7c41856"
+            ]
+          },
+          "host": "127.0.0.1",
+          "methods": [
+            "GET"
+          ],
+          "path": "/orders/1001",
+          "port": 54687,
+          "request": {
+            "body_keys": [],
+            "body_present": false,
+            "body_shapes": [],
+            "body_sizes": [
+              0
+            ],
+            "body_types": [],
+            "content_types": [],
+            "header_names": [
+              "authorization",
+              "host",
+              "x-lab-run-id"
+            ],
+            "methods": [
+              "GET"
+            ],
+            "query_keys": []
+          },
+          "response": {
+            "body_keys": [
+              "owner_alias",
+              "purpose",
+              "resource_id"
+            ],
+            "body_present": true,
+            "body_shapes": [
+              {
+                "owner_alias": "string",
+                "purpose": "string",
+                "resource_id": "string"
+              }
+            ],
+            "body_sizes": [
+              87
+            ],
+            "body_types": [
+              "json"
+            ],
+            "content_types": [
+              "application/json"
+            ],
+            "header_names": [
+              "cache-control",
+              "content-length",
+              "content-type",
+              "date",
+              "server",
+              "x-lab-trace-id"
+            ],
+            "observed_status_codes": [
+              200
+            ],
+            "status_code_counts": {
+              "200": 1
+            }
+          },
+          "route_context": [],
+          "runtime_context": {
+            "activity_changes_observed": false,
+            "crash_observed": false,
+            "evidence_available": false,
+            "fatal_observed": false,
+            "pid_changed_observed": false,
+            "process_death_observed": false
+          },
+          "scheme": "http",
+          "static": {},
+          "visibility": {
+            "http_visibility": "available",
+            "https_visibility": "unavailable",
+            "https_visibility_reason": "certificate_trust_unknown"
+          }
+        },
+        "control_ref": "control_0dd75ab4f1ff96fec75a",
+        "execution_ref": "execution_0dd75ab4f1ff96fec75a",
+        "ownership": {
+          "evidence_ref": "ownership_1fc292f489ee7b6ce5de",
+          "host": "127.0.0.1",
+          "port": 54687,
+          "principals": [
+            "user_A",
+            "user_B"
+          ],
+          "resources": {
+            "1001": "user_A",
+            "2002": "user_B"
+          },
+          "session_id": "7428e410-486d-46b6-90c8-9d8d99e3b9ab",
+          "source": "controlled_local_lab_configuration"
+        },
+        "session": {
+          "session_id": "7428e410-486d-46b6-90c8-9d8d99e3b9ab"
+        },
+        "variant": {
+          "attribution": {
+            "baseline_transaction_ref": "031007d1-67fc-467c-981a-a864b7c41856",
+            "method": "deterministic_local_executor"
+          },
+          "capture_id": "capture_991cb41dc0b34ef3b5373e0b4022875f",
+          "correlation": {},
+          "duration_ms": 0.0,
+          "flow_id": null,
+          "request": {
+            "body": null,
+            "body_metadata": {
+              "binary": false,
+              "size": 0,
+              "truncated": false
+            },
+            "headers": {
+              "authorization": "[REDACTED]",
+              "host": "127.0.0.1:54687",
+              "x-lab-run-id": "7428e410-486d-46b6-90c8-9d8d99e3b9ab"
+            },
+            "host": "127.0.0.1",
+            "method": "GET",
+            "path": "/orders/2002",
+            "port": 54687,
+            "query": {},
+            "request_id": "72f52de6-3c5b-4f03-946a-3b102978269e",
+            "scheme": "http",
+            "timestamp": "2026-10-03T07:24:28.891079+00:00"
+          },
+          "response": {
+            "body": {
+              "error": "object_access_denied",
+              "resource_id": "2002"
+            },
+            "body_metadata": {
+              "binary": false,
+              "content_type": "application/json",
+              "size": 56,
+              "truncated": false
+            },
+            "headers": {
+              "cache-control": "no-store",
+              "content-length": "56",
+              "content-type": "application/json",
+              "date": "Sat, 03 Oct 2026 07:24:28 GMT",
+              "server": "BaseHTTP/0.6 Python/3.11.7",
+              "x-lab-trace-id": "lab_8c91ff3e60a94120ad8b41394f89938b"
+            },
+            "status_code": 403,
+            "timestamp": "2026-10-03T07:24:28.892876+00:00"
+          },
+          "scope": "UNKNOWN",
+          "session_id": "7428e410-486d-46b6-90c8-9d8d99e3b9ab",
+          "transaction_id": "ac56e82c-7c9a-43aa-bac2-b6b5d3a4e149"
+        },
+        "variant_receipts": [
+          {
+            "auth_present": false,
+            "auth_valid": false,
+            "method": "POST",
+            "path": "/login",
+            "run_id": "7428e410-486d-46b6-90c8-9d8d99e3b9ab",
+            "source": "local_training_backend_actual_response",
+            "status": 200,
+            "trace_id": "lab_a03e2506a742479792f1998e675add0a"
+          },
+          {
+            "auth_present": true,
+            "auth_valid": true,
+            "credential_ref": "principal_session_c499012ccd134879a18e54662bac8f00",
+            "method": "GET",
+            "owner_alias": "user_A",
+            "path": "/orders/1001",
+            "principal_alias": "user_A",
+            "resource_id": "1001",
+            "response_owner_alias": "user_A",
+            "response_resource_id": "1001",
+            "response_sha256": "094b69cfacd4f225c92233a8e3f3df3b0e3d1bf2dc95ac633f307f9c1f6cfe58",
+            "run_id": "7428e410-486d-46b6-90c8-9d8d99e3b9ab",
+            "source": "local_training_backend_actual_response",
+            "status": 200,
+            "trace_id": "lab_473c90adad63424c9beeaddfc84059c9"
+          },
+          {
+            "auth_present": true,
+            "auth_valid": true,
+            "credential_ref": "principal_session_c499012ccd134879a18e54662bac8f00",
+            "method": "GET",
+            "owner_alias": "user_B",
+            "path": "/orders/2002",
+            "principal_alias": "user_A",
+            "resource_id": "2002",
+            "response_owner_alias": null,
+            "response_resource_id": "2002",
+            "response_sha256": "d82d3b29730b68edd0a694f3dfbdb191e3ded0d4a005b9ca2ced73fc0dc285cc",
+            "run_id": "7428e410-486d-46b6-90c8-9d8d99e3b9ab",
+            "source": "local_training_backend_actual_response",
+            "status": 403,
+            "trace_id": "lab_8c91ff3e60a94120ad8b41394f89938b"
+          }
+        ]
+      },
+      "execution": {
+        "endpoint_context_id": "ctx_fedbe20e19a01b31",
+        "evidence_refs": [
+          "72f52de6-3c5b-4f03-946a-3b102978269e",
+          "7428e410-486d-46b6-90c8-9d8d99e3b9ab",
+          "cb181e62-fd54-47fa-ad20-d0853bb81624",
+          "comparison_0dd75ab4f1ff96fec75a",
+          "control_0dd75ab4f1ff96fec75a",
+          "ctx_fedbe20e19a01b31",
+          "execution_0dd75ab4f1ff96fec75a",
+          "lab_473c90adad63424c9beeaddfc84059c9",
+          "lab_8c91ff3e60a94120ad8b41394f89938b",
+          "ownership_1fc292f489ee7b6ce5de"
+        ],
+        "execution_status": "completed",
+        "failure_reason": null,
+        "finished_at": "2026-10-03T07:24:28.893207+00:00",
+        "observed_request_ref": "72f52de6-3c5b-4f03-946a-3b102978269e",
+        "observed_response_ref": "lab_8c91ff3e60a94120ad8b41394f89938b",
+        "schema_version": "1.0",
+        "session_id": "7428e410-486d-46b6-90c8-9d8d99e3b9ab",
+        "started_at": "2026-10-03T07:24:28.891079+00:00",
+        "test_id": "OBJECT_AUTHORIZATION",
+        "tool_refs": [
+          "execution_0dd75ab4f1ff96fec75a"
+        ]
+      },
+      "registry": {
+        "72f52de6-3c5b-4f03-946a-3b102978269e": {
+          "endpoint_context_id": "ctx_fedbe20e19a01b31",
+          "kind": "request",
+          "ref": "72f52de6-3c5b-4f03-946a-3b102978269e",
+          "session_id": "7428e410-486d-46b6-90c8-9d8d99e3b9ab"
+        },
+        "7428e410-486d-46b6-90c8-9d8d99e3b9ab": {
+          "endpoint_context_id": "ctx_fedbe20e19a01b31",
+          "kind": "runtime",
+          "ref": "7428e410-486d-46b6-90c8-9d8d99e3b9ab",
+          "session_id": "7428e410-486d-46b6-90c8-9d8d99e3b9ab"
+        },
+        "cb181e62-fd54-47fa-ad20-d0853bb81624": {
+          "endpoint_context_id": "ctx_fedbe20e19a01b31",
+          "kind": "request",
+          "ref": "cb181e62-fd54-47fa-ad20-d0853bb81624",
+          "session_id": "7428e410-486d-46b6-90c8-9d8d99e3b9ab"
+        },
+        "comparison_0dd75ab4f1ff96fec75a": {
+          "endpoint_context_id": "ctx_fedbe20e19a01b31",
+          "kind": "comparison",
+          "ref": "comparison_0dd75ab4f1ff96fec75a",
+          "session_id": "7428e410-486d-46b6-90c8-9d8d99e3b9ab"
+        },
+        "control_0dd75ab4f1ff96fec75a": {
+          "endpoint_context_id": "ctx_fedbe20e19a01b31",
+          "kind": "control",
+          "ref": "control_0dd75ab4f1ff96fec75a",
+          "session_id": "7428e410-486d-46b6-90c8-9d8d99e3b9ab"
+        },
+        "ctx_fedbe20e19a01b31": {
+          "endpoint_context_id": "ctx_fedbe20e19a01b31",
+          "kind": "context",
+          "ref": "ctx_fedbe20e19a01b31",
+          "session_id": "7428e410-486d-46b6-90c8-9d8d99e3b9ab"
+        },
+        "execution_0dd75ab4f1ff96fec75a": {
+          "endpoint_context_id": "ctx_fedbe20e19a01b31",
+          "kind": "tool",
+          "ref": "execution_0dd75ab4f1ff96fec75a",
+          "session_id": "7428e410-486d-46b6-90c8-9d8d99e3b9ab"
+        },
+        "lab_473c90adad63424c9beeaddfc84059c9": {
+          "endpoint_context_id": "ctx_fedbe20e19a01b31",
+          "kind": "response",
+          "ref": "lab_473c90adad63424c9beeaddfc84059c9",
+          "session_id": "7428e410-486d-46b6-90c8-9d8d99e3b9ab"
+        },
+        "lab_8c91ff3e60a94120ad8b41394f89938b": {
+          "endpoint_context_id": "ctx_fedbe20e19a01b31",
+          "kind": "response",
+          "ref": "lab_8c91ff3e60a94120ad8b41394f89938b",
+          "session_id": "7428e410-486d-46b6-90c8-9d8d99e3b9ab"
+        },
+        "ownership_1fc292f489ee7b6ce5de": {
+          "endpoint_context_id": "ctx_fedbe20e19a01b31",
+          "kind": "control",
+          "ref": "ownership_1fc292f489ee7b6ce5de",
+          "session_id": "7428e410-486d-46b6-90c8-9d8d99e3b9ab"
+        }
+      },
+      "request": {
+        "endpoint_context_id": "ctx_fedbe20e19a01b31",
+        "purpose": "Validate expected cross-principal enforcement in the controlled training lab",
+        "requested_action": "validate_object_access_behavior",
+        "required_evidence_refs": [
+          "7428e410-486d-46b6-90c8-9d8d99e3b9ab",
+          "cb181e62-fd54-47fa-ad20-d0853bb81624",
+          "ctx_fedbe20e19a01b31",
+          "lab_473c90adad63424c9beeaddfc84059c9",
+          "ownership_1fc292f489ee7b6ce5de"
+        ],
+        "risk_class": "low",
+        "schema_version": "1.0",
+        "session_id": "7428e410-486d-46b6-90c8-9d8d99e3b9ab",
+        "test_category": "object_authorization",
+        "test_id": "OBJECT_AUTHORIZATION"
+      },
+      "standards": {
+        "mastg_test_refs": [],
+        "masvs_category": "MASVS-AUTH",
+        "masvs_control_refs": [
+          "MASVS-AUTH-1"
+        ],
+        "maswe_refs": []
+      },
+      "validation": {
+        "coverage": "available",
+        "created_at": "2026-10-03T07:24:28.893588+00:00",
+        "criterion": "controlled_behavior_check",
+        "endpoint_context_id": "ctx_fedbe20e19a01b31",
+        "evidence_refs": [
+          "72f52de6-3c5b-4f03-946a-3b102978269e",
+          "7428e410-486d-46b6-90c8-9d8d99e3b9ab",
+          "cb181e62-fd54-47fa-ad20-d0853bb81624",
+          "comparison_0dd75ab4f1ff96fec75a",
+          "control_0dd75ab4f1ff96fec75a",
+          "ctx_fedbe20e19a01b31",
+          "execution_0dd75ab4f1ff96fec75a",
+          "lab_473c90adad63424c9beeaddfc84059c9",
+          "lab_8c91ff3e60a94120ad8b41394f89938b",
+          "ownership_1fc292f489ee7b6ce5de"
+        ],
+        "outcome": "validated",
+        "reason_codes": [
+          "OBJECT_AUTHORIZATION_ENFORCED"
+        ],
+        "schema_version": "1.0",
+        "session_id": "7428e410-486d-46b6-90c8-9d8d99e3b9ab",
+        "test_id": "OBJECT_AUTHORIZATION"
+      }
+    }
+  ],
+  "schema_version": "1.0",
+  "session_id": "7428e410-486d-46b6-90c8-9d8d99e3b9ab"
+}

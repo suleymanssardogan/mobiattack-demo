@@ -3009,12 +3009,12 @@
                   </tr>
                 </thead>
                 <tbody>
-                  ${filtered.length > 0 ? tableRows : `<tr><td colspan="4" style="text-align:center; color:var(--text-3); padding:24px;">No candidates match filter "${escapeHtml(state.searchQuery || state.filterType)}".</td></tr>`}
+                  ${filtered.length > 0 ? tableRows : `<tr><td colspan="4" style="text-align:center; color:var(--text-3); padding:24px;">No indicators match filter "${escapeHtml(state.searchQuery || state.filterType)}".</td></tr>`}
                 </tbody>
               </table>
             </div>
             <div style="padding:8px 12px; background:#f8fafc; border-top:1px solid #e2e8f0; font-size:11.5px; color:var(--text-3); display:flex; justify-content:space-between;">
-              <span>Showing ${filtered.length} of ${allCands.length} canonical candidates</span>
+              <span>Showing ${filtered.length} of ${allCands.length} canonical network indicators</span>
               <span>Click any row to inspect occurrences & evidence</span>
             </div>
           </div>
@@ -3587,6 +3587,7 @@
         if (!response.ok) throw new Error('Summary unavailable');
         const summary = await response.json();
         if (request !== compactSummaryRequest) return;
+        if (summary.run_id !== runId) throw new Error("Report run mismatch");
         compactSummaryData = summary;
         compactSummaryPage = 0;
         renderCompactSummary(runId);
@@ -3612,10 +3613,11 @@
         ? 'Validated — auth enforcement confirmed' : row.outcome;
       let html = '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;line-height:1.8;">';
       html += '<section><h3>Static Summary</h3>' + pair('App', stat.app) + pair('Package', stat.package) + pair('Coverage', stat.status);
-      html += pair('Key permissions', list(stat.key_permissions)) + pair('API candidates', stat.api_candidates_count) + pair('Frameworks', list(stat.frameworks_detected));
+      html += pair('Key permissions', list(stat.key_permissions)) + pair('API candidates', stat.api_candidates_count) + pair('API frameworks', list(stat.frameworks_detected)) + pair('Runtime technologies', list(stat.runtime_technologies || []));
       html += pair('Network indicators', 'URLs ' + (indicators.urls ?? 'Unknown') + ' · domains ' + (indicators.domains ?? 'Unknown') + ' · IPs ' + (indicators.ips ?? 'Unknown') + ' · paths ' + (indicators.paths ?? 'Unknown') + ' · local files ' + (indicators.local_file_urls ?? 'Unknown'));
-      html += pair('Network hosts', list(indicators.hosts)) + limits(stat.coverage_limitations) + '</section>';
+      html += pair('Indicator hosts (unconfirmed)', list(indicators.hosts)) + limits(stat.coverage_limitations) + '</section>';
       html += '<section><h3>Dynamic Summary</h3>' + pair('Coverage', dyn.status) + pair('Launch', dyn.launch_status) + pair('Runtime', dyn.runtime_status);
+      html += pair('Exploration', dyn.exploration_note || 'Safe frontier accounting is unavailable.') + pair('Stop reason', dyn.exploration_stop_reason) + pair('Safe actions remaining', dyn.safe_actions_remaining ?? 'Unknown');
       html += pair('Routes explored', dyn.routes_explored) + pair('Actions attempted / succeeded', (dyn.actions_attempted ?? 'Unknown') + ' / ' + (dyn.actions_succeeded ?? 'Unknown'));
       html += pair('HTTP visibility', dyn.traffic_visibility.http_visibility) + pair('HTTPS visibility', dyn.traffic_visibility.https_visibility) + pair('Observed endpoints', dyn.observed_endpoints);
       html += pair('Security tests completed', dyn.security_tests_executed) + pair('Validation outcomes', Object.entries(dyn.validation_outcomes).map(([key, count]) => key + ': ' + count).join(' · '));
@@ -4512,8 +4514,10 @@
     async function pollStatus() {
       if (!currentRunId || isPolling) return;
       isPolling = true;
+      const polledRunId = currentRunId;
       try {
-        const resp = await fetch(backendUrl("/api/status/" + encodeURIComponent(currentRunId)));
+        const resp = await fetch(backendUrl("/api/status/" + encodeURIComponent(polledRunId)));
+        if (currentRunId !== polledRunId) return;
         if (!resp.ok) {
           if (resp.status === 404) {
             if (pollTimer) clearInterval(pollTimer);
@@ -4524,6 +4528,7 @@
           return;
         }
         const status = await resp.json();
+        if (currentRunId !== polledRunId) return;
 
         const stages = status.stages || {};
         const productStages = deriveProductStages(stages, status);
@@ -4715,6 +4720,13 @@
     }
 
     function resetDashboardToInitial() {
+      ++compactSummaryRequest; // Invalidate in-flight responses from the previous run.
+      compactSummaryData = null;
+      compactSummaryPage = 0;
+      if (window.demo3State) { window.demo3State.currentRunId = null; window.demo3State.currentSha = null; window.demo3State.loadedRunId = null; window.demo3State.rawJsonLoaded = false; window.demo3State.candidates = []; }
+      for (const id of ["compactReportSummary", "staticSecurityReport", "dynamicSecurityReport"]) {
+        const pane = document.getElementById(id); if (pane) pane.textContent = "No report selected.";
+      }
       currentRunId = null;
       if (pollTimer) {
         clearInterval(pollTimer);
@@ -4764,13 +4776,27 @@
     }
 
     window.addEventListener("DOMContentLoaded", async () => {
-      // Clean query parameters on refresh so page always loads with a fresh slate
+      const requestedReportRun = new URLSearchParams(window.location.search).get("run_id");
+      // Report selection is explicit; refresh without a run remains a fresh slate.
       if (window.location.search) {
         window.history.replaceState({}, "", window.location.pathname);
       }
 
       // Reset all views, inputs, and stage cards
       resetDashboardToInitial();
+      if (requestedReportRun && /^[a-zA-Z0-9_-]+$/.test(requestedReportRun)) {
+        currentRunId = requestedReportRun;
+        try {
+          const response = await fetch(backendUrl("/reports/" + encodeURIComponent(requestedReportRun) + "/static_analysis_report.json"));
+          if (!response.ok) throw new Error("Static report unavailable");
+          const report = await response.json();
+          if (currentRunId !== requestedReportRun || report.run_id !== requestedReportRun) return;
+          renderAnalysisResults(report, requestedReportRun);
+        } catch (_) {
+          document.getElementById("analysisSection").style.display = "block";
+          document.getElementById("staticSecurityReport").textContent = "Static report unavailable. Run a fresh scan.";
+        }
+      }
 
       // Legacy presentation notice check preserved for backward compatibility
       if (window.location.hostname === "mobiattack-demo.vercel.app" && window.location.search.includes("local=1")) {

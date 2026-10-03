@@ -6,6 +6,7 @@ runtime execution evidence without dynamic vulnerability assessment or UI intera
 """
 
 from __future__ import annotations
+from src.dynamic.deadline import bounded_operation, current_deadline, bounded_timeout
 
 import os
 from pathlib import Path
@@ -23,7 +24,11 @@ DEFAULT_POLL_INTERVAL: float = 0.5
 
 class AndroidRuntimeError(ValueError):
     """Raised when ADB executable resolution, device selection, installation, or launch fails."""
-    pass
+    def __init__(self, message, reason_code='APP_LAUNCH_FAILED', backend_reason_code=None, evidence=None):
+        super().__init__(message)
+        self.reason_code = reason_code
+        self.backend_reason_code = backend_reason_code or reason_code
+        self.evidence = evidence or {'source': 'runtime_launcher'}
 
 
 class AndroidDeviceUnavailableError(AndroidRuntimeError):
@@ -53,7 +58,8 @@ def resolve_adb_executable(adb_executable: str | None = None) -> str:
 def get_connected_devices(
     adb_executable: str | None = None,
     timeout_seconds: float = DEFAULT_COMMAND_TIMEOUT_SECONDS,
-) -> list[str]:
+    with_states: bool = False,
+) -> list:
     """Queries adb devices and returns serial numbers of devices in 'device' state.
 
     Ignores entries with status offline, unauthorized, unknown, etc.
@@ -65,7 +71,7 @@ def get_connected_devices(
             cmd,
             capture_output=True,
             text=True,
-            timeout=timeout_seconds,
+            timeout=bounded_timeout(timeout_seconds),
         )
     except (subprocess.TimeoutExpired, OSError) as err:
         raise AndroidDeviceUnavailableError(
@@ -88,8 +94,11 @@ def get_connected_devices(
         if not line:
             continue
         parts = line.split()
-        if len(parts) >= 2 and parts[1] == "device":
-            devices.append(parts[0])
+        if len(parts) >= 2:
+            if with_states:
+                devices.append((parts[0], parts[1]))
+            elif parts[1] == 'device':
+                devices.append(parts[0])
 
     return devices
 
@@ -108,32 +117,14 @@ def select_target_device(
         - 1 device -> auto-selects it
         - >1 devices -> raises AndroidDeviceUnavailableError (explicit serial required)
     """
-    usable_devices = get_connected_devices(adb_executable, timeout_seconds=timeout_seconds)
-
-    if adb_serial is not None:
-        clean_serial = str(adb_serial).strip()
-        if clean_serial not in usable_devices:
-            raise AndroidDeviceUnavailableError(
-                f"Specified device serial '{clean_serial}' is not connected or not in 'device' state. "
-                f"Available devices: {usable_devices}",
-                reason="device_not_ready",
-            )
-        return clean_serial
-
-    if len(usable_devices) == 0:
-        raise AndroidDeviceUnavailableError(
-            "No Android device/emulator found in 'device' state. "
-            "Please start MuMu emulator or connect an Android device via ADB.",
-            reason="no_devices",
-        )
-    elif len(usable_devices) == 1:
-        return usable_devices[0]
-    else:
-        raise AndroidDeviceUnavailableError(
-            f"Multiple devices/emulators connected ({usable_devices}). "
-            f"Explicit adb_serial is required to avoid ambiguous execution.",
-            reason="multiple_devices",
-        )
+    from src.dynamic.runtime.execution_target import select_transport
+    entries = get_connected_devices(adb_executable, timeout_seconds=timeout_seconds, with_states=True)
+    try:
+        return select_transport(entries, str(adb_serial).strip() if adb_serial is not None else None)
+    except ValueError as exc:
+        reason = {'MULTIPLE_DEVICES': 'multiple_devices', 'DEVICE_OFFLINE': 'offline',
+                  'DEVICE_UNAUTHORIZED': 'unauthorized', 'DEVICE_NOT_FOUND': 'device_not_ready' if adb_serial else 'no_devices'}.get(str(exc), 'device_not_ready')
+        raise AndroidDeviceUnavailableError('Selected execution environment unavailable; explicit target selection may be required.', reason) from exc
 
 
 def check_device_availability(
@@ -176,6 +167,7 @@ def normalize_component_name(package_name: str, activity_name: str) -> str:
         raise AndroidRuntimeError(error.reason_code + ': ' + str(error)) from error
 
 
+@bounded_operation(30.0, field="timeout_seconds")
 def install_apk(
     adb_bin: str,
     serial: str,
@@ -216,10 +208,11 @@ def install_apk(
             cmd,
             capture_output=True,
             text=True,
-            timeout=timeout_seconds,
+            timeout=bounded_timeout(timeout_seconds),
         )
     except (subprocess.TimeoutExpired, OSError) as err:
-        raise AndroidRuntimeError(f"adb install command timed out or failed: {err}") from err
+        raise AndroidRuntimeError('APK installation unavailable.', 'INSTALL_FAILED',
+            evidence={'source': 'package_manager', 'install_succeeded': False}) from err
 
     stdout = res.stdout or ""
     stderr = res.stderr or ""
@@ -229,7 +222,23 @@ def install_apk(
     has_success_text = "Success" in stdout or "Success" in stderr
     if res.returncode != 0 or ("Failure" in combined and not has_success_text):
         err_msg = combined[:300] if combined else f"returncode {res.returncode}"
-        raise AndroidRuntimeError(f"APK installation failed on device '{serial}': {err_msg}")
+        from src.dynamic.runtime.availability import install_reason
+        reason, backend_reason = install_reason(combined)
+        evidence = {'source': 'package_manager', 'returncode': res.returncode, 'install_succeeded': False}
+        if reason == 'ABI_UNSUPPORTED':
+            import zipfile
+            try:
+                with zipfile.ZipFile(apk_path) as archive:
+                    evidence['app_abis'] = sorted({name.split('/')[1] for name in archive.namelist()
+                        if name.startswith('lib/') and name.endswith('.so') and len(name.split('/')) == 3})
+                abi_result = subprocess.run([adb_bin, '-s', serial, 'shell', 'getprop', 'ro.product.cpu.abilist'],
+                    capture_output=True, text=True, timeout=bounded_timeout(3))
+                if abi_result.returncode == 0:
+                    evidence['device_abis'] = sorted({abi for abi in abi_result.stdout.strip().split(',')
+                        if re.fullmatch(r'[A-Za-z0-9_-]+', abi)})
+            except (OSError, zipfile.BadZipFile, subprocess.TimeoutExpired):
+                pass  # The explicit package-manager ABI failure is still evidence.
+        raise AndroidRuntimeError(f'APK installation failed: {backend_reason}', reason, backend_reason, evidence)
 
     return {
         "success": True,
@@ -251,10 +260,12 @@ def launch_activity(
             cmd,
             capture_output=True,
             text=True,
-            timeout=timeout_seconds,
+            timeout=bounded_timeout(timeout_seconds),
         )
     except (subprocess.TimeoutExpired, OSError) as err:
-        raise AndroidRuntimeError(f"adb am start command timed out or failed: {err}") from err
+        raise AndroidRuntimeError('Activity manager command unavailable.', 'RUNTIME_OBSERVATION_UNAVAILABLE',
+            backend_reason_code='COMMAND_TIMEOUT' if isinstance(err, subprocess.TimeoutExpired) else 'COMMAND_UNAVAILABLE',
+            evidence={'source': 'activity_manager'}) from err
 
     stdout = res.stdout or ""
     stderr = res.stderr or ""
@@ -263,11 +274,13 @@ def launch_activity(
     # Detect explicit am start errors (e.g. Error: Activity class ... does not exist)
     if res.returncode != 0 or "Error:" in combined:
         err_msg = combined[:300] if combined else f"returncode {res.returncode}"
-        raise AndroidRuntimeError(f"Failed to start activity '{component}': {err_msg}")
+        raise AndroidRuntimeError(f"Failed to start activity '{component}': {err_msg}", evidence={'source': 'activity_manager',
+            'returncode': res.returncode, 'launch_succeeded': False})
 
     return {"success": True, "component": component}
 
 
+@bounded_operation(30.0, field="timeout_seconds")
 def query_process_pid(
     adb_bin: str,
     serial: str,
@@ -286,7 +299,7 @@ def query_process_pid(
             cmd_pidof,
             capture_output=True,
             text=True,
-            timeout=timeout_seconds,
+            timeout=bounded_timeout(timeout_seconds),
         )
         if res.returncode == 0 and res.stdout:
             parts = res.stdout.strip().split()
@@ -302,7 +315,7 @@ def query_process_pid(
             cmd_ps,
             capture_output=True,
             text=True,
-            timeout=timeout_seconds,
+            timeout=bounded_timeout(timeout_seconds),
         )
         if res.returncode == 0 and res.stdout:
             for line in res.stdout.strip().splitlines():
@@ -360,6 +373,7 @@ def parse_dumpsys_foreground_activity(dumpsys_text: str) -> tuple[str | None, st
     return None, None
 
 
+@bounded_operation(30.0, field="timeout_seconds")
 def get_current_activity(
     adb_serial: str,
     adb_executable: str | None = None,
@@ -377,7 +391,7 @@ def get_current_activity(
             cmd,
             capture_output=True,
             text=True,
-            timeout=timeout_seconds,
+            timeout=bounded_timeout(timeout_seconds),
         )
         if res.returncode == 0 and res.stdout:
             pkg, act = parse_dumpsys_foreground_activity(res.stdout)
@@ -396,7 +410,7 @@ def get_current_activity(
             cmd_win,
             capture_output=True,
             text=True,
-            timeout=timeout_seconds,
+            timeout=bounded_timeout(timeout_seconds),
         )
         if res.returncode == 0 and res.stdout:
             pkg, act = parse_dumpsys_foreground_activity(res.stdout)
@@ -427,6 +441,7 @@ def launch_android_app(
     poll_interval: float = DEFAULT_POLL_INTERVAL,
     skip_install: bool = False,
     run_dir: str | Path | None = None,
+    execution_target=None,
 ) -> dict:
     """Installs APK, starts launcher activity, and verifies runtime execution presence.
 
@@ -452,11 +467,25 @@ def launch_android_app(
                              or if the process cannot be detected within max_wait_seconds.
     """
     adb_bin = resolve_adb_executable(adb_executable)
+    from src.dynamic.runtime.execution_target import ExecutionTarget, EmulatorTargetAdapter, save_target
+    if execution_target is not None:
+        try:
+            adb_serial = execution_target.require_transport(adb_serial)
+            execution_target.require_capability('app_launch')
+            if not skip_install:
+                execution_target.require_capability('app_install')
+        except ValueError as exc:
+            raise AndroidRuntimeError('Selected execution target unavailable.', 'RUNTIME_OBSERVATION_UNAVAILABLE',
+                backend_reason_code=str(exc), evidence={'source': 'execution_target'}) from exc
     serial = select_target_device(
         adb_serial=adb_serial,
         adb_executable=adb_bin,
         timeout_seconds=timeout_seconds,
     )
+
+    selected_target = execution_target or ExecutionTarget.selected(serial, availability='available')
+    if run_dir is not None:
+        save_target(run_dir, selected_target)
 
     # 1. Normalize component
     component = normalize_component_name(package_name, launcher_activity)
@@ -505,48 +534,60 @@ def launch_android_app(
     observed_act: str | None = None
     attempt_count = 0
 
-    while (time.monotonic() - start_time) < max_wait_seconds:
-        attempt_count += 1
-        if pid is None:
+    from src.dynamic.deadline import budget
+    with budget(max_wait_seconds):
+        while current_deadline().remaining() > 0:
+            attempt_count += 1
             pid = query_process_pid(
-                adb_bin=adb_bin,
-                serial=serial,
-                package_name=package_name,
+                    adb_bin=adb_bin,
+                    serial=serial,
+                    package_name=package_name,
+                    timeout_seconds=timeout_seconds,
+                )
+
+            # Early check for fatal exception in logcat if pid was found
+            if pid is not None:
+                cmd_log = [adb_bin, "-s", serial, "shell", "logcat", "-d", f"--pid={pid}", "-t", "100"]
+                try:
+                    res_log = subprocess.run(cmd_log, capture_output=True, text=True, timeout=bounded_timeout(2.0))
+                    if res_log.returncode == 0 and res_log.stdout:
+                        if "FATAL EXCEPTION" in res_log.stdout or "Shutting down VM" in res_log.stdout:
+                            raise AndroidRuntimeError(
+                                f"Application '{package_name}' crashed immediately after launch on device '{serial}'.",
+                                reason_code='APP_CRASHED', backend_reason_code='FATAL_EXCEPTION' if 'FATAL EXCEPTION' in res_log.stdout else 'RUNTIME_SHUTDOWN', evidence={'source': 'logcat', 'launch_succeeded': True, 'process_appeared': True}
+                            )
+                except (subprocess.TimeoutExpired, OSError):
+                    pass
+
+            activity_info = get_current_activity(
+                adb_serial=serial,
+                adb_executable=adb_bin,
                 timeout_seconds=timeout_seconds,
             )
+            observed_pkg = activity_info.get("observed_package")
+            observed_act = activity_info.get("observed_activity")
 
-        # Early check for fatal exception in logcat if pid was found
-        if pid is not None:
-            cmd_log = [adb_bin, "-s", serial, "shell", "logcat", "-d", f"--pid={pid}", "-t", "100"]
-            try:
-                res_log = subprocess.run(cmd_log, capture_output=True, text=True, timeout=2.0)
-                if res_log.returncode == 0 and res_log.stdout:
-                    if "FATAL EXCEPTION" in res_log.stdout or "Shutting down VM" in res_log.stdout:
-                        raise AndroidRuntimeError(
-                            f"Application '{package_name}' crashed immediately after launch on device '{serial}'."
-                        )
-            except (subprocess.TimeoutExpired, OSError):
-                pass
+            # Re-check after foreground/log observation; an earlier PID is not current evidence.
+            if pid is not None and current_deadline().remaining() > 0:
+                current_pid = query_process_pid(adb_bin, serial, package_name, timeout_seconds=timeout_seconds)
+                if current_pid is None:
+                    raise AndroidRuntimeError('Application process exited during startup.', 'PROCESS_EXITED',
+                        evidence={'source': 'process_query', 'launch_succeeded': True, 'process_appeared': True, 'process_survived': False})
+                pid = current_pid
+            if pid is not None and observed_pkg == package_name and current_deadline().remaining() > 0:
+                break
 
-        activity_info = get_current_activity(
-            adb_serial=serial,
-            adb_executable=adb_bin,
-            timeout_seconds=timeout_seconds,
-        )
-        observed_pkg = activity_info.get("observed_package")
-        observed_act = activity_info.get("observed_activity")
-
-        # Stop early if process is detected and foreground activity is verified
-        if pid is not None and observed_pkg == package_name:
-            break
-
-        time.sleep(poll_interval)
+            if current_deadline().remaining() <= 0:
+                pid, observed_pkg, observed_act = None, None, None
+                break
+            time.sleep(min(poll_interval, current_deadline().remaining()))
 
     # If after max_wait_seconds, PID is still not detected, fail clearly
     if pid is None:
         raise AndroidRuntimeError(
             f"Package process '{package_name}' did not start on device '{serial}' "
-            f"within {max_wait_seconds} seconds after launch."
+            f"within {max_wait_seconds} seconds after launch.", backend_reason_code='PID_NOT_OBSERVED',
+            evidence={'source': 'process_query', 'launch_succeeded': True, 'process_survived': False}
         )
 
     # Explicit status semantics:
@@ -578,6 +619,7 @@ def launch_android_app(
         "launch": launch_meta,
         "runtime": {
             "process_running": True,
+            "process_survived": True,
             "pid": pid,
             "observed_package": observed_pkg,
             "observed_activity": observed_act,
@@ -586,6 +628,18 @@ def launch_android_app(
         },
         "status": status,
     }
+
+    if run_dir is not None:
+        from src.dynamic.preflight.device_check import run_adb_cmd
+        selected_target = EmulatorTargetAdapter().describe(serial,
+            lambda args, serial: run_adb_cmd(adb_bin, args, serial=serial, timeout_seconds=2), result_dict['runtime'])
+        save_target(run_dir, selected_target)
+    if install_meta.get('success') and not skip_install:
+        from src.dynamic.runtime.execution_target import Capability
+        selected_target.capabilities['app_install'] = Capability('available', 'OBSERVED', 'package_manager')
+        if run_dir is not None:
+            save_target(run_dir, selected_target)
+    result_dict['execution_target'] = selected_target.to_dict()
 
     if permissions is not None:
         result_dict['runtime_permissions'] = permissions

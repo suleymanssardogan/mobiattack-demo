@@ -270,7 +270,8 @@ class TestDynamicRuntimeObserver(unittest.TestCase):
 
         for c in mock_runner.call_args_list:
             _, kwargs = c
-            self.assertEqual(kwargs.get("timeout"), 3.5)
+            self.assertGreater(kwargs.get("timeout"), 0)
+            self.assertLessEqual(kwargs.get("timeout"), 3.5)
 
     # 18. timeout handled as controlled observation diagnostic
     def test_18_timeout_handled_as_controlled_observation_diagnostic(self):

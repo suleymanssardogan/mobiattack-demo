@@ -173,9 +173,9 @@ class TestDynamicLaunchStabilization(unittest.TestCase):
             sleeper=sleeper_mock,
         )
 
-        self.assertTrue(baseline.immediate_crash)
+        self.assertFalse(baseline.immediate_crash)
         self.assertFalse(baseline.launch_success)
-        self.assertEqual(err_code, ErrorCode.APP_CRASHED)
+        self.assertEqual(err_code, ErrorCode.PROCESS_EXITED)
         self.assertIn("died immediately after launch", err_msg)
         self.assertEqual(baseline.launch_attempts, 2)
 
@@ -250,7 +250,7 @@ class TestDynamicLaunchStabilization(unittest.TestCase):
 
         # Loop must stop because clock exceeded 5.0 seconds
         self.assertLess(baseline.launch_attempts, 5)
-        self.assertEqual(err_code, ErrorCode.APP_LAUNCH_FAILED)
+        self.assertEqual(err_code, ErrorCode.COMMAND_TIMEOUT)
 
     # 9. Presence-only verified when foreground cannot be confirmed
     @patch("src.dynamic.preflight.runtime_health._scan_recent_fatal_logs", return_value=(False, []))

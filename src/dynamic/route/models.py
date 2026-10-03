@@ -84,6 +84,7 @@ class DiscoveredAction:
     status: str = ActionStatus.DISCOVERED.value
     first_seen_at: str = field(default_factory=utc_now_iso)
     last_seen_at: str = field(default_factory=utc_now_iso)
+    navigation_evidence: dict[str, str] = field(default_factory=dict)
 
     @classmethod
     def from_action_candidate(
@@ -121,6 +122,7 @@ class DiscoveredAction:
             content_desc=sanitize_str(candidate.content_desc) if candidate.content_desc else None,
             text=sanitize_str(text_val) if text_val else None,
             status=ActionStatus.DISCOVERED.value,
+            navigation_evidence=dict(candidate.navigation_evidence),
             first_seen_at=ts,
             last_seen_at=ts,
         )
@@ -142,6 +144,7 @@ class DiscoveredAction:
             "status": self.status,
             "first_seen_at": self.first_seen_at,
             "last_seen_at": self.last_seen_at,
+            **({"navigation_evidence": dict(self.navigation_evidence)} if self.navigation_evidence else {}),
         }
 
     @classmethod
@@ -153,6 +156,7 @@ class DiscoveredAction:
         center = tuple(center_raw) if isinstance(center_raw, list) else (0, 0)
 
         return cls(
+            navigation_evidence=dict(data.get("navigation_evidence", {})),
             action_id=data["action_id"],
             source_node_id=data["source_node_id"],
             source_screen_identity=data["source_screen_identity"],

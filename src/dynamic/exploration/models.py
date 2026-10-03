@@ -66,15 +66,55 @@ def is_destructive_action(action: DiscoveredAction) -> bool:
     return any(kw in combined for kw in DESTRUCTIVE_KEYWORDS)
 
 
-def is_safe_clickable_action(action: DiscoveredAction) -> bool:
-    """Verifies that an action candidate is a safe, unattempted click interaction."""
+def navigation_skip_reason(action: DiscoveredAction) -> str | None:
+    """Conservative navigation-only policy; unknown side effects never auto-dispatch."""
     if action.action_type != "click":
-        return False
-    if action.status != ActionStatus.DISCOVERED.value:
-        return False
+        return "NON_NAVIGATION_INPUT"
+    label = " ".join((action.text or "", action.content_desc or "", action.resource_id or "")).lower()
+    if is_destructive_action(action) or re.search(
+        r"submit|sign.?in|sign.?up|login|register|logout|send|message|save|update|confirm|"
+        r"\bsubscribe\b|credential|password|permission_allow|while using|allow access|enable|disable", label
+    ):
+        return "SIDE_EFFECT_BOUNDARY"
+    # Checkable controls may modify persistent state even when their caption looks informational.
+    if any(term in action.class_name.lower() for term in ("switch", "checkbox", "toggle")):
+        return "SIDE_EFFECT_BOUNDARY"
+    if structural_navigation(action):
+        return None
+    if re.search(r"\b(menu|navigation|drawer|tab|back|cancel|close|dismiss|help|about|instructions|information|details)\b", label):
+        return None
+    if re.search(r"\b(open|show|view)\s+(an?\s+)?(informational|screen|dialog|list|settings)\b", label):
+        return None
+    if re.search(r"\bimplementation\b", label):
+        return None  # informational implementation sections, not test/submit buttons
+    return "UNCERTAIN_SIDE_EFFECTS"
+
+
+def structural_navigation(action):
+    evidence = getattr(action, 'navigation_evidence', {})
+    return (isinstance(evidence, dict) and evidence.get('role') == 'navigation_item'
+            and evidence.get('source') in {'material_navigation_hierarchy', 'android_tab_widget'}
+            and evidence.get('control_path', '').startswith(evidence.get('container_path', '') + '/')
+            and bool(evidence.get('container_path')))
+
+
+def navigation_classification(action):
+    """Classification for evidence-based roles; existing informational policy is unchanged."""
+    label = ' '.join((action.text or '', action.content_desc or '', action.resource_id or '')).lower()
     if is_destructive_action(action):
-        return False
-    return True
+        return 'DESTRUCTIVE'
+    if re.search(r'login|register|sign.?in|sign.?up|credential|password', label):
+        return 'CREDENTIAL/AUTH'
+    reason = navigation_skip_reason(action)
+    if reason in {'SIDE_EFFECT_BOUNDARY', 'NON_NAVIGATION_INPUT'}:
+        return 'SIDE_EFFECTING'
+    if structural_navigation(action) and reason is None:
+        return 'SAFE_NAVIGATION'
+    return 'AMBIGUOUS'
+
+
+def is_safe_clickable_action(action: DiscoveredAction) -> bool:
+    return action.status == ActionStatus.DISCOVERED.value and navigation_skip_reason(action) is None
 
 
 ALLOWED_PERMISSION_PACKAGES: frozenset[str] = frozenset({
@@ -130,7 +170,13 @@ class StopReason(str, Enum):
     """Specific condition that terminated the exploration loop."""
     COMPLETED = "completed"
     NO_ACTIONS = "no_actions"
+    UNSAFE_ACTION_BOUNDARY = "unsafe_action_boundary"
+    REPEATED_STATE = "repeated_state"
     MAX_STEPS = "max_steps"
+    AUTH_NOT_COMPLETED = "auth_intervention_not_completed"
+    HARD_STEP_CEILING = "hard_step_ceiling"
+    FRONTIER_STAGNATED = "frontier_stagnated"
+    RUNTIME_UNAVAILABLE = "runtime_unavailable"
     MAX_DEPTH = "max_depth"
     DEADLINE = "deadline"
     EXTERNAL_PACKAGE = "external_package"
@@ -149,6 +195,29 @@ class ExplorationLimits:
     action_settle_delay: float = 0.2
     allow_system_dialogs: bool = True
     stop_on_external_package: bool = True
+    base_step_budget: int | None = None
+    hard_step_ceiling: int | None = None
+    stagnation_actions: int = 3
+    minimum_extension_seconds: float = 1.0
+
+    def __post_init__(self):
+        base = self.max_steps if self.base_step_budget is None else self.base_step_budget
+        ceiling = base if self.hard_step_ceiling is None else self.hard_step_ceiling
+        if any(isinstance(v, bool) or not isinstance(v, int) or v < 1
+               for v in (base, ceiling, self.stagnation_actions)) or ceiling < base:
+            raise ValueError("Budgets must be positive integers with hard ceiling >= base")
+        import math
+        if not math.isfinite(self.minimum_extension_seconds) or self.minimum_extension_seconds <= 0:
+            raise ValueError("Extension requires a finite positive remaining deadline")
+
+    @property
+    def base_budget(self):
+        return self.max_steps if self.base_step_budget is None else self.base_step_budget
+
+    @property
+    def hard_ceiling(self):
+        return self.base_budget if self.hard_step_ceiling is None else self.hard_step_ceiling
+
 
 
 @dataclass

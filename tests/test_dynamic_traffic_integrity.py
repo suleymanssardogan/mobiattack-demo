@@ -2,6 +2,8 @@
 import io
 import json
 import socket
+import threading
+from types import SimpleNamespace
 from email.message import Message
 from unittest.mock import Mock
 
@@ -20,11 +22,15 @@ def proxy_handler(monkeypatch):
     holder = {}
     def server(address, handler):
         holder['handler'] = handler
-        return Mock(serve_forever=lambda: None)
+        ready, stopped = threading.Event(), threading.Event()
+        ready.set()
+        return SimpleNamespace(ready=ready, clients=set(), clients_lock=threading.Lock(),
+            serve_forever=lambda **kwargs: stopped.wait(), shutdown=stopped.set, server_close=lambda: None)
     monkeypatch.setattr(native_backend, '_ThreadingHTTPServer', server)
     backend = native_backend.NativeProxyCaptureBackend()
     backend.start()
     handler = object.__new__(holder['handler'])
+    handler.connection = Mock()
     handler.headers = Message()
     handler.headers['Host'] = 'localhost'
     handler.path = 'http://localhost:9123/orders?token=DUMMY_SECRET'
@@ -59,13 +65,14 @@ def test_localhost_real_upstream_status_is_preserved(proxy_handler, monkeypatch,
     backend, handler = proxy_handler
     conn = Mock()
     response = Mock(status=status)
-    response.read.return_value = b'{"result":"observed","token":"DUMMY_SECRET"}'
+    response.read1.side_effect = [b'{"result":"observed","token":"DUMMY_SECRET"}', b'']
     response.getheaders.return_value = [('Content-Type', 'application/json')]
     conn.getresponse.return_value = response
     connect = Mock(return_value=conn)
     monkeypatch.setattr(native_backend.http.client, 'HTTPConnection', connect)
     handler.do_GET()
-    connect.assert_called_once_with('localhost', 9123, timeout=3.0)
+    assert connect.call_args.args == ('localhost', 9123)
+    assert 0 < connect.call_args.kwargs['timeout'] <= 3.0
     tx, = backend.captured_transactions
     assert tx.response.status_code == status
     assert tx.response.body == {'result': 'observed', 'token': '[REDACTED]'}
@@ -193,13 +200,14 @@ def test_origin_form_local_request_is_forwarded_without_mock_success(proxy_handl
     handler.headers.replace_header('Host', 'localhost:9123')
     conn = Mock()
     response = Mock(status=204)
-    response.read.return_value = b''
+    response.read1.side_effect = [b'']
     response.getheaders.return_value = []
     conn.getresponse.return_value = response
     connect = Mock(return_value=conn)
     monkeypatch.setattr(native_backend.http.client, 'HTTPConnection', connect)
     handler.do_GET()
-    connect.assert_called_once_with('localhost', 9123, timeout=3.0)
+    assert connect.call_args.args == ('localhost', 9123)
+    assert 0 < connect.call_args.kwargs['timeout'] <= 3.0
     assert backend.captured_transactions[0].response.status_code == 204
 
 

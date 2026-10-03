@@ -1,0 +1,130 @@
+{
+  "backend": "controlled_local_lab",
+  "http_visibility": "available",
+  "https_visibility": "unavailable",
+  "schema_version": "1.0",
+  "session_id": "004d4800-6acf-4d80-81f3-112d0e95dc83",
+  "transactions": [
+    {
+      "attribution": {},
+      "capture_id": "capture_c28f342aa1574b8ea93c9f94833534a9",
+      "correlation": {},
+      "duration_ms": 0.0,
+      "flow_id": null,
+      "request": {
+        "body": {
+          "enabled": true
+        },
+        "body_metadata": {
+          "binary": false,
+          "content_type": "application/json",
+          "size": 17,
+          "truncated": false
+        },
+        "headers": {
+          "authorization": "[REDACTED]",
+          "content-length": "17",
+          "content-type": "application/json",
+          "host": "127.0.0.1:59005",
+          "x-lab-run-id": "004d4800-6acf-4d80-81f3-112d0e95dc83"
+        },
+        "host": "127.0.0.1",
+        "method": "POST",
+        "path": "/lab/admin/toggle",
+        "port": 59005,
+        "query": {},
+        "request_id": "dcd6efa6-cca0-4f13-9d86-b1ce269ce336",
+        "scheme": "http",
+        "timestamp": "2026-10-03T08:12:57.942740+00:00"
+      },
+      "response": {
+        "body": {
+          "applied": true,
+          "enabled": true,
+          "function": "training_toggle",
+          "revision": 1
+        },
+        "body_metadata": {
+          "binary": false,
+          "content_type": "application/json",
+          "size": 80,
+          "truncated": false
+        },
+        "headers": {
+          "cache-control": "no-store",
+          "content-length": "80",
+          "content-type": "application/json",
+          "date": "Sat, 03 Oct 2026 08:12:57 GMT",
+          "server": "BaseHTTP/0.6 Python/3.11.7",
+          "x-lab-trace-id": "lab_d101c6e3bf1e425b8e128c1b5add1dfe"
+        },
+        "status_code": 200,
+        "timestamp": "2026-10-03T08:12:57.943026+00:00"
+      },
+      "scope": "UNKNOWN",
+      "session_id": "004d4800-6acf-4d80-81f3-112d0e95dc83",
+      "transaction_id": "11209cb1-72a0-41a7-a9b1-46e6093c9436"
+    },
+    {
+      "attribution": {
+        "baseline_transaction_ref": "11209cb1-72a0-41a7-a9b1-46e6093c9436",
+        "method": "deterministic_local_executor"
+      },
+      "capture_id": "capture_ca1b6190eb624c4e8730ccfe7597046e",
+      "correlation": {},
+      "duration_ms": 0.0,
+      "flow_id": null,
+      "request": {
+        "body": {
+          "enabled": true
+        },
+        "body_metadata": {
+          "binary": false,
+          "content_type": "application/json",
+          "size": 17,
+          "truncated": false
+        },
+        "headers": {
+          "authorization": "[REDACTED]",
+          "content-length": "17",
+          "content-type": "application/json",
+          "host": "127.0.0.1:59005",
+          "x-lab-run-id": "004d4800-6acf-4d80-81f3-112d0e95dc83"
+        },
+        "host": "127.0.0.1",
+        "method": "POST",
+        "path": "/lab/admin/toggle",
+        "port": 59005,
+        "query": {},
+        "request_id": "db1c27bc-fdc6-47a8-acb2-f2c9130bafab",
+        "scheme": "http",
+        "timestamp": "2026-10-03T08:12:57.943978+00:00"
+      },
+      "response": {
+        "body": {
+          "error": "function_access_denied",
+          "function": "training_toggle"
+        },
+        "body_metadata": {
+          "binary": false,
+          "content_type": "application/json",
+          "size": 66,
+          "truncated": false
+        },
+        "headers": {
+          "cache-control": "no-store",
+          "content-length": "66",
+          "content-type": "application/json",
+          "date": "Sat, 03 Oct 2026 08:12:57 GMT",
+          "server": "BaseHTTP/0.6 Python/3.11.7",
+          "x-lab-trace-id": "lab_ba442684b33f4fea857eb5a5af0c6678"
+        },
+        "status_code": 403,
+        "timestamp": "2026-10-03T08:12:57.944526+00:00"
+      },
+      "scope": "UNKNOWN",
+      "session_id": "004d4800-6acf-4d80-81f3-112d0e95dc83",
+      "transaction_id": "54f2f682-0555-4fc6-8ebf-8c63ebd70f87"
+    }
+  ]
+}

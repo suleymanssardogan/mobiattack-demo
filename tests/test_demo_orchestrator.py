@@ -252,11 +252,9 @@ class TestDemoOrchestratorUnit(unittest.TestCase):
             "app": {"package_name": "com.example.app", "launcher_activity": None}
         }
 
-        with self.assertRaises(DemoOrchestrationError) as ctx:
-            run_demo("http://example.com/app.apk", self.output_root)
-        self.assertEqual(ctx.exception.stage, "runtime")
-        self.assertEqual(ctx.exception.reason_code, "LAUNCHER_UNRESOLVED")
-        self.assertIn("launcher_activity", str(ctx.exception))
+        result = run_demo("http://example.com/app.apk", self.output_root)
+        self.assertEqual(result['runtime']['runtime_availability']['reason_code'], 'LAUNCHER_UNRESOLVED')
+        self.assertEqual(result['demo_status'], 'completed')
 
     @patch("src.demo_orchestrator.acquire_apk")
     @patch("src.demo_orchestrator.preprocess_apk")
@@ -282,10 +280,9 @@ class TestDemoOrchestratorUnit(unittest.TestCase):
             "app": {"package_name": "com.example.app", "launcher_activity": "com.example.app.MainActivity"}
         }
 
-        with self.assertRaises(DemoOrchestrationError) as ctx:
-            run_demo("http://example.com/app.apk", self.output_root)
-        self.assertEqual(ctx.exception.stage, "runtime")
-        self.assertIn("Install failed", str(ctx.exception))
+        result = run_demo("http://example.com/app.apk", self.output_root)
+        self.assertEqual(result['runtime']['status'], 'unavailable')
+        self.assertEqual(result['demo_status'], 'completed')
 
     @patch("src.demo_orchestrator.acquire_apk")
     @patch("src.demo_orchestrator.preprocess_apk")
@@ -312,7 +309,7 @@ class TestDemoOrchestratorUnit(unittest.TestCase):
             "app": {"package_name": "com.example.app", "launcher_activity": "com.example.app.MainActivity"},
             "api_candidates": [],
         }
-        mock_runtime.return_value = {"status": "runtime_launch_verified", "runtime": {"pid": 1234}}
+        mock_runtime.return_value = {"status": "runtime_launch_verified", "adb": {"serial": "emulator-5554"}, "runtime": {"pid": 1234}}
 
         events = []
 

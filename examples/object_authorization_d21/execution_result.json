@@ -1,0 +1,27 @@
+{
+  "endpoint_context_id": "ctx_fedbe20e19a01b31",
+  "evidence_refs": [
+    "72f52de6-3c5b-4f03-946a-3b102978269e",
+    "7428e410-486d-46b6-90c8-9d8d99e3b9ab",
+    "cb181e62-fd54-47fa-ad20-d0853bb81624",
+    "comparison_0dd75ab4f1ff96fec75a",
+    "control_0dd75ab4f1ff96fec75a",
+    "ctx_fedbe20e19a01b31",
+    "execution_0dd75ab4f1ff96fec75a",
+    "lab_473c90adad63424c9beeaddfc84059c9",
+    "lab_8c91ff3e60a94120ad8b41394f89938b",
+    "ownership_1fc292f489ee7b6ce5de"
+  ],
+  "execution_status": "completed",
+  "failure_reason": null,
+  "finished_at": "2026-10-03T07:24:28.893207+00:00",
+  "observed_request_ref": "72f52de6-3c5b-4f03-946a-3b102978269e",
+  "observed_response_ref": "lab_8c91ff3e60a94120ad8b41394f89938b",
+  "schema_version": "1.0",
+  "session_id": "7428e410-486d-46b6-90c8-9d8d99e3b9ab",
+  "started_at": "2026-10-03T07:24:28.891079+00:00",
+  "test_id": "OBJECT_AUTHORIZATION",
+  "tool_refs": [
+    "execution_0dd75ab4f1ff96fec75a"
+  ]
+}

@@ -11,6 +11,7 @@ Provides deterministic, side-effect-free screen observation:
 """
 
 from __future__ import annotations
+from src.dynamic.deadline import bounded_operation, current_deadline
 
 import hashlib
 import logging
@@ -64,9 +65,10 @@ def compute_node_id(
     bounds: tuple[int, int, int, int],
     clickable: bool,
     editable: bool,
+    structural_key: str = "",
 ) -> str:
     """Computes a deterministic 12-character hex ID for an interactive UI node."""
-    raw = f"{class_name}:{resource_id}:{bounds[0]},{bounds[1]},{bounds[2]},{bounds[3]}:{1 if clickable else 0}:{1 if editable else 0}"
+    raw = f"{class_name}:{resource_id}:{structural_key}:{1 if clickable else 0}:{1 if editable else 0}"
     return hashlib.sha256(raw.encode("utf-8")).hexdigest()[:12]
 
 
@@ -80,27 +82,18 @@ def compute_screen_identity(
     Strict Resilience Rules:
     - Dynamic text (clocks, balances, usernames, counters) is excluded.
     - Captures structural elements: class, resource-id, interactive flags,
-      accessibility labels for controls, and normalized spatial buckets.
+      accessibility labels for controls, hierarchy positions and checked/selected state.
     - Compose nodes lacking resource-ids are distinguished by structural descriptors.
     """
     descriptors: list[str] = []
     for node in nodes:
-        # Round spatial coordinates to 10px buckets to absorb minor sub-pixel rendering jitter
-        bx1 = node.bounds[0] // 10
-        by1 = node.bounds[1] // 10
-        bx2 = node.bounds[2] // 10
-        by2 = node.bounds[3] // 10
-
-        # Include content-desc only for interactive or input nodes (e.g. Compose action labels)
+        # Geometry remains tap evidence, not visited-state identity.
         desc_label = node.content_desc.strip() if (node.clickable or node.editable) else ""
-
+        control_label = re.sub(r"\d+", "#", node.text) if node.clickable and not node.editable and not node.password else ""
         descriptor = (
-            f"{node.class_name}|"
-            f"{node.resource_id}|"
-            f"{desc_label}|"
-            f"{1 if node.clickable else 0}|"
-            f"{1 if node.editable else 0}|"
-            f"[{bx1},{by1}][{bx2},{by2}]"
+            f"{node.node_id}|{node.class_name}|{node.resource_id}|{desc_label}|"
+            f"{int(node.clickable)}|{int(node.editable)}|{int(node.enabled)}|"
+            f"{int(node.checkable)}|{int(node.checked)}|{int(node.selected)}|{int(node.visible)}|{control_label}"
         )
         descriptors.append(descriptor)
 
@@ -111,7 +104,7 @@ def compute_screen_identity(
     return hashlib.sha256(payload.encode("utf-8")).hexdigest()[:16]
 
 
-def extract_ui_node(node_elem: ET.Element) -> UiNode | None:
+def extract_ui_node(node_elem: ET.Element, structural_key: str = "") -> UiNode | None:
     """Extracts and normalizes a UiNode from an XML ElementTree node."""
     attrib = node_elem.attrib
     class_name = (attrib.get("class") or "").strip()
@@ -161,6 +154,7 @@ def extract_ui_node(node_elem: ET.Element) -> UiNode | None:
         bounds=bounds_tuple,
         clickable=clickable,
         editable=is_editable,
+        structural_key=structural_key,
     )
 
     return UiNode(
@@ -179,6 +173,8 @@ def extract_ui_node(node_elem: ET.Element) -> UiNode | None:
         scrollable=scrollable,
         checkable=checkable,
         checked=checked,
+        selected=attrib.get("selected", "false").lower() == "true",
+        visible=attrib.get("visible-to-user", "true").lower() != "false" and width > 0 and height > 0,
         bounds=bounds_tuple,
         center_x=center_x,
         center_y=center_y,
@@ -201,10 +197,19 @@ def parse_ui_hierarchy(
     input_count = 0
     diagnostics: list[str] = []
 
+    # Preserve hierarchy position for repeated/no-id controls; never use tap coordinates as identity.
+    paths = {}
+    def index_tree(elem, path="root"):
+        paths[id(elem)] = path
+        for i, child in enumerate(elem):
+            index_tree(child, f"{path}/{i}")
+    index_tree(root)
+    from src.dynamic.ui.navigation import navigation_roles
+    roles = navigation_roles(root, paths)
     # Traverse all nodes safely
     for elem in root.iter("node"):
         try:
-            node = extract_ui_node(elem)
+            node = extract_ui_node(elem, structural_key=paths[id(elem)])
             if not node:
                 continue
 
@@ -216,23 +221,41 @@ def parse_ui_hierarchy(
             if node.clickable:
                 clickable_count += 1
                 # Action candidate rules: must be enabled and have positive visible bounds
-                if node.enabled and node.width > 0 and node.height > 0:
-                    action_type = "input" if node.editable else "click"
+                if node.enabled and node.visible:
+                    action_type = "input" if node.editable else "toggle" if node.checkable else "click"
+                    # A clickable row often owns its non-clickable label. Do not promote the child
+                    # to a second action, or inherit editable/password values.
+                    label = node.text
+                    if not node.editable and not node.password:
+                        labels = [label] if label else []
+                        for child in elem.iter("node"):
+                            if child is elem or child.get("clickable") == "true":
+                                continue
+                            parsed = extract_ui_node(child)
+                            if parsed and not parsed.editable and not parsed.password and parsed.enabled and parsed.visible:
+                                value = parsed.text or parsed.content_desc
+                                if value:
+                                    labels.append(value)
+                        label = " ".join(dict.fromkeys(labels))[:200]
+                        node.text = label
                     candidate = ActionCandidate(
                         node_id=node.node_id,
                         resource_id=node.resource_id,
                         class_name=node.class_name,
-                        text=node.text,
+                        text=label,
                         content_desc=node.content_desc,
                         bounds=node.bounds,
                         center_x=node.center_x,
                         center_y=node.center_y,
                         action_type=action_type,
+                        navigation_evidence=roles.get(id(elem), {}),
                     )
                     action_candidates.append(candidate)
         except Exception as exc:
             diagnostics.append(f"Failed to parse node element: {exc}")
 
+    if any(e.get("actions") or e.get("accessibility-actions") for e in root.iter("node")):
+        diagnostics.append("Accessibility-only actions are not supported by the UIAutomator click backend.")
     # Derive package from XML root if dumpsys did not provide one
     if not foreground_package and nodes:
         for n in nodes:
@@ -265,6 +288,7 @@ def parse_ui_hierarchy(
     )
 
 
+@bounded_operation(4.0, field="deadline_seconds")
 def observe_screen(
     serial: str,
     adb_bin: str | None = None,
@@ -295,6 +319,8 @@ def observe_screen(
             adb_executable=adb_bin,
             timeout_seconds=min(DEFAULT_COMMAND_TIMEOUT_SECONDS, 8.0),
         )
+        if current_deadline().remaining() <= 0:
+            raise UIObservationError('UI observation deadline exhausted')
         fg_pkg = activity_info.get("observed_package") or ""
         fg_act = activity_info.get("observed_activity") or ""
 
@@ -305,6 +331,8 @@ def observe_screen(
                 adb_bin=adb_bin,
                 timeout_seconds=min(DEFAULT_COMMAND_TIMEOUT_SECONDS, 10.0),
             )
+            if current_deadline().remaining() <= 0:
+                raise UIObservationError('UI observation deadline exhausted')
             obs = parse_ui_hierarchy(
                 root=root,
                 foreground_package=fg_pkg,
@@ -329,12 +357,12 @@ def observe_screen(
         elapsed = clock() - start_time
         remaining = deadline_seconds - elapsed
         if attempt < max_attempts and remaining > 0:
-            wait_time = min(poll_interval, remaining)
+            wait_time = min(poll_interval, remaining, current_deadline().remaining())
             if wait_time > 0:
                 sleeper(wait_time)
 
     # If we obtained at least one valid ScreenObservation, return it
-    if last_observation is not None:
+    if last_observation is not None and current_deadline().remaining() > 0:
         last_observation.observation_attempts = attempt
         return last_observation
 

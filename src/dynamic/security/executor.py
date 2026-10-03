@@ -1,4 +1,4 @@
-"""Deterministic dispatch with an opt-in, one-shot local auth-presence backend.
+"""Deterministic dispatch with opt-in, one-shot local training backends.
 
 All other actions remain unavailable. No general replay or payload executor.
 """
@@ -16,10 +16,22 @@ from src.dynamic.security.contracts import (
 class DeterministicSecurityExecutor:
     """Safety gate precedes every dispatch, including the local lab backend."""
 
-    def __init__(self, *, clock: Callable[[], str] = utc_now_iso, auth_backend=None):
+    def __init__(self, *, clock: Callable[[], str] = utc_now_iso, auth_backend=None, object_backend=None, function_backend=None, session_backend=None):
         from src.dynamic.security.authentication_presence import LocalLabAuthenticationPresence
         if auth_backend is not None and type(auth_backend) is not LocalLabAuthenticationPresence:
             raise ValueError('Unsupported security backend')
+        from src.dynamic.security.object_authorization import LocalLabObjectAuthorization
+        if object_backend is not None and type(object_backend) is not LocalLabObjectAuthorization:
+            raise ValueError('Unsupported security backend')
+        from src.dynamic.security.function_authorization import LocalLabFunctionAuthorization
+        if function_backend is not None and type(function_backend) is not LocalLabFunctionAuthorization:
+            raise ValueError('Unsupported security backend')
+        from src.dynamic.security.session_invalidation import LocalLabSessionInvalidation
+        if session_backend is not None and type(session_backend) is not LocalLabSessionInvalidation:
+            raise ValueError('Unsupported security backend')
+        self._session_backend = session_backend
+        self._function_backend = function_backend
+        self._object_backend = object_backend
         self._auth_backend = auth_backend
         self._clock = clock
         self._handlers = {action: self._backend_unavailable
@@ -53,14 +65,23 @@ class DeterministicSecurityExecutor:
             raise ValueError('Executing session does not own this request')
         if request.session_id is None and session_id is not None:
             raise ValueError('Session-scoped execution requires a scoped request')
-        decision = check_request_safety(request, context, evidence)
+        decision = check_request_safety(request, context, evidence, controlled_object_lab=self._object_backend, controlled_function_lab=self._function_backend, controlled_session_lab=self._session_backend)
         started = self._clock()
         _time(started)
         if decision['decision'] == 'blocked':
-            return self._result(request, evidence, started, 'blocked', 'risk_not_automatically_executable')
+            return self._result(request, evidence, started, 'blocked', decision['reason'] if decision['reason'] in {'controlled_object_lab_evidence_required','controlled_function_lab_evidence_required','controlled_session_lab_evidence_required'} else 'risk_not_automatically_executable')
         if routing_error:
             return self._result(request, evidence, started, 'blocked', routing_error)
+        if request.test_category == 'object_authorization':
+            if self._object_backend is None or not self._object_backend.eligible(request, context, evidence):
+                return self._result(request, evidence, started, 'blocked', 'controlled_object_lab_evidence_required')
         try:
+            if self._session_backend is not None and request.test_category=='session_handling':
+                return self._session_backend.run(request,context,evidence,started,self._clock)
+            if self._function_backend is not None and request.test_category == 'function_authorization':
+                return self._function_backend.run(request,context,evidence,started,self._clock)
+            if self._object_backend is not None and request.test_category == 'object_authorization':
+                return self._object_backend.run(request, context, evidence, started, self._clock)
             if self._auth_backend is not None and request.test_category == 'authentication_presence':
                 return self._auth_backend.run(request, context, evidence, started, self._clock)
             output = self._dispatch(request)

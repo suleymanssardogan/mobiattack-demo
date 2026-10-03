@@ -1,4 +1,5 @@
 """Evidence-based HTTPS capability and read-only emulator CA trust inspection."""
+from src.dynamic.deadline import bounded_timeout
 from dataclasses import dataclass
 import hashlib
 from pathlib import Path
@@ -16,7 +17,7 @@ def check_ca_trust(adb_bin: str, serial: str, certificate: Path) -> tuple[str, s
         pem = certificate.read_text()
         fingerprint = hashlib.sha256(ssl.PEM_cert_to_DER_cert(pem)).digest()
         proc = subprocess.run(['openssl', 'x509', '-subject_hash_old', '-noout', '-in', str(certificate)],
-                              capture_output=True, text=True, timeout=3)
+                              capture_output=True, text=True, timeout=bounded_timeout(3))
         cert_hash = proc.stdout.strip()
         if proc.returncode or len(cert_hash) != 8 or any(c not in '0123456789abcdef' for c in cert_hash):
             return 'unknown', 'ca_fingerprint_check_unavailable'

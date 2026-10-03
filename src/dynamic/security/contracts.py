@@ -29,6 +29,9 @@ ACTIONS = {
 EXECUTION_STATUSES = frozenset({'completed', 'failed', 'blocked', 'unavailable', 'interrupted'})
 OUTCOMES = frozenset({'validated', 'rejected', 'inconclusive', 'blocked'})
 VALIDATION_REASON_CODES = frozenset({
+    'SESSION_INVALIDATION_ENFORCED','SESSION_INVALIDATION_NOT_ENFORCED','MISSING_LOGOUT_EVIDENCE','LOGOUT_NOT_PROVEN','CREDENTIAL_IDENTITY_MISMATCH','BASELINE_EXPIRED',
+    'FUNCTION_AUTHORIZATION_ENFORCED', 'FUNCTION_AUTHORIZATION_NOT_ENFORCED', 'MISSING_PRIVILEGE_EVIDENCE', 'MISSING_STATE_EVIDENCE',
+    'OBJECT_AUTHORIZATION_ENFORCED', 'OBJECT_AUTHORIZATION_NOT_ENFORCED', 'MISSING_OWNERSHIP_EVIDENCE',
     'AUTH_ENFORCEMENT_CONFIRMED', 'MISSING_BASELINE_EVIDENCE', 'MISSING_VARIANT_EVIDENCE',
     'MISSING_REQUIRED_EVIDENCE', 'MISSING_ENDPOINT_EVIDENCE', 'MISSING_SESSION_EVIDENCE',
     'MISSING_EXECUTION_EVIDENCE', 'MISSING_COMPARISON_EVIDENCE', 'CROSS_SESSION_EVIDENCE',
@@ -189,7 +192,19 @@ class DynamicValidationResult(StrictContract):
         object.__setattr__(self, 'reason_codes', tuple(sorted(set(self.reason_codes))))
         if 'AUTH_ENFORCEMENT_CONFIRMED' in self.reason_codes and self.outcome != 'validated':
             raise ValueError('Reason code and outcome mismatch')
-        if self.outcome == 'validated' and set(self.reason_codes) - {'AUTH_ENFORCEMENT_CONFIRMED'}:
+        if 'OBJECT_AUTHORIZATION_ENFORCED' in self.reason_codes and self.outcome != 'validated':
+            raise ValueError('Reason code and outcome mismatch')
+        if 'OBJECT_AUTHORIZATION_NOT_ENFORCED' in self.reason_codes and self.outcome != 'rejected':
+            raise ValueError('Reason code and outcome mismatch')
+        if 'FUNCTION_AUTHORIZATION_ENFORCED' in self.reason_codes and self.outcome != 'validated':
+            raise ValueError('Reason code and outcome mismatch')
+        if 'FUNCTION_AUTHORIZATION_NOT_ENFORCED' in self.reason_codes and self.outcome != 'rejected':
+            raise ValueError('Reason code and outcome mismatch')
+        if 'SESSION_INVALIDATION_ENFORCED' in self.reason_codes and self.outcome != 'validated':
+            raise ValueError('Reason code and outcome mismatch')
+        if 'SESSION_INVALIDATION_NOT_ENFORCED' in self.reason_codes and self.outcome != 'rejected':
+            raise ValueError('Reason code and outcome mismatch')
+        if self.outcome == 'validated' and set(self.reason_codes) - {'AUTH_ENFORCEMENT_CONFIRMED', 'OBJECT_AUTHORIZATION_ENFORCED', 'FUNCTION_AUTHORIZATION_ENFORCED','SESSION_INVALIDATION_ENFORCED'}:
             raise ValueError('Incomplete or invalid evidence cannot be validated')
         _id(self.test_id)
         _endpoint(self.endpoint_context_id)
@@ -235,11 +250,26 @@ def _verify_refs(refs, endpoint, session, registry: Mapping[str, EvidenceReferen
             raise ValueError('Cross-session or unscoped evidence')
 
 
-def check_request_safety(request, context: EndpointContext, registry):
+def check_request_safety(request, context: EndpointContext, registry, *, controlled_object_lab=None, controlled_function_lab=None, controlled_session_lab=None):
     """Eligibility metadata only. No decision from this function executes anything."""
     if not isinstance(context, EndpointContext) or context.endpoint_context_id != request.endpoint_context_id:
         raise ValueError('Endpoint context mismatch')
     _verify_refs(request.required_evidence_refs, request.endpoint_context_id, request.session_id, registry)
+    if request.test_category == 'object_authorization' and request.risk_class in {'passive','low'}:
+        from src.dynamic.security.object_authorization import LocalLabObjectAuthorization
+        if type(controlled_object_lab) is not LocalLabObjectAuthorization or not controlled_object_lab.eligible(request,context,registry):
+            return {'policy_version': SAFETY_VERSION, 'decision':'blocked', 'automatic_execution_allowed':False,
+                    'reason':'controlled_object_lab_evidence_required'}
+    if request.test_category == 'function_authorization' and request.risk_class in {'passive','low'}:
+        from src.dynamic.security.function_authorization import LocalLabFunctionAuthorization
+        if type(controlled_function_lab) is not LocalLabFunctionAuthorization or not controlled_function_lab.eligible(request,context,registry):
+            return {'policy_version':SAFETY_VERSION, 'decision':'blocked', 'automatic_execution_allowed':False,
+                    'reason':'controlled_function_lab_evidence_required'}
+    if request.test_category == 'session_handling' and request.risk_class in {'passive','low'}:
+        from src.dynamic.security.session_invalidation import LocalLabSessionInvalidation
+        if type(controlled_session_lab) is not LocalLabSessionInvalidation or not controlled_session_lab.eligible(request,context,registry):
+            return {'policy_version':SAFETY_VERSION,'decision':'blocked','automatic_execution_allowed':False,
+                    'reason':'controlled_session_lab_evidence_required'}
     return {'policy_version': SAFETY_VERSION,
             'decision': 'eligible_for_future_policy_review' if request.risk_class in {'passive', 'low'} else 'blocked',
             'automatic_execution_allowed': False,
@@ -261,7 +291,7 @@ def validate_execution(request, execution, registry):
         raise ValueError('Invalid tool reference kind')
 
 
-def validate_result(request, execution, result, registry, *, auth_evidence=None):
+def validate_result(request, execution, result, registry, *, auth_evidence=None, object_evidence=None, function_evidence=None, session_evidence=None):
     """No findings; only explicit controlled behavior evidence can be validated."""
     validate_execution(request, execution, registry)
     if (result.test_id, result.endpoint_context_id, result.session_id) != (
@@ -286,3 +316,21 @@ def validate_result(request, execution, result, registry, *, auth_evidence=None)
             raise ValueError(inspection.code)
         if result.reason_codes != ('AUTH_ENFORCEMENT_CONFIRMED',) or not inspection.refs.issubset(result.evidence_refs):
             raise ValueError('MISSING_REQUIRED_EVIDENCE')
+
+    if request.test_category == 'object_authorization' and result.outcome in {'validated', 'rejected'}:
+        from src.dynamic.security.object_authorization import inspect_object_authorization
+        inspection = inspect_object_authorization(request, execution, registry, object_evidence)
+        if inspection.outcome != result.outcome or result.reason_codes != (inspection.code,) or not inspection.refs.issubset(result.evidence_refs):
+            raise ValueError('Unbacked object authorization result')
+
+    if request.test_category == 'function_authorization' and result.outcome in {'validated', 'rejected'}:
+        from src.dynamic.security.function_authorization import inspect_function_authorization
+        inspection = inspect_function_authorization(request, execution, registry, function_evidence)
+        if inspection.outcome != result.outcome or result.reason_codes != (inspection.code,) or not inspection.refs.issubset(result.evidence_refs):
+            raise ValueError('Unbacked function authorization result')
+
+    if request.test_category == 'session_handling' and result.outcome in {'validated','rejected'}:
+        from src.dynamic.security.session_invalidation import inspect_session_invalidation
+        inspection=inspect_session_invalidation(request,execution,registry,session_evidence)
+        if inspection.outcome!=result.outcome or result.reason_codes!=(inspection.code,) or not inspection.refs.issubset(result.evidence_refs):
+            raise ValueError('Unbacked session invalidation result')

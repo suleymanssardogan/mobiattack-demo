@@ -16,9 +16,9 @@ EVIDENCE = {'baseline': EvidenceReference('baseline', 'ctx_orders', 'context', '
 
 
 def payload(**changes):
-    data = dict(test_id='OBJECT_AUTHORIZATION', endpoint_context_id='ctx_orders',
-                test_category='object_authorization', purpose='Evaluate controlled object behavior',
-                required_evidence_refs=['baseline'], requested_action='validate_object_access_behavior',
+    data = dict(test_id='PARAMETER_CONSISTENCY', endpoint_context_id='ctx_orders',
+                test_category='parameter_consistency', purpose='Evaluate controlled object behavior',
+                required_evidence_refs=['baseline'], requested_action='validate_parameter_consistency',
                 risk_class='low', session_id='session_1')
     data.update(changes)
     return data
@@ -149,7 +149,7 @@ def test_arbitrary_backend_output_cannot_synthesize_success(output):
 def test_even_valid_baseline_evidence_cannot_be_promoted_to_new_execution():
     evidence={**EVIDENCE,'req_1':EvidenceReference('req_1','ctx_orders','request','session_1'),
               'resp_1':EvidenceReference('resp_1','ctx_orders','response','session_1')}
-    fake=DynamicTestExecutionResult(test_id='OBJECT_AUTHORIZATION',endpoint_context_id='ctx_orders',
+    fake=DynamicTestExecutionResult(test_id='PARAMETER_CONSISTENCY',endpoint_context_id='ctx_orders',
          execution_status='completed',observed_request_ref='req_1',observed_response_ref='resp_1',
          evidence_refs=('req_1','resp_1'),tool_refs=(),started_at=START,finished_at=FINISH,session_id='session_1')
     runner=executor()
@@ -165,7 +165,7 @@ def test_deterministic_timestamps_identity_and_input_preservation():
     result=run(data)
     assert result==run(data)
     assert result.started_at==START and result.finished_at==FINISH
-    assert (result.test_id,result.endpoint_context_id,result.session_id)==('OBJECT_AUTHORIZATION','ctx_orders','session_1')
+    assert (result.test_id,result.endpoint_context_id,result.session_id)==(data['test_id'],'ctx_orders','session_1')
     assert data==before and EVIDENCE==evidence
     assert DynamicTestExecutionResult.from_dict(result.to_dict())==result
 
@@ -181,7 +181,7 @@ def test_all_canonical_actions_remain_unimplemented_and_do_not_send_requests(cat
     with patch('socket.socket') as socket_call, patch('subprocess.run') as subprocess_call:
         for action in ACTIONS[category]:
             result=run(payload(test_category=category,requested_action=action))
-            assert result.execution_status=='unavailable'
+            assert result.execution_status == ('blocked' if category in {'object_authorization','function_authorization','session_handling'} else 'unavailable')
             assert not set(result.to_dict()) & {'finding','severity','poc','is_vulnerable'}
     socket_call.assert_not_called()
     subprocess_call.assert_not_called()

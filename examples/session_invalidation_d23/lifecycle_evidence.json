@@ -1,0 +1,18 @@
+{
+  "credential_ref": "principal_session_e864b906c668436eb1199edce068aeb8",
+  "evidence_ref": "lifecycle_cc0ececc47cdcd86f698",
+  "generation": 1,
+  "host": "127.0.0.1",
+  "logout": {
+    "method": "POST",
+    "path": "/logout"
+  },
+  "port": 62563,
+  "principal_alias": "user_A",
+  "protected": {
+    "method": "GET",
+    "path": "/profile"
+  },
+  "session_id": "2cf26134-1e56-445b-99c7-d9f7cd0e1e10",
+  "source": "controlled_local_lab_configuration"
+}

@@ -42,11 +42,21 @@ class DynamicPreflightService:
         activity_name: str | None = None,
         auto_install: bool = True,
         is_split_apk: bool = False,
+        execution_target=None,
     ) -> PreflightResult:
         """Executes the full dynamic preflight suite and produces normalized results."""
         result = PreflightResult()
         warnings: list[str] = []
         errors: list[dict[str, str]] = []
+
+        if execution_target is not None:
+            try:
+                target_serial = execution_target.require_transport(target_serial)
+            except ValueError:
+                result.status = PreflightStatus.FAIL
+                result.errors = [{'code': ErrorCode.RUNTIME_OBSERVATION_UNAVAILABLE.value,
+                                  'message': 'Current execution environment unavailable.'}]
+                return result
 
         # 1. ADB Binary check
         if not self.adb_bin:
@@ -73,7 +83,11 @@ class DynamicPreflightService:
             result.errors = errors
             return result
 
-        serial = dev_info.serial or ""
+        from src.dynamic.runtime.execution_target import ExecutionTarget, TargetType
+        selected_target = execution_target or ExecutionTarget.selected(dev_info.serial,
+            TargetType.EMULATOR if dev_info.is_emulator else TargetType.UNKNOWN, availability='available')
+        serial = selected_target.require_transport(dev_info.serial)
+        result.execution_target = selected_target.to_dict()
 
         # Flag environment characteristics
         if dev_info.is_emulator:
@@ -175,6 +189,13 @@ class DynamicPreflightService:
             relaunch_fn=_relaunch_fallback,
         )
         result.runtime = baseline
+        from src.dynamic.runtime.execution_target import Capability
+        if baseline.pid and not health_err_code:
+            selected_target.capabilities['pid_observation'] = Capability('available', 'OBSERVED', 'preflight_runtime')
+            selected_target.capabilities['app_launch'] = Capability('available', 'OBSERVED', 'preflight_runtime')
+        if is_foreground and not health_err_code:
+            selected_target.capabilities['foreground_observation'] = Capability('available', 'OBSERVED', 'preflight_runtime')
+        result.execution_target = selected_target.to_dict()
         app_info.process_running = (baseline.pid is not None)
         app_info.foreground = is_foreground
 
@@ -253,6 +274,12 @@ def save_preflight_result(
     target_file = target_dir / "preflight_result.json"
 
     data = result.to_dict() if isinstance(result, PreflightResult) else dict(result)
+    if data.get('execution_target') is not None:
+        from src.dynamic.runtime.execution_target import ExecutionTarget, save_target
+        selected = ExecutionTarget.from_dict(data['execution_target'])
+        if selected.adb_serial != data.get('device', {}).get('serial'):
+            raise ValueError('TARGET_IDENTITY_MISMATCH')
+        save_target(run_dir, selected)
     sanitized_data = sanitize_preflight_dict(data)
 
     fd, temp_path = tempfile.mkstemp(

@@ -1,0 +1,119 @@
+{
+  "backend": "controlled_local_lab",
+  "http_visibility": "available",
+  "https_visibility": "unavailable",
+  "schema_version": "1.0",
+  "session_id": "7428e410-486d-46b6-90c8-9d8d99e3b9ab",
+  "transactions": [
+    {
+      "attribution": {},
+      "capture_id": "capture_bdd8fb848b114294b8002c1308e83e5b",
+      "correlation": {},
+      "duration_ms": 0.0,
+      "flow_id": null,
+      "request": {
+        "body": null,
+        "body_metadata": {
+          "binary": false,
+          "size": 0,
+          "truncated": false
+        },
+        "headers": {
+          "authorization": "[REDACTED]",
+          "host": "127.0.0.1:54687",
+          "x-lab-run-id": "7428e410-486d-46b6-90c8-9d8d99e3b9ab"
+        },
+        "host": "127.0.0.1",
+        "method": "GET",
+        "path": "/orders/1001",
+        "port": 54687,
+        "query": {},
+        "request_id": "cb181e62-fd54-47fa-ad20-d0853bb81624",
+        "scheme": "http",
+        "timestamp": "2026-10-03T07:24:28.889554+00:00"
+      },
+      "response": {
+        "body": {
+          "owner_alias": "user_A",
+          "purpose": "protected_training_order",
+          "resource_id": "1001"
+        },
+        "body_metadata": {
+          "binary": false,
+          "content_type": "application/json",
+          "size": 87,
+          "truncated": false
+        },
+        "headers": {
+          "cache-control": "no-store",
+          "content-length": "87",
+          "content-type": "application/json",
+          "date": "Sat, 03 Oct 2026 07:24:28 GMT",
+          "server": "BaseHTTP/0.6 Python/3.11.7",
+          "x-lab-trace-id": "lab_473c90adad63424c9beeaddfc84059c9"
+        },
+        "status_code": 200,
+        "timestamp": "2026-10-03T07:24:28.890151+00:00"
+      },
+      "scope": "UNKNOWN",
+      "session_id": "7428e410-486d-46b6-90c8-9d8d99e3b9ab",
+      "transaction_id": "031007d1-67fc-467c-981a-a864b7c41856"
+    },
+    {
+      "attribution": {
+        "baseline_transaction_ref": "031007d1-67fc-467c-981a-a864b7c41856",
+        "method": "deterministic_local_executor"
+      },
+      "capture_id": "capture_991cb41dc0b34ef3b5373e0b4022875f",
+      "correlation": {},
+      "duration_ms": 0.0,
+      "flow_id": null,
+      "request": {
+        "body": null,
+        "body_metadata": {
+          "binary": false,
+          "size": 0,
+          "truncated": false
+        },
+        "headers": {
+          "authorization": "[REDACTED]",
+          "host": "127.0.0.1:54687",
+          "x-lab-run-id": "7428e410-486d-46b6-90c8-9d8d99e3b9ab"
+        },
+        "host": "127.0.0.1",
+        "method": "GET",
+        "path": "/orders/2002",
+        "port": 54687,
+        "query": {},
+        "request_id": "72f52de6-3c5b-4f03-946a-3b102978269e",
+        "scheme": "http",
+        "timestamp": "2026-10-03T07:24:28.891079+00:00"
+      },
+      "response": {
+        "body": {
+          "error": "object_access_denied",
+          "resource_id": "2002"
+        },
+        "body_metadata": {
+          "binary": false,
+          "content_type": "application/json",
+          "size": 56,
+          "truncated": false
+        },
+        "headers": {
+          "cache-control": "no-store",
+          "content-length": "56",
+          "content-type": "application/json",
+          "date": "Sat, 03 Oct 2026 07:24:28 GMT",
+          "server": "BaseHTTP/0.6 Python/3.11.7",
+          "x-lab-trace-id": "lab_8c91ff3e60a94120ad8b41394f89938b"
+        },
+        "status_code": 403,
+        "timestamp": "2026-10-03T07:24:28.892876+00:00"
+      },
+      "scope": "UNKNOWN",
+      "session_id": "7428e410-486d-46b6-90c8-9d8d99e3b9ab",
+      "transaction_id": "ac56e82c-7c9a-43aa-bac2-b6b5d3a4e149"
+    }
+  ]
+}

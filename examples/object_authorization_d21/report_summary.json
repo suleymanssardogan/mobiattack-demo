@@ -1,0 +1,107 @@
+{
+  "canonical_artifacts": {
+    "dynamic": true,
+    "static": false
+  },
+  "dynamic_security_report": {
+    "coverage_limitations": [
+      "Dynamic coverage is partial.",
+      "HTTPS visibility is unavailable.",
+      "Runtime observation is unavailable.",
+      "Exploration is unavailable."
+    ],
+    "results": [
+      {
+        "comparison": "200 / 403",
+        "endpoint": "GET http://127.0.0.1:54687/orders/1001",
+        "evidence_available": "YES",
+        "finding_created": false,
+        "outcome": "validated",
+        "reason_code": "OBJECT_AUTHORIZATION_ENFORCED",
+        "result_message": "Object authorization enforcement confirmed",
+        "standard_mapping": "MASVS-AUTH, MASVS-AUTH-1",
+        "test_category": "object_authorization",
+        "tested_relationship": {
+          "baseline_resource_id": "1001",
+          "principal_alias": "user_A",
+          "resource_owner_alias": "user_B",
+          "variant_resource_id": "2002"
+        }
+      }
+    ],
+    "runtime_status": "unavailable"
+  },
+  "dynamic_summary": {
+    "actions_attempted": 0,
+    "actions_succeeded": 0,
+    "coverage_limitations": [
+      "Dynamic coverage is partial.",
+      "HTTPS visibility is unavailable.",
+      "Runtime observation is unavailable.",
+      "Exploration is unavailable."
+    ],
+    "launch_status": "Unknown",
+    "observed_endpoints": 1,
+    "routes_explored": 0,
+    "runtime_status": "unavailable",
+    "security_tests_executed": 1,
+    "status": "partial",
+    "traffic_visibility": {
+      "http_visibility": "available",
+      "https_visibility": "unavailable"
+    },
+    "validation_outcomes": {
+      "blocked": 0,
+      "inconclusive": 0,
+      "rejected": 0,
+      "validated": 1
+    }
+  },
+  "security_note": "Validated auth enforcement is expected security behavior, not a vulnerability finding.",
+  "security_validation_summary": [
+    {
+      "endpoint": "GET http://127.0.0.1:54687/orders/1001",
+      "evidence_available": "YES",
+      "outcome": "validated",
+      "reason_code": "OBJECT_AUTHORIZATION_ENFORCED",
+      "result_message": "Object authorization enforcement confirmed",
+      "standard_mapping": "MASVS-AUTH, MASVS-AUTH-1",
+      "test_category": "object_authorization",
+      "tested_relationship": {
+        "baseline_resource_id": "1001",
+        "principal_alias": "user_A",
+        "resource_owner_alias": "user_B",
+        "variant_resource_id": "2002"
+      }
+    }
+  ],
+  "static_security_report": {
+    "coverage_limitations": [
+      "Static report is unavailable.",
+      "Static API candidates are not runtime confirmation."
+    ],
+    "findings": [],
+    "status": "unavailable"
+  },
+  "static_summary": {
+    "api_candidates_count": null,
+    "app": "Unknown",
+    "coverage_limitations": [
+      "Static report is unavailable.",
+      "Static API candidates are not runtime confirmation."
+    ],
+    "frameworks_detected": [],
+    "key_permissions": [],
+    "network_indicators": {
+      "domains": null,
+      "hosts": [],
+      "ips": null,
+      "local_file_urls": null,
+      "paths": null,
+      "urls": null
+    },
+    "package": "Unknown",
+    "status": "unavailable"
+  },
+  "summary_version": "1.0"
+}

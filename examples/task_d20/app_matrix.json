@@ -1,0 +1,98 @@
+[
+  {
+    "app": "OWASP_Kotlin",
+    "static_source": "existing_fixture",
+    "launcher_status": "resolved",
+    "live_status": "RUN",
+    "live_reason": null,
+    "canonical_report_validation": "PASS",
+    "report_source": "demo_runs/checkpoint_d20_owasp_kotlin/dynamic_analysis_report.json",
+    "coverage": {
+      "ui_exploration": "partial",
+      "runtime_observation": "available",
+      "http_visibility": "available",
+      "https_visibility": "unavailable",
+      "api_correlation": "available",
+      "endpoint_contexts": "available"
+    },
+    "report_status": "completed",
+    "endpoint_context_count": 1,
+    "transactions": 0
+  },
+  {
+    "app": "Wikipedia",
+    "static_source": "existing_fixture",
+    "launcher_status": "resolved",
+    "live_status": "RUN",
+    "live_reason": null,
+    "canonical_report_validation": "PASS",
+    "report_source": "demo_runs/checkpoint_d20_wikipedia/dynamic_analysis_report.json",
+    "coverage": {
+      "ui_exploration": "partial",
+      "runtime_observation": "available",
+      "http_visibility": "available",
+      "https_visibility": "unavailable",
+      "api_correlation": "available",
+      "endpoint_contexts": "available"
+    },
+    "report_status": "completed",
+    "endpoint_context_count": 0,
+    "transactions": 0
+  },
+  {
+    "app": "Flashlight",
+    "static_source": "existing_fixture",
+    "launcher_status": "resolved",
+    "live_status": "NOT_RUN",
+    "live_reason": "Not selected for the bounded fresh smoke; historical local artifacts inspected only.",
+    "canonical_report_validation": "NOT_AVAILABLE"
+  },
+  {
+    "app": "AntennaPod",
+    "static_source": "existing_fixture",
+    "launcher_status": "resolved",
+    "live_status": "NOT_RUN",
+    "live_reason": "Not selected for the bounded fresh smoke; historical local artifacts inspected only.",
+    "canonical_report_validation": "NOT_AVAILABLE"
+  },
+  {
+    "app": "VulnBank",
+    "static_source": "existing_fixture",
+    "launcher_status": "resolved",
+    "live_status": "NOT_RUN",
+    "live_reason": "Not selected for the bounded fresh smoke; historical local artifacts inspected only.",
+    "canonical_report_validation": "PASS",
+    "report_source": "demo_runs/task_9_5_3_app_005/dynamic_analysis_report.json",
+    "coverage": {
+      "ui_exploration": "available",
+      "runtime_observation": "available",
+      "http_visibility": "unavailable",
+      "https_visibility": "unavailable",
+      "api_correlation": "available",
+      "endpoint_contexts": "available"
+    },
+    "report_status": "completed",
+    "endpoint_context_count": 0,
+    "transactions": 0
+  },
+  {
+    "app": "Damn_Vulnerable_Bank",
+    "static_source": "existing_fixture",
+    "launcher_status": "resolved",
+    "live_status": "NOT_RUN",
+    "live_reason": "Not selected for the bounded fresh smoke; historical local artifacts inspected only.",
+    "canonical_report_validation": "PASS",
+    "report_source": "demo_runs/task_9_5_3_app_006/dynamic_analysis_report.json",
+    "coverage": {
+      "ui_exploration": "available",
+      "runtime_observation": "available",
+      "http_visibility": "unavailable",
+      "https_visibility": "unavailable",
+      "api_correlation": "available",
+      "endpoint_contexts": "available"
+    },
+    "report_status": "completed",
+    "endpoint_context_count": 0,
+    "transactions": 0
+  }
+]

@@ -1,0 +1,31 @@
+{
+  "endpoint_context_id": "ctx_09deb6fa998c4877",
+  "evidence_refs": [
+    "004d4800-6acf-4d80-81f3-112d0e95dc83",
+    "comparison_2b9a9e7072ae159b54d3",
+    "control_2b9a9e7072ae159b54d3",
+    "ctx_09deb6fa998c4877",
+    "db1c27bc-fdc6-47a8-acb2-f2c9130bafab",
+    "dcd6efa6-cca0-4f13-9d86-b1ce269ce336",
+    "execution_2b9a9e7072ae159b54d3",
+    "lab_ba442684b33f4fea857eb5a5af0c6678",
+    "lab_d101c6e3bf1e425b8e128c1b5add1dfe",
+    "privilege_bc891e59103718a7e4b8",
+    "state_lab_ba442684b33f4fea857eb5a5af0c6678_after",
+    "state_lab_ba442684b33f4fea857eb5a5af0c6678_before",
+    "state_lab_d101c6e3bf1e425b8e128c1b5add1dfe_after",
+    "state_lab_d101c6e3bf1e425b8e128c1b5add1dfe_before"
+  ],
+  "execution_status": "completed",
+  "failure_reason": null,
+  "finished_at": "2026-10-03T08:12:57.944637+00:00",
+  "observed_request_ref": "db1c27bc-fdc6-47a8-acb2-f2c9130bafab",
+  "observed_response_ref": "lab_ba442684b33f4fea857eb5a5af0c6678",
+  "schema_version": "1.0",
+  "session_id": "004d4800-6acf-4d80-81f3-112d0e95dc83",
+  "started_at": "2026-10-03T08:12:57.943978+00:00",
+  "test_id": "FUNCTION_AUTHORIZATION",
+  "tool_refs": [
+    "execution_2b9a9e7072ae159b54d3"
+  ]
+}

@@ -1,0 +1,280 @@
+{
+  "schema_version": "1.0",
+  "report_type": "dynamic_analysis",
+  "scan_id": "object_authorization_d21",
+  "generated_at": "2026-10-03T07:37:34.925302+00:00",
+  "report_status": "completed",
+  "analysis_coverage": "partial",
+  "target": {
+    "package_name": null,
+    "platform": "android"
+  },
+  "coverage": {
+    "ui_exploration": "unavailable",
+    "runtime_observation": "unavailable",
+    "http_visibility": "available",
+    "https_visibility": "unavailable",
+    "api_correlation": "available",
+    "endpoint_contexts": "available"
+  },
+  "preflight": {
+    "status": "unavailable",
+    "launch_success": null,
+    "process_running": null,
+    "diagnostic_codes": []
+  },
+  "session": {
+    "session_id": "7428e410-486d-46b6-90c8-9d8d99e3b9ab",
+    "status": "COMPLETED",
+    "started_at": "2026-10-03T07:24:28.889554+00:00",
+    "ended_at": "2026-10-03T07:24:28.893207+00:00"
+  },
+  "exploration": {
+    "status": "partial",
+    "stop_reason": "security_validation_only",
+    "steps_attempted": 0,
+    "actions_succeeded": 0,
+    "actions_failed": 0,
+    "screens_observed": 0,
+    "transitions_recorded": 0,
+    "duration_seconds": null
+  },
+  "routes": {
+    "node_count": 0,
+    "edge_count": 0,
+    "root_node_id": null,
+    "current_node_id": null,
+    "action_count": 0,
+    "self_loop_count": 0,
+    "system_boundary_count": 0,
+    "external_boundary_count": 0
+  },
+  "runtime": {
+    "action_evidence_count": 0,
+    "correlated_action_count": 0,
+    "pid_change_count": 0,
+    "process_death_count": 0,
+    "activity_change_count": 0,
+    "fatal_count": 0,
+    "crash_count": 0
+  },
+  "traffic": {
+    "backend": null,
+    "total_transactions": 2,
+    "http_count": 2,
+    "https_count": 0,
+    "hosts": [
+      "127.0.0.1"
+    ],
+    "hosts_count": 1,
+    "http_visibility": "available",
+    "https_visibility": "unavailable",
+    "https_visibility_reason": null,
+    "proxy_restored": null,
+    "visibility_note": "Traffic visibility is incomplete; unobserved requests may exist."
+  },
+  "traffic_correlation": {
+    "actions_with_evidence": 0,
+    "transaction_correlated_action_count": 0,
+    "partial_correlation_count": 0,
+    "unavailable_correlation_count": 0
+  },
+  "api_correlation": {
+    "static_candidate_count": 0,
+    "dynamic_endpoint_count": 1,
+    "correlated_count": 0,
+    "static_only_count": 0,
+    "dynamic_only_count": 1,
+    "exact_count": 0,
+    "template_count": 0,
+    "method_mismatch_count": 0,
+    "visibility_note": "HTTPS traffic visibility was unavailable (certificate_trust_unknown). Unobserved static HTTPS candidates were not observable in runtime traffic."
+  },
+  "endpoint_context_summary": {
+    "endpoint_context_count": 1,
+    "runtime_observed_count": 1,
+    "static_only_count": 0,
+    "dynamic_only_count": 1
+  },
+  "endpoint_contexts": [
+    {
+      "endpoint_context_id": "ctx_fedbe20e19a01b31",
+      "host": "127.0.0.1",
+      "path": "/orders/1001",
+      "static_method": null,
+      "observed_methods": [
+        "GET"
+      ],
+      "match_type": "dynamic_only",
+      "confidence": "low",
+      "observation_count": 1,
+      "observed_status_codes": [
+        200
+      ],
+      "auth": {
+        "authorization_header_present": true,
+        "bearer_token_present": null,
+        "cookie_present": false,
+        "session_cookie_present": false,
+        "api_key_header_present": false
+      },
+      "evidence_refs": {
+        "action_ids": [],
+        "correlation_ids": [
+          "corr_3a4da7ac1d5564cd"
+        ],
+        "runtime_action_ids": [],
+        "static_candidate_ids": [],
+        "transaction_ids": [
+          "031007d1-67fc-467c-981a-a864b7c41856"
+        ]
+      },
+      "action_ids": []
+    }
+  ],
+  "evidence": {
+    "api_correlation": "dynamic/api_correlation.json",
+    "endpoint_contexts": "dynamic/endpoint_contexts.json",
+    "security_results": "dynamic/security_results.json",
+    "session": "dynamic/session.json",
+    "traffic": "dynamic/traffic.json"
+  },
+  "evidence_status": {
+    "api_correlation": "available",
+    "endpoint_contexts": "available",
+    "exploration": "missing",
+    "preflight": "missing",
+    "routes": "missing",
+    "runtime": "missing",
+    "security_results": "available",
+    "session": "available",
+    "traffic": "available",
+    "traffic_correlation": "missing"
+  },
+  "security_results": {
+    "schema_version": "1.0",
+    "coverage": "available",
+    "limitations": [],
+    "result_count": 1,
+    "results": [
+      {
+        "test_id": "OBJECT_AUTHORIZATION",
+        "endpoint_context_id": "ctx_fedbe20e19a01b31",
+        "test_category": "object_authorization",
+        "standards": {
+          "masvs_category": "MASVS-AUTH",
+          "masvs_control_refs": [
+            "MASVS-AUTH-1"
+          ],
+          "mastg_test_refs": [],
+          "maswe_refs": []
+        },
+        "execution_status": "completed",
+        "validation_outcome": "validated",
+        "reason_codes": [
+          "OBJECT_AUTHORIZATION_ENFORCED"
+        ],
+        "baseline_evidence_refs": {
+          "request": "cb181e62-fd54-47fa-ad20-d0853bb81624",
+          "response": "lab_473c90adad63424c9beeaddfc84059c9"
+        },
+        "variant_evidence_refs": {
+          "request": "72f52de6-3c5b-4f03-946a-3b102978269e",
+          "response": "lab_8c91ff3e60a94120ad8b41394f89938b"
+        },
+        "evidence_refs": [
+          "72f52de6-3c5b-4f03-946a-3b102978269e",
+          "7428e410-486d-46b6-90c8-9d8d99e3b9ab",
+          "cb181e62-fd54-47fa-ad20-d0853bb81624",
+          "comparison_0dd75ab4f1ff96fec75a",
+          "control_0dd75ab4f1ff96fec75a",
+          "ctx_fedbe20e19a01b31",
+          "execution_0dd75ab4f1ff96fec75a",
+          "lab_473c90adad63424c9beeaddfc84059c9",
+          "lab_8c91ff3e60a94120ad8b41394f89938b",
+          "ownership_1fc292f489ee7b6ce5de"
+        ],
+        "execution_result_ref": "execution_0dd75ab4f1ff96fec75a",
+        "session_id": "7428e410-486d-46b6-90c8-9d8d99e3b9ab",
+        "risk_class": "low",
+        "timestamps": {
+          "started_at": "2026-10-03T07:24:28.891079+00:00",
+          "finished_at": "2026-10-03T07:24:28.893207+00:00",
+          "validated_at": "2026-10-03T07:24:28.893588+00:00"
+        },
+        "coverage": "available",
+        "limitations": [],
+        "finding_created": false,
+        "tested_relationship": {
+          "principal_alias": "user_A",
+          "resource_owner_alias": "user_B",
+          "baseline_resource_id": "1001",
+          "variant_resource_id": "2002"
+        },
+        "result_message": "Object authorization enforcement confirmed"
+      }
+    ],
+    "evidence_index": {
+      "72f52de6-3c5b-4f03-946a-3b102978269e": {
+        "ref": "72f52de6-3c5b-4f03-946a-3b102978269e",
+        "endpoint_context_id": "ctx_fedbe20e19a01b31",
+        "kind": "request",
+        "session_id": "7428e410-486d-46b6-90c8-9d8d99e3b9ab"
+      },
+      "7428e410-486d-46b6-90c8-9d8d99e3b9ab": {
+        "ref": "7428e410-486d-46b6-90c8-9d8d99e3b9ab",
+        "endpoint_context_id": "ctx_fedbe20e19a01b31",
+        "kind": "runtime",
+        "session_id": "7428e410-486d-46b6-90c8-9d8d99e3b9ab"
+      },
+      "cb181e62-fd54-47fa-ad20-d0853bb81624": {
+        "ref": "cb181e62-fd54-47fa-ad20-d0853bb81624",
+        "endpoint_context_id": "ctx_fedbe20e19a01b31",
+        "kind": "request",
+        "session_id": "7428e410-486d-46b6-90c8-9d8d99e3b9ab"
+      },
+      "comparison_0dd75ab4f1ff96fec75a": {
+        "ref": "comparison_0dd75ab4f1ff96fec75a",
+        "endpoint_context_id": "ctx_fedbe20e19a01b31",
+        "kind": "comparison",
+        "session_id": "7428e410-486d-46b6-90c8-9d8d99e3b9ab"
+      },
+      "control_0dd75ab4f1ff96fec75a": {
+        "ref": "control_0dd75ab4f1ff96fec75a",
+        "endpoint_context_id": "ctx_fedbe20e19a01b31",
+        "kind": "control",
+        "session_id": "7428e410-486d-46b6-90c8-9d8d99e3b9ab"
+      },
+      "ctx_fedbe20e19a01b31": {
+        "ref": "ctx_fedbe20e19a01b31",
+        "endpoint_context_id": "ctx_fedbe20e19a01b31",
+        "kind": "context",
+        "session_id": "7428e410-486d-46b6-90c8-9d8d99e3b9ab"
+      },
+      "execution_0dd75ab4f1ff96fec75a": {
+        "ref": "execution_0dd75ab4f1ff96fec75a",
+        "endpoint_context_id": "ctx_fedbe20e19a01b31",
+        "kind": "tool",
+        "session_id": "7428e410-486d-46b6-90c8-9d8d99e3b9ab"
+      },
+      "lab_473c90adad63424c9beeaddfc84059c9": {
+        "ref": "lab_473c90adad63424c9beeaddfc84059c9",
+        "endpoint_context_id": "ctx_fedbe20e19a01b31",
+        "kind": "response",
+        "session_id": "7428e410-486d-46b6-90c8-9d8d99e3b9ab"
+      },
+      "lab_8c91ff3e60a94120ad8b41394f89938b": {
+        "ref": "lab_8c91ff3e60a94120ad8b41394f89938b",
+        "endpoint_context_id": "ctx_fedbe20e19a01b31",
+        "kind": "response",
+        "session_id": "7428e410-486d-46b6-90c8-9d8d99e3b9ab"
+      },
+      "ownership_1fc292f489ee7b6ce5de": {
+        "ref": "ownership_1fc292f489ee7b6ce5de",
+        "endpoint_context_id": "ctx_fedbe20e19a01b31",
+        "kind": "control",
+        "session_id": "7428e410-486d-46b6-90c8-9d8d99e3b9ab"
+      }
+    }
+  }
+}

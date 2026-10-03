@@ -669,7 +669,14 @@ def build_static_analysis_report(
     if failure_reason:
         failure_reason = sanitize_text_host_paths(failure_reason)
 
+    from src.static_inventory import runtime_technologies, FLUTTER_COVERAGE
+    technologies = runtime_technologies(base_report.get("structure") or {})
+    if technologies:
+        static_limitations.append(FLUTTER_COVERAGE)
+    from src.static_security.report_freshness import STATIC_EVALUATION_REVISION
     static_report: dict[str, Any] = {
+        "static_evaluation_revision": STATIC_EVALUATION_REVISION,
+        "runtime_technologies": technologies,
         "report_type": "static_analysis",
         "report_version": base_report.get("report_version", "1.0"),
         "run_id": run_id,

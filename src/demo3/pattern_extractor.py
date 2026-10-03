@@ -7,6 +7,7 @@ from typing import Generator
 
 from src.demo3.candidate_model import RawCandidate
 from src.ios.ios_network_indicator_extractor import is_valid_domain
+from src.static_inventory import is_configuration_identifier
 
 # Regex patterns
 NETWORK_URL_RE = re.compile(r'\bhttps?://[a-zA-Z0-9][-a-zA-Z0-9.]*(?::[0-9]+)?(?:/[^\s"\'<>]*)?')
@@ -176,6 +177,8 @@ def extract_candidates_from_text(
     # 4. Bare Domains (ignoring hosts already represented inside URLs on this line)
     for m in DOMAIN_RE.finditer(line):
         val = _clean_trailing(m.group(0))
+        if is_configuration_identifier(val, source_file, line):
+            continue
         if not is_valid_domain(val):
             continue
         if val.lower().startswith(("com.", "org.", "net.")):

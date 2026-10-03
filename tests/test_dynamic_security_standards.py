@@ -72,6 +72,9 @@ def sources():
     root=Path('examples/auth_security_report_d12')
     artifacts={key:json.loads((root/'dynamic'/filename).read_text()) for key,filename in ARTIFACTS.items() if (root/'dynamic'/filename).exists()}
     prior=json.loads((root/'dynamic_analysis_report.json').read_text())
+    # D20 preserves the actual backend label; historical execution/validation evidence is unchanged.
+    assert artifacts['traffic']['backend'] == 'NativeProxyCaptureBackend'
+    prior['traffic']['backend'] = 'native_http'
     return artifacts,prior
 
 

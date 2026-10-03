@@ -124,9 +124,9 @@ class TestDemo3AdbOptional(unittest.TestCase):
 
         # 2. Runtime stage was skipped (not failed)
         rt = result.get("runtime", {})
-        self.assertEqual(rt.get("status"), "skipped")
-        self.assertEqual(rt.get("reason"), "adb_not_found")
-        self.assertIn("No connected Android device", rt.get("message", ""))
+        self.assertEqual(rt.get("status"), "unavailable")
+        self.assertEqual(rt["runtime_availability"]["backend_reason_code"], "ADB_NOT_FOUND")
+        self.assertEqual(rt["runtime_availability"]["reason_code"], "RUNTIME_OBSERVATION_UNAVAILABLE")
 
         # 3. Static analysis and Demo 3 artifacts were assembled
         demo3_scan = result.get("demo3_scan")
@@ -166,14 +166,14 @@ class TestDemo3AdbOptional(unittest.TestCase):
 
         self.assertEqual(result.get("demo_status"), "completed")
         rt = result.get("runtime", {})
-        self.assertEqual(rt.get("status"), "skipped")
-        self.assertEqual(rt.get("reason"), "no_devices")
+        self.assertEqual(rt.get("status"), "unavailable")
+        self.assertEqual(rt["runtime_availability"]["backend_reason_code"], "DEVICE_NOT_FOUND")
 
     # --- TEST 3: Device offline / unauthorized -> launch skipped, static report completes ---
     @patch("src.demo_orchestrator.acquire_apk")
     @patch("src.demo_orchestrator.preprocess_apk")
     @patch("src.demo_orchestrator.build_static_context")
-    @patch("src.android_runtime_launcher.get_connected_devices", return_value=["emulator-5556"])
+    @patch("src.android_runtime_launcher.get_connected_devices", return_value=[("emulator-5556", "device")])
     def test_03_device_offline_skips_launch_and_completes_static_report(
         self, mock_get_devices, mock_static, mock_prep, mock_acq
     ) -> None:
@@ -190,8 +190,8 @@ class TestDemo3AdbOptional(unittest.TestCase):
 
         self.assertEqual(result.get("demo_status"), "completed")
         rt = result.get("runtime", {})
-        self.assertEqual(rt.get("status"), "skipped")
-        self.assertEqual(rt.get("reason"), "device_not_ready")
+        self.assertEqual(rt.get("status"), "unavailable")
+        self.assertEqual(rt["runtime_availability"]["backend_reason_code"], "DEVICE_NOT_FOUND")
 
     # --- TEST 4: Usable device available -> launches normally ---
     @patch("src.demo_orchestrator.acquire_apk")
@@ -254,7 +254,7 @@ class TestDemo3AdbOptional(unittest.TestCase):
     # --- Helper check_device_availability unit test ---
     @patch("src.android_runtime_launcher.get_connected_devices")
     def test_07_check_device_availability_helper(self, mock_get_devices) -> None:
-        mock_get_devices.return_value = ["emulator-5554"]
+        mock_get_devices.return_value = [("emulator-5554", "device")]
         avail, reason, serial = check_device_availability(adb_serial="emulator-5554")
         self.assertTrue(avail)
         self.assertEqual(reason, "ready")

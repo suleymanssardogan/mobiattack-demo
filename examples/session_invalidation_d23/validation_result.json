@@ -1,0 +1,33 @@
+{
+  "coverage": "available",
+  "created_at": "2026-10-03T08:53:52.207004+00:00",
+  "criterion": "controlled_behavior_check",
+  "endpoint_context_id": "ctx_cae05b8c35fbaf4d",
+  "evidence_refs": [
+    "2cf26134-1e56-445b-99c7-d9f7cd0e1e10",
+    "89a6db02-a37d-4dd9-a92a-c0e90cd4a9bd",
+    "9646f3be-4465-4091-90f1-98f649aa98a5",
+    "comparison_80c77edcca670c9705ae",
+    "control_80c77edcca670c9705ae",
+    "ctx_cae05b8c35fbaf4d",
+    "d9ddfc96-ede1-4675-be46-41eb64e0b451",
+    "execution_80c77edcca670c9705ae",
+    "lab_2722c8fefd874e16bc031b9c9c3032d2",
+    "lab_ce5ba4b3966b445ca4c0556e060ed052",
+    "lab_e56823ce7da94d1693a82be0698f3aa1",
+    "lifecycle_cc0ececc47cdcd86f698",
+    "state_lab_2722c8fefd874e16bc031b9c9c3032d2_after",
+    "state_lab_2722c8fefd874e16bc031b9c9c3032d2_before",
+    "state_lab_ce5ba4b3966b445ca4c0556e060ed052_after",
+    "state_lab_ce5ba4b3966b445ca4c0556e060ed052_before",
+    "state_lab_e56823ce7da94d1693a82be0698f3aa1_after",
+    "state_lab_e56823ce7da94d1693a82be0698f3aa1_before"
+  ],
+  "outcome": "validated",
+  "reason_codes": [
+    "SESSION_INVALIDATION_ENFORCED"
+  ],
+  "schema_version": "1.0",
+  "session_id": "2cf26134-1e56-445b-99c7-d9f7cd0e1e10",
+  "test_id": "SESSION_HANDLING"
+}

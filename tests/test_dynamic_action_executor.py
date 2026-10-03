@@ -227,9 +227,9 @@ class TestDynamicActionExecutor(unittest.TestCase):
 
         res = executor.execute(action)
 
-        self.assertTrue(res.is_success)
-        self.assertEqual(res.attempts, 2)
-        self.assertEqual(mock_run.call_count, 2)
+        self.assertFalse(res.is_success)
+        self.assertEqual(res.attempts, 1)
+        self.assertEqual(mock_run.call_count, 1)
 
     # 10. deterministic failure does not retry
     @patch("subprocess.run")
@@ -252,8 +252,8 @@ class TestDynamicActionExecutor(unittest.TestCase):
         res = executor.execute(action)
 
         self.assertEqual(res.status, ActionExecutionStatus.FAILED.value)
-        self.assertEqual(res.attempts, 2)
-        self.assertEqual(mock_run.call_count, 2)
+        self.assertEqual(res.attempts, 1)
+        self.assertEqual(mock_run.call_count, 1)
 
     # 12. timeout returns timed_out
     @patch("subprocess.run")
@@ -266,7 +266,7 @@ class TestDynamicActionExecutor(unittest.TestCase):
 
         self.assertEqual(res.status, ActionExecutionStatus.TIMED_OUT.value)
         self.assertEqual(res.error_code, ActionErrorCode.ACTION_TIMEOUT.value)
-        self.assertEqual(res.attempts, 2)
+        self.assertEqual(res.attempts, 1)
 
     # 13. no infinite loop
     @patch("subprocess.run")
@@ -278,8 +278,8 @@ class TestDynamicActionExecutor(unittest.TestCase):
         res = executor.execute(action)
 
         self.assertEqual(res.status, ActionExecutionStatus.FAILED.value)
-        self.assertEqual(res.attempts, 3)
-        self.assertEqual(mock_run.call_count, 3)
+        self.assertEqual(res.attempts, 1)
+        self.assertEqual(mock_run.call_count, 1)
 
     # 14. result timestamps populated
     @patch("subprocess.run")

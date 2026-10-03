@@ -12,6 +12,7 @@ import signal
 import socket
 import subprocess
 import time
+from src.dynamic.deadline import bounded_operation, current_deadline, bounded_timeout
 from typing import Any, Callable
 
 from src.dynamic.traffic.models import (
@@ -62,7 +63,7 @@ def find_mitmproxy_binary(custom_path: str | None = None) -> str | None:
 def is_port_in_use(port: int, host: str = "127.0.0.1") -> bool:
     """Checks whether the specified port is already bound on localhost."""
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        s.settimeout(0.5)
+        s.settimeout(bounded_timeout(0.5))
         return s.connect_ex((host, port)) == 0
 
 
@@ -79,6 +80,8 @@ class MitmproxyCaptureBackend:
         self.ca_directory = Path(ca_directory) if ca_directory else Path.home() / '.mitmproxy'
         self.https = HttpsVisibility()
         self._bridge_ready = threading.Event()
+        self._startup_ready = False
+        self.cleanup_state = 'not_started'
         self._reader: threading.Thread | None = None
         self._stderr_reader: threading.Thread | None = None
 
@@ -86,6 +89,7 @@ class MitmproxyCaptureBackend:
         """Returns True if mitmdump/mitmproxy executable is detected on system."""
         return self.executable_path is not None
 
+    @bounded_operation(5.0, field="timeout_seconds")
     def start(
         self,
         listen_host: str = "0.0.0.0",
@@ -112,6 +116,7 @@ class MitmproxyCaptureBackend:
         self._on_transaction = on_transaction_captured
         self.captured_transactions = []
         self._bridge_ready.clear()
+        self._startup_ready = False
         self.https = HttpsVisibility(ca_trust=self.https.ca_trust, ca_reason=self.https.ca_reason)
 
         cmd = [
@@ -147,11 +152,10 @@ class MitmproxyCaptureBackend:
                 f"Failed to launch mitmproxy process: {exc}",
             ) from exc
 
-        # Wait shortly to verify process did not crash immediately
-        time.sleep(0.6)
+        # Process exit is an explicit startup failure.
         if self.process.poll() is not None:
             self.https.backend_failed = True
-            _, stderr = self.process.communicate()
+            _, stderr = self.process.communicate(timeout=bounded_timeout(timeout_seconds))
             raise TrafficException(
                 TrafficErrorCode.CAPTURE_PROCESS_DIED,
                 f"mitmproxy exited immediately with code {self.process.returncode}: {stderr.strip()}",
@@ -161,7 +165,12 @@ class MitmproxyCaptureBackend:
         self._reader.start()
         self._stderr_reader = threading.Thread(target=self._drain_stderr, daemon=True)
         self._stderr_reader.start()
-        if not self._bridge_ready.wait(timeout=timeout_seconds) or not self.is_alive():
+        try:
+            ready = self._bridge_ready.wait(timeout=bounded_timeout(timeout_seconds))
+            ready = ready and self._startup_ready and self.is_alive() and not self.https.backend_failed
+        except subprocess.TimeoutExpired:
+            ready = False
+        if not ready:
             self.https.backend_failed = True
             self.stop()
             raise TrafficException(TrafficErrorCode.CAPTURE_START_FAILED, 'Sanitized capture bridge did not become ready.')
@@ -175,6 +184,7 @@ class MitmproxyCaptureBackend:
         if self.process and self.process.stdout:
             for line in self.process.stdout:
                 self.process_event_line(line)
+        self._bridge_ready.set()  # EOF wakes startup; startup_ready still distinguishes error/ready.
 
     def process_event_line(self, line: str) -> None:
         if not line.startswith('MOBIATTACK_EVIDENCE '):
@@ -182,6 +192,7 @@ class MitmproxyCaptureBackend:
         try:
             record = json.loads(line[len('MOBIATTACK_EVIDENCE '):])
             if record.get('event') == 'ready':
+                self._startup_ready = True
                 self._bridge_ready.set()
             elif record.get('event') == 'tls_failure':
                 self.https.tls_failures += 1
@@ -203,38 +214,50 @@ class MitmproxyCaptureBackend:
         if self._on_transaction:
             self._on_transaction(transaction)
 
+    @bounded_operation(4.0, field="timeout_seconds")
     def stop(self, timeout_seconds: float = 4.0) -> None:
-        """Terminates mitmproxy process gracefully with SIGTERM, then SIGKILL fallback."""
-        if not self.process:
-            return
-
-        logger.info(f"Stopping mitmproxy process (PID: {self.process.pid})")
-        try:
-            if hasattr(os, "killpg") and hasattr(os, "getpgid"):
-                try:
-                    os.killpg(os.getpgid(self.process.pid), signal.SIGTERM)
-                except Exception:
-                    self.process.terminate()
-            else:
-                self.process.terminate()
-
-            self.process.wait(timeout=timeout_seconds)
-        except subprocess.TimeoutExpired:
-            logger.warning("mitmproxy did not exit within timeout, killing forcibly...")
-            if hasattr(os, "killpg") and hasattr(os, "getpgid"):
-                try:
-                    os.killpg(os.getpgid(self.process.pid), signal.SIGKILL)
-                except Exception:
-                    self.process.kill()
-            else:
-                self.process.kill()
-            self.process.wait()
-        except Exception as exc:
-            logger.error(f"Error terminating mitmproxy process: {exc}")
-        finally:
+        deadline = current_deadline()
+        self.cleanup_state = 'completed'
+        process = self.process
+        if not process:
             for reader in (self._reader, self._stderr_reader):
                 if reader:
-                    reader.join(timeout=timeout_seconds)
+                    reader.join(timeout=deadline.remaining())
+                    if reader.is_alive():
+                        self.cleanup_state = 'partial'
+            return
+        try:
+            if os.name == "posix" and isinstance(process.pid, int):
+                try:
+                    os.killpg(os.getpgid(process.pid), signal.SIGTERM)
+                except OSError:
+                    process.terminate()
+            else:
+                process.terminate()
+            # Reserve part of the shared budget for kill and stream drain.
+            process.wait(timeout=deadline.timeout(min(timeout_seconds * 0.5, deadline.remaining())))
+        except subprocess.TimeoutExpired:
+            try:
+                if os.name == "posix" and isinstance(process.pid, int):
+                    try:
+                        os.killpg(os.getpgid(process.pid), signal.SIGKILL)
+                    except OSError:
+                        process.kill()
+                else:
+                    process.kill()
+                process.wait(timeout=deadline.timeout(timeout_seconds))
+            except Exception:
+                self.cleanup_state = 'partial'
+        except Exception:
+            self.cleanup_state = 'partial'
+        for reader in (self._reader, self._stderr_reader):
+            if reader:
+                reader.join(timeout=deadline.remaining())
+                if reader.is_alive():
+                    self.cleanup_state = 'partial'
+        if process.poll() is None:
+            self.cleanup_state = 'partial'
+        else:
             self.process = None
 
     def is_alive(self) -> bool:

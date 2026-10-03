@@ -230,6 +230,7 @@ class CaptureSummary:
     in_scope_count: int = 0
     proxy_restored: bool = False
     http_visibility: str = "available"
+    http_visibility_reason: str = ""
     https_visibility: str = "unavailable"
     https_visibility_reason: str = "certificate_trust_unknown"
     ca_trust_state: str = "unknown"
@@ -249,6 +250,7 @@ class CaptureSummary:
             "in_scope_count": self.in_scope_count,
             "proxy_restored": self.proxy_restored,
             "http_visibility": self.http_visibility,
+            "http_visibility_reason": self.http_visibility_reason,
             "https_visibility": self.https_visibility,
             "https_visibility_reason": self.https_visibility_reason,
             "ca_trust_state": self.ca_trust_state,

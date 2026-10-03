@@ -139,8 +139,6 @@ def install_apk_on_device(
     if "INSTALL_FAILED_ALREADY_EXISTS" in combined:
         return True, None, "Already installed"
 
-    return (
-        False,
-        ErrorCode.APP_LAUNCH_FAILED,
-        f"APK installation failed: {combined}",
-    )
+    from src.dynamic.runtime.availability import install_reason
+    reason, backend = install_reason(combined)
+    return False, ErrorCode(reason), f"APK installation failed: {backend}"

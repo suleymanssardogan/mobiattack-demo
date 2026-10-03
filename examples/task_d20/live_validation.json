@@ -1,0 +1,132 @@
+[
+  {
+    "app": "OWASP_Kotlin",
+    "evidence_mode": "fresh_live_dynamic_with_historical_static",
+    "runtime_availability": "available",
+    "reason": "SUPPORTED",
+    "pid_observed": true,
+    "foreground": true,
+    "report_status": "completed",
+    "coverage": {
+      "ui_exploration": "partial",
+      "runtime_observation": "available",
+      "http_visibility": "available",
+      "https_visibility": "unavailable",
+      "api_correlation": "available",
+      "endpoint_contexts": "available"
+    },
+    "summary": {
+      "status": "partial",
+      "launch_status": "Observed",
+      "runtime_status": "available",
+      "routes_explored": 2,
+      "actions_attempted": 1,
+      "actions_succeeded": 1,
+      "traffic_visibility": {
+        "http_visibility": "available",
+        "https_visibility": "unavailable"
+      },
+      "observed_endpoints": 0,
+      "security_tests_executed": 0,
+      "validation_outcomes": {
+        "validated": 0,
+        "rejected": 0,
+        "inconclusive": 0,
+        "blocked": 0
+      },
+      "coverage_limitations": [
+        "Dynamic coverage is partial.",
+        "HTTPS visibility is unavailable.",
+        "Exploration is partial.",
+        "No endpoints were observed in available traffic; this does not establish absence of network activity.",
+        "No security validation results are available; security was not established."
+      ],
+      "execution_environment": {
+        "label": "Current execution environment",
+        "target_type": "EMULATOR",
+        "availability": "available",
+        "capabilities": {
+          "app_install": "available",
+          "app_launch": "available",
+          "debugger_available": "unknown",
+          "filesystem_observation": "unknown",
+          "foreground_observation": "available",
+          "host_reachability": "available",
+          "http_capture": "available",
+          "https_capture": "unavailable",
+          "pid_observation": "available",
+          "proxy_configuration": "available",
+          "traffic_capture": "available",
+          "ui_automation": "unknown"
+        }
+      },
+      "runtime_reason": "SUPPORTED"
+    },
+    "endpoint_context_count": 1
+  },
+  {
+    "app": "Wikipedia",
+    "evidence_mode": "fresh_live_dynamic_with_historical_static",
+    "runtime_availability": "available",
+    "reason": "SUPPORTED",
+    "pid_observed": true,
+    "foreground": true,
+    "report_status": "completed",
+    "coverage": {
+      "ui_exploration": "partial",
+      "runtime_observation": "available",
+      "http_visibility": "available",
+      "https_visibility": "unavailable",
+      "api_correlation": "available",
+      "endpoint_contexts": "available"
+    },
+    "summary": {
+      "status": "partial",
+      "launch_status": "Observed",
+      "runtime_status": "available",
+      "routes_explored": 2,
+      "actions_attempted": 1,
+      "actions_succeeded": 1,
+      "traffic_visibility": {
+        "http_visibility": "available",
+        "https_visibility": "unavailable"
+      },
+      "observed_endpoints": 0,
+      "security_tests_executed": 0,
+      "validation_outcomes": {
+        "validated": 0,
+        "rejected": 0,
+        "inconclusive": 0,
+        "blocked": 0
+      },
+      "coverage_limitations": [
+        "Dynamic coverage is partial.",
+        "HTTPS visibility is unavailable.",
+        "Exploration is partial.",
+        "No endpoints were observed in available traffic; this does not establish absence of network activity.",
+        "No security validation results are available; security was not established."
+      ],
+      "execution_environment": {
+        "label": "Current execution environment",
+        "target_type": "EMULATOR",
+        "availability": "available",
+        "capabilities": {
+          "app_install": "unknown",
+          "app_launch": "available",
+          "debugger_available": "unknown",
+          "filesystem_observation": "unknown",
+          "foreground_observation": "available",
+          "host_reachability": "available",
+          "http_capture": "available",
+          "https_capture": "unavailable",
+          "pid_observation": "available",
+          "proxy_configuration": "available",
+          "traffic_capture": "available",
+          "ui_automation": "unknown"
+        }
+      },
+      "runtime_reason": "SUPPORTED"
+    },
+    "endpoint_context_count": 0
+  }
+]

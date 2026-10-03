@@ -18,16 +18,16 @@ REGISTRY = {ref: EvidenceReference(ref, CTX.endpoint_context_id, kind, 'session_
 
 
 def request(**kw):
-    values=dict(test_id='OBJECT_AUTHORIZATION', endpoint_context_id='ctx_orders',
-                test_category='object_authorization', purpose='Evaluate controlled object access behavior',
-                required_evidence_refs=('ctx_evidence',), requested_action='validate_object_access_behavior',
+    values=dict(test_id='PARAMETER_CONSISTENCY', endpoint_context_id='ctx_orders',
+                test_category='parameter_consistency', purpose='Evaluate controlled object access behavior',
+                required_evidence_refs=('ctx_evidence',), requested_action='validate_parameter_consistency',
                 risk_class='low', session_id='session_1')
     values.update(kw)
     return DynamicTestRequest(**values)
 
 
 def execution(**kw):
-    values=dict(test_id='OBJECT_AUTHORIZATION', endpoint_context_id='ctx_orders',
+    values=dict(test_id='PARAMETER_CONSISTENCY', endpoint_context_id='ctx_orders',
                 execution_status='completed', observed_request_ref='req_1', observed_response_ref='resp_1',
                 evidence_refs=('req_1','resp_1'), tool_refs=('tool_1',), started_at=START,
                 finished_at=END, session_id='session_1')
@@ -36,7 +36,7 @@ def execution(**kw):
 
 
 def result(**kw):
-    values=dict(test_id='OBJECT_AUTHORIZATION', endpoint_context_id='ctx_orders', outcome='validated',
+    values=dict(test_id='PARAMETER_CONSISTENCY', endpoint_context_id='ctx_orders', outcome='validated',
                 evidence_refs=('req_1','resp_1','control_1','compare_1'), criterion='controlled_behavior_check',
                 coverage='available', created_at=END, session_id='session_1')
     values.update(kw)

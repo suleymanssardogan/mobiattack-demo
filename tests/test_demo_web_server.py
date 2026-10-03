@@ -97,7 +97,8 @@ class TestDemoWebServer(unittest.TestCase):
         run_id = "run_test"
         run_dir = self.runs_root / run_id
         run_dir.mkdir()
-        static = {"report_type": "static_analysis", "scan_id": run_id}
+        from src.static_security.report_freshness import STATIC_EVALUATION_REVISION
+        static = {"report_type": "static_analysis", "run_id": run_id, "static_evaluation_revision": STATIC_EVALUATION_REVISION}
         (run_dir / "static_analysis_report.json").write_text(json.dumps(static))
         status, body = self._get_json(f"/reports/{run_id}/static_analysis_report.json")
         self.assertEqual((status, body), (200, static))
@@ -210,6 +211,7 @@ class TestDemoWebServer(unittest.TestCase):
         self.assertIsNone(mock_run_demo.call_args.kwargs["adb_serial"])
         self.assertEqual(mock_run_demo.call_args.kwargs["install_mode"], "ui_automation")
         self.assertTrue(mock_run_demo.call_args.kwargs["grant_permissions"])
+        self.assertEqual(mock_run_demo.call_args.kwargs["traffic_proxy_port"], 18080)
 
         status, s_body = self._get_json(f"/api/status/{run_id}")
         self.assertEqual(status, 200)

@@ -14,6 +14,7 @@ Strict Safety and Guardrail Rules:
 """
 
 from __future__ import annotations
+from src.dynamic.deadline import bounded_operation, current_deadline, bounded_timeout
 
 from dataclasses import dataclass, field
 import re
@@ -118,6 +119,7 @@ def parse_node_bounds(bounds_str: str | None) -> tuple[int, int, int, int] | Non
     return (x1, y1, x2, y2)
 
 
+@bounded_operation(12.0, field="timeout_seconds")
 def dump_window_hierarchy(
     serial: str,
     adb_bin: str | None = None,
@@ -138,7 +140,7 @@ def dump_window_hierarchy(
             dump_cmd,
             capture_output=True,
             text=True,
-            timeout=timeout_seconds,
+            timeout=bounded_timeout(timeout_seconds),
         )
     except (subprocess.TimeoutExpired, OSError) as err:
         raise AndroidRuntimeError(f"Failed to dump UI hierarchy via uiautomator: {err}") from err
@@ -150,7 +152,7 @@ def dump_window_hierarchy(
             cat_cmd,
             capture_output=True,
             text=True,
-            timeout=timeout_seconds,
+            timeout=bounded_timeout(timeout_seconds),
         )
     except (subprocess.TimeoutExpired, OSError) as err:
         raise AndroidRuntimeError(f"Failed to read UI hierarchy XML from device: {err}") from err
@@ -160,7 +162,7 @@ def dump_window_hierarchy(
         subprocess.run(
             [resolved_adb, "-s", serial, "shell", "rm", "-f", remote_dump_path],
             capture_output=True,
-            timeout=5.0,
+            timeout=bounded_timeout(5.0),
         )
     except Exception:
         pass
@@ -353,7 +355,7 @@ def tap_screen_bounds(
             cmd,
             capture_output=True,
             text=True,
-            timeout=timeout_seconds,
+            timeout=bounded_timeout(timeout_seconds),
             check=True,
         )
     except (subprocess.TimeoutExpired, OSError, subprocess.CalledProcessError) as err:

@@ -7,6 +7,7 @@ Performs deterministic runtime security audits on connected Android devices/emul
 """
 
 from __future__ import annotations
+from src.dynamic.deadline import bounded_timeout
 
 import re
 import subprocess
@@ -171,7 +172,7 @@ def inspect_runtime_process(
             mem_cmd,
             capture_output=True,
             text=True,
-            timeout=timeout_seconds,
+            timeout=bounded_timeout(timeout_seconds),
             check=False,
         )
         if proc.returncode == 0 and proc.stdout:
@@ -194,7 +195,7 @@ def inspect_runtime_process(
             log_cmd,
             capture_output=True,
             text=True,
-            timeout=timeout_seconds,
+            timeout=bounded_timeout(timeout_seconds),
             check=False,
         )
         if proc_log.returncode == 0 and proc_log.stdout:

@@ -3,6 +3,7 @@ import json
 from pathlib import Path
 import re
 from urllib.parse import urlsplit
+from src.static_inventory import indicator_context, runtime_technologies, FLUTTER_COVERAGE
 
 from src.dynamic.report.models import load_dynamic_analysis_report, DynamicReportError
 from src.dynamic.security.standards import standards_for_category, validate_standards_metadata
@@ -62,6 +63,8 @@ def build_report_summary(static_report=None,dynamic_report=None,*,contexts=None,
     hosts=set()
     for value in net.get('network_urls') or []:
         url=value if isinstance(value,str) else (value.get('value') or value.get('url') or '') if isinstance(value,dict) else ''
+        if indicator_context(url, value.get("source_file", "") if isinstance(value, dict) else "") != "unconfirmed_network_indicator":
+            continue
         try:
             parsed=urlsplit(url)
             if parsed.scheme in {'http','https'} and parsed.hostname and parsed.username is None:
@@ -87,12 +90,16 @@ def build_report_summary(static_report=None,dynamic_report=None,*,contexts=None,
         static_limits.append('Static control coverage is partial or unavailable for: ' + ', '.join(limited_categories) + '.')
     if static.get('api_discovery'):
         static_limits.append('API discovery is bounded; unresolved networking is not absence of networking.')
+    technologies = runtime_technologies(static.get("structure") or {})
+    if technologies:
+        static_limits.append(FLUTTER_COVERAGE)
     static_summary={'app':_text(app.get('app_name') or app.get('label') or app.get('filename')),
         'package':_text(app.get('package_name')),'status':static.get('status') if static.get('status') in {'completed','partial','failed'} else 'unavailable',
         'key_permissions':key_permissions,'api_candidates_count':_length(candidates),
         'frameworks_detected':sorted({framework for c in candidates or [] if isinstance(c,dict)
             for framework in (c.get('frameworks') if isinstance(c.get('frameworks'), list) else [c.get('framework')])
             if framework in {'Fuel','Retrofit','okhttp','volley','httpurlconnection','ktor'}}),
+        'runtime_technologies': [r['name'] for r in technologies],
         'network_indicators':{'urls':_length(net.get('network_urls')),'domains':_length(net.get('domains')),'ips':_length(net.get('ip_addresses')),
                               'paths':_length(net.get('path_candidates')),'local_file_urls':_length(net.get('local_file_urls')),'hosts':sorted(hosts)[:5]},
         'coverage_limitations':static_limits}
@@ -108,7 +115,8 @@ def build_report_summary(static_report=None,dynamic_report=None,*,contexts=None,
         security_rows.append({'endpoint':_endpoint(endpoint_rows.get(row['endpoint_context_id'],{}),contexts),
             'test_category':row['test_category'],'outcome':row['validation_outcome'],
             'reason_code':', '.join(row['reason_codes']),'standard_mapping':', '.join(mapping),
-            'evidence_available':'YES' if available else 'NO'})
+            'evidence_available':'YES' if available else 'NO',
+            **({'result_message':row['result_message'],'tested_relationship':row['tested_relationship']} if row['test_category'] in {'object_authorization','function_authorization','session_handling'} else {})})
     coverage=dynamic.get('coverage') or {};preflight=dynamic.get('preflight') or {};exploration=dynamic.get('exploration') or {}
     count=_count(dynamic.get('endpoint_context_summary',{}).get('runtime_observed_count'))
     dynamic_limits=[]
@@ -117,6 +125,9 @@ def build_report_summary(static_report=None,dynamic_report=None,*,contexts=None,
     for name,label in [('http_visibility','HTTP visibility'),('https_visibility','HTTPS visibility'),('runtime_observation','Runtime observation'),('ui_exploration','Exploration')]:
         state=coverage.get(name,'unavailable')
         if state!='available':dynamic_limits.append(label+' is '+state+'.')
+    http_reason = _text((dynamic.get('traffic') or {}).get('http_visibility_reason'), '')
+    if coverage.get('http_visibility') != 'available' and http_reason:
+        dynamic_limits.append('HTTP capture reason: '+http_reason+'.')
     if count==0:dynamic_limits.append('No endpoints were observed in available traffic; this does not establish absence of network activity.')
     if not rows:dynamic_limits.append('No security validation results are available; security was not established.')
     elif security.get('coverage')!='available':dynamic_limits.append('Security validation coverage is partial or unavailable.')
@@ -126,6 +137,9 @@ def build_report_summary(static_report=None,dynamic_report=None,*,contexts=None,
         'launch_status':'Observed' if preflight.get('launch_success') is True else 'Failed' if preflight.get('launch_success') is False else 'Unknown',
         'runtime_status':coverage.get('runtime_observation','unavailable'),
         'routes_explored':_count(dynamic.get('routes',{}).get('node_count')),
+        'exploration_note':_text(exploration.get('note'), 'Safe frontier accounting is unavailable.', complete=True),
+        'exploration_stop_reason':_text(exploration.get('stop_kind') or exploration.get('stop_reason')),
+        'safe_actions_remaining':exploration.get('safe_actions_remaining') if isinstance(exploration.get('safe_actions_remaining'), int) else None,
         'actions_attempted':_count(exploration.get('steps_attempted')),'actions_succeeded':_count(exploration.get('actions_succeeded')),
         'traffic_visibility':{name:coverage.get(name,'unavailable') for name in ('http_visibility','https_visibility')},
         'observed_endpoints':count,'security_tests_executed':sum(r['execution_status']=='completed' for r in rows),
@@ -149,12 +163,12 @@ def build_report_summary(static_report=None,dynamic_report=None,*,contexts=None,
             'security_note':'Validated auth enforcement is expected security behavior, not a vulnerability finding.'}
 
 
-def load_report_summary(run_dir):
+def load_report_summary(run_dir, *, static_run_id=None):
     """Only reads canonical sources. Missing/corrupt sources remain explicit."""
     run_dir=Path(run_dir);static=None;dynamic=None;contexts={};available=set()
     try:
-        value=json.loads((run_dir/'static_analysis_report.json').read_text())
-        if isinstance(value,dict) and value.get('report_type')=='static_analysis':static=value
+        from src.static_security.report_freshness import load_current_static_report
+        static=load_current_static_report(run_dir, static_run_id or run_dir.name)
     except (ValueError,OSError):pass
     try:dynamic=load_dynamic_analysis_report(run_dir,run_dir.name)
     except DynamicReportError:pass
@@ -172,6 +186,8 @@ def load_report_summary(run_dir):
                 if old and row['validation_outcome']==old['validation_outcome'] and _evidence_available(row,verified['evidence_index']):available.add(row['execution_result_ref'])
         except (ValueError,OSError,KeyError,TypeError,AttributeError):pass
     result=build_report_summary(static,dynamic,contexts=contexts,available_executions=available)
+    if dynamic and dynamic.get('execution_environment'):
+        result['dynamic_summary']['execution_environment'] = dynamic['execution_environment']
     if dynamic:
         # Compare only previously validated, ownership-checked canonical records.
         try:
@@ -196,5 +212,16 @@ def load_report_summary(run_dir):
             result['dynamic_summary']['coverage_limitations'].append('Some runtime permissions could not be granted or verified.')
     except (ValueError, OSError, AttributeError):
         pass
+    if dynamic and dynamic.get('runtime_availability'):
+        availability = dynamic['runtime_availability']
+        result['dynamic_summary']['runtime_status'] = availability['status']
+        result['dynamic_summary']['runtime_reason'] = availability['reason_code']
+        if availability['status'] != 'available':
+            limits = ['Runtime analysis unavailable on the current execution environment.' if availability['status'] == 'unavailable'
+                      else 'Runtime analysis coverage is partial.', availability['message']]
+            if availability['status'] == 'partial' and not availability['evidence'].get('foreground_verified'):
+                limits.append('Foreground activity could not be confirmed.')
+            result['dynamic_summary']['coverage_limitations'].extend(limits)
+            result['dynamic_security_report']['coverage_limitations'].extend(limits)
     result['canonical_artifacts']={'static':static is not None,'dynamic':dynamic is not None}
     return result

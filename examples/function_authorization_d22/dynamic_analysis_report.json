@@ -1,0 +1,309 @@
+{
+  "schema_version": "1.0",
+  "report_type": "dynamic_analysis",
+  "scan_id": "function_authorization_d22",
+  "generated_at": "2026-10-03T08:19:04.502336+00:00",
+  "report_status": "completed",
+  "analysis_coverage": "partial",
+  "target": {
+    "package_name": null,
+    "platform": "android"
+  },
+  "coverage": {
+    "ui_exploration": "unavailable",
+    "runtime_observation": "unavailable",
+    "http_visibility": "available",
+    "https_visibility": "unavailable",
+    "api_correlation": "available",
+    "endpoint_contexts": "available"
+  },
+  "preflight": {
+    "status": "unavailable",
+    "launch_success": null,
+    "process_running": null,
+    "diagnostic_codes": []
+  },
+  "session": {
+    "session_id": "004d4800-6acf-4d80-81f3-112d0e95dc83",
+    "status": "COMPLETED",
+    "started_at": "2026-10-03T08:12:57.942740+00:00",
+    "ended_at": "2026-10-03T08:12:57.944637+00:00"
+  },
+  "exploration": {
+    "status": "partial",
+    "stop_reason": "security_validation_only",
+    "steps_attempted": 0,
+    "actions_succeeded": 0,
+    "actions_failed": 0,
+    "screens_observed": 0,
+    "transitions_recorded": 0,
+    "duration_seconds": null
+  },
+  "routes": {
+    "node_count": 0,
+    "edge_count": 0,
+    "root_node_id": null,
+    "current_node_id": null,
+    "action_count": 0,
+    "self_loop_count": 0,
+    "system_boundary_count": 0,
+    "external_boundary_count": 0
+  },
+  "runtime": {
+    "action_evidence_count": 0,
+    "correlated_action_count": 0,
+    "pid_change_count": 0,
+    "process_death_count": 0,
+    "activity_change_count": 0,
+    "fatal_count": 0,
+    "crash_count": 0
+  },
+  "traffic": {
+    "backend": null,
+    "total_transactions": 2,
+    "http_count": 2,
+    "https_count": 0,
+    "hosts": [
+      "127.0.0.1"
+    ],
+    "hosts_count": 1,
+    "http_visibility": "available",
+    "https_visibility": "unavailable",
+    "https_visibility_reason": null,
+    "proxy_restored": null,
+    "visibility_note": "Traffic visibility is incomplete; unobserved requests may exist."
+  },
+  "traffic_correlation": {
+    "actions_with_evidence": 0,
+    "transaction_correlated_action_count": 0,
+    "partial_correlation_count": 0,
+    "unavailable_correlation_count": 0
+  },
+  "api_correlation": {
+    "static_candidate_count": 0,
+    "dynamic_endpoint_count": 1,
+    "correlated_count": 0,
+    "static_only_count": 0,
+    "dynamic_only_count": 1,
+    "exact_count": 0,
+    "template_count": 0,
+    "method_mismatch_count": 0,
+    "visibility_note": "HTTPS traffic visibility was unavailable (certificate_trust_unknown). Unobserved static HTTPS candidates were not observable in runtime traffic."
+  },
+  "endpoint_context_summary": {
+    "endpoint_context_count": 1,
+    "runtime_observed_count": 1,
+    "static_only_count": 0,
+    "dynamic_only_count": 1
+  },
+  "endpoint_contexts": [
+    {
+      "endpoint_context_id": "ctx_09deb6fa998c4877",
+      "host": "127.0.0.1",
+      "path": "/lab/admin/toggle",
+      "static_method": null,
+      "observed_methods": [
+        "POST"
+      ],
+      "match_type": "dynamic_only",
+      "confidence": "low",
+      "observation_count": 1,
+      "observed_status_codes": [
+        200
+      ],
+      "auth": {
+        "authorization_header_present": true,
+        "bearer_token_present": null,
+        "cookie_present": false,
+        "session_cookie_present": false,
+        "api_key_header_present": false
+      },
+      "evidence_refs": {
+        "action_ids": [],
+        "correlation_ids": [
+          "corr_6a00557882b2bd61"
+        ],
+        "runtime_action_ids": [],
+        "static_candidate_ids": [],
+        "transaction_ids": [
+          "11209cb1-72a0-41a7-a9b1-46e6093c9436"
+        ]
+      },
+      "action_ids": []
+    }
+  ],
+  "evidence": {
+    "api_correlation": "dynamic/api_correlation.json",
+    "endpoint_contexts": "dynamic/endpoint_contexts.json",
+    "security_results": "dynamic/security_results.json",
+    "session": "dynamic/session.json",
+    "traffic": "dynamic/traffic.json"
+  },
+  "evidence_status": {
+    "api_correlation": "available",
+    "endpoint_contexts": "available",
+    "exploration": "missing",
+    "preflight": "missing",
+    "routes": "missing",
+    "runtime": "missing",
+    "security_results": "available",
+    "session": "available",
+    "traffic": "available",
+    "traffic_correlation": "missing"
+  },
+  "security_results": {
+    "schema_version": "1.0",
+    "coverage": "available",
+    "limitations": [],
+    "result_count": 1,
+    "results": [
+      {
+        "test_id": "FUNCTION_AUTHORIZATION",
+        "endpoint_context_id": "ctx_09deb6fa998c4877",
+        "test_category": "function_authorization",
+        "standards": {
+          "masvs_category": "MASVS-AUTH",
+          "masvs_control_refs": [
+            "MASVS-AUTH-1"
+          ],
+          "mastg_test_refs": [],
+          "maswe_refs": []
+        },
+        "execution_status": "completed",
+        "validation_outcome": "validated",
+        "reason_codes": [
+          "FUNCTION_AUTHORIZATION_ENFORCED"
+        ],
+        "baseline_evidence_refs": {
+          "request": "dcd6efa6-cca0-4f13-9d86-b1ce269ce336",
+          "response": "lab_d101c6e3bf1e425b8e128c1b5add1dfe"
+        },
+        "variant_evidence_refs": {
+          "request": "db1c27bc-fdc6-47a8-acb2-f2c9130bafab",
+          "response": "lab_ba442684b33f4fea857eb5a5af0c6678"
+        },
+        "evidence_refs": [
+          "004d4800-6acf-4d80-81f3-112d0e95dc83",
+          "comparison_2b9a9e7072ae159b54d3",
+          "control_2b9a9e7072ae159b54d3",
+          "ctx_09deb6fa998c4877",
+          "db1c27bc-fdc6-47a8-acb2-f2c9130bafab",
+          "dcd6efa6-cca0-4f13-9d86-b1ce269ce336",
+          "execution_2b9a9e7072ae159b54d3",
+          "lab_ba442684b33f4fea857eb5a5af0c6678",
+          "lab_d101c6e3bf1e425b8e128c1b5add1dfe",
+          "privilege_bc891e59103718a7e4b8",
+          "state_lab_ba442684b33f4fea857eb5a5af0c6678_after",
+          "state_lab_ba442684b33f4fea857eb5a5af0c6678_before",
+          "state_lab_d101c6e3bf1e425b8e128c1b5add1dfe_after",
+          "state_lab_d101c6e3bf1e425b8e128c1b5add1dfe_before"
+        ],
+        "execution_result_ref": "execution_2b9a9e7072ae159b54d3",
+        "session_id": "004d4800-6acf-4d80-81f3-112d0e95dc83",
+        "risk_class": "low",
+        "timestamps": {
+          "started_at": "2026-10-03T08:12:57.943978+00:00",
+          "finished_at": "2026-10-03T08:12:57.944637+00:00",
+          "validated_at": "2026-10-03T08:12:57.944790+00:00"
+        },
+        "coverage": "available",
+        "limitations": [],
+        "finding_created": false,
+        "tested_relationship": {
+          "normal_principal": "user_A",
+          "normal_role": "user",
+          "privileged_principal": "user_B",
+          "privileged_role": "admin",
+          "function": "training_toggle"
+        },
+        "result_message": "Function authorization enforcement confirmed"
+      }
+    ],
+    "evidence_index": {
+      "004d4800-6acf-4d80-81f3-112d0e95dc83": {
+        "ref": "004d4800-6acf-4d80-81f3-112d0e95dc83",
+        "endpoint_context_id": "ctx_09deb6fa998c4877",
+        "kind": "runtime",
+        "session_id": "004d4800-6acf-4d80-81f3-112d0e95dc83"
+      },
+      "comparison_2b9a9e7072ae159b54d3": {
+        "ref": "comparison_2b9a9e7072ae159b54d3",
+        "endpoint_context_id": "ctx_09deb6fa998c4877",
+        "kind": "comparison",
+        "session_id": "004d4800-6acf-4d80-81f3-112d0e95dc83"
+      },
+      "control_2b9a9e7072ae159b54d3": {
+        "ref": "control_2b9a9e7072ae159b54d3",
+        "endpoint_context_id": "ctx_09deb6fa998c4877",
+        "kind": "control",
+        "session_id": "004d4800-6acf-4d80-81f3-112d0e95dc83"
+      },
+      "ctx_09deb6fa998c4877": {
+        "ref": "ctx_09deb6fa998c4877",
+        "endpoint_context_id": "ctx_09deb6fa998c4877",
+        "kind": "context",
+        "session_id": "004d4800-6acf-4d80-81f3-112d0e95dc83"
+      },
+      "db1c27bc-fdc6-47a8-acb2-f2c9130bafab": {
+        "ref": "db1c27bc-fdc6-47a8-acb2-f2c9130bafab",
+        "endpoint_context_id": "ctx_09deb6fa998c4877",
+        "kind": "request",
+        "session_id": "004d4800-6acf-4d80-81f3-112d0e95dc83"
+      },
+      "dcd6efa6-cca0-4f13-9d86-b1ce269ce336": {
+        "ref": "dcd6efa6-cca0-4f13-9d86-b1ce269ce336",
+        "endpoint_context_id": "ctx_09deb6fa998c4877",
+        "kind": "request",
+        "session_id": "004d4800-6acf-4d80-81f3-112d0e95dc83"
+      },
+      "execution_2b9a9e7072ae159b54d3": {
+        "ref": "execution_2b9a9e7072ae159b54d3",
+        "endpoint_context_id": "ctx_09deb6fa998c4877",
+        "kind": "tool",
+        "session_id": "004d4800-6acf-4d80-81f3-112d0e95dc83"
+      },
+      "lab_ba442684b33f4fea857eb5a5af0c6678": {
+        "ref": "lab_ba442684b33f4fea857eb5a5af0c6678",
+        "endpoint_context_id": "ctx_09deb6fa998c4877",
+        "kind": "response",
+        "session_id": "004d4800-6acf-4d80-81f3-112d0e95dc83"
+      },
+      "lab_d101c6e3bf1e425b8e128c1b5add1dfe": {
+        "ref": "lab_d101c6e3bf1e425b8e128c1b5add1dfe",
+        "endpoint_context_id": "ctx_09deb6fa998c4877",
+        "kind": "response",
+        "session_id": "004d4800-6acf-4d80-81f3-112d0e95dc83"
+      },
+      "privilege_bc891e59103718a7e4b8": {
+        "ref": "privilege_bc891e59103718a7e4b8",
+        "endpoint_context_id": "ctx_09deb6fa998c4877",
+        "kind": "control",
+        "session_id": "004d4800-6acf-4d80-81f3-112d0e95dc83"
+      },
+      "state_lab_ba442684b33f4fea857eb5a5af0c6678_after": {
+        "ref": "state_lab_ba442684b33f4fea857eb5a5af0c6678_after",
+        "endpoint_context_id": "ctx_09deb6fa998c4877",
+        "kind": "control",
+        "session_id": "004d4800-6acf-4d80-81f3-112d0e95dc83"
+      },
+      "state_lab_ba442684b33f4fea857eb5a5af0c6678_before": {
+        "ref": "state_lab_ba442684b33f4fea857eb5a5af0c6678_before",
+        "endpoint_context_id": "ctx_09deb6fa998c4877",
+        "kind": "control",
+        "session_id": "004d4800-6acf-4d80-81f3-112d0e95dc83"
+      },
+      "state_lab_d101c6e3bf1e425b8e128c1b5add1dfe_after": {
+        "ref": "state_lab_d101c6e3bf1e425b8e128c1b5add1dfe_after",
+        "endpoint_context_id": "ctx_09deb6fa998c4877",
+        "kind": "control",
+        "session_id": "004d4800-6acf-4d80-81f3-112d0e95dc83"
+      },
+      "state_lab_d101c6e3bf1e425b8e128c1b5add1dfe_before": {
+        "ref": "state_lab_d101c6e3bf1e425b8e128c1b5add1dfe_before",
+        "endpoint_context_id": "ctx_09deb6fa998c4877",
+        "kind": "control",
+        "session_id": "004d4800-6acf-4d80-81f3-112d0e95dc83"
+      }
+    }
+  }
+}

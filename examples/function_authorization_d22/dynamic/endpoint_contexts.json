@@ -1,0 +1,147 @@
+{
+  "session_id": "004d4800-6acf-4d80-81f3-112d0e95dc83",
+  "schema_version": "1.0",
+  "summary": {
+    "endpoint_context_count": 1,
+    "runtime_observed_count": 1,
+    "static_only_count": 0,
+    "dynamic_only_count": 1
+  },
+  "endpoints": [
+    {
+      "endpoint_context_id": "ctx_09deb6fa998c4877",
+      "host": "127.0.0.1",
+      "path": "/lab/admin/toggle",
+      "scheme": "http",
+      "methods": [
+        "POST"
+      ],
+      "static": {},
+      "dynamic": {
+        "observed": true,
+        "transaction_ids": [
+          "11209cb1-72a0-41a7-a9b1-46e6093c9436"
+        ],
+        "observation_count": 1,
+        "available_transaction_count": 1,
+        "missing_transaction_ids": [],
+        "first_observed_at": "2026-10-03T08:12:57.942740+00:00",
+        "last_observed_at": "2026-10-03T08:12:57.942740+00:00",
+        "observed_methods": [
+          "POST"
+        ],
+        "observed_status_codes": [
+          200
+        ],
+        "schemes": [
+          "http"
+        ]
+      },
+      "request": {
+        "content_types": [
+          "application/json"
+        ],
+        "header_names": [
+          "authorization",
+          "content-length",
+          "content-type",
+          "host",
+          "x-lab-run-id"
+        ],
+        "body_present": true,
+        "body_types": [
+          "json"
+        ],
+        "body_keys": [
+          "enabled"
+        ],
+        "body_shapes": [
+          {
+            "enabled": "boolean"
+          }
+        ],
+        "body_sizes": [
+          17
+        ],
+        "methods": [
+          "POST"
+        ],
+        "query_keys": []
+      },
+      "response": {
+        "content_types": [
+          "application/json"
+        ],
+        "header_names": [
+          "cache-control",
+          "content-length",
+          "content-type",
+          "date",
+          "server",
+          "x-lab-trace-id"
+        ],
+        "body_present": true,
+        "body_types": [
+          "json"
+        ],
+        "body_keys": [
+          "applied",
+          "enabled",
+          "function",
+          "revision"
+        ],
+        "body_shapes": [
+          {
+            "applied": "boolean",
+            "enabled": "boolean",
+            "function": "string",
+            "revision": "number"
+          }
+        ],
+        "body_sizes": [
+          80
+        ],
+        "observed_status_codes": [
+          200
+        ],
+        "status_code_counts": {
+          "200": 1
+        }
+      },
+      "auth": {
+        "authorization_header_present": true,
+        "bearer_token_present": null,
+        "cookie_present": false,
+        "session_cookie_present": false,
+        "api_key_header_present": false
+      },
+      "action_context": [],
+      "route_context": [],
+      "runtime_context": {
+        "pid_changed_observed": false,
+        "process_death_observed": false,
+        "activity_changes_observed": false,
+        "fatal_observed": false,
+        "crash_observed": false,
+        "evidence_available": false
+      },
+      "visibility": {
+        "http_visibility": "available",
+        "https_visibility": "unavailable",
+        "https_visibility_reason": "certificate_trust_unknown"
+      },
+      "evidence_refs": {
+        "static_candidate_ids": [],
+        "correlation_ids": [
+          "corr_6a00557882b2bd61"
+        ],
+        "transaction_ids": [
+          "11209cb1-72a0-41a7-a9b1-46e6093c9436"
+        ],
+        "action_ids": [],
+        "runtime_action_ids": []
+      },
+      "port": 59005
+    }
+  ]
+}

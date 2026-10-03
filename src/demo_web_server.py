@@ -179,12 +179,14 @@ class _DemoRequestHandler(BaseHTTPRequestHandler):
         # GET /reports/<run_id>/static_analysis_report.json
         static_json_match = re.match(r"^/reports/([a-zA-Z0-9_\-]+)/static_analysis_report\.json$", path)
         if static_json_match:
+            from src.static_security.report_freshness import load_current_static_report
             rid = static_json_match.group(1)
             serve_run_file(
                 self, rid, "static_analysis_report.json",
                 "application/json; charset=utf-8", server.get_run_dir,
                 disposition_filename=f"static_analysis_report_{rid}.json",
                 label="Static analysis report",
+                validated_json_loader=load_current_static_report,
             )
             return
 
@@ -327,7 +329,9 @@ class _DemoRequestHandler(BaseHTTPRequestHandler):
             self._send_json(404, {"status": "error", "message": "Run not found."})
             return
         try:
-            self._send_json(200, load_report_summary(directory))
+            payload = load_report_summary(directory, static_run_id=run_id)
+            payload["run_id"] = run_id
+            self._send_json(200, payload)
         except (ValueError, TypeError, KeyError, AttributeError):
             self._send_json(500, {"status": "error", "message": "Summary unavailable."})
 
@@ -438,7 +442,10 @@ class _DemoRequestHandler(BaseHTTPRequestHandler):
 class DemoWebServer:
     """Local Web Server managing live dashboard UI, reporting, and background orchestrations."""
 
-    def __init__(self, host: str = "127.0.0.1", port: int = 8080, runs_root: str | Path = "demo_runs") -> None:
+    def __init__(self, host: str = "127.0.0.1", port: int = 8080, runs_root: str | Path = "demo_runs", traffic_proxy_port: int = 18080) -> None:
+        if type(traffic_proxy_port) is not int or not 1 <= traffic_proxy_port <= 65535:
+            raise ValueError("Invalid traffic proxy port")
+        self.traffic_proxy_port = traffic_proxy_port
         self.host = host
         self._requested_port = port
         self.port: int = port
@@ -762,6 +769,7 @@ class DemoWebServer:
                 grant_permissions=grant_permissions,
                 progress_callback=callback,
                 install_mode=install_mode,
+                traffic_proxy_port=self.traffic_proxy_port,
             )
             # Evaluate vulnerabilities
             ensure_vulnerabilities(res)

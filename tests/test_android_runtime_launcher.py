@@ -53,7 +53,7 @@ class TestAndroidRuntimeLauncherUnit(unittest.TestCase):
         )
         with self.assertRaises(AndroidRuntimeError) as ctx:
             select_target_device()
-        self.assertIn("No Android device/emulator found", str(ctx.exception))
+        self.assertEqual(ctx.exception.reason, "no_devices")
 
     @patch("subprocess.run")
     @patch("shutil.which", return_value="/bin/adb")
@@ -87,8 +87,11 @@ class TestAndroidRuntimeLauncherUnit(unittest.TestCase):
             stdout=stdout,
             stderr="",
         )
-        selected = select_target_device()
-        self.assertEqual(selected, "emulator-5554")
+        with self.assertRaises(AndroidRuntimeError) as ctx:
+            select_target_device()
+        self.assertEqual(ctx.exception.reason, 'multiple_devices')
+        selected = select_target_device(adb_serial='emulator-5554')
+        self.assertEqual(selected, 'emulator-5554')
 
     @patch("subprocess.run")
     @patch("shutil.which", return_value="/bin/adb")
@@ -106,7 +109,7 @@ class TestAndroidRuntimeLauncherUnit(unittest.TestCase):
         )
         with self.assertRaises(AndroidRuntimeError) as ctx:
             select_target_device()
-        self.assertIn("Multiple devices/emulators connected", str(ctx.exception))
+        self.assertEqual(ctx.exception.reason, "multiple_devices")
 
     @patch("subprocess.run")
     @patch("shutil.which", return_value="/bin/adb")
@@ -140,7 +143,7 @@ class TestAndroidRuntimeLauncherUnit(unittest.TestCase):
         )
         with self.assertRaises(AndroidRuntimeError) as ctx:
             select_target_device(adb_serial="nonexistent-serial")
-        self.assertIn("not connected or not in 'device' state", str(ctx.exception))
+        self.assertEqual(ctx.exception.reason, "device_not_ready")
 
     # --- 2. Input Validation & Component Normalization ---
 

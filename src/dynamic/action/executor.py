@@ -9,6 +9,8 @@ Provides safe, deterministic, and bounded action execution over ADB:
 """
 
 from __future__ import annotations
+from src.dynamic.deadline import bounded_operation, current_deadline
+from src.dynamic.deadline import bounded_timeout
 
 import logging
 import subprocess
@@ -301,6 +303,7 @@ class ActionExecutor:
         self._record_timeline(res, timeline_recorder)
         return res
 
+    @bounded_operation(8.0, field="timeout")
     def _run_bounded_adb_action(
         self,
         action_id: str,
@@ -322,7 +325,7 @@ class ActionExecutor:
                     cmd,
                     capture_output=True,
                     text=True,
-                    timeout=timeout,
+                    timeout=bounded_timeout(timeout),
                 )
                 if proc.returncode == 0:
                     return ActionExecutionResult(
@@ -357,6 +360,7 @@ class ActionExecutor:
                     self.max_attempts,
                     timeout,
                 )
+                break  # Dispatch may have happened; observe postcondition instead of resending.
             except (OSError, Exception) as exc:
                 last_error_code = ActionErrorCode.ADB_COMMAND_FAILED.value
                 last_error_msg = f"ADB execution exception: {exc}"
@@ -367,6 +371,9 @@ class ActionExecutor:
                     self.max_attempts,
                     exc,
                 )
+
+            if not (metadata.get('idempotent') and metadata.get('dispatch_rejected')):
+                break
 
         status = (
             ActionExecutionStatus.TIMED_OUT.value

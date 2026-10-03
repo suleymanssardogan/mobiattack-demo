@@ -107,6 +107,7 @@ class TrafficStorage:
             "https_count": summary.https_count if summary else 0,
             "proxy_restored": summary.proxy_restored if summary else False,
             "http_visibility": http_vis,
+            "http_visibility_reason": summary.http_visibility_reason if summary else "capture_state_unknown",
             "https_visibility": https_vis,
             "https_visibility_reason": https_reason,
             "capture": capture.to_dict() if capture else None,

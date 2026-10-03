@@ -35,6 +35,9 @@ class DeviceProxyManager:
         self.proxy_port = proxy_port
         self.previous_proxy: str | None = None
         self.configured: bool = False
+        self.readback_verified = False
+        self.backup_verified = False
+        self._last_read_succeeded = False
 
     def get_current_proxy(self) -> str | None:
         """Reads current global HTTP proxy from Android device settings."""
@@ -43,6 +46,7 @@ class DeviceProxyManager:
             ["shell", "settings", "get", "global", "http_proxy"],
             serial=self.serial,
         )
+        self._last_read_succeeded = code == 0
         if code != 0:
             logger.warning(f"Could not read current http_proxy on {self.serial}: {stderr}")
             return None
@@ -56,6 +60,9 @@ class DeviceProxyManager:
     def apply_proxy(self) -> None:
         """Backs up existing proxy and applies target host:port."""
         self.previous_proxy = self.get_current_proxy()
+        if not self._last_read_succeeded:
+            raise TrafficException(TrafficErrorCode.PROXY_CONFIGURATION_FAILED, "Cannot read prior proxy state.")
+        self.backup_verified = True
         target_value = f"{self.proxy_host}:{self.proxy_port}"
 
         logger.info(
@@ -73,10 +80,17 @@ class DeviceProxyManager:
             )
 
         self.configured = True
+        actual = self.get_current_proxy()
+        if not self._last_read_succeeded or actual != target_value:
+            self.restore_proxy()
+            raise TrafficException(TrafficErrorCode.PROXY_CONFIGURATION_FAILED, "Proxy readback did not match requested configuration.")
+        self.readback_verified = True
 
     def restore_proxy(self) -> bool:
         """Restores previous proxy setting (or removes proxy if previously none)."""
         logger.info(f"Restoring proxy on {self.serial} -> {self.previous_proxy or 'cleared'}")
+        if not self.backup_verified:
+            return False
         if self.previous_proxy:
             code, _, stderr = run_adb_cmd(
                 self.adb_bin,
@@ -95,7 +109,9 @@ class DeviceProxyManager:
         if code != 0:
             logger.error(f"Failed to restore http_proxy on {self.serial}: {stderr}")
             return False
-        return True
+        actual = self.get_current_proxy()
+        self.readback_verified = False
+        return self._last_read_succeeded and actual == self.previous_proxy
 
     def __enter__(self) -> DeviceProxyManager:
         self.apply_proxy()

@@ -268,7 +268,9 @@ def validate_scan_state(state: dict[str, Any], run_dir: str | Path | None = None
         if run_dir is not None:
             from src.dynamic.report.models import DynamicReportError, load_dynamic_analysis_report
             try:
-                load_dynamic_analysis_report(run_dir, state["scan_id"])
+                report = load_dynamic_analysis_report(run_dir, state["scan_id"])
+                if dyn_status == 'completed' and report.get('runtime_availability', {}).get('status') == 'unavailable':
+                    raise ScanStateValidationError('Unavailable runtime cannot complete Dynamic analysis.')
             except DynamicReportError as exc:
                 raise ScanStateValidationError("Dynamic report availability requires a valid canonical file.") from exc
 
@@ -429,7 +431,7 @@ def sync_dynamic_report_artifact(state: dict[str, Any], run_dir: str | Path, *, 
     """Reconcile physical integrity before registering or completing the dynamic stage."""
     from src.dynamic.report.models import DynamicReportError, load_dynamic_analysis_report
     try:
-        load_dynamic_analysis_report(run_dir, state["scan_id"])
+        report = load_dynamic_analysis_report(run_dir, state["scan_id"])
         available = True
     except DynamicReportError:
         available = False
@@ -437,7 +439,12 @@ def sync_dynamic_report_artifact(state: dict[str, Any], run_dir: str | Path, *, 
         "available": available, "relative_path": "dynamic_analysis_report.json" if available else None,
     }
     stage = state["stages"]["dynamic_analysis"]
-    if available and complete_stage:
+    if available and complete_stage and report.get('runtime_availability', {}).get('status') == 'unavailable':
+        stage['status'] = 'not_available' if report['report_status'] == 'unavailable' else 'partial'
+        stage['completed_at'] = None
+        stage['message'] = report['runtime_availability']['message']
+        state['stages']['report_generation']['status'] = 'partial'
+    elif available and complete_stage:
         stage["status"] = "completed"
         stage["completed_at"] = stage.get("completed_at") or _utc_now_iso()
         stage["message"] = "Canonical dynamic report generated and validated; coverage is described in the report."
@@ -589,8 +596,11 @@ class ScanStateCheckpointer:
                 # CRITICAL RULE: Runtime is launch/preflight, NOT dynamic analysis.
                 # dynamic_analysis MUST remain "not_available" until exploration starts.
                 # Later runtime failure does NOT fail or erase completed static_analysis.
-                if state == "failed":
-                    set_overall_status(st, "failed", error=safe_msg)
+                if state in {'failed', 'skipped'}:
+                    update_stage_status(st, 'dynamic_analysis', 'not_available', 'Runtime analysis unavailable.')
+                    st['current_stage'] = 'report_generation'
+                    if state == 'failed':
+                        set_overall_status(st, 'running', current_stage='report_generation')
 
             elif stage == "dynamic_analysis":
                 # Week 1 — Day 5: Dynamic UI Exploration execution
@@ -672,8 +682,10 @@ class ScanStateCheckpointer:
                 update_stage_status(st, "static_analysis", "failed", clean_err)
                 set_overall_status(st, "failed", current_stage="static_analysis", error=clean_err)
             elif stage == "runtime":
-                # Runtime failure does NOT fail or erase static analysis or its artifacts!
-                set_overall_status(st, "failed", error=clean_err)
+                # Runtime availability cannot invalidate completed Static evidence.
+                update_stage_status(st, 'dynamic_analysis', 'not_available', 'Runtime analysis unavailable.')
+                set_overall_status(st, "completed" if st['stages']['static_analysis']['status'] == 'completed' else "running",
+                                   current_stage='report_generation')
             else:
                 set_overall_status(st, "failed", error=clean_err)
 

@@ -81,7 +81,7 @@ def _make_candidate(
         resource_id=f"com.example.app:id/{node_id}",
         class_name="android.widget.Button",
         text=text,
-        content_desc=text,
+        content_desc="Open informational screen",
         bounds=bounds,
         center_x=center_x,
         center_y=center_y,
@@ -535,7 +535,7 @@ class TestDynamicExplorationPipelineWiring(unittest.TestCase):
         self.assertEqual(st["stages"]["dynamic_analysis"]["status"], "completed")
 
     # 13. exploration no-evidence fatal failure can mark dynamic failed
-    def test_13_exploration_no_evidence_fatal_failure_can_mark_dynamic_failed(self):
+    def test_13_observation_failure_preserves_preflight_runtime_as_partial(self):
         init_st = create_initial_scan_state(
             scan_id=self.output_root.name,
             target_url="http://example.com/app.apk",
@@ -560,7 +560,10 @@ class TestDynamicExplorationPipelineWiring(unittest.TestCase):
             _wire_dynamic_exploration(self.output_root, "com.example.app", "emulator-5554")
 
         st = load_scan_state(self.output_root)
-        self.assertEqual(st["stages"]["dynamic_analysis"]["status"], "failed")
+        self.assertEqual(st["stages"]["dynamic_analysis"]["status"], "partial")
+        result = json.loads((dyn_dir / "exploration_result.json").read_text())
+        self.assertEqual(result["status"], "failed")
+        self.assertEqual(result["stop_reason"], "observation_failed")
 
     # 14. dynamic stage never becomes completed
     @patch("src.dynamic.ui.observer.observe_screen")
@@ -794,7 +797,7 @@ class TestDynamicExplorationPipelineWiring(unittest.TestCase):
         )
 
         mock_click.assert_not_called()
-        self.assertEqual(res.stop_reason, StopReason.NO_ACTIONS.value)
+        self.assertEqual(res.stop_reason, StopReason.UNSAFE_ACTION_BOUNDARY.value)
 
     # 23. input actions not auto-executed
     @patch("src.dynamic.action.executor.ActionExecutor.click")
@@ -1106,6 +1109,8 @@ class TestTask541SemanticsCleanup(unittest.TestCase):
         expected_values = {
             "completed",
             "no_actions",
+            "unsafe_action_boundary",
+            "repeated_state",
             "max_steps",
             "max_depth",
             "deadline",

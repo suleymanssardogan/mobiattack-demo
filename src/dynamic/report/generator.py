@@ -1,5 +1,6 @@
 """Pure projection of finalized canonical artifacts into a dynamic product report."""
 from __future__ import annotations
+from src.dynamic.exploration.frontier import exploration_summary
 
 from collections import Counter
 from datetime import datetime, timezone
@@ -17,7 +18,7 @@ from .models import (COVERAGE_STATES, DynamicReportError, DynamicReportUnavailab
 ARTIFACTS = {"preflight": "preflight_result.json", "session": "session.json", "exploration": "exploration_result.json",
              "routes": "route_graph.json", "runtime": "runtime_evidence.json", "traffic": "traffic.json",
              "traffic_correlation": "traffic_evidence.json", "api_correlation": "api_correlation.json",
-             "endpoint_contexts": "endpoint_contexts.json", "security_results": "security_results.json"}
+             "endpoint_contexts": "endpoint_contexts.json", "security_results": "security_results.json", "runtime_availability": "runtime_availability.json"}
 LIST_FIELDS = {"routes": ("nodes", "edges"), "runtime": ("actions",), "traffic": ("transactions",),
                "traffic_correlation": ("actions",), "api_correlation": ("correlations",), "endpoint_contexts": ("endpoints",)}
 
@@ -123,6 +124,24 @@ def _validate_source(name: str, value: Any) -> None:
                 raise DynamicReportError("Invalid source metadata")
 
 
+def _unavailable_report(scan_id, record, target, generated_at):
+    """Coverage report only: no fabricated session or execution evidence."""
+    report = {'schema_version': '1.0', 'report_type': 'dynamic_analysis', 'scan_id': scan_id,
+        'generated_at': generated_at or datetime.now(timezone.utc).isoformat(), 'report_status': 'unavailable',
+        'analysis_coverage': 'partial', 'target': {'platform': 'android'}, 'runtime_availability': record,
+        'coverage': {key: 'unavailable' for key in ('ui_exploration', 'runtime_observation', 'http_visibility',
+            'https_visibility', 'api_correlation', 'endpoint_contexts')},
+        'preflight': {'status': 'FAIL', 'launch_success': False}, 'session': {},
+        'exploration': {'status': 'unavailable', **{key: 0 for key in ('steps_attempted', 'actions_succeeded',
+            'actions_failed', 'screens_observed', 'transitions_recorded')}},
+        'routes': {}, 'runtime': {}, 'traffic': {}, 'traffic_correlation': {}, 'api_correlation': {},
+        'endpoint_context_summary': {}, 'endpoint_contexts': [], 'evidence': {'runtime_availability': 'dynamic/runtime_availability.json'},
+        'evidence_status': {'runtime_availability': 'available'},
+        'limitations': ['Runtime analysis unavailable on the current execution environment.', record['message']]}
+    validate_dynamic_analysis_report(report, scan_id)
+    return report
+
+
 def build_dynamic_analysis_report(scan_id: str, artifacts: dict[str, dict], target: dict | None = None,
                                   generated_at: str | None = None, source_errors: dict[str, str] | None = None) -> dict:
     """Pure summarization; source dicts retain their existing canonical schemas."""
@@ -135,10 +154,36 @@ def build_dynamic_analysis_report(scan_id: str, artifacts: dict[str, dict], targ
                 valid[name] = artifacts[name]
             except (DynamicReportError, TypeError, AttributeError):
                 source_errors[name] = "invalid_schema"
+    record = artifacts.get('runtime_availability')
+    if record is not None:
+        from src.dynamic.runtime.availability import validate_availability
+        try:
+            validate_availability(record)
+        except ValueError as exc:
+            raise DynamicReportError('Invalid runtime availability evidence') from exc
+        if record['status'] == 'unavailable' and not any(_count(valid.get('exploration', {}).get(k)) for k in
+            ('steps_attempted', 'actions_succeeded', 'screens_observed', 'transitions_recorded')):
+            return _unavailable_report(scan_id, record, target, generated_at)
+    security_only = False
+    if 'session' in valid and 'exploration' not in valid and 'security_results' in valid:
+        # A recorded local security execution is not UI exploration. Revalidate
+        # its source first; zero UI counts and unavailable UI coverage stay honest.
+        from src.dynamic.security.reporting import build_security_section
+        section = build_security_section(valid['security_results'], valid['session']['session_id'],
+                                         valid.get('endpoint_contexts', {}).get('endpoints', []))
+        security_only = any(row['execution_status']=='completed' and (row['validation_outcome']=='validated' or
+                            (row['test_category'],row['reason_codes']) in [('object_authorization',['OBJECT_AUTHORIZATION_NOT_ENFORCED']),('function_authorization',['FUNCTION_AUTHORIZATION_NOT_ENFORCED']),('session_handling',['SESSION_INVALIDATION_NOT_ENFORCED'])])
+                            for row in section['results'])
+        if not security_only and section['results']:
+            from src.dynamic.security.reporting import session_observation_complete
+            security_only=session_observation_complete(valid['security_results'],valid['session']['session_id'],valid.get('endpoint_contexts',{}).get('endpoints',[]))
+        if security_only:
+            valid['exploration'] = {'status':'partial','stop_reason':'security_validation_only',
+                **{key:0 for key in ('steps_attempted','actions_succeeded','actions_failed','screens_observed','transitions_recorded')}}
     if not {"session", "exploration"} <= valid.keys():
         raise DynamicReportUnavailable("Session and exploration evidence are required")
     session, exploration = valid["session"], valid["exploration"]
-    if not any(_count(exploration.get(k)) for k in ("steps_attempted", "actions_succeeded", "screens_observed", "transitions_recorded")):
+    if not security_only and not any(_count(exploration.get(k)) for k in ("steps_attempted", "actions_succeeded", "screens_observed", "transitions_recorded")):
         raise DynamicReportUnavailable("No dynamic execution observed")
     preflight = valid.get("preflight", {})
     routes = valid.get("routes", {})
@@ -153,7 +198,21 @@ def build_dynamic_analysis_report(scan_id: str, artifacts: dict[str, dict], targ
     txs = traffic.get("transactions", [])
     http_vis = _states(traffic.get("http_visibility", "unavailable"))
     https_vis = _states(traffic.get("https_visibility", "unavailable"))
-    coverage = {"ui_exploration": "available" if exploration["status"] == "completed" else "partial",
+    exploration_metadata = exploration.get('metadata')
+    exploration_frontier = exploration_metadata.get('frontier') if isinstance(exploration_metadata, dict) else None
+    concise_exploration = exploration_summary(exploration['status'], exploration.get('stop_reason'), exploration_frontier, exploration_metadata.get('budget') if isinstance(exploration_metadata, dict) else None)
+    auth_events = exploration_metadata.get('auth_interventions', []) if isinstance(exploration_metadata, dict) else []
+    from src.dynamic.session.auth_intervention import STATES, MESSAGES
+    auth_events = [e for e in auth_events if isinstance(e, dict) and e.get('state') in STATES
+                   and e.get('session_id') == session['session_id']] if isinstance(auth_events, list) else []
+    if auth_events:
+        auth_state = auth_events[-1]['state']
+        concise_exploration['authentication'] = {'state':auth_state, 'message':MESSAGES[auth_state]}
+        concise_exploration['note'] += ' ' + MESSAGES[auth_state]
+    exploration_complete = (exploration['status'] == 'completed' and concise_exploration['safe_frontier_exhausted'] is True
+                            and exploration.get('stop_reason') not in {'max_steps', 'hard_step_ceiling', 'frontier_stagnated', 'runtime_unavailable', 'max_depth', 'deadline', 'observation_failed', 'executor_failed'})
+    reported_exploration_status = "partial" if exploration["status"] == "completed" and not exploration_complete else exploration["status"]
+    coverage = {"ui_exploration": "unavailable" if security_only else "available" if exploration_complete else "partial",
                 "runtime_observation": runtime_coverage, "http_visibility": http_vis, "https_visibility": https_vis,
                 "api_correlation": "available" if "api_correlation" in valid else "unavailable",
                 "endpoint_contexts": "available" if "endpoint_contexts" in valid else "unavailable"}
@@ -169,10 +228,12 @@ def build_dynamic_analysis_report(scan_id: str, artifacts: dict[str, dict], targ
     nodes, edges = routes.get("nodes", []), routes.get("edges", [])
     hosts = sorted({_safe(normalize_host((t.get("request") or {}).get("host"))) for t in txs if (t.get("request") or {}).get("host")})
     hosts = [host for host in hosts if host]
-    traffic_summary = {"backend": traffic.get("backend") if traffic.get("backend") in {"mitmproxy", "unknown"} else None, "total_transactions": len(txs),
+    traffic_summary = {"backend": {'mitmproxy': 'mitmproxy', 'MitmproxyCaptureBackend': 'mitmproxy',
+                       'NativeProxyCaptureBackend': 'native_http', 'native_http': 'native_http', 'unknown': 'unknown'}.get(traffic.get('backend')), "total_transactions": len(txs),
                        "http_count": sum((t.get("request") or {}).get("scheme") == "http" for t in txs),
                        "https_count": sum((t.get("request") or {}).get("scheme") == "https" for t in txs),
                        "hosts": hosts, "hosts_count": len(hosts), "http_visibility": http_vis, "https_visibility": https_vis,
+                       "http_visibility_reason": _safe(traffic.get("http_visibility_reason")),
                        "https_visibility_reason": _safe(traffic.get("https_visibility_reason")),
                        "proxy_restored": traffic.get("proxy_restored") if isinstance(traffic.get("proxy_restored"), bool) else None}
     if http_vis != "available" or https_vis != "available":
@@ -221,9 +282,10 @@ def build_dynamic_analysis_report(scan_id: str, artifacts: dict[str, dict], targ
                             "diagnostic_codes": diagnostic_codes},
               "session": {"session_id": _safe(session["session_id"]), "status": str(session["status"]).upper(),
                           "started_at": _safe(session.get("started_at")), "ended_at": _safe(session.get("ended_at"))},
-              "exploration": {"status": exploration["status"], "stop_reason": _safe(exploration.get("stop_reason")),
+              "exploration": {"status": reported_exploration_status, "stop_reason": _safe(exploration.get("stop_reason")),
                               **{k: _count(exploration.get(k)) for k in ("steps_attempted", "actions_succeeded", "actions_failed", "screens_observed", "transitions_recorded")},
-                              "duration_seconds": exploration.get("duration_seconds") if isinstance(exploration.get("duration_seconds"), (int, float)) else None},
+                              "duration_seconds": exploration.get("duration_seconds") if isinstance(exploration.get("duration_seconds"), (int, float)) else None,
+                              **concise_exploration},
               "routes": {"node_count": len(nodes), "edge_count": len(edges), "root_node_id": _safe(routes.get("root_node_id")),
                          "current_node_id": _safe(routes.get("current_node_id")), "action_count": sum(len(n.get("actions", [])) for n in nodes),
                          "self_loop_count": sum(e.get("source_node_id") == e.get("target_node_id") and bool(e.get("source_node_id")) for e in edges),
@@ -231,8 +293,8 @@ def build_dynamic_analysis_report(scan_id: str, artifacts: dict[str, dict], targ
                          "external_boundary_count": sum(n.get("is_target_package") is False and n.get("is_dialog_or_system") is not True for n in nodes)},
               "runtime": runtime_summary, "traffic": traffic_summary, "traffic_correlation": traffic_correlation_summary,
               "api_correlation": api_summary, "endpoint_context_summary": context_summary, "endpoint_contexts": rows,
-              "evidence": {name: f"dynamic/{ARTIFACTS[name]}" for name in sorted(valid)},
-              "evidence_status": {name: "available" if name in valid else "corrupt" if name in source_errors else "missing" for name in sorted(ARTIFACTS)}}
+              "evidence": {name: f"dynamic/{ARTIFACTS[name]}" for name in sorted(valid) if not (security_only and name=='exploration')},
+              "evidence_status": {name: "missing" if security_only and name=='exploration' else "available" if name in valid else "corrupt" if name in source_errors else "missing" for name in sorted(ARTIFACTS) if name != 'runtime_availability' or name in artifacts}}
     if 'security_results' in artifacts or 'security_results' in source_errors:
         from src.dynamic.security.reporting import build_security_section, unavailable_security_section
         security = (build_security_section(valid['security_results'], session['session_id'], contexts.get('endpoints', []))
@@ -242,6 +304,10 @@ def build_dynamic_analysis_report(scan_id: str, artifacts: dict[str, dict], targ
             report['analysis_coverage'] = 'partial'
         if 'security_results' in valid and security['limitations'] == ['SECURITY_SOURCE_INVALID']:
             report['evidence_status']['security_results'] = 'corrupt'
+    if record is not None:
+        report['runtime_availability'] = record
+        if record['status'] != 'available':
+            report['analysis_coverage'] = 'partial'
     validate_dynamic_analysis_report(report)
     return report
 
@@ -258,5 +324,11 @@ def generate_dynamic_analysis_report(run_dir: str | Path, target: dict | None = 
             except (ValueError, OSError):
                 errors[name] = "invalid_json"
     report = build_dynamic_analysis_report(run_dir.name, artifacts, target, source_errors=errors)
+    from src.dynamic.runtime.execution_target import load_target, environment_summary
+    selected = load_target(run_dir)
+    if selected:
+        if report.get('runtime_availability', {}).get('execution_target_id') not in {None, selected.target_id}:
+            raise DynamicReportError('Mismatched execution target evidence')
+        report['execution_environment'] = environment_summary(selected)
     save_dynamic_analysis_report(run_dir, report)
     return load_dynamic_analysis_report(run_dir, run_dir.name)

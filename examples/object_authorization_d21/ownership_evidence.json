@@ -1,0 +1,15 @@
+{
+  "evidence_ref": "ownership_1fc292f489ee7b6ce5de",
+  "host": "127.0.0.1",
+  "port": 54687,
+  "principals": [
+    "user_A",
+    "user_B"
+  ],
+  "resources": {
+    "1001": "user_A",
+    "2002": "user_B"
+  },
+  "session_id": "7428e410-486d-46b6-90c8-9d8d99e3b9ab",
+  "source": "controlled_local_lab_configuration"
+}

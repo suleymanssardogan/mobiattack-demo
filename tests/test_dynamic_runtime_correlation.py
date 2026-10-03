@@ -390,6 +390,7 @@ class TestDynamicRuntimeCorrelation(unittest.TestCase):
             runtime_observer=mock_observer,
             target_package=self.pkg,
             runtime_evidence_file=self.evidence_file,
+            no_navigation_postcondition=lambda obs: True,
             limits=limits,
         )
 

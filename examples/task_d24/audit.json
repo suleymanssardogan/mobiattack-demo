@@ -1,0 +1,46 @@
+{
+  "root_cause": "Web demo omitted traffic_proxy_port; run_demo defaulted to occupied 8080.",
+  "source_run": "run_1791030832_580a42",
+  "source_evidence": "dynamic/timeline.json#TRAFFIC_CAPTURE_UNAVAILABLE",
+  "error_code": "PROXY_PORT_IN_USE",
+  "fix": "Configurable web-demo capture port defaults to 18080; capture/proxy readiness and readback govern visibility.",
+  "live_artifact_root": "demo_runs/d24_a7591ee7",
+  "probe": {
+    "source": "real emulator toybox nc over TCP",
+    "upstream": "controlled host-local HTTP server",
+    "captured_transactions": 1,
+    "synthetic": false,
+    "proxy_readback_verified": true,
+    "proxy_restored": true
+  },
+  "apps": [
+    {
+      "app": "OWASP",
+      "runtime": "available",
+      "http_visibility": "available",
+      "https_visibility": "unavailable",
+      "transactions": 0,
+      "report": "demo_runs/d24_a7591ee7/OWASP/dynamic_analysis_report.json"
+    },
+    {
+      "app": "AntennaPod",
+      "runtime": "available",
+      "http_visibility": "available",
+      "https_visibility": "unavailable",
+      "transactions": 0,
+      "report": "demo_runs/d24_a7591ee7/AntennaPod/dynamic_analysis_report.json"
+    }
+  ],
+  "limits": [
+    "Static input reused as explicitly historical evidence; runtime and traffic are fresh.",
+    "OWASP UI observation exceeded its bounded deadline; signup was not verified as triggered.",
+    "Device loopback is not the host Mac; app endpoints were not rewritten.",
+    "HTTPS interception was not enabled."
+  ],
+  "tests": {
+    "focused_passed": 37,
+    "traffic_checkpoint_passed": 276,
+    "failed": 0,
+    "full_repo_regression": "not_run"
+  }
+}

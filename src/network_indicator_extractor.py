@@ -20,6 +20,7 @@ Semantic Notes:
 from pathlib import Path
 import re
 from src.ios.ios_network_indicator_extractor import is_valid_domain
+from src.static_inventory import is_configuration_identifier, indicator_context
 
 # Supported textual extensions to scan
 SUPPORTED_EXTENSIONS = {
@@ -284,6 +285,8 @@ def extract_network_indicators(analysis_root: str | Path) -> dict:
                 for m in DOMAIN_RE.finditer(line):
                     dom_val = _clean_trailing_punctuation(m.group(0))
                     dom_lower = dom_val.lower()
+                    if is_configuration_identifier(dom_val, rel_source_path, line):
+                        continue
                     if not is_valid_domain(dom_val):
                         continue
                     if dom_lower.startswith(("com.", "org.", "net.")):
@@ -369,6 +372,10 @@ def extract_network_indicators(analysis_root: str | Path) -> dict:
     # Sort each list deterministically by (value, source_file, line_number)
     def sort_key(item: dict) -> tuple:
         return (item["value"], item["source_file"], item["line_number"])
+
+    for row in network_urls + domains:
+        row["inventory_context"] = indicator_context(row["value"], row["source_file"])
+        row["backend_confirmed"] = False
 
     return {
         "network_urls": sorted(network_urls, key=sort_key),
