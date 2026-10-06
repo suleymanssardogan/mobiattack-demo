@@ -41,10 +41,35 @@ class FailureAwareClient:
     def __init__(self, client):
         self.client = client
         self.failure = None
+        self._availability_checked = False
+
+    @property
+    def identity(self):
+        from src.agent.model_client import model_identity
+        return model_identity(self.client)
 
     def generate(self, request):
+        if self.failure:
+            raise RuntimeError('Agent provider stage already stopped')
         try:
-            return self.client.generate(request)
+            from src.agent.model_client import ProviderAvailability, ModelReply
+            probe = getattr(self.client, 'check_availability', None)
+            if not self._availability_checked and callable(probe):
+                self._availability_checked = True
+                availability = probe()
+                if not isinstance(availability, ProviderAvailability):
+                    self.failure = 'MALFORMED_RESPONSE'
+                    raise RuntimeError('Provider availability invalid')
+                if not availability.available:
+                    self.failure = availability.reason_code if availability.reason_code in {
+                        'TIMEOUT', 'MODEL_UNAVAILABLE', 'PROVIDER_UNAVAILABLE', 'MALFORMED_RESPONSE',
+                        'EMPTY_RESPONSE', 'RESPONSE_TOO_LARGE'} else 'PROVIDER_UNAVAILABLE'
+                    raise RuntimeError('Provider unavailable')
+            reply = self.client.generate(request)
+            if isinstance(reply, ModelReply) and (reply.data is None or isinstance(reply.data, str) and not reply.data.strip()):
+                self.failure = 'EMPTY_RESPONSE'
+                raise RuntimeError('Provider response empty')
+            return reply
         except (KeyboardInterrupt, InterruptedError):
             self.failure = 'INTERRUPTED'
             raise RuntimeError('Agent stage interrupted') from None
@@ -53,5 +78,7 @@ class FailureAwareClient:
             raise RuntimeError('Agent model timeout') from None
         except Exception as exc:
             # Ollama uses a safe typed code. Never copy exception text into state.
-            self.failure = 'TIMEOUT' if getattr(exc, 'code', None) == 'TIMEOUT' else 'PROVIDER_UNAVAILABLE'
+            code = getattr(exc, 'code', None)
+            self.failure = self.failure or (code if code in {'TIMEOUT', 'MODEL_UNAVAILABLE', 'MALFORMED_RESPONSE',
+                'EMPTY_RESPONSE', 'OUTPUT_TRUNCATED', 'MODEL_MISMATCH', 'RESPONSE_TOO_LARGE', 'PROVIDER_ERROR'} else 'PROVIDER_UNAVAILABLE')
             raise RuntimeError('Agent provider unavailable') from None

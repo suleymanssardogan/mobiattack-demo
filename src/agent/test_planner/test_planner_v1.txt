@@ -19,3 +19,6 @@ Return strict JSON matching output_schema, with every canonical TestProposal fie
 Use the schema-specified proposal ID and timestamp. Return no additional fields,
 free-form findings, test execution instructions, private chain-of-thought or secrets.
 No approved_for_execution, execute_now, tool calls, severity, finding, exploit or PoC.
+If scan_goal is supplied, select only its supplied, grounded candidate subset.
+It expresses intent, not permission. Utility is computed outside the model;
+never emit a utility score, priority approval or execution authorization.

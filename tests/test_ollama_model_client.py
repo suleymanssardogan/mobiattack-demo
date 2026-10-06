@@ -1,5 +1,6 @@
 """Mocked HTTP only: no live service, downloads or execution."""
 import json
+from io import BytesIO
 import socket
 from unittest.mock import MagicMock
 from urllib.error import HTTPError, URLError
@@ -25,7 +26,11 @@ def body(**extra):
 
 def mock_reply(client, raw):
     reply = MagicMock()
-    reply.__enter__.return_value.read.return_value = raw
+    def enter():
+        response = MagicMock()
+        response.read1.side_effect = BytesIO(raw).read1
+        return response
+    reply.__enter__.side_effect = enter
     client._opener.open = MagicMock(return_value=reply)
 
 

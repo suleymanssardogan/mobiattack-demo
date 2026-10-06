@@ -21,7 +21,7 @@ def valid_output(request):
         "observation": {"observation_id": record_id("obs", eid), "endpoint_context_id": eid,
             "facts": [f["statement"] for f in source["fact_catalog"]], "evidence_refs": [context_ref],
             "coverage_gaps": [g["gap_id"] for g in gaps],
-            "created_at": request.output_schema["properties"]["observation"]["properties"]["created_at"]["const"]},
+            "created_at": request.input_data.get("analysis_created_at", TIME)},
         "hypotheses": hypotheses, "coverage_gaps": gaps}
 
 

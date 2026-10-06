@@ -316,8 +316,8 @@ def test_runtime_owns_hypothesis_identity_state_and_does_not_mutate_reply(endpoi
     result=run(endpoint,client)
     assert captured['data']==captured['before']
     assert result.status=='completed' and result.hypotheses
-    schema=client.requests[0].output_schema['properties']['hypotheses']['items']
-    assert set(schema['properties'])=={'hypothesis_type','statement','evidence_refs','required_evidence'}
+    schema=client.requests[0].output_schema
+    assert set(schema['properties'])=={'schema_version','endpoint_context_id','endpoint_role','concerns'}
     assert set(schema['required'])==set(schema['properties'])
     for h in result.hypotheses:
         assert h.hypothesis_id==record_id('hyp',endpoint.endpoint_context_id+h.hypothesis_type)

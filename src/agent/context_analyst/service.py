@@ -3,18 +3,20 @@ from __future__ import annotations
 
 from datetime import datetime, timezone
 
-from src.agent.model_client import AgentModelClient, ModelReply, ModelRequest
+from src.agent.model_client import model_identity, AgentModelClient, ModelReply, ModelRequest
 from src.agent.models import ContractError, identifier, timestamp
 from src.dynamic.context.models import EndpointContext
 from .input_builder import build_context_analyst_input
 from .models import ContextAnalystResult, PROMPT_VERSION
+from .model_context import build_model_context
+from .compact import compact_output_schema, validate_analyst_reply
 from .prompts import INSTRUCTION, RETRY_CORRECTION
-from .validation import OutputInvalid, output_schema, record_id, validate_model_output
+from .validation import OutputInvalid, record_id
 
 
 def analyze_endpoint_context(endpoint_context: EndpointContext, model_client: AgentModelClient, *,
                              coverage_metadata=None, available_evidence_refs=None,
-                             max_attempts=2, created_at=None) -> ContextAnalystResult:
+                             max_attempts=2, created_at=None, goal=None) -> ContextAnalystResult:
     if type(max_attempts) is not int or not 1 <= max_attempts <= 2:
         raise ValueError("max_attempts must be 1 or 2")
     now = created_at or datetime.now(timezone.utc).isoformat()
@@ -30,9 +32,16 @@ def analyze_endpoint_context(endpoint_context: EndpointContext, model_client: Ag
             eid = "unknown_endpoint"
         return ContextAnalystResult(record_id("analysis", eid + "input_invalid" + now), eid, "input_invalid", now,
                                     validation_errors=("INPUT_INVALID",))
+    if goal is not None:
+        from src.agent.planning.goals import resolve_goal
+        goal = resolve_goal(goal, endpoint_context)
     errors = []
     for attempt in range(1, max_attempts + 1):
-        request = ModelRequest(PROMPT_VERSION, INSTRUCTION, context.to_dict(), output_schema(context, now),
+        model_context = build_model_context(context)
+        model_context["analysis_created_at"] = now
+        if goal is not None:
+            model_context["scan_goal"] = goal.to_dict()
+        request = ModelRequest(PROMPT_VERSION, INSTRUCTION, model_context, compact_output_schema(context),
                                attempt, RETRY_CORRECTION if attempt > 1 else None)
         try:
             reply = model_client.generate(request)
@@ -40,11 +49,11 @@ def analyze_endpoint_context(endpoint_context: EndpointContext, model_client: Ag
             # Do not echo provider exceptions, raw inputs or credentials into trace.
             return ContextAnalystResult(record_id("analysis", context.endpoint_context_id + "model_error" + now),
                 context.endpoint_context_id, "model_error", now, input_evidence_refs=context.evidence_universe,
-                validation_errors=tuple(errors + ["MODEL_ERROR"]), attempts=attempt)
+                validation_errors=tuple(errors + ["MODEL_ERROR"]), attempts=attempt, model_metadata=model_identity(model_client))
         try:
             if not isinstance(reply, ModelReply):
                 raise OutputInvalid("MODEL_REPLY_INVALID")
-            return validate_model_output(reply.data, context, created_at=now, metadata=reply.metadata,
+            return validate_analyst_reply(reply.data, context, created_at=now, metadata=reply.metadata,
                                          attempts=attempt, errors=errors)
         except OutputInvalid as exc:
             errors.append(str(exc))

@@ -5,7 +5,7 @@ caller, never from model output. Existing catalog risk/action semantics remain
 unchanged: a passive metadata review cannot become an active auth-removal test.
 """
 from copy import deepcopy
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 import ipaddress
 from collections.abc import Mapping
 
@@ -18,9 +18,11 @@ from src.dynamic.security.executor import DeterministicSecurityExecutor
 from src.dynamic.security.reporting import security_result_artifact, build_security_section, unavailable_security_section
 
 from .reliability import FailureAwareClient, guard_for
+from src.agent.planning.goals import PlanningGoal, resolve_goal, SUPPORTED_PRIMITIVES
+from src.agent.planning.utility import UtilityRanking, rank_candidates
+from src.agent.models import ContractError
 
-SUPPORTED_TEST_IDS = ('AUTHENTICATION_PRESENCE', 'OBJECT_AUTHORIZATION',
-                      'FUNCTION_AUTHORIZATION', 'SESSION_HANDLING')
+SUPPORTED_TEST_IDS = SUPPORTED_PRIMITIVES
 
 
 @dataclass(frozen=True)
@@ -40,6 +42,8 @@ class AgentValidationRun:
     artifacts: tuple
     security_report: dict
     reason_codes: tuple[str, ...]
+    goal: PlanningGoal | None = None
+    ranking: UtilityRanking | None = None
 
 
     @property
@@ -56,6 +60,8 @@ class AgentValidationRun:
         """Safe internal trace; no public Agent completion or finding authority."""
         return {'schema_version':'1.0', 'status':self.status, 'agent_state':self.agent_state,
             'public_agent_analysis':'not_available',
+            'goal': self.goal.to_dict() if self.goal is not None else None,
+            'utility_ranking': self.ranking.to_dict() if self.ranking is not None else None,
             'analyst':self.analyst.to_dict() if self.analyst is not None else None,
             'planner':self.planner.to_dict() if self.planner is not None else None,
             'policy':self.policy.to_dict() if self.policy is not None else None,
@@ -66,7 +72,7 @@ class AgentValidationRun:
 def run_agent_validation(context, analyst_client, planner_client, *, evidence_index,
                          precondition_index=None, execution_bindings=None,
                          executor=None, session_id=None, controlled_lab=False,
-                         coverage_metadata=None, created_at=None):
+                         coverage_metadata=None, created_at=None, goal=None, duplicate_proposal_ids=()):
     """One planning pass, at most one controlled execution, no autonomous loop.
 
     Missing bindings/backends stop explicitly. Policy decisions are recomputed,
@@ -74,29 +80,42 @@ def run_agent_validation(context, analyst_client, planner_client, *, evidence_in
     executor independently checks its existing safety and lab preconditions.
     """
     context = deepcopy(context)
+    if context is not None or goal is not None:
+        goal = resolve_goal(goal, context)
+    ranking = None
+    def finish(*args):
+        return AgentValidationRun(*args, goal=goal, ranking=ranking)
     analyst_client = FailureAwareClient(analyst_client)
     planner_client = FailureAwareClient(planner_client)
     analyst = analyze_endpoint_context(context, analyst_client,
-        coverage_metadata=coverage_metadata, created_at=created_at)
+        coverage_metadata=coverage_metadata, created_at=created_at, goal=goal)
     empty = unavailable_security_section()
     if analyst.status != 'completed':
-        return AgentValidationRun('stopped', analyst, None, None, (), (), empty, ('ANALYST_'+analyst_client.failure if analyst_client.failure else 'ANALYST_UNAVAILABLE_OR_INVALID',))
+        return finish('stopped', analyst, None, None, (), (), empty, ('ANALYST_'+analyst_client.failure if analyst_client.failure else 'ANALYST_UNAVAILABLE_OR_INVALID',))
     planner = plan_endpoint_tests(context, analyst, planner_client,
-        catalog_test_ids=SUPPORTED_TEST_IDS, coverage_metadata=coverage_metadata, created_at=created_at)
+        catalog_test_ids=SUPPORTED_TEST_IDS, coverage_metadata=coverage_metadata, created_at=created_at, goal=goal)
     if planner.status not in {'completed', 'no_relevant_tests'}:
-        return AgentValidationRun('stopped', analyst, planner, None, (), (), empty, ('PLANNER_'+planner_client.failure if planner_client.failure else 'PLANNER_UNAVAILABLE_OR_INVALID',))
-    policy = evaluate_test_plan(context, analyst, planner, evidence_index,
+        return finish('stopped', analyst, planner, None, (), (), empty, ('PLANNER_'+planner_client.failure if planner_client.failure else 'PLANNER_UNAVAILABLE_OR_INVALID',))
+    try:
+        ranking = rank_candidates(goal, context, analyst, planner, evidence_index=evidence_index,
+            precondition_index=precondition_index, duplicate_proposal_ids=duplicate_proposal_ids)
+    except (ContractError, ValueError, TypeError, KeyError, AttributeError, RecursionError):
+        return finish('stopped', analyst, planner, None, (), (), empty, ('UTILITY_INPUT_INVALID',))
+    proposals = {p.proposal_id: p for p in planner.proposals}
+    prioritized = tuple(proposals[pid] for pid in ranking.proposal_order)
+    # Priority changes order only. Gate decisions are recomputed, never scores.
+    policy = evaluate_test_plan(context, analyst, replace(planner, proposals=prioritized), evidence_index,
         precondition_index=precondition_index, created_at=created_at)
     if policy.status == 'not_processed':
-        return AgentValidationRun('stopped', analyst, planner, policy, (), (), empty, ('POLICY_NOT_PROCESSED',))
+        return finish('stopped', analyst, planner, policy, (), (), empty, ('POLICY_NOT_PROCESSED',))
     if not planner.proposals:
-        return AgentValidationRun('no_relevant_tests', analyst, planner, policy, (), (), empty, ())
+        return finish('no_relevant_tests', analyst, planner, policy, (), (), empty, ())
     reasons = []
     executions, artifacts = [], []
     dispatched = False
     bindings = execution_bindings if isinstance(execution_bindings, Mapping) else {}
     decisions = {d.proposal_id:d for d in policy.decisions}
-    for proposal in sorted(planner.proposals, key=lambda p:p.proposal_id):
+    for proposal in prioritized:
         decision = decisions.get(proposal.proposal_id)
         if decision is None or decision.decision != 'allow':
             reasons.append('POLICY_DENIED' if decision and decision.decision=='deny' else 'POLICY_NEEDS_EVIDENCE')
@@ -146,5 +165,5 @@ def run_agent_validation(context, analyst_client, planner_client, *, evidence_in
               'records':[r for a in artifacts for r in a['records']]}
     report = build_security_section(source, session_id, [context.to_dict()]) if artifacts else empty
     status = 'completed' if artifacts else 'stopped'
-    return AgentValidationRun(status, analyst, planner, policy, tuple(executions), tuple(artifacts),
+    return finish(status, analyst, planner, policy, tuple(executions), tuple(artifacts),
                               report, tuple(sorted(set(reasons))))

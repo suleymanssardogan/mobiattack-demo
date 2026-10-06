@@ -55,3 +55,31 @@ class ModelReply:
 class AgentModelClient(Protocol):
     def generate(self, request: ModelRequest) -> ModelReply:
         """Return structured output only. No tool calls or executable action channel."""
+
+
+@dataclass(frozen=True)
+class ProviderAvailability:
+    """Optional provider preflight; no prompt, credentials or generation."""
+    available: bool
+    reason_code: str
+    identity: ModelMetadata
+
+    def __post_init__(self):
+        if (type(self.available) is not bool or not isinstance(self.identity, ModelMetadata)
+                or self.reason_code not in {'AVAILABLE', 'TIMEOUT', 'MODEL_UNAVAILABLE',
+                    'PROVIDER_UNAVAILABLE', 'MALFORMED_RESPONSE', 'EMPTY_RESPONSE', 'RESPONSE_TOO_LARGE'}
+                or self.available != (self.reason_code == 'AVAILABLE')):
+            raise ContractError('Invalid provider availability')
+
+
+class AgentProviderProbe(Protocol):
+    def check_availability(self) -> ProviderAvailability:
+        """Bounded service/model check independent of the generation contract."""
+
+
+def model_identity(client) -> ModelMetadata:
+    try:
+        identity = getattr(client, 'identity', None)
+    except Exception:
+        return ModelMetadata()
+    return identity if isinstance(identity, ModelMetadata) else ModelMetadata()

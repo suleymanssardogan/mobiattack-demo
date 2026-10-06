@@ -15,7 +15,7 @@ from urllib.error import HTTPError, URLError
 from urllib.parse import urlsplit
 from urllib.request import HTTPRedirectHandler, ProxyHandler, Request, build_opener
 
-from .model_client import ModelMetadata, ModelReply, ModelRequest
+from .model_client import ModelMetadata, ModelReply, ModelRequest, ProviderAvailability
 
 MAX_RESPONSE_BYTES = 262_144
 MAX_REQUEST_BYTES = 1_048_576
@@ -47,13 +47,26 @@ def _grammar_schema(value):
     """Ollama grammar cannot compile very large bounded string repetitions.
 
     Leave those length bounds to the unchanged runtime validator. The canonical
-    schema is still supplied verbatim in the user message; do not mutate it.
+    schema remains unchanged on ModelRequest; do not mutate it.
     """
     if isinstance(value, dict):
         return {key: _grammar_schema(child) for key, child in value.items()
                 if not (key == "maxLength" and type(child) is int and child > 256)}
     if isinstance(value, list):
         return [_grammar_schema(child) for child in value]
+    return value
+
+
+def _schema_structure(value):
+    """Omit repeated enums from Analyst prose, not from enforced grammar.
+
+    The sanitized fact/hypothesis/role/reference/gap catalogs already enumerate
+    these values. Keep field structure, constants, bounds and required fields.
+    """
+    if isinstance(value, dict):
+        return {key: _schema_structure(child) for key, child in value.items() if key != "enum"}
+    if isinstance(value, list):
+        return [_schema_structure(child) for child in value]
     return value
 
 
@@ -74,8 +87,65 @@ class OllamaModelClient:
         self.base_url = base_url.rstrip("/")
         self.model = model
         self.timeout = timeout
+        self.last_generation_metrics = {}
         # Do not route local evidence through environment proxies or redirects.
         self._opener = build_opener(ProxyHandler({}), _NoRedirect())
+
+    @property
+    def identity(self):
+        return ModelMetadata(provider="local", model=self.model)
+
+    def check_availability(self):
+        """Inspect installed models only; never load/download/generate a model."""
+        try:
+            raw = self._request_bytes(Request(self.base_url + "/api/tags", method="GET"),
+                                      min(3.0, self.timeout))
+            body = json.loads(raw, object_pairs_hook=_unique_object)
+            models = body.get('models') if isinstance(body, dict) else None
+            if not isinstance(models, list) or any(not isinstance(m, dict) or
+                    not isinstance(m.get('name'), str) for m in models):
+                raise OllamaClientError('MALFORMED_RESPONSE')
+            found = any(m['name'] == self.model for m in models)
+            return ProviderAvailability(found, 'AVAILABLE' if found else 'MODEL_UNAVAILABLE', self.identity)
+        except OllamaClientError as exc:
+            reason = 'PROVIDER_UNAVAILABLE' if exc.code in {'CONNECTION_ERROR', 'HTTP_ERROR', 'MODEL_UNAVAILABLE'} else exc.code
+            return ProviderAvailability(False, reason, self.identity)
+        except (ValueError, TypeError, UnicodeError, RecursionError):
+            return ProviderAvailability(False, 'MALFORMED_RESPONSE', self.identity)
+
+    def _request_bytes(self, request, timeout):
+        started = monotonic()
+        try:
+            with self._opener.open(request, timeout=timeout) as response:
+                chunks = []
+                size = 0
+                while True:
+                    remaining = timeout - (monotonic() - started)
+                    if remaining <= 0:
+                        raise OllamaClientError('TIMEOUT')
+                    # HTTPResponse.read1 performs at most one underlying read.
+                    # Keep each subsequent read inside the remaining budget.
+                    sock = getattr(getattr(getattr(response, 'fp', None), 'raw', None), '_sock', None)
+                    if isinstance(sock, socket.SocketType):
+                        sock.settimeout(remaining)
+                    chunk = response.read1(min(16384, MAX_RESPONSE_BYTES + 1 - size))
+                    if not chunk:
+                        break
+                    chunks.append(chunk); size += len(chunk)
+                    if size > MAX_RESPONSE_BYTES:
+                        raise OllamaClientError('RESPONSE_TOO_LARGE')
+                raw = b''.join(chunks)
+                if not raw.strip():
+                    raise OllamaClientError('EMPTY_RESPONSE')
+                return raw
+        except HTTPError as exc:
+            raise OllamaClientError('MODEL_UNAVAILABLE' if exc.code == 404 else 'HTTP_ERROR') from None
+        except (TimeoutError, socket.timeout):
+            raise OllamaClientError('TIMEOUT') from None
+        except URLError as exc:
+            raise OllamaClientError('TIMEOUT' if isinstance(exc.reason, (TimeoutError, socket.timeout)) else 'CONNECTION_ERROR') from None
+        except OSError:
+            raise OllamaClientError('CONNECTION_ERROR') from None
 
     @classmethod
     def from_env(cls):
@@ -87,6 +157,7 @@ class OllamaModelClient:
                    model=os.environ.get("MOBIATTACK_OLLAMA_MODEL", "qwen2.5:7b"), timeout=timeout)
 
     def generate(self, request: ModelRequest) -> ModelReply:
+        self.last_generation_metrics = {}
         if not isinstance(request, ModelRequest):
             raise OllamaClientError("REQUEST_INVALID")
         try:
@@ -98,9 +169,13 @@ class OllamaModelClient:
         return self._generate(payload)
 
     def _payload(self, request):
+        compact_analyst = (request.prompt_version == "context_analyst_v1"
+                           and "fact_catalog" in request.input_data)
+        schema = _schema_structure(request.output_schema) if compact_analyst else request.output_schema
         messages = [{"role": "system", "content": request.instruction},
-                    {"role": "user", "content": json.dumps({"input": request.input_data, "output_schema": request.output_schema},
-                                                            sort_keys=True, allow_nan=False)}]
+                    {"role": "user", "content": json.dumps({"input": request.input_data, "output_schema": schema},
+                                                            sort_keys=True, allow_nan=False,
+                                                            **({"separators": (",", ":")} if compact_analyst else {}))}]
         if request.correction:
             messages.append({"role": "user", "content": request.correction})
         return json.dumps({"model": self.model, "messages": messages, "stream": False,
@@ -112,21 +187,7 @@ class OllamaModelClient:
         http_request = Request(self.base_url + "/api/chat", data=payload,
                                headers={"Content-Type": "application/json"}, method="POST")
         started = monotonic()
-        try:
-            with self._opener.open(http_request, timeout=self.timeout) as response:
-                raw = response.read(MAX_RESPONSE_BYTES + 1)
-        except HTTPError as exc:
-            code = "MODEL_UNAVAILABLE" if exc.code == 404 else "HTTP_ERROR"
-            raise OllamaClientError(code) from None
-        except (TimeoutError, socket.timeout):
-            raise OllamaClientError("TIMEOUT") from None
-        except URLError as exc:
-            code = "TIMEOUT" if isinstance(exc.reason, (TimeoutError, socket.timeout)) else "CONNECTION_ERROR"
-            raise OllamaClientError(code) from None
-        except OSError:
-            raise OllamaClientError("CONNECTION_ERROR") from None
-        if len(raw) > MAX_RESPONSE_BYTES:
-            raise OllamaClientError("RESPONSE_TOO_LARGE")
+        raw = self._request_bytes(http_request, self.timeout)
         try:
             body = json.loads(raw, object_pairs_hook=_unique_object)
             if not isinstance(body, dict):
@@ -134,6 +195,8 @@ class OllamaModelClient:
             if "error" in body:
                 raise OllamaClientError("PROVIDER_ERROR")
             message = body.get("message")
+            if isinstance(message, dict) and isinstance(message.get('content'), str) and not message['content'].strip():
+                raise OllamaClientError('EMPTY_RESPONSE')
             if (body.get("done") is not True or not isinstance(message, dict)
                     or message.get("role") != "assistant" or not isinstance(message.get("content"), str)
                     or not message["content"].strip() or message.get("tool_calls")):
@@ -149,6 +212,12 @@ class OllamaModelClient:
             metadata = ModelMetadata(provider="local", model=self.model,
                                      latency_ms=duration / 1_000_000 if duration is not None else (monotonic() - started) * 1000,
                                      input_tokens=body.get("prompt_eval_count"), output_tokens=body.get("eval_count"))
+            # Numeric performance telemetry only; never response/thinking data.
+            self.last_generation_metrics = {
+                key: body[key] for key in ("load_duration", "prompt_eval_duration", "eval_duration",
+                                          "total_duration", "prompt_eval_count", "eval_count")
+                if type(body.get(key)) is int and body[key] >= 0
+            }
             # Returning JSON text allows existing validators to classify invalid
             # output and retry; this adapter never repairs/fabricates a response.
             return ModelReply(data=message["content"], metadata=metadata)

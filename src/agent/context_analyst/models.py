@@ -71,6 +71,7 @@ class ContextAnalystResult:
     attempts: int = 0
     prompt_version: str = PROMPT_VERSION
     schema_version: str = "1.0"
+    compact_context: dict | None = None
 
     def __post_init__(self):
         identifier(self.analysis_id, "analysis_id"); identifier(self.endpoint_context_id, "endpoint_context_id")
@@ -85,7 +86,7 @@ class ContextAnalystResult:
         for code in self.validation_errors:
             identifier(code, "diagnostic code")
         if self.status != "completed":
-            if self.observation is not None or self.hypotheses or self.coverage_gaps or self.endpoint_role != "unknown":
+            if self.observation is not None or self.hypotheses or self.coverage_gaps or self.endpoint_role != "unknown" or self.compact_context is not None:
                 raise ContractError("Failure cannot fabricate analysis")
             return
         if not isinstance(self.observation, AgentObservation) or self.observation.endpoint_context_id != self.endpoint_context_id:
@@ -110,6 +111,9 @@ class ContextAnalystResult:
         if (not refs.issubset(universe) or set(self.observation.coverage_gaps) != gap_ids
                 or len(all_ids) != len(set(all_ids))):
             raise ContractError("Result evidence/ID links invalid")
+        if self.compact_context is not None:
+            from .compact import validate_compact_context
+            validate_compact_context(self.compact_context, self)
 
     @property
     def trace(self):
