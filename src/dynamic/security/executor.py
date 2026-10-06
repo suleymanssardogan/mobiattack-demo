@@ -98,6 +98,35 @@ class DeterministicSecurityExecutor:
             # Never persist arbitrary provider exceptions or manufacture evidence.
             return self._result(request, evidence, started, 'failed', 'execution_failed')
 
+    def validation_evidence(self, request, context, registry, execution):
+        """Return proof, never a backend's validation claim or Agent evidence."""
+        from src.dynamic.security.validation import AuthPresenceEvidence
+        from src.dynamic.security.object_authorization import ObjectAuthorizationEvidence
+        from src.dynamic.security.function_authorization import FunctionAuthorizationEvidence
+        from src.dynamic.security.session_invalidation import SessionInvalidationEvidence
+        backend = {'authentication_presence':self._auth_backend,
+                   'object_authorization':self._object_backend,
+                   'function_authorization':self._function_backend,
+                   'session_handling':self._session_backend}.get(request.test_category)
+        if execution.execution_status == 'completed' and backend is not None:
+            proof = backend.validation_evidence() if request.test_category == 'authentication_presence' else backend.bundle
+            if proof is None:
+                raise ValueError('Execution evidence unavailable')
+            return backend.evidence, proof
+        # No replacement transaction is fabricated for blocked/failed execution.
+        args = dict(context=context, session={'session_id':request.session_id}, baseline=None,
+                    variant=None, baseline_receipts=[], variant_receipts=[], execution_ref='',
+                    control_ref='', comparison_ref='')
+        if request.test_category == 'session_handling':
+            proof = SessionInvalidationEvidence(**args, lifecycle={}, logout=None, logout_receipts=[])
+        elif request.test_category == 'object_authorization':
+            proof = ObjectAuthorizationEvidence(**args, ownership={})
+        elif request.test_category == 'function_authorization':
+            proof = FunctionAuthorizationEvidence(**args, privileges={})
+        else:
+            proof = AuthPresenceEvidence(**args)
+        return registry, proof
+
     def _dispatch(self, request):
         handler = self._handlers.get(request.requested_action)
         if handler is None:

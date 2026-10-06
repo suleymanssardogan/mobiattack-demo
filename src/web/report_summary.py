@@ -12,6 +12,24 @@ KEY_PERMISSIONS = ('INTERNET','ACCESS_NETWORK_STATE','CAMERA','RECORD_AUDIO','AC
                   'ACCESS_COARSE_LOCATION','READ_CONTACTS','READ_SMS','SEND_SMS','READ_PHONE_STATE',
                   'MANAGE_EXTERNAL_STORAGE','READ_EXTERNAL_STORAGE','WRITE_EXTERNAL_STORAGE')
 
+# Display only known capability reasons; arbitrary backend diagnostics stay out of the UI.
+HTTPS_REASON_MESSAGES = {
+    'USER_CA_TRUSTED': 'HTTPS visibility available for the observed application only.',
+    'USER_CA_NOT_TRUSTED_BY_APP': 'HTTPS visibility unavailable — application does not trust the current USER CA.',
+    'CA_TRUST_SCOPE_UNKNOWN': 'HTTPS trust scope is unknown; application trust has not been verified.',
+    'TLS_INTERCEPTION_UNAVAILABLE': 'HTTPS visibility unavailable — TLS interception could not be established.',
+    'PINNING_SUSPECTED': 'Certificate pinning is suspected from specific evidence; it is not confirmed.',
+    'PINNING_CONFIRMED': 'Certificate pinning was evidenced for the observed application; interception is unavailable.',
+
+    'cleartext_http_only_backend': 'The current capture backend supports HTTP only; TLS interception is unavailable.',
+    'capture_backend_unavailable': 'The TLS interception backend is unavailable.',
+    'capture_backend_failure': 'The TLS interception backend failed.',
+    'ca_not_installed': 'The interception CA is not installed in the inspected certificate stores.',
+    'tls_interception_failed_ca_or_app_trust_unverified': 'TLS interception failed; CA and application trust have not been verified.',
+    'tls_interception_failed_for_some_connections': 'Some TLS connections could not be intercepted.',
+    'no_https_transaction_available_to_verify': 'No real HTTPS transaction is available to verify visibility.',
+}
+
 
 def _text(value, default='Unknown', *, complete=False):
     if not isinstance(value,str) or not value.strip(): return default
@@ -128,6 +146,11 @@ def build_report_summary(static_report=None,dynamic_report=None,*,contexts=None,
     http_reason = _text((dynamic.get('traffic') or {}).get('http_visibility_reason'), '')
     if coverage.get('http_visibility') != 'available' and http_reason:
         dynamic_limits.append('HTTP capture reason: '+http_reason+'.')
+    https_reason = (dynamic.get('traffic') or {}).get('https_visibility_reason')
+    if isinstance(https_reason, str) and (coverage.get('https_visibility') != 'available' or https_reason == 'USER_CA_TRUSTED'):
+        message = HTTPS_REASON_MESSAGES.get(https_reason)
+        if message:
+            dynamic_limits.append(message)
     if count==0:dynamic_limits.append('No endpoints were observed in available traffic; this does not establish absence of network activity.')
     if not rows:dynamic_limits.append('No security validation results are available; security was not established.')
     elif security.get('coverage')!='available':dynamic_limits.append('Security validation coverage is partial or unavailable.')

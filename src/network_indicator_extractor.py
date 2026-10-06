@@ -157,7 +157,7 @@ def _clean_trailing_punctuation(val: str) -> str:
     return val.rstrip("\"'`,;:)>]} ")
 
 
-def extract_network_indicators(analysis_root: str | Path) -> dict:
+def extract_network_indicators(analysis_root: str | Path, *, coverage: dict | None = None) -> dict:
     """Scan textual files under analysis_root and extract network-related indicators.
 
     Args:
@@ -192,10 +192,13 @@ def extract_network_indicators(analysis_root: str | Path) -> dict:
     # Sorting makes both the evidence order and the JSON report reproducible across
     # filesystems. Process files as streams because decoded packages can contain
     # large generated JavaScript and resource files.
+    from src.flutter_network_indicator_extractor import is_safe_asset
     for file_path in sorted(root_path.rglob("*"), key=lambda path: path.as_posix()):
         if not file_path.is_file():
             continue
 
+        if is_safe_asset(file_path.relative_to(root_path)):
+            continue  # Flutter assets use bounded extraction and query-value redaction.
         ext = file_path.suffix.lower()
         if ext in EXCLUDED_EXTENSIONS or ext not in SUPPORTED_EXTENSIONS:
             continue
@@ -369,9 +372,16 @@ def extract_network_indicators(analysis_root: str | Path) -> dict:
                             "source_file": rel_source_path, "line_number": line_num,
                         })
 
+    from src.flutter_network_indicator_extractor import extract_flutter_network_indicators
+    flutter = extract_flutter_network_indicators(root_path)
+    network_urls.extend(flutter['network_urls'])
+    domains.extend(flutter['domains'])
+    if coverage is not None and flutter['coverage']['detected']:
+        coverage['flutter'] = flutter['coverage']
+
     # Sort each list deterministically by (value, source_file, line_number)
     def sort_key(item: dict) -> tuple:
-        return (item["value"], item["source_file"], item["line_number"])
+        return (item["value"], item["source_file"], item.get("line_number") or 0)
 
     for row in network_urls + domains:
         row["inventory_context"] = indicator_context(row["value"], row["source_file"])

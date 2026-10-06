@@ -467,7 +467,7 @@ def launch_android_app(
                              or if the process cannot be detected within max_wait_seconds.
     """
     adb_bin = resolve_adb_executable(adb_executable)
-    from src.dynamic.runtime.execution_target import ExecutionTarget, EmulatorTargetAdapter, save_target
+    from src.dynamic.runtime.execution_target import ExecutionTarget, AdbTargetAdapter, PhysicalDeviceTargetAdapter, configure_physical_capabilities, TargetType, save_target
     if execution_target is not None:
         try:
             adb_serial = execution_target.require_transport(adb_serial)
@@ -484,6 +484,14 @@ def launch_android_app(
     )
 
     selected_target = execution_target or ExecutionTarget.selected(serial, availability='available')
+    if execution_target is not None and execution_target.target_type == TargetType.PHYSICAL_DEVICE:
+        from src.dynamic.preflight.device_check import run_adb_cmd
+        try:
+            selected_target = PhysicalDeviceTargetAdapter().describe(serial,
+                lambda args, serial=None: run_adb_cmd(adb_bin, args, serial=serial, timeout_seconds=2))
+        except ValueError as exc:
+            raise AndroidRuntimeError('Selected execution target unavailable.', 'RUNTIME_OBSERVATION_UNAVAILABLE',
+                backend_reason_code=str(exc), evidence={'source': 'execution_target'}) from exc
     if run_dir is not None:
         save_target(run_dir, selected_target)
 
@@ -629,16 +637,18 @@ def launch_android_app(
         "status": status,
     }
 
-    if run_dir is not None:
-        from src.dynamic.preflight.device_check import run_adb_cmd
-        selected_target = EmulatorTargetAdapter().describe(serial,
-            lambda args, serial: run_adb_cmd(adb_bin, args, serial=serial, timeout_seconds=2), result_dict['runtime'])
-        save_target(run_dir, selected_target)
+    from src.dynamic.preflight.device_check import run_adb_cmd
+    described = AdbTargetAdapter().describe(serial,
+        lambda args, serial: run_adb_cmd(adb_bin, args, serial=serial, timeout_seconds=2), result_dict['runtime'])
+    if execution_target is None or described.target_type != TargetType.UNKNOWN:
+        selected_target = described
+    if selected_target.target_type == TargetType.PHYSICAL_DEVICE:
+        configure_physical_capabilities(selected_target)
     if install_meta.get('success') and not skip_install:
         from src.dynamic.runtime.execution_target import Capability
         selected_target.capabilities['app_install'] = Capability('available', 'OBSERVED', 'package_manager')
-        if run_dir is not None:
-            save_target(run_dir, selected_target)
+    if run_dir is not None:
+        save_target(run_dir, selected_target)
     result_dict['execution_target'] = selected_target.to_dict()
 
     if permissions is not None:

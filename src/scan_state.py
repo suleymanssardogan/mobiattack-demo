@@ -6,13 +6,13 @@ of product-level scan lifecycle state (scan_state.json) without internal pipelin
 
 from __future__ import annotations
 
+from src.persistence import write_json_atomic
+
 from datetime import datetime, timezone
 import json
 import logging
-import os
 from pathlib import Path
 import re
-import tempfile
 import threading
 from typing import Any, Callable
 
@@ -377,20 +377,7 @@ def save_scan_state(run_dir: str | Path, state: dict[str, Any]) -> Path:
     dest_dir.mkdir(parents=True, exist_ok=True)
     target_file = dest_dir / STATE_FILENAME
 
-    fd, temp_path = tempfile.mkstemp(dir=dest_dir, prefix=".tmp_scan_state_", suffix=".json")
-    try:
-        with open(fd, "w", encoding="utf-8") as f:
-            json.dump(state, f, indent=2, ensure_ascii=False)
-            f.flush()
-            os.fsync(f.fileno())
-        os.replace(temp_path, target_file)
-    except Exception:
-        if os.path.exists(temp_path):
-            try:
-                os.remove(temp_path)
-            except OSError:
-                pass
-        raise
+    write_json_atomic(target_file, state, durable=True)
 
     return target_file
 

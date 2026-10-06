@@ -7,11 +7,11 @@ via safe, atomic write-then-rename semantics.
 
 from __future__ import annotations
 
+from src.persistence import write_json_atomic
+
 import json
 import logging
-import os
 from pathlib import Path
-import tempfile
 from typing import Any
 
 from src.dynamic.route.graph import RouteGraph
@@ -66,23 +66,10 @@ class RouteGraphStorage:
 
         data = graph.to_dict()
 
-        # Atomic write using temporary file in destination directory
-        fd, temp_path = tempfile.mkstemp(
-            dir=str(target_dir),
-            prefix=".tmp_route_graph_",
-            suffix=".json",
-        )
         try:
-            with open(fd, "w", encoding="utf-8") as f:
-                json.dump(data, f, indent=2, ensure_ascii=False)
-            os.replace(temp_path, str(target_path))
+            write_json_atomic(target_path, data)
             return target_path
         except Exception as exc:
-            if os.path.exists(temp_path):
-                try:
-                    os.remove(temp_path)
-                except OSError:
-                    pass
             logger.error(f"Failed to persist route graph to '{target_path}': {exc}")
             raise RouteGraphError(f"Failed to persist route graph to '{target_path}': {exc}") from exc
 

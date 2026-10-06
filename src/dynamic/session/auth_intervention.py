@@ -5,7 +5,7 @@ import re
 import time
 from src.dynamic.deadline import budget
 from src.dynamic.session.models import utc_now_iso
-from src.dynamic.session.storage import SessionStorage
+from src.persistence import write_json_atomic
 
 STATES = {'AUTH_INTERVENTION_REQUIRED', 'WAITING_FOR_USER_AUTH', 'AUTH_STATE_OBSERVED',
           'AUTH_RESUME_READY', 'AUTH_TIMEOUT', 'AUTH_NOT_COMPLETED'}
@@ -47,7 +47,7 @@ def wait_for_user_auth(before, observer, runtime_observer, *, session_id, packag
                              'Manual authentication body/query/header values are withheld.']}
     def emit(state):
         evidence.update(state=state,message=MESSAGES[state],timestamp=utc_now_iso())
-        if evidence_path:SessionStorage._atomic_write_json(str(evidence_path),evidence)
+        if evidence_path:write_json_atomic(str(evidence_path),evidence)
         if publish:publish(dict(evidence))
     emit('AUTH_INTERVENTION_REQUIRED');emit('WAITING_FOR_USER_AUTH')
     candidate=None

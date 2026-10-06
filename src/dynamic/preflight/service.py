@@ -2,16 +2,16 @@
 
 from __future__ import annotations
 
+from src.persistence import write_json_atomic
+
 import json
 import logging
-import os
 from pathlib import Path
 import re
-import tempfile
 from typing import Any, Tuple
 
 from src.dynamic.preflight.app_launcher import launch_application
-from src.dynamic.preflight.device_check import check_connected_device, find_adb_binary
+from src.dynamic.preflight.device_check import check_connected_device, find_adb_binary, run_adb_cmd
 from src.dynamic.preflight.models import (
     ApplicationInfo,
     DeviceInfo,
@@ -83,9 +83,18 @@ class DynamicPreflightService:
             result.errors = errors
             return result
 
-        from src.dynamic.runtime.execution_target import ExecutionTarget, TargetType
-        selected_target = execution_target or ExecutionTarget.selected(dev_info.serial,
-            TargetType.EMULATOR if dev_info.is_emulator else TargetType.UNKNOWN, availability='available')
+        from src.dynamic.runtime.execution_target import AdbTargetAdapter, PhysicalDeviceTargetAdapter, TargetType
+        selected_target = execution_target or AdbTargetAdapter().describe(dev_info.serial,
+            lambda args, serial: run_adb_cmd(self.adb_bin, args, serial=serial, timeout_seconds=2))
+        if execution_target is not None and execution_target.target_type == TargetType.PHYSICAL_DEVICE:
+            try:
+                selected_target = PhysicalDeviceTargetAdapter().describe(dev_info.serial,
+                    lambda args, serial=None: run_adb_cmd(self.adb_bin, args, serial=serial, timeout_seconds=2))
+            except ValueError:
+                result.status = PreflightStatus.FAIL
+                result.errors = [{'code': ErrorCode.RUNTIME_OBSERVATION_UNAVAILABLE.value,
+                                  'message': 'Physical execution target could not be verified.'}]
+                return result
         serial = selected_target.require_transport(dev_info.serial)
         result.execution_target = selected_target.to_dict()
 
@@ -282,16 +291,6 @@ def save_preflight_result(
         save_target(run_dir, selected)
     sanitized_data = sanitize_preflight_dict(data)
 
-    fd, temp_path = tempfile.mkstemp(
-        dir=target_dir, prefix=".tmp_preflight_", suffix=".json"
-    )
-    try:
-        with open(fd, "w", encoding="utf-8") as f:
-            json.dump(sanitized_data, f, indent=2, ensure_ascii=False)
-        os.replace(temp_path, target_file)
-    except Exception:
-        if os.path.exists(temp_path):
-            os.remove(temp_path)
-        raise
+    write_json_atomic(target_file, sanitized_data)
 
     return target_file

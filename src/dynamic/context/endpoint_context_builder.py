@@ -118,19 +118,25 @@ def _message_context(messages: list[dict]) -> dict:
             "body_shapes": [shapes[key] for key in sorted(shapes)], "body_sizes": sorted(sizes)}
 
 
-def _auth(requests: list[dict]) -> dict:
-    headers = [_headers(request) for request in requests]
-    auth_values = [h["authorization"] for h in headers if "authorization" in h]
-    cookies = [h["cookie"] for h in headers if "cookie" in h]
-    bearer = any(re.match(r"^bearer\s+\S+", value, re.I) for value in auth_values)
-    session_cookie = any(any("session" in key.lower() or key.lower() in {"sid", "jsessionid", "phpsessid"}
-                             for key in (part.split("=", 1)[0].strip() for part in value.split(";")))
-                         for value in cookies if value != "[REDACTED]")
-    return {"authorization_header_present": bool(auth_values),
-            "bearer_token_present": True if bearer else None if "[REDACTED]" in auth_values else False,
-            "cookie_present": bool(cookies),
-            "session_cookie_present": True if session_cookie else None if "[REDACTED]" in cookies else False,
-            "api_key_header_present": any(any(k in h for k in ("x-api-key", "api-key", "apikey")) for h in headers)}
+def _auth(requests: list[dict], session_id=None) -> dict:
+    from src.dynamic.traffic.auth_metadata import observe_auth, safe_auth_metadata
+    observations = [safe_auth_metadata(r.get("auth_metadata"), session_id) or observe_auth(r.get("headers")) for r in requests]
+    def presence(key):
+        values = [o.get(key) for o in observations]
+        return True if True in values else (None if not values or any(o['state']=='unknown' for o in observations) else False)
+    types = sorted({o['token_type'] for o in observations if o.get('token_type')})
+    cookie_names = sorted({c['name'] for o in observations for c in o['cookies']})
+    bearer = True if 'bearer' in types else (None if not observations or 'unknown' in types else False)
+    cookie_present = presence('cookie_header_present')
+    session_cookie = any('session' in n.lower() or n.lower() in {'sid','jsessionid','phpsessid'} for n in cookie_names)
+    return {'authorization_header_present':presence('authorization_header_present'),
+            'bearer_token_present':bearer, 'cookie_present':cookie_present,
+            'session_cookie_present':True if session_cookie else (None if cookie_present or not observations else False),
+            'api_key_header_present':presence('api_key_header_present'), 'token_types':types,
+            'cookie_names':cookie_names, 'credential_refs':sorted({ref for o in observations for ref in o['credential_refs']} |
+                {c['credential_ref'] for o in observations for c in o['cookies'] if c.get('credential_ref')}),
+            'request_auth_states':sorted({o['state'] for o in observations}) if observations else ['unknown'],
+            'authenticated_state':'unknown'}
 
 
 def _compact_route(route: dict) -> dict:
@@ -227,7 +233,10 @@ def build_endpoint_contexts(
             query_keys.update(k for k, _ in parse_qsl(urlsplit(req.get("path", "")).query))
         request.update(methods=sorted({normalize_method(r.get("method")) for r in requests if normalize_method(r.get("method"))}),
                        query_keys=sorted(_name(k) for k in query_keys))
+        from src.dynamic.traffic.auth_metadata import safe_auth_metadata, observe_auth
+        request['auth_observations'] = [{'transaction_id':tx['transaction_id'], 'metadata':safe_auth_metadata(tx['request'].get('auth_metadata'), api_correlation.session_id) or observe_auth(tx['request'].get('headers'))} for tx in linked]
         response = _message_context(responses)
+        response['cookie_observations'] = [{'transaction_id':tx['transaction_id'], 'metadata':safe_auth_metadata(tx['response'].get('auth_metadata'), api_correlation.session_id) or observe_auth(tx['response'].get('headers'), response=True)} for tx in linked if tx.get('response')]
         counts = Counter(r["status_code"] for r in responses if isinstance(r.get("status_code"), int) and r["status_code"] > 0)
         response.update(observed_status_codes=sorted(counts),
                         status_code_counts={str(k): counts[k] for k in sorted(counts)})
@@ -250,7 +259,7 @@ def build_endpoint_contexts(
                 host, path, entry.static_method if entry.static_candidate_id else (entry.observed_methods[0] if entry.observed_methods else None),
                 scheme=entry.scheme, port=entry.port),
             host=host, path=path, scheme=entry.scheme, port=entry.port, methods=methods,
-            static=static, dynamic=dynamic, request=request, response=response, auth=_auth(requests),
+            static=static, dynamic=dynamic, request=request, response=response, auth=_auth(requests, api_correlation.session_id),
             action_context=action_context, route_context=[routes[key] for key in sorted(routes)],
             runtime_context=flags, visibility=visibility,
             evidence_refs={"static_candidate_ids": [entry.static_candidate_id] if entry.static_candidate_id else [],

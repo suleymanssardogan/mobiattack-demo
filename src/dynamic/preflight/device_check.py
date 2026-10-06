@@ -139,7 +139,7 @@ def check_connected_device(
 
 def _detect_is_emulator(adb_bin: str, serial: str) -> bool:
     """Detects if connected target is an Android emulator."""
-    if serial.startswith("emulator-") or "127.0.0.1:" in serial or "localhost:" in serial:
+    if serial.startswith("emulator-"):
         return True
 
     # Check system properties

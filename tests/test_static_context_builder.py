@@ -131,7 +131,7 @@ class TestStaticContextBuilderUnit(unittest.TestCase):
         ctx = build_static_context(self.manifest_path, self.raw_apk, self.apktool)
         top_keys = set(ctx.keys())
         expected_top_keys = {
-            "app", "manifest", "permissions", "activities", "structure", "network_indicators", "api_candidates", "api_discovery"
+            "app", "manifest", "permissions", "activities", "structure", "network_indicators", "api_candidates", "api_discovery", "tls_metadata", "webview_metadata", "permission_usage"
         }
         self.assertEqual(top_keys, expected_top_keys)
         app_keys = set(ctx["app"].keys())

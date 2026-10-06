@@ -108,7 +108,7 @@ def test_synthetic_and_internal_evidence_never_validate(side,location,marker):
 @pytest.mark.parametrize('field,value,code', [
     ('path','/account','CROSS_ENDPOINT_EVIDENCE'), ('method','POST','CROSS_ENDPOINT_EVIDENCE'),
     ('host','external.example','CROSS_ENDPOINT_EVIDENCE'),('scheme','https','CROSS_ENDPOINT_EVIDENCE'),
-    ('query',{'id':'2'},'UNEXPECTED_REQUEST_MUTATION'),('body',{'id':'2'},'UNEXPECTED_REQUEST_MUTATION'),
+    ('query',{'id':'[REDACTED]'},'UNEXPECTED_REQUEST_MUTATION'),('body',{'id':'[REDACTED]'},'UNEXPECTED_REQUEST_MUTATION'),
     ('headers',{'x-lab-run-id':'other_session'},'CROSS_SESSION_EVIDENCE'),
     ('body_metadata',{'size':1,'truncated':False,'binary':False},'UNEXPECTED_REQUEST_MUTATION'),
     ('extra_request_field','extra','UNEXPECTED_REQUEST_MUTATION')])
@@ -128,7 +128,8 @@ def test_headers_must_differ_only_by_auth_removal(mode):
     elif mode=='unrelated_header_changed': headers['accept']='application/json'
     else: headers['x-new-header']='extra'
     result=evaluate(request,execution,registry,evidence)
-    assert result.reason_codes==('UNEXPECTED_REQUEST_MUTATION',) and result.outcome=='blocked'
+    code = 'UNREDACTED_EVIDENCE' if mode in {'unrelated_header_changed', 'unrelated_header_added'} else 'UNEXPECTED_REQUEST_MUTATION'
+    assert result.reason_codes==(code,) and result.outcome=='blocked'
 
 
 @pytest.mark.parametrize('side', ['baseline','variant'])

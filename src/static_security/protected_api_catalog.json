@@ -1,0 +1,161 @@
+{
+  "catalog_version": "android_permission_api_v1",
+  "entries": [
+    {
+      "category": "alternative_access",
+      "signature": "Landroid/app/Activity;->startActivity(Landroid/content/Intent;)V",
+      "permissions": [],
+      "context_rule": "alternative",
+      "context_note": "Intent action/grant semantics unresolved; delegated access is not direct permission-protected use.",
+      "official_source": "https://developer.android.com/privacy-and-security/minimize-permission-requests",
+      "api_min_sdk": 1
+    },
+    {
+      "category": "notifications",
+      "signature": "Landroid/app/NotificationManager;->notify(ILandroid/app/Notification;)V",
+      "permissions": [
+        "android.permission.POST_NOTIFICATIONS"
+      ],
+      "context_rule": "conditional",
+      "context_note": "Device API 33+ and notification exemptions required; target SDK alone insufficient.",
+      "official_source": "https://developer.android.com/develop/ui/compose/notifications/notification-permission",
+      "api_min_sdk": 1
+    },
+    {
+      "category": "notifications",
+      "signature": "Landroid/app/NotificationManager;->notify(Ljava/lang/String;ILandroid/app/Notification;)V",
+      "permissions": [
+        "android.permission.POST_NOTIFICATIONS"
+      ],
+      "context_rule": "conditional",
+      "context_note": "Device API 33+ and notification exemptions required; target SDK alone insufficient.",
+      "official_source": "https://developer.android.com/develop/ui/compose/notifications/notification-permission",
+      "api_min_sdk": 5
+    },
+    {
+      "category": "bluetooth",
+      "signature": "Landroid/bluetooth/BluetoothAdapter;->startDiscovery()Z",
+      "permissions": [
+        "android.permission.BLUETOOTH_SCAN",
+        "android.permission.BLUETOOTH_ADMIN"
+      ],
+      "context_rule": "bluetooth_scan",
+      "context_note": "Target 31+ requires SCAN; location/neverForLocation and device API remain conditional.",
+      "official_source": "https://developer.android.com/develop/connectivity/bluetooth/bt-permissions",
+      "api_min_sdk": 5
+    },
+    {
+      "category": "contacts",
+      "signature": "Landroid/content/ContentResolver;->query(Landroid/net/Uri;[Ljava/lang/String;Ljava/lang/String;[Ljava/lang/String;Ljava/lang/String;)Landroid/database/Cursor;",
+      "permissions": [
+        "android.permission.READ_CONTACTS"
+      ],
+      "context_rule": "uri",
+      "context_note": "URI grant/picker alternatives and provider access rules must be considered.",
+      "official_source": "https://developer.android.com/reference/android/content/ContentResolver",
+      "api_min_sdk": 1
+    },
+    {
+      "category": "camera",
+      "signature": "Landroid/hardware/Camera;->open()Landroid/hardware/Camera;",
+      "permissions": [
+        "android.permission.CAMERA"
+      ],
+      "context_rule": "direct",
+      "context_note": "",
+      "official_source": "https://developer.android.com/reference/android/hardware/Camera",
+      "api_min_sdk": 1
+    },
+    {
+      "category": "camera",
+      "signature": "Landroid/hardware/Camera;->open(I)Landroid/hardware/Camera;",
+      "permissions": [
+        "android.permission.CAMERA"
+      ],
+      "context_rule": "direct",
+      "context_note": "",
+      "official_source": "https://developer.android.com/reference/android/hardware/Camera",
+      "api_min_sdk": 1
+    },
+    {
+      "category": "camera",
+      "signature": "Landroid/hardware/camera2/CameraManager;->openCamera(Ljava/lang/String;Landroid/hardware/camera2/CameraDevice$StateCallback;Landroid/os/Handler;)V",
+      "permissions": [
+        "android.permission.CAMERA"
+      ],
+      "context_rule": "direct",
+      "context_note": "",
+      "official_source": "https://developer.android.com/reference/android/hardware/camera2/CameraManager",
+      "api_min_sdk": 21
+    },
+    {
+      "category": "location",
+      "signature": "Landroid/location/LocationManager;->getLastKnownLocation(Ljava/lang/String;)Landroid/location/Location;",
+      "permissions": [
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION"
+      ],
+      "context_rule": "any_of",
+      "context_note": "Provider and platform restrictions may require additional context.",
+      "official_source": "https://developer.android.com/reference/android/location/LocationManager",
+      "api_min_sdk": 1
+    },
+    {
+      "category": "location",
+      "signature": "Landroid/location/LocationManager;->requestLocationUpdates(Ljava/lang/String;JFLandroid/location/LocationListener;)V",
+      "permissions": [
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION"
+      ],
+      "context_rule": "any_of",
+      "context_note": "",
+      "official_source": "https://developer.android.com/reference/android/location/LocationManager",
+      "api_min_sdk": 1
+    },
+    {
+      "category": "microphone",
+      "signature": "Landroid/media/AudioRecord;->startRecording()V",
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ],
+      "context_rule": "direct",
+      "context_note": "",
+      "official_source": "https://developer.android.com/reference/android/media/AudioRecord",
+      "api_min_sdk": 3
+    },
+    {
+      "category": "microphone",
+      "signature": "Landroid/media/MediaRecorder;->setAudioSource(I)V",
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ],
+      "context_rule": "conditional",
+      "context_note": "Configuration observed; recording and source not proven.",
+      "official_source": "https://developer.android.com/reference/android/media/MediaRecorder",
+      "api_min_sdk": 1
+    },
+    {
+      "category": "storage_media",
+      "signature": "Landroid/os/Environment;->getExternalStorageDirectory()Ljava/io/File;",
+      "permissions": [
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE"
+      ],
+      "context_rule": "conditional",
+      "context_note": "Directory lookup does not prove read/write; scoped storage, app ownership and SDK context unresolved.",
+      "official_source": "https://developer.android.com/reference/android/os/Environment",
+      "api_min_sdk": 1
+    },
+    {
+      "category": "sms",
+      "signature": "Landroid/telephony/SmsManager;->sendTextMessage(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Landroid/app/PendingIntent;Landroid/app/PendingIntent;)V",
+      "permissions": [
+        "android.permission.SEND_SMS"
+      ],
+      "context_rule": "direct",
+      "context_note": "",
+      "official_source": "https://developer.android.com/reference/android/telephony/SmsManager",
+      "api_min_sdk": 4
+    }
+  ]
+}

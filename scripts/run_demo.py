@@ -63,6 +63,7 @@ def parse_args() -> argparse.Namespace:
         default=300.0,
         help="Subprocess timeout ceiling in seconds for preprocessing and ADB",
     )
+    parser.add_argument("--traffic-mode", choices=("https", "native_http"), default="https", help="Explicit capture backend mode; no automatic fallback")
     return parser.parse_args()
 
 
@@ -76,6 +77,7 @@ def main() -> int:
             reinstall=args.reinstall,
             grant_permissions=args.grant_permissions,
             timeout_seconds=args.timeout,
+            traffic_mode=args.traffic_mode,
         )
 
         if args.summary:

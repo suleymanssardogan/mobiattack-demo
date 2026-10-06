@@ -1,11 +1,11 @@
 """Canonical dynamic product report integrity and atomic persistence."""
 from __future__ import annotations
 
+from src.persistence import write_json_atomic
+
 import json
 import math
-import os
 from pathlib import Path
-import tempfile
 from typing import Any
 
 REPORT_FILENAME = "dynamic_analysis_report.json"
@@ -18,6 +18,21 @@ class DynamicReportError(ValueError):
 
 class DynamicReportUnavailable(DynamicReportError):
     """Insufficient dynamic execution evidence for a canonical report."""
+
+
+def verified_startup(record, package_name):
+    """Accept only validated, package-bound process/foreground evidence."""
+    from src.dynamic.runtime.availability import validate_availability
+    try:
+        validate_availability(record)
+    except (ValueError, TypeError):
+        return False
+    evidence = record['evidence']
+    return bool(package_name and record.get('package_name') == package_name
+                and record['status'] == 'available'
+                and evidence.get('process_survived') is True
+                and evidence.get('foreground_verified') is True
+                and isinstance(evidence.get('pid'), int) and evidence['pid'] > 0)
 
 
 def _validate_dynamic_analysis_report(report: dict[str, Any], scan_id: str | None = None) -> None:
@@ -88,6 +103,19 @@ def _validate_dynamic_analysis_report(report: dict[str, Any], scan_id: str | Non
     expected_capabilities = {"ui_exploration", "runtime_observation", "http_visibility", "https_visibility", "api_correlation", "endpoint_contexts"}
     if set(report["coverage"]) != expected_capabilities or any(v not in COVERAGE_STATES for v in report["coverage"].values()):
         raise DynamicReportError("Invalid capability coverage")
+    from src.dynamic.traffic.https_compatibility import validate_compatibility_metadata
+    try:
+        compatibility = validate_compatibility_metadata(report['traffic'].get('https_compatibility'), report['session']['session_id'])
+        if compatibility:
+            if (report['session'].get('package_name') and
+                    compatibility['package_name'] != report['session']['package_name']):
+                raise ValueError('HTTPS compatibility application mismatch')
+            if report['traffic'].get('https_visibility_reason') not in {'capture_backend_failure', 'capture_backend_unavailable'}:
+                if (report['coverage']['https_visibility'] != compatibility['visibility'] or
+                        report['traffic'].get('https_visibility_reason') != compatibility['reason_code']):
+                    raise ValueError('HTTPS coverage contradicts compatibility evidence')
+    except ValueError as exc:
+        raise DynamicReportError(str(exc)) from exc
     exploration = report["exploration"]
     if exploration.get("status") not in {"completed", "partial", "failed"} or not report["session"].get("session_id"):
         raise DynamicReportError("Missing minimum execution evidence")
@@ -107,7 +135,14 @@ def _validate_dynamic_analysis_report(report: dict[str, Any], scan_id: str | Non
             raise DynamicReportError('Invalid security results section') from exc
         if report['security_results']['coverage'] != 'available' and report['analysis_coverage'] != 'partial':
             raise DynamicReportError('Incomplete security coverage cannot be complete')
-    if not has_ui_execution:
+    runtime_only = (exploration.get('stop_reason') == 'observation_failed'
+                    and exploration.get('status') == 'partial'
+                    and report['coverage']['ui_exploration'] == 'unavailable'
+                    and report['coverage']['runtime_observation'] == 'partial'
+                    and report['analysis_coverage'] == 'partial'
+                    and report['evidence'].get('runtime_availability') == 'dynamic/runtime_availability.json'
+                    and verified_startup(report.get('runtime_availability'), report['target'].get('package_name')))
+    if not has_ui_execution and not runtime_only:
         if (exploration.get('stop_reason')!='security_validation_only'
                 or report['coverage']['ui_exploration']!='unavailable'
                 or report['analysis_coverage']!='partial'
@@ -211,13 +246,5 @@ def save_dynamic_analysis_report(run_dir: str | Path, report: dict[str, Any]) ->
     validate_dynamic_analysis_report(report)
     directory = Path(run_dir)
     directory.mkdir(parents=True, exist_ok=True)
-    fd, temporary = tempfile.mkstemp(dir=directory, prefix=".tmp_dynamic_report_", suffix=".json")
-    try:
-        with os.fdopen(fd, "w", encoding="utf-8") as stream:
-            json.dump(report, stream, indent=2, ensure_ascii=False, allow_nan=False)
-            stream.flush()
-            os.fsync(stream.fileno())
-        os.replace(temporary, directory / REPORT_FILENAME)
-    finally:
-        Path(temporary).unlink(missing_ok=True)
+    write_json_atomic(directory / REPORT_FILENAME, report, durable=True, allow_nan=False)
     return directory / REPORT_FILENAME

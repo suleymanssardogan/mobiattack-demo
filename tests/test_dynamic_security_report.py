@@ -170,6 +170,8 @@ def test_corrupt_security_json_remains_explicit_in_facade(sources,tmp_path):
 
 def test_only_security_incompleteness_also_forces_partial(sources):
     sources['exploration']['status']='completed'
+    sources['exploration']['metadata']={'frontier':{'observation_available':True,
+        'safe_frontier_exhausted':True,'safe_actions_remaining':0,'unsafe_skipped':0}}
     sources['runtime']={'actions':[{'correlation_status':'available'}]}
     sources['traffic']['https_visibility']='available'
     sources['security_results']['records'][0]['evidence']['variant']=None

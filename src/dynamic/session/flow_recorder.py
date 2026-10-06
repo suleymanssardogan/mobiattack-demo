@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from typing import Any, Callable
+import re
 
 from src.dynamic.session.models import (
     EventType,
@@ -28,6 +29,7 @@ SENSITIVE_KEY_PATTERNS = {
     "api_key",
     "apikey",
     "private_key",
+    "credential", "otp", "sid",
 }
 
 
@@ -41,11 +43,15 @@ def sanitize_metadata(meta: dict[str, Any] | None) -> dict[str, Any]:
         lower_key = str(key).lower()
         if any(pat in lower_key for pat in SENSITIVE_KEY_PATTERNS):
             sanitized[key] = "[REDACTED]"
+        elif lower_key in {"note", "message", "text", "description", "details"} and isinstance(val,str):
+            sanitized[key] = "[REDACTED]"
+        elif isinstance(val,str) and re.search(r"(?i)\bbearer\s+|\b(?:token|password|credential|cookie|session|secret|otp)\s*[:=]|\beyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+",val):
+            sanitized[key] = "[REDACTED]"
         elif isinstance(val, dict):
             sanitized[key] = sanitize_metadata(val)
         elif isinstance(val, list):
             sanitized[key] = [
-                sanitize_metadata(item) if isinstance(item, dict) else item for item in val
+                sanitize_metadata(item) if isinstance(item, dict) else "[REDACTED]" if isinstance(item,str) else item for item in val
             ]
         else:
             sanitized[key] = val

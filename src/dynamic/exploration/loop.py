@@ -13,6 +13,8 @@ Executes autonomous UI exploration bounded by max_steps, max_depth, and deadline
 """
 
 from __future__ import annotations
+
+from src.persistence import write_json_atomic
 from src.dynamic.deadline import bounded_operation, current_deadline
 from src.dynamic.action.completion import wait_for_completion
 from src.dynamic.exploration.frontier import build_frontier, exploration_summary
@@ -193,9 +195,8 @@ def run_exploration(
             try:
                 graph_storage.save_graph(route_graph)
                 # Atomic frontier snapshots follow the same session/graph mutation boundaries.
-                from src.dynamic.session.storage import SessionStorage
                 frontier_path = graph_storage.resolve_path(run_id=route_graph.run_id).parent / 'exploration_frontier.json'
-                SessionStorage._atomic_write_json(str(frontier_path), {
+                write_json_atomic(str(frontier_path), {
                     'session_id': route_graph.session_id, 'graph_id': route_graph.graph_id,
                     **build_frontier(route_graph, allow_system_dialogs=cfg.allow_system_dialogs)})
             except Exception as exc:
@@ -228,7 +229,7 @@ def run_exploration(
             logger.error(err_msg)
             _emit_timeline_event(timeline_recorder, "EXPLORATION_FAILED", {"error": err_msg})
             return ExplorationResult(
-                status=ExplorationStatus.FAILED.value,
+                status=ExplorationStatus.PARTIAL.value,
                 stop_reason=StopReason.OBSERVATION_FAILED.value,
                 started_at=started_at,
                 completed_at=utc_now_iso(),
@@ -846,9 +847,8 @@ def run_exploration(
     _persist_graph()
     if graph_storage:
         try:
-            from src.dynamic.session.storage import SessionStorage
             path = graph_storage.resolve_path(run_id=route_graph.run_id).parent / 'exploration_frontier.json'
-            SessionStorage._atomic_write_json(str(path), {'session_id': route_graph.session_id,
+            write_json_atomic(str(path), {'session_id': route_graph.session_id,
                 'graph_id': route_graph.graph_id, **frontier})
         except Exception as exc:
             logger.warning('Frontier persistence failed: %s', exc)

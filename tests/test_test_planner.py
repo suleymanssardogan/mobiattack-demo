@@ -170,7 +170,9 @@ def test_no_network_policy_tools_executor_or_replay(endpoint, analyst, monkeypat
     for p in root.glob("*.py"):
         for n in ast.walk(ast.parse(p.read_text())):
             if isinstance(n, ast.ImportFrom) and n.module:
-                assert n.module != "src.agent.policy"
+                if n.module == "src.agent.policy":
+                    # A1-Lite imports only the trusted precondition value contract.
+                    assert {name.name for name in n.names} == {"PreconditionRecord"}
                 assert n.module.split(".")[0] not in {"requests", "httpx", "openai", "urllib", "socket", "subprocess"}
     assert not list(root.glob("*executor*")) and not list(root.glob("*replay*"))
 

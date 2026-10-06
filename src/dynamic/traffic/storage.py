@@ -2,10 +2,11 @@
 
 from __future__ import annotations
 
+from src.persistence import write_json_atomic
+
 import json
 import logging
 import os
-import tempfile
 from typing import Any
 
 from src.dynamic.traffic.models import (
@@ -67,10 +68,7 @@ class TrafficStorage:
         }
 
         try:
-            fd, tmp_path = tempfile.mkstemp(dir=traffic_dir, prefix=".tmp_capture_", suffix=".json")
-            with open(fd, "w", encoding="utf-8") as f:
-                json.dump(payload, f, indent=2, ensure_ascii=False)
-            os.replace(tmp_path, capture_path)
+            write_json_atomic(capture_path, payload)
             return capture_path
         except Exception as exc:
             logger.error(f"Failed to save capture metadata to {capture_path}: {exc}")
@@ -86,6 +84,7 @@ class TrafficStorage:
         transactions: list[TrafficTransaction] | list[dict[str, Any]],
         capture: CaptureSession | None = None,
         summary: CaptureSummary | None = None,
+        backend_name: str | None = None,
     ) -> str:
         """Atomically saves dynamic/traffic.json with transaction records and session summary."""
         target_str = str(target_path)
@@ -96,7 +95,7 @@ class TrafficStorage:
         http_vis = summary.http_visibility if summary else "available"
         https_vis = summary.https_visibility if summary else "unavailable"
         https_reason = summary.https_visibility_reason if summary else "certificate_trust_unknown"
-        backend_name = getattr(capture, "backend", getattr(capture, "backend_name", "unknown")) if capture else getattr(summary, "backend", "unknown")
+        backend_name = backend_name or (getattr(capture, "backend", getattr(capture, "backend_name", "unknown")) if capture else getattr(summary, "backend", "unknown"))
 
         payload: dict[str, Any] = {
             "schema_version": "1.0",
@@ -110,6 +109,7 @@ class TrafficStorage:
             "http_visibility_reason": summary.http_visibility_reason if summary else "capture_state_unknown",
             "https_visibility": https_vis,
             "https_visibility_reason": https_reason,
+            "https_compatibility": summary.https_compatibility if summary else None,
             "capture": capture.to_dict() if capture else None,
             "summary": summary.to_dict() if summary else None,
             "transactions": [
@@ -119,14 +119,7 @@ class TrafficStorage:
         }
 
         try:
-            fd, tmp_path = tempfile.mkstemp(
-                dir=parent_dir or ".",
-                prefix=".tmp_traffic_",
-                suffix=".json",
-            )
-            with open(fd, "w", encoding="utf-8") as f:
-                json.dump(payload, f, indent=2, ensure_ascii=False)
-            os.replace(tmp_path, target_str)
+            write_json_atomic(target_str, payload)
             return target_str
         except Exception as exc:
             logger.error(f"Failed to save traffic json to {target_str}: {exc}")

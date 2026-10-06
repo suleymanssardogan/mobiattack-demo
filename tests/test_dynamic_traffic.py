@@ -169,7 +169,7 @@ class TestDynamicTraffic(unittest.TestCase):
             "session_id": "app_internal_session_id",  # sensitive pattern
         }
         sanitized = sanitize_body_payload(body)
-        self.assertEqual(sanitized["email"], "user@example.com")
+        self.assertEqual(sanitized["email"], "[REDACTED]")
         self.assertEqual(sanitized["password"], "[REDACTED]")
         self.assertEqual(sanitized["auth"]["refresh_token"], "[REDACTED]")
 

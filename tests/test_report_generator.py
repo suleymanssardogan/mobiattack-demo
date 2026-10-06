@@ -393,12 +393,15 @@ class TestCompactReportSummary(unittest.TestCase):
         self.assertEqual(result['security_validation_summary'][0]['endpoint'], 'GET https://example.com/profile')
 
     def test_static_canonical_bytes_are_preserved(self):
-        import shutil
+        from src.report_generator import build_static_analysis_report
         with tempfile.TemporaryDirectory() as directory:
             run = Path(directory) / 'static_lab'
             run.mkdir()
             canonical = run / 'static_analysis_report.json'
-            shutil.copyfile(self.root / 'demo_runs/preset_android_monolithic/static_analysis_report.json', canonical)
+            # Generate a fresh report for this explicit run; historical fixtures
+            # are intentionally rejected by the report freshness boundary.
+            fixture = json.loads((self.root / 'demo_runs/preset_android_monolithic/static_analysis_report.json').read_text())
+            canonical.write_text(json.dumps(build_static_analysis_report('static_lab', report_dict=fixture)))
             before = canonical.read_bytes()
             summary = self.load(run)
             self.assertTrue(summary['canonical_artifacts']['static'])

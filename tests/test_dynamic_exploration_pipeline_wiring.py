@@ -534,7 +534,7 @@ class TestDynamicExplorationPipelineWiring(unittest.TestCase):
         st = load_scan_state(self.output_root)
         self.assertEqual(st["stages"]["dynamic_analysis"]["status"], "completed")
 
-    # 13. exploration no-evidence fatal failure can mark dynamic failed
+    # 13. UI failure is partial; launch-only evidence cannot fabricate a report
     def test_13_observation_failure_preserves_preflight_runtime_as_partial(self):
         init_st = create_initial_scan_state(
             scan_id=self.output_root.name,
@@ -562,8 +562,10 @@ class TestDynamicExplorationPipelineWiring(unittest.TestCase):
         st = load_scan_state(self.output_root)
         self.assertEqual(st["stages"]["dynamic_analysis"]["status"], "partial")
         result = json.loads((dyn_dir / "exploration_result.json").read_text())
-        self.assertEqual(result["status"], "failed")
+        self.assertEqual(result["status"], "partial")
         self.assertEqual(result["stop_reason"], "observation_failed")
+
+        self.assertFalse((self.output_root / "dynamic_analysis_report.json").exists())
 
     # 14. dynamic stage never becomes completed
     @patch("src.dynamic.ui.observer.observe_screen")
@@ -1118,6 +1120,10 @@ class TestTask541SemanticsCleanup(unittest.TestCase):
             "system_ui_boundary",
             "observation_failed",
             "executor_failed",
+            "hard_step_ceiling",
+            "frontier_stagnated",
+            "runtime_unavailable",
+            "auth_intervention_not_completed",
         }
         enum_values = {e.value for e in StopReason}
         self.assertEqual(enum_values, expected_values)

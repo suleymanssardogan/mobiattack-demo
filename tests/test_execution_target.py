@@ -29,7 +29,7 @@ def test_emulator_adapter_observed_metadata():
     assert target.capabilities['proxy_configuration'].state == 'unknown'
 
 
-@pytest.mark.parametrize('kind', [TargetType.PHYSICAL_DEVICE, TargetType.CLOUD_DEVICE])
+@pytest.mark.parametrize('kind', [TargetType.CLOUD_DEVICE])
 def test_placeholders_do_not_execute(kind):
     target = ExecutionTarget.selected('device-A', kind, availability='available')
     with patch('src.android_runtime_launcher.select_target_device') as select:
@@ -117,8 +117,9 @@ def test_malformed_target_rejected(kwargs):
         ExecutionTarget.from_dict(values)
 
 
-def test_target_linked_d18_report_and_ui_without_transport_leak(tmp_path):
-    target = ExecutionTarget.selected('private-serial', TargetType.EMULATOR, availability='available')
+@pytest.mark.parametrize('kind', [TargetType.EMULATOR, TargetType.PHYSICAL_DEVICE])
+def test_target_linked_d18_report_and_ui_without_transport_leak(tmp_path, kind):
+    target = ExecutionTarget.selected('private-serial', kind, availability='available')
     save_target(tmp_path, target)
     error = AndroidRuntimeError('raw secret', 'ABI_UNSUPPORTED', evidence={'source':'package_manager'})
     with patch('src.demo_orchestrator.launch_android_app', side_effect=error):

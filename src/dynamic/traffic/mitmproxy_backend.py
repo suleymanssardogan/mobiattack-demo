@@ -96,6 +96,7 @@ class MitmproxyCaptureBackend:
         listen_port: int = 8080,
         on_transaction_captured: Callable[[TrafficTransaction], None] | None = None,
         script_path: str | None = None,
+        session_id: str | None = None,
         timeout_seconds: float = 5.0,
     ) -> None:
         """Starts mitmdump as a background child process with graceful failure checks."""
@@ -142,7 +143,7 @@ class MitmproxyCaptureBackend:
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
                 text=True,
-                env={**os.environ, 'PYTHONPATH': str(Path(__file__).resolve().parents[3]) + os.pathsep + os.environ.get('PYTHONPATH', '')},
+                env={**os.environ, 'MOBIATTACK_CAPTURE_SESSION': session_id or '', 'PYTHONPATH': str(Path(__file__).resolve().parents[3]) + os.pathsep + os.environ.get('PYTHONPATH', '')},
                 preexec_fn=os.setsid if hasattr(os, "setsid") else None,
             )
         except Exception as exc:

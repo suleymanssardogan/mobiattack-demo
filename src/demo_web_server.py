@@ -442,9 +442,11 @@ class _DemoRequestHandler(BaseHTTPRequestHandler):
 class DemoWebServer:
     """Local Web Server managing live dashboard UI, reporting, and background orchestrations."""
 
-    def __init__(self, host: str = "127.0.0.1", port: int = 8080, runs_root: str | Path = "demo_runs", traffic_proxy_port: int = 18080) -> None:
+    def __init__(self, host: str = "127.0.0.1", port: int = 8080, runs_root: str | Path = "demo_runs", traffic_proxy_port: int = 18080, traffic_mode: str = "https") -> None:
         if type(traffic_proxy_port) is not int or not 1 <= traffic_proxy_port <= 65535:
             raise ValueError("Invalid traffic proxy port")
+        from src.dynamic.traffic.backend_selection import validate_traffic_mode
+        self.traffic_mode = validate_traffic_mode(traffic_mode)
         self.traffic_proxy_port = traffic_proxy_port
         self.host = host
         self._requested_port = port
@@ -770,6 +772,7 @@ class DemoWebServer:
                 progress_callback=callback,
                 install_mode=install_mode,
                 traffic_proxy_port=self.traffic_proxy_port,
+                **({"traffic_mode": self.traffic_mode} if self.traffic_mode != "https" else {}),
             )
             # Evaluate vulnerabilities
             ensure_vulnerabilities(res)

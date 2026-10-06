@@ -47,6 +47,7 @@ def parse_args() -> argparse.Namespace:
         help="Automatically open the web dashboard in default system browser",
     )
     parser.add_argument("--traffic-proxy-port", type=int, default=18080, help="Dynamic traffic capture port")
+    parser.add_argument("--traffic-mode", choices=("https", "native_http"), default="https", help="Explicit capture backend mode; no automatic fallback")
     return parser.parse_args()
 
 
@@ -57,6 +58,7 @@ def main() -> int:
         port=args.port,
         runs_root=args.runs_dir,
         traffic_proxy_port=args.traffic_proxy_port,
+        traffic_mode=args.traffic_mode,
     )
 
     try:

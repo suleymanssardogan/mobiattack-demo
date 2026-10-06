@@ -160,3 +160,35 @@ def test_ca_inspection_compares_certificate_without_store_writes(store_state,exp
          patch('src.dynamic.traffic.https_visibility.run_adb_cmd',side_effect=adb):
         assert check_ca_trust('adb','emulator',cert)[0]==expected
     assert calls
+
+
+@pytest.mark.parametrize('reason,expected', [
+    ('cleartext_http_only_backend', 'supports HTTP only'),
+    ('capture_backend_unavailable', 'backend is unavailable'),
+    ('ca_not_installed', 'CA is not installed'),
+    ('tls_interception_failed_ca_or_app_trust_unverified', 'trust have not been verified'),
+    ('no_https_transaction_available_to_verify', 'No real HTTPS transaction'),
+])
+def test_summary_explains_known_https_reason_without_claiming_pinning(reason, expected):
+    from src.web.report_summary import build_report_summary
+    report = {'coverage': {'http_visibility': 'available', 'https_visibility': 'unavailable'},
+              'traffic': {'https_visibility_reason': reason}}
+    summary = build_report_summary(dynamic_report=report)['dynamic_summary']
+    notes = ' '.join(summary['coverage_limitations'])
+    assert expected in notes
+    assert 'pinning' not in notes.lower()
+    assert summary['traffic_visibility']['http_visibility'] == 'available'
+    assert summary['traffic_visibility']['https_visibility'] == 'unavailable'
+
+
+def test_summary_does_not_render_unknown_https_diagnostics_or_override_available():
+    from src.web.report_summary import build_report_summary
+    for state, reason in [('unknown', '/tmp/private.pem token=SECRET'),
+                          ('available', 'cleartext_http_only_backend')]:
+        summary = build_report_summary(dynamic_report={
+            'coverage': {'https_visibility': state},
+            'traffic': {'https_visibility_reason': reason}})['dynamic_summary']
+        notes = ' '.join(summary['coverage_limitations'])
+        assert 'SECRET' not in notes and '/tmp' not in notes
+        assert 'supports HTTP only' not in notes
+        assert summary['traffic_visibility']['https_visibility'] == state

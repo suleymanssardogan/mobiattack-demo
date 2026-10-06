@@ -2,11 +2,12 @@
 
 from __future__ import annotations
 
+from src.persistence import write_json_atomic
+
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
 from enum import Enum
 import json
-import os
 from pathlib import Path
 from typing import Any
 import uuid
@@ -123,6 +124,7 @@ class HttpRequestModel:
     headers: dict[str, str] = field(default_factory=dict)
     body: Any = None
     body_metadata: dict[str, Any] = field(default_factory=dict)
+    auth_metadata: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -137,6 +139,7 @@ class HttpRequestModel:
             "headers": self.headers,
             "body": self.body,
             "body_metadata": self.body_metadata,
+            "auth_metadata": self.auth_metadata,
         }
 
 
@@ -147,6 +150,7 @@ class HttpResponseModel:
     body: Any = None
     timestamp: str = field(default_factory=utc_now_iso)
     body_metadata: dict[str, Any] = field(default_factory=dict)
+    auth_metadata: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -155,6 +159,7 @@ class HttpResponseModel:
             "body": self.body,
             "timestamp": self.timestamp,
             "body_metadata": self.body_metadata,
+            "auth_metadata": self.auth_metadata,
         }
 
 
@@ -235,6 +240,7 @@ class CaptureSummary:
     https_visibility_reason: str = "certificate_trust_unknown"
     ca_trust_state: str = "unknown"
     ca_trust_reason: str = "certificate_trust_unknown"
+    https_compatibility: dict[str, Any] | None = None
     verified_https_transactions: int = 0
     tls_failure_count: int = 0
 
@@ -255,6 +261,7 @@ class CaptureSummary:
             "https_visibility_reason": self.https_visibility_reason,
             "ca_trust_state": self.ca_trust_state,
             "ca_trust_reason": self.ca_trust_reason,
+            "https_compatibility": self.https_compatibility,
             "verified_https_transactions": self.verified_https_transactions,
             "tls_failure_count": self.tls_failure_count,
         }
@@ -339,12 +346,7 @@ class TrafficEvidenceArtifact:
 
     def save_atomic(self, file_path: Path | str) -> None:
         """Atomically persists the artifact to disk via a temporary file."""
-        target_path = Path(file_path)
-        target_path.parent.mkdir(parents=True, exist_ok=True)
-        tmp_path = target_path.with_suffix(f".tmp.{uuid.uuid4().hex[:8]}")
-        with open(tmp_path, "w", encoding="utf-8") as f:
-            json.dump(self.to_dict(), f, indent=2, ensure_ascii=False)
-        os.replace(tmp_path, target_path)
+        write_json_atomic(file_path, self.to_dict())
 
     @classmethod
     def load_or_create(cls, file_path: Path | str, session_id: str = "") -> TrafficEvidenceArtifact:

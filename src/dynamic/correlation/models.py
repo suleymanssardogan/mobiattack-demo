@@ -2,16 +2,16 @@
 
 from __future__ import annotations
 
+from src.persistence import write_json_atomic
+
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
 from enum import Enum
 import hashlib
 import json
-import os
 from pathlib import Path
 import re
 from typing import Any
-import uuid
 
 
 def utc_now_iso() -> str:
@@ -178,13 +178,8 @@ class ApiCorrelationResult:
 
     def save_atomic(self, file_path: Path | str) -> str:
         """Atomically saves api_correlation.json via temporary file replace."""
-        target_path = Path(file_path)
-        target_path.parent.mkdir(parents=True, exist_ok=True)
-        tmp_path = target_path.with_suffix(f".tmp.{uuid.uuid4().hex[:8]}")
-        with open(tmp_path, "w", encoding="utf-8") as f:
-            json.dump(self.to_dict(), f, indent=2, ensure_ascii=False)
-        os.replace(tmp_path, target_path)
-        return str(target_path)
+        target = write_json_atomic(file_path, self.to_dict())
+        return str(target)
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> ApiCorrelationResult:

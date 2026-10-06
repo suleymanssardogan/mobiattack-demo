@@ -224,7 +224,8 @@ def _security_facts(root, app, package, path):
         tag = node.tag.rsplit('}', 1)[-1]
         if tag == 'uses-permission' or tag.startswith('uses-permission-sdk-'):
             facts['permission_declarations'].append({'name': node.get(ns + 'name'), 'tag': tag,
-                'max_sdk': _sdk(node.get(ns + 'maxSdkVersion')), 'source': 'AndroidManifest.xml'})
+                'max_sdk': _sdk(node.get(ns + 'maxSdkVersion')),
+                'uses_permission_flags': node.get(ns + 'usesPermissionFlags'), 'source': 'AndroidManifest.xml'})
     facts['permission_declarations'].sort(key=lambda row: (row['name'] or '', row['tag'], row['max_sdk'] or 0))
     if app is None:
         return facts

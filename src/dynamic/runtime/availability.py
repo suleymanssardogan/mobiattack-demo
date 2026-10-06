@@ -2,7 +2,7 @@
 from enum import Enum
 import re
 from pathlib import Path
-from src.dynamic.session.storage import SessionStorage
+from src.persistence import write_json_atomic
 
 
 class RuntimeReason(str, Enum):
@@ -108,5 +108,5 @@ def save_availability(root, value):
     validate_availability(value)
     path = Path(root) / 'dynamic' / 'runtime_availability.json'
     path.parent.mkdir(parents=True, exist_ok=True)
-    SessionStorage._atomic_write_json(str(path), value)
+    write_json_atomic(str(path), value)
     return path

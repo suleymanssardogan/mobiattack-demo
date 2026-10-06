@@ -2,10 +2,11 @@
 
 from __future__ import annotations
 
+from src.persistence import write_json_atomic
+
 import json
 import logging
 import os
-import tempfile
 from typing import Any
 
 from src.dynamic.session.models import DynamicSession, SessionErrorCode, SessionException, TimelineEvent
@@ -82,15 +83,4 @@ class SessionStorage:
     @staticmethod
     def _atomic_write_json(filepath: str, data: Any) -> None:
         """Writes JSON to a temporary file in the same directory and replaces atomically."""
-        dir_name = os.path.dirname(filepath)
-        os.makedirs(dir_name, exist_ok=True)
-
-        fd, temp_path = tempfile.mkstemp(dir=dir_name, prefix=".tmp_session_", suffix=".json")
-        try:
-            with open(fd, "w", encoding="utf-8") as f:
-                json.dump(data, f, indent=2, ensure_ascii=False)
-            os.replace(temp_path, filepath)
-        except Exception:
-            if os.path.exists(temp_path):
-                os.remove(temp_path)
-            raise
+        write_json_atomic(filepath, data)

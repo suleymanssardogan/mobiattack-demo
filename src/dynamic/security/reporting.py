@@ -57,6 +57,9 @@ LIMITATIONS = frozenset({'SECURITY_RESULTS_UNAVAILABLE', 'SECURITY_SOURCE_INVALI
 
 def security_result_artifact(request, execution, registry, evidence, validation=None):
     """Sanitized source record, separate from the compact public report section."""
+    if request.test_category == 'authentication_presence':
+        from src.dynamic.security.auth_evidence_contract import adapt_auth_presence_evidence
+        evidence = adapt_auth_presence_evidence(evidence)
     for payload in (evidence.baseline,evidence.variant,getattr(evidence,'logout',None)):
         if payload is not None and sanitize_transaction_data(payload) != payload:
             raise ValueError('Security source must already be sanitized')
@@ -71,6 +74,7 @@ def security_result_artifact(request, execution, registry, evidence, validation=
             'baseline_receipts':evidence.baseline_receipts, 'variant_receipts':evidence.variant_receipts,
             'execution_ref':evidence.execution_ref, 'control_ref':evidence.control_ref,
             'comparison_ref':evidence.comparison_ref,
+            **({'auth_contract_version':evidence.auth_contract_version, 'auth_migration':evidence.auth_migration} if request.test_category=='authentication_presence' else {}),
             **({'ownership':evidence.ownership} if request.test_category == 'object_authorization' else {'privileges':evidence.privileges} if request.test_category == 'function_authorization' else {'lifecycle':evidence.lifecycle,'logout':evidence.logout,'logout_receipts':evidence.logout_receipts} if request.test_category=='session_handling' else {})}}]}
 
 

@@ -13,7 +13,7 @@ from typing import Any
 from src.dynamic.correlation.api_correlator import normalize_host, normalize_path
 from src.dynamic.correlation.models import sanitize_provenance_paths
 from .models import (COVERAGE_STATES, DynamicReportError, DynamicReportUnavailable,
-                     validate_dynamic_analysis_report, save_dynamic_analysis_report, load_dynamic_analysis_report)
+                     verified_startup, validate_dynamic_analysis_report, save_dynamic_analysis_report, load_dynamic_analysis_report)
 
 ARTIFACTS = {"preflight": "preflight_result.json", "session": "session.json", "exploration": "exploration_result.json",
              "routes": "route_graph.json", "runtime": "runtime_evidence.json", "traffic": "traffic.json",
@@ -183,7 +183,12 @@ def build_dynamic_analysis_report(scan_id: str, artifacts: dict[str, dict], targ
     if not {"session", "exploration"} <= valid.keys():
         raise DynamicReportUnavailable("Session and exploration evidence are required")
     session, exploration = valid["session"], valid["exploration"]
-    if not security_only and not any(_count(exploration.get(k)) for k in ("steps_attempted", "actions_succeeded", "screens_observed", "transitions_recorded")):
+    has_ui_execution = any(_count(exploration.get(k)) for k in
+                           ("steps_attempted", "actions_succeeded", "screens_observed", "transitions_recorded"))
+    runtime_only = (not has_ui_execution and exploration.get('stop_reason') == 'observation_failed'
+                    and verified_startup(record, session.get('package_name') or
+                                         valid.get('preflight', {}).get('application', {}).get('package_name')))
+    if not security_only and not has_ui_execution and not runtime_only:
         raise DynamicReportUnavailable("No dynamic execution observed")
     preflight = valid.get("preflight", {})
     routes = valid.get("routes", {})
@@ -195,6 +200,8 @@ def build_dynamic_analysis_report(scan_id: str, artifacts: dict[str, dict], targ
     runtime_actions = runtime.get("actions", [])
     usable = [a for a in runtime_actions if a.get("correlation_status", "available") in {"available", "partial"}]
     runtime_coverage = "unavailable" if "runtime" not in valid else "not_observed" if not usable else "partial" if any(a.get("correlation_status", "available") != "available" for a in runtime_actions) else "available"
+    if runtime_only:
+        runtime_coverage = "partial"  # Startup observed; action/runtime interval unavailable.
     txs = traffic.get("transactions", [])
     http_vis = _states(traffic.get("http_visibility", "unavailable"))
     https_vis = _states(traffic.get("https_visibility", "unavailable"))
@@ -212,7 +219,10 @@ def build_dynamic_analysis_report(scan_id: str, artifacts: dict[str, dict], targ
     exploration_complete = (exploration['status'] == 'completed' and concise_exploration['safe_frontier_exhausted'] is True
                             and exploration.get('stop_reason') not in {'max_steps', 'hard_step_ceiling', 'frontier_stagnated', 'runtime_unavailable', 'max_depth', 'deadline', 'observation_failed', 'executor_failed'})
     reported_exploration_status = "partial" if exploration["status"] == "completed" and not exploration_complete else exploration["status"]
-    coverage = {"ui_exploration": "unavailable" if security_only else "available" if exploration_complete else "partial",
+    if runtime_only:
+        reported_exploration_status = "partial"
+        concise_exploration['note'] = "UI observation unavailable; verified application startup evidence preserved. No UI actions or screens observed."
+    coverage = {"ui_exploration": "unavailable" if security_only or runtime_only else "available" if exploration_complete else "partial",
                 "runtime_observation": runtime_coverage, "http_visibility": http_vis, "https_visibility": https_vis,
                 "api_correlation": "available" if "api_correlation" in valid else "unavailable",
                 "endpoint_contexts": "available" if "endpoint_contexts" in valid else "unavailable"}
@@ -236,6 +246,20 @@ def build_dynamic_analysis_report(scan_id: str, artifacts: dict[str, dict], targ
                        "http_visibility_reason": _safe(traffic.get("http_visibility_reason")),
                        "https_visibility_reason": _safe(traffic.get("https_visibility_reason")),
                        "proxy_restored": traffic.get("proxy_restored") if isinstance(traffic.get("proxy_restored"), bool) else None}
+    from src.dynamic.traffic.https_compatibility import validate_compatibility_metadata
+    try:
+        compatibility = validate_compatibility_metadata(traffic.get('https_compatibility'), session['session_id'])
+    except ValueError as exc:
+        raise DynamicReportError(str(exc)) from exc
+    if compatibility:
+        if session.get('package_name') and compatibility['package_name'] != session['package_name']:
+            raise DynamicReportError('HTTPS compatibility application mismatch')
+        if (https_vis != compatibility['visibility'] or
+                traffic.get('https_visibility_reason') != compatibility['reason_code']):
+            # Backend failure can supersede a prior scoped compatibility result.
+            if traffic.get('https_visibility_reason') not in {'capture_backend_failure', 'capture_backend_unavailable'}:
+                raise DynamicReportError('HTTPS coverage contradicts compatibility evidence')
+        traffic_summary['https_compatibility'] = compatibility
     if http_vis != "available" or https_vis != "available":
         traffic_summary["visibility_note"] = "Traffic visibility is incomplete; unobserved requests may exist."
     actions = traffic_corr.get("actions", [])

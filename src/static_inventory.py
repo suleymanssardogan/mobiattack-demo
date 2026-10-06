@@ -24,8 +24,10 @@ def indicator_context(value, source_file=''):
     name=PurePosixPath(str(source_file).lower()).name
     if name.startswith(('license','notice','readme')):
         return 'documentation_or_license'
-    if host in {'developer.android.com','docs.flutter.dev','api.flutter.dev'}:
+    if host in {'developer.android.com','docs.flutter.dev','api.flutter.dev','flutter.dev','dart.dev'}:
         return 'framework_documentation'
+    if host=='pub.dev':
+        return 'framework_package_repository'
     if host=='github.com' and ('/issues/' in path or '/flutter/' in path):
         return 'framework_repository_or_issue_tracker'
     if value=='io.flutter.network' and str(source_file).endswith('.smali'):
@@ -47,4 +49,4 @@ def runtime_technologies(structure):
     return [{'name':'Flutter','status':'detected','evidence':[{'source_file':p,**({'source_apk':a} if a else {})} for p,a in evidence]}] if evidence else []
 
 
-FLUTTER_COVERAGE = 'Flutter/Dart networking is not currently covered by deterministic API extraction.'
+FLUTTER_COVERAGE = 'Flutter/Dart request-use is not resolved; extracted network strings are indicators, not API endpoints.'

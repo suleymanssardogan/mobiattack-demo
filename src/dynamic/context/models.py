@@ -1,11 +1,12 @@
 """Evidence-only endpoint context artifact models."""
 from __future__ import annotations
 
+from src.persistence import write_json_atomic
+
 from dataclasses import asdict, dataclass, field
 import hashlib
 import json
 from pathlib import Path
-import uuid
 from typing import Any
 
 
@@ -55,14 +56,7 @@ class EndpointContextArtifact:
         return asdict(self)
 
     def save_atomic(self, file_path: str | Path) -> str:
-        target = Path(file_path)
-        target.parent.mkdir(parents=True, exist_ok=True)
-        temporary = target.with_suffix(f".tmp.{uuid.uuid4().hex}")
-        try:
-            temporary.write_text(json.dumps(self.to_dict(), indent=2, ensure_ascii=False), encoding="utf-8")
-            temporary.replace(target)
-        finally:
-            temporary.unlink(missing_ok=True)
+        target = write_json_atomic(file_path, self.to_dict())
         return str(target)
 
     @classmethod

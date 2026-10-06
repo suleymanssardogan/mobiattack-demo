@@ -16,12 +16,16 @@ Rules:
 from __future__ import annotations
 
 import json
+from hashlib import sha256
 from pathlib import Path
 
 from src.manifest_parser import parse_manifest
 from src.apk_structure_extractor import extract_apk_structure
 from src.network_indicator_extractor import extract_network_indicators
 from src.api_candidate_extractor import extract_api_candidates
+from src.static_tls_metadata import extract_static_tls_metadata
+from src.static_webview_metadata import extract_webview_metadata
+from src.static_permission_usage import aggregate_permission_usage
 
 
 def build_split_static_context(
@@ -129,6 +133,9 @@ def build_split_static_context(
     aggregated_api_candidates: list[dict] = []
     from src.api_candidate_canonicalizer import canonicalize_api_candidates, bind_source_apk
     api_discovery_components: list[dict] = []
+    tls_components: list[dict] = []
+    webview_components: list[dict] = []
+    permission_inputs = []
 
     # 3. Analyze each component independently
     for comp in components:
@@ -192,6 +199,23 @@ def build_split_static_context(
                 w_msg = f"Failed parsing manifest for '{fname}': {exc}"
                 all_warnings.append(w_msg)
 
+        permission_inputs.append((fname, apktool_dir))
+        tls = extract_static_tls_metadata(apktool_dir, manifest_file)
+        for row in tls["evidence"]:
+            row["source_apk"] = fname
+            row["evidence_id"] = "tls_" + sha256((fname + row["evidence_id"]).encode()).hexdigest()[:20]
+        tls_components.append({"source_apk": fname, **tls})
+
+        webview = extract_webview_metadata(apktool_dir, manifest_file)
+        # Scope both instance and evidence references to this APK component.
+        ids = {r["evidence_id"]: "webview_" + sha256((fname+r["evidence_id"]).encode()).hexdigest()[:20] for r in webview["evidence"]}
+        for row in webview["evidence"]:
+            row["source_apk"] = fname
+            row["evidence_id"] = ids[row["evidence_id"]]
+            if row.get("webview_instance_id"): row["webview_instance_id"] = fname + ":" + row["webview_instance_id"]
+            if "callback_evidence_refs" in row: row["callback_evidence_refs"] = [ids.get(ref, ref) for ref in row["callback_evidence_refs"]]
+        webview_components.append({"source_apk": fname, **webview})
+
         # --- B. Structure Inventory ---
         if raw_apk_dir and raw_apk_dir.is_dir():
             try:
@@ -226,9 +250,10 @@ def build_split_static_context(
                     "has_kotlin_metadata": False,
                 })
 
+        network_coverage = {}
         # --- C. Network Indicators (with Provenance) ---
         try:
-            net_indicators = extract_network_indicators(apktool_dir)
+            net_indicators = extract_network_indicators(apktool_dir, coverage=network_coverage)
             for item in net_indicators.get("network_urls", []):
                 record = dict(item)
                 record["source_apk"] = fname
@@ -261,13 +286,16 @@ def build_split_static_context(
         if has_dex:
             try:
                 api_res = extract_api_candidates(apktool_dir)
-                api_discovery_components.append({"source_apk": fname, **api_res.get("discovery_diagnostics", {})})
+                api_discovery_components.append({"source_apk": fname, **api_res.get("discovery_diagnostics", {}), **network_coverage})
                 for cand in api_res.get("api_candidates", []):
                     cand_record = bind_source_apk(cand, fname)
                     aggregated_api_candidates.append(cand_record)
             except Exception as exc:
                 w_msg = f"Failed extracting API candidates for '{fname}': {exc}"
                 all_warnings.append(w_msg)
+
+        if not has_dex and network_coverage:
+            api_discovery_components.append({'source_apk': fname, **network_coverage})
 
     aggregated_api_candidates = canonicalize_api_candidates(aggregated_api_candidates)
     all_warnings = sorted(set(all_warnings))
@@ -323,6 +351,13 @@ def build_split_static_context(
         },
         "api_candidates": aggregated_api_candidates,
         "api_discovery": {"components": api_discovery_components},
+        "permission_usage": aggregate_permission_usage(permission_inputs, manifest_evidence, base_manifest),
+        "webview_metadata": {"schema_version": "1.0", "detected": any(c["detected"] for c in webview_components),
+                             "components": webview_components, "evidence": [r for c in webview_components for r in c["evidence"]],
+                             "coverage": {"status": "partial", "limitations": sorted({n for c in webview_components for n in c["coverage"]["limitations"]})}},
+        "tls_metadata": {"schema_version": "1.0", "components": tls_components,
+                         "evidence": [row for component in tls_components for row in component["evidence"]],
+                         "coverage": {"status": "partial", "limitations": sorted({note for c in tls_components for note in c["coverage"]["limitations"]})}},
         "aggregation_counts": {
             "total_dex_count": total_dex_count,
             "network_indicator_count": total_indicators_count,

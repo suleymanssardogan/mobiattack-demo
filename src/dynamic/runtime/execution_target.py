@@ -1,11 +1,11 @@
-"""Small execution-target contract; no physical/cloud execution adapters."""
+"""ADB execution-target contract and bounded Android target adapters."""
 from dataclasses import asdict, dataclass, field
 from enum import Enum
 import hashlib
 import re
 from pathlib import Path
 
-from src.dynamic.session.storage import SessionStorage
+from src.persistence import write_json_atomic
 from src.dynamic.deadline import bounded_operation
 
 
@@ -51,6 +51,8 @@ class ExecutionTarget:
 
     def __post_init__(self):
         self.target_type = TargetType(self.target_type)
+        if self.proxy_context and self.target_type == TargetType.PHYSICAL_DEVICE:
+            raise ValueError('Physical target proxy configuration is unsupported')
         if self.proxy_context:
             if (set(self.proxy_context) != {'host', 'source'} or not isinstance(self.proxy_context['host'], str)
                 or not re.fullmatch(r'[A-Za-z0-9_.:-]+', self.proxy_context['host'])
@@ -90,7 +92,7 @@ class ExecutionTarget:
             raise ValueError('TARGET_CAPABILITY_UNAVAILABLE')
 
     def require_transport(self, selected_serial=None):
-        if self.target_type in {TargetType.PHYSICAL_DEVICE, TargetType.CLOUD_DEVICE}:
+        if self.target_type == TargetType.CLOUD_DEVICE:
             raise ValueError('TARGET_ADAPTER_UNAVAILABLE')
         if not self.adb_serial or self.availability != 'available':
             raise ValueError('TARGET_UNAVAILABLE')
@@ -118,17 +120,20 @@ def select_transport(entries, selected_serial=None):
     return serial
 
 
-class EmulatorTargetAdapter:
+class AdbTargetAdapter:
     """Describe observed transport capabilities, without installing or modifying a target."""
     @bounded_operation(2.0)
     def describe(self, serial, query, runtime=None):
         target = ExecutionTarget.selected(serial, availability='available')
-        for prop, key in [('ro.kernel.qemu', 'emulator'), ('ro.product.cpu.abilist', 'abis'), ('ro.build.version.sdk', 'api')]:
+        properties = {}
+        for prop, key in [('ro.kernel.qemu', 'emulator'), ('ro.product.cpu.abilist', 'abis'),
+                          ('ro.build.version.sdk', 'api'), ('ro.build.characteristics', 'characteristics')]:
             try:
                 code, value, _ = query(['shell', 'getprop', prop], serial=serial)
                 if code != 0:
                     continue
                 value = value.strip()
+                properties[key] = value
                 if key == 'emulator' and value == '1':
                     target.target_type = TargetType.EMULATOR
                 elif key == 'abis':
@@ -137,6 +142,27 @@ class EmulatorTargetAdapter:
                     target.api_level = int(value)
             except Exception:
                 continue  # failed observation never becomes positive capability evidence
+        characteristics = properties.get('characteristics', '').lower().split(',')
+        if 'emulator' in characteristics:
+            target.target_type = TargetType.EMULATOR
+        elif (target.target_type != TargetType.EMULATOR and target.api_level and target.abis
+              and (properties.get('emulator') == '0' or
+                   ('emulator' in properties and properties['emulator'] == '' and
+                    any(c in {'phone', 'tablet', 'default', 'nosdcard'} for c in characteristics)))):
+            target.target_type = TargetType.PHYSICAL_DEVICE
+        if target.target_type == TargetType.PHYSICAL_DEVICE:
+            configure_physical_capabilities(target)
+            try:
+                _, output, _ = query(['shell', 'which', 'pm', 'am', 'pidof', 'dumpsys', 'input', 'uiautomator'], serial=serial)
+                tools = {Path(line.strip()).name for line in output.splitlines() if line.startswith('/')}
+                requirements = {'app_install': {'pm'}, 'app_launch': {'am'},
+                                'pid_observation': {'pidof'}, 'foreground_observation': {'dumpsys'},
+                                'ui_automation': {'input', 'uiautomator'}}
+                for key, required in requirements.items():
+                    if required <= tools:
+                        target.capabilities[key] = Capability('available', 'TOOL_AVAILABLE', 'adb_tools')
+            except Exception:
+                pass  # unavailable tool observation remains unknown
         if target.target_type == TargetType.EMULATOR:
             target.proxy_context = {'host': '10.0.2.2', 'source': 'emulator_adapter_configuration'}
         if runtime:
@@ -149,11 +175,39 @@ class EmulatorTargetAdapter:
         return target
 
 
+def configure_physical_capabilities(target):
+    """Physical runtime is supported; physical proxy/traffic is deliberately absent."""
+    target.proxy_context = {}
+    for name in ('proxy_configuration', 'traffic_capture', 'http_capture', 'https_capture'):
+        target.capabilities[name] = Capability('unavailable', 'ADAPTER_NOT_IMPLEMENTED', 'physical_device_adapter')
+
+
+class EmulatorTargetAdapter(AdbTargetAdapter):
+    """Compatibility name for the shared ADB descriptor used by earlier callers."""
+
+
+class PhysicalDeviceTargetAdapter(AdbTargetAdapter):
+    """Validate explicitly selected physical transport without changing device state."""
+    @bounded_operation(8.0)
+    def describe(self, serial, query, runtime=None):
+        if not serial:
+            raise ValueError('TARGET_SELECTION_REQUIRED')
+        code, output, _ = query(['devices'])
+        if code:
+            raise ValueError('TARGET_OBSERVATION_UNAVAILABLE')
+        entries = [tuple(line.split()[:2]) for line in output.splitlines()[1:] if len(line.split()) >= 2]
+        select_transport(entries, serial)
+        target = super().describe(serial, query, runtime)
+        if target.target_type != TargetType.PHYSICAL_DEVICE:
+            raise ValueError('TARGET_TYPE_UNVERIFIED')
+        return target
+
+
 def save_target(root, target):
     target = ExecutionTarget.from_dict(target.to_dict())
     path = Path(root) / 'dynamic' / 'execution_target.json'
     path.parent.mkdir(parents=True, exist_ok=True)
-    SessionStorage._atomic_write_json(str(path), target.to_dict())
+    write_json_atomic(str(path), target.to_dict())
 
 
 def load_target(root):

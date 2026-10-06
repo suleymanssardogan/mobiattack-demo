@@ -4,7 +4,7 @@ Ref labels alone cannot establish response reality or mutation integrity. The
 source bundle contains sanitized canonical payloads and actual lab receipts.
 Legacy summaries/booleans are intentionally not inputs to the decision.
 """
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 import hashlib
 import json
 from pathlib import Path
@@ -29,6 +29,8 @@ class AuthPresenceEvidence:
     execution_ref: str
     control_ref: str
     comparison_ref: str
+    auth_contract_version: str | None = field(default=None, kw_only=True)
+    auth_migration: dict = field(default_factory=dict, kw_only=True)
 
 
 @dataclass(frozen=True)
@@ -121,13 +123,26 @@ def inspect_auth_presence(request, execution, registry, evidence):
         # Do not silently normalize away synthetic markers or secret values.
         if sanitize_transaction_data(baseline) != baseline or sanitize_transaction_data(variant) != variant:
             return fail('UNREDACTED_EVIDENCE', True)
+        from src.dynamic.traffic.auth_metadata import safe_auth_metadata
+        for q, state in ((bq, 'present'), (vq, 'absent')):
+            metadata = q.get('auth_metadata')
+            if not isinstance(metadata, dict) or metadata != safe_auth_metadata(metadata, request.session_id):
+                return fail('INVALID_EVIDENCE', True)
+            if metadata.get('session_id') != request.session_id:
+                return fail('CROSS_SESSION_EVIDENCE', True)
+            if metadata.get('state') != state or metadata.get('authorization_header_present') is not (state == 'present'):
+                return fail('MISSING_BASELINE_EVIDENCE' if state == 'present' else 'UNEXPECTED_REQUEST_MUTATION', True)
+            if metadata.get('cookie_header_present') is not False or metadata.get('api_key_header_present') is not False:
+                return fail('UNEXPECTED_REQUEST_MUTATION', True)
+            if state == 'absent' and (metadata.get('credential_refs') or metadata.get('cookies') or metadata.get('token_type')):
+                return fail('UNEXPECTED_REQUEST_MUTATION', True)
         from src.dynamic.security.authentication_presence import auth_removal_variant
         try:
-            expected = auth_removal_variant(baseline)
+            expected = auth_removal_variant(baseline, evidence_only=True)
         except ValueError:
             return fail('UNEXPECTED_REQUEST_MUTATION', True)
         # Only observation identity/time may differ. Unknown request fields fail.
-        transient = {'request_id', 'timestamp'}
+        transient = {'request_id', 'timestamp', 'auth_metadata'}
         if {k:v for k,v in expected.items() if k not in transient} != {k:v for k,v in vq.items() if k not in transient}:
             return fail('UNEXPECTED_REQUEST_MUTATION', True)
         if not (_time(execution.started_at) <= _time(vq['timestamp']) <= _time(vr['timestamp']) <= _time(execution.finished_at)) or _time(br['timestamp']) > _time(execution.started_at):
@@ -212,4 +227,5 @@ def load_recorded_auth_presence_case(directory, baseline_directory):
             or source_traffic.get('session_id') != request.session_id
             or source_contexts.get('session_id') != request.session_id):
         raise ValueError('REFERENCE_MISMATCH')
-    return request, execution, registry, evidence
+    from src.dynamic.security.auth_evidence_contract import adapt_auth_presence_evidence
+    return request, execution, registry, adapt_auth_presence_evidence(evidence)

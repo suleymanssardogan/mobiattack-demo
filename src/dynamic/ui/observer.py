@@ -331,8 +331,8 @@ def observe_screen(
                 adb_bin=adb_bin,
                 timeout_seconds=min(DEFAULT_COMMAND_TIMEOUT_SECONDS, 10.0),
             )
-            if current_deadline().remaining() <= 0:
-                raise UIObservationError('UI observation deadline exhausted')
+            # A completed bounded dump is evidence even if its cleanup consumed
+            # the last budget. Parse it locally; never start another ADB call.
             obs = parse_ui_hierarchy(
                 root=root,
                 foreground_package=fg_pkg,
@@ -340,6 +340,8 @@ def observe_screen(
                 target_package=target_package,
                 observation_attempts=attempt,
             )
+            if not obs.nodes:
+                raise UIObservationError('UI hierarchy contains no nodes')
             last_observation = obs
 
             # If target package was requested and we are on target package, observation is optimal!
@@ -362,7 +364,7 @@ def observe_screen(
                 sleeper(wait_time)
 
     # If we obtained at least one valid ScreenObservation, return it
-    if last_observation is not None and current_deadline().remaining() > 0:
+    if last_observation is not None:
         last_observation.observation_attempts = attempt
         return last_observation
 

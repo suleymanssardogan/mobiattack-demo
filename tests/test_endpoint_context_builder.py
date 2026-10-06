@@ -111,14 +111,14 @@ def test_auth_presence_without_values(evidence, key):
     assert "SECRET" not in json.dumps(context(evidence).to_dict())
 
 
-def test_redacted_auth_has_unknown_subtype():
+def test_capture_preserves_safe_auth_subtype_before_redaction():
     tx = normalize_http_transaction({"url": "https://api.example.com/login", "headers": {
         "Authorization": "Bearer TOKEN_SECRET", "Cookie": "session=COOKIE_SECRET"}}, None, "capture")
     corr = correlate_static_dynamic_apis([], [tx])
     auth = build_endpoint_contexts(corr, [tx]).endpoints[0].auth
     assert auth["authorization_header_present"] and auth["cookie_present"]
-    assert auth["bearer_token_present"] is None
-    assert auth["session_cookie_present"] is None
+    assert auth["bearer_token_present"] is True
+    assert auth["session_cookie_present"] is True
 
 
 def test_content_type_safe_metadata(evidence):
@@ -256,16 +256,16 @@ def test_atomic_write_and_load(evidence, tmp_path):
     path = tmp_path / "endpoint_contexts.json"
     artifact.save_atomic(path)
     assert EndpointContextArtifact.load(path).to_dict() == artifact.to_dict()
-    assert not list(tmp_path.glob("*.tmp.*"))
+    assert not list(tmp_path.glob(".tmp_json_*"))
 
 
 def test_atomic_failure_preserves_existing(evidence, tmp_path):
     path = tmp_path / "endpoint_contexts.json"; path.write_text("previous")
-    with patch.object(Path, "replace", side_effect=OSError("failed")):
+    with patch("src.persistence.os.replace", side_effect=OSError("failed")):
         with pytest.raises(OSError):
             build_endpoint_contexts(*evidence).save_atomic(path)
     assert path.read_text() == "previous"
-    assert not list(tmp_path.glob("*.tmp.*"))
+    assert not list(tmp_path.glob(".tmp_json_*"))
 
 
 @pytest.mark.parametrize("raw", ["{", "[]", '{"schema_version":"2.0"}',

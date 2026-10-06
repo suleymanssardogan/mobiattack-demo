@@ -93,6 +93,7 @@ class NativeProxyCaptureBackend:
         listen_port: int = 8080,
         on_transaction_captured: Callable[[TrafficTransaction], None] | None = None,
         capture_id: str | None = None,
+        session_id: str | None = None,
         timeout_seconds: float = 5.0,
     ) -> None:
         """Binds and starts the HTTP proxy server on a background thread."""
@@ -108,6 +109,7 @@ class NativeProxyCaptureBackend:
         self.listen_host = listen_host
         self.listen_port = listen_port
         self._on_transaction = on_transaction_captured
+        self.session_id = session_id
         self.captured_transactions = []
         if capture_id:
             self.capture_id = capture_id
@@ -205,7 +207,10 @@ class NativeProxyCaptureBackend:
                             chunks.append(chunk)
                         upstream_body = b''.join(chunks)
                         resp_status = upstream_resp.status
-                        resp_headers = dict(upstream_resp.getheaders())
+                        upstream_headers = upstream_resp.getheaders()
+                        resp_headers = dict(upstream_headers)
+                        cookie_values = [v for k,v in upstream_headers if k.lower() == 'set-cookie']
+                        if cookie_values: resp_headers['Set-Cookie'] = cookie_values
                         resp_body = upstream_body
                         upstream_observed = True
                 except Exception:
@@ -225,7 +230,9 @@ class NativeProxyCaptureBackend:
                     self.connection.settimeout(request_deadline.timeout(3.0))
                     self.send_response(resp_status)
                     for h_k, h_v in resp_headers.items():
-                        self.send_header(h_k, h_v)
+                        if isinstance(h_v,list):
+                            for value in h_v: self.send_header(h_k,value)
+                        else: self.send_header(h_k, h_v)
                     self.end_headers()
                     self.wfile.write(resp_body)
                 except Exception as send_err:
@@ -254,6 +261,7 @@ class NativeProxyCaptureBackend:
                 # Normalize and dispatch
                 tx = normalize_http_transaction(
                     raw_req=raw_req,
+                    session_id=backend_self.session_id,
                     raw_resp=raw_resp if upstream_observed else None,
                     capture_id=backend_self.capture_id,
                     duration_ms=duration_ms,

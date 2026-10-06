@@ -75,7 +75,7 @@ def test_localhost_real_upstream_status_is_preserved(proxy_handler, monkeypatch,
     assert 0 < connect.call_args.kwargs['timeout'] <= 3.0
     tx, = backend.captured_transactions
     assert tx.response.status_code == status
-    assert tx.response.body == {'result': 'observed', 'token': '[REDACTED]'}
+    assert tx.response.body == {'result': '[REDACTED]', 'token': '[REDACTED]'}
     assert 'response_observation' not in tx.correlation
 
 
@@ -98,7 +98,7 @@ def test_query_keys_preserved_sensitive_values_redacted(key):
                                      'path':f'/orders?{key}=DUMMY_SECRET&q=hello'}, None, 'capture')
     assert tx.request.path == '/orders'
     assert tx.request.query[key] == '[REDACTED]'
-    assert tx.request.query['q'] == 'hello'
+    assert tx.request.query['q'] == '[REDACTED]'
     assert 'DUMMY_SECRET' not in json.dumps(tx.to_dict())
 
 
@@ -117,7 +117,7 @@ def test_structured_body_preserves_shape_without_sensitive_values(ct, body):
         assert tx.request.body['auth'] == {'session':'[REDACTED]'}
         assert tx.request.body['items'] == [{'jwt':'[REDACTED]', 'count':2}]
     else:
-        assert tx.request.body['q'] == 'hello'
+        assert tx.request.body['q'] == '[REDACTED]'
     assert tx.response.status_code == 201
 
 
@@ -148,7 +148,7 @@ def test_sensitive_headers_and_url_header_queries_are_sanitized():
                                    'Set-Cookie':'DUMMY_SECRET'}},'capture')
     assert 'DUMMY_SECRET' not in json.dumps(tx.to_dict())
     assert tx.request.headers['content-type'] == 'application/json'
-    assert 'q=hello' in tx.request.headers['referer']
+    assert tx.request.headers['referer'] == '[REDACTED]'
 
 
 @pytest.mark.parametrize('flag',['synthetic','internal'])

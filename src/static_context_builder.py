@@ -18,6 +18,9 @@ from src.manifest_parser import parse_manifest
 from src.apk_structure_extractor import extract_apk_structure
 from src.network_indicator_extractor import extract_network_indicators
 from src.api_candidate_extractor import extract_api_candidates
+from src.static_tls_metadata import extract_static_tls_metadata
+from src.static_webview_metadata import extract_webview_metadata
+from src.static_permission_usage import extract_permission_usage
 
 
 def build_static_context(
@@ -90,12 +93,14 @@ def build_static_context(
     structure_data = extract_apk_structure(raw_p, apktool_p)
 
     # 3. Task 03: Textual network indicators (source paths relative to apktool_root)
-    network_indicators = extract_network_indicators(apktool_p)
+    network_coverage = {}
+    network_indicators = extract_network_indicators(apktool_p, coverage=network_coverage)
 
     # 4. Task 04: Static API candidates
     # Called directly with apktool_root so Smali source paths are canonically relative to apktool_root
     api_data = extract_api_candidates(apktool_p)
 
+    discovery = {**api_data.get("discovery_diagnostics", {}), **network_coverage}
     return {
         "app": {
             "package_name": manifest_data["package_name"],
@@ -109,7 +114,10 @@ def build_static_context(
         "structure": structure_data,
         "network_indicators": network_indicators,
         "api_candidates": api_data["api_candidates"],
-        "api_discovery": api_data.get("discovery_diagnostics", {}),
+        "api_discovery": discovery,
+        "tls_metadata": extract_static_tls_metadata(apktool_p, manifest_p),
+        "webview_metadata": extract_webview_metadata(apktool_p, manifest_p),
+        "permission_usage": extract_permission_usage(apktool_p, manifest_data),
     }
 
 

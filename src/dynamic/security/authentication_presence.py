@@ -19,7 +19,7 @@ from src.dynamic.security.contracts import (
 from src.dynamic.traffic.normalizer import normalize_http_transaction, sanitize_transaction_data
 
 
-def auth_removal_variant(baseline):
+def auth_removal_variant(baseline, *, evidence_only=False):
     """Only Authorization is supported in V1; ambiguous cookies fail closed."""
     request = deepcopy(baseline['request'])
     if request.get('method') != 'GET' or request.get('path') != '/profile' or request.get('scheme') != 'http' or request.get('port') != 18081:
@@ -33,7 +33,7 @@ def auth_removal_variant(baseline):
     if len(auth) != 1 or not headers[auth[0]] or any(k.lower() in {'cookie', 'proxy-authorization', 'x-api-key', 'x-auth-token', 'x-access-token'} for k in headers):
         raise ValueError('Single observed Authorization baseline required')
     del headers[auth[0]]
-    if any('[REDACTED]' in str(v) or '\r' in str(v) or '\n' in str(v) for v in headers.values()):
+    if any((not evidence_only and '[REDACTED]' in str(v)) or '\r' in str(v) or '\n' in str(v) for v in headers.values()):
         raise ValueError('Unreconstructable or invalid remaining headers')
     return request
 
@@ -153,14 +153,21 @@ class LocalLabAuthenticationPresence:
     def validate(self, request, execution):
         if not self.comparison or execution.execution_status != 'completed' or self.execution_ref not in execution.tool_refs:
             raise ValueError('This execution has no verified comparison')
-        from src.dynamic.security.validation import AuthPresenceEvidence, validate_authentication_presence
+        from src.dynamic.security.validation import validate_authentication_presence
+        evidence = self.validation_evidence()
+        result = validate_authentication_presence(request, execution, self.evidence, evidence)
+        if result.outcome == 'validated':
+            validate_result(request, execution, result, self.evidence, auth_evidence=evidence)
+        return result
+
+    def validation_evidence(self):
+        """Expose sanitized canonical proof for independent validator invocation."""
+        from src.dynamic.security.validation import AuthPresenceEvidence
         evidence = AuthPresenceEvidence(
             context=self._context, session=self._session, baseline=self.baseline,
             variant=self.transaction.to_dict() if self.transaction else None,
             baseline_receipts=self._baseline_receipts, variant_receipts=self.receipts,
             execution_ref=self.execution_ref, control_ref=self.comparison.get('control_ref'),
             comparison_ref=self.comparison.get('comparison_ref'))
-        result = validate_authentication_presence(request, execution, self.evidence, evidence)
-        if result.outcome == 'validated':
-            validate_result(request, execution, result, self.evidence, auth_evidence=evidence)
-        return result
+        from src.dynamic.security.auth_evidence_contract import adapt_auth_presence_evidence
+        return adapt_auth_presence_evidence(evidence)

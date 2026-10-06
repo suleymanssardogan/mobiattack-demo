@@ -592,12 +592,14 @@ class TestStaticDynamicApiCorrelation(unittest.TestCase):
         init_st = create_initial_scan_state(scan_id=self.base_dir.name, target_url="http://test.com/app.apk")
         save_scan_state(self.base_dir, init_st)
 
-        obs = MagicMock(
+        from src.dynamic.ui.models import ScreenObservation
+        obs = ScreenObservation(
             screen_identity="screen_1",
             foreground_package="com.test",
             foreground_activity="MainActivity",
-            clickable_elements=[],
-            actionable_candidates=[],
+            target_package="com.test",
+            is_target_package=True,
+            action_candidates=[],
         )
 
         with patch("src.dynamic.ui.observer.observe_screen", return_value=obs), \

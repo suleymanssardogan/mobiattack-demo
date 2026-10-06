@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from src.dynamic.traffic.auth_metadata import observe_auth, safe_auth_metadata, observe_payload_credentials
 import hashlib
 import json
 import re
@@ -41,6 +42,7 @@ SENSITIVE_PAYLOAD_KEYS = {
     "key",
     "session",
     "jwt",
+    "credential", "credentials", "sid", "otp", "pin", "sessionid",
 }
 
 
@@ -71,27 +73,49 @@ def _sanitize_url_header(value: str) -> str:
         return "[REDACTED]"
 
 
-def sanitize_headers(headers: dict[str, str] | None) -> dict[str, str]:
+def sanitize_headers(headers: dict[str, str] | None, session_id: str | None = None) -> dict[str, str]:
     """Keep header names, redact credential headers and secrets in URL headers."""
     sanitized = {}
     for key, val in (headers or {}).items():
         name = str(key).strip().lower()
         if name in SENSITIVE_HEADERS or _sensitive_name(name):
             sanitized[name] = "[REDACTED]"
-        elif name in {"location", "content-location", "referer"}:
-            sanitized[name] = _sanitize_url_header(str(val))
-        else:
+        elif name == "host" and re.fullmatch(r"[A-Za-z0-9.\[\]:-]{1,253}", str(val)):
             sanitized[name] = str(val)
+        elif name == "x-lab-run-id" and session_id and str(val) == session_id:
+            sanitized[name] = str(val)  # Existing canonical session reference, not a credential.
+        elif name == "x-lab-trace-id" and (re.fullmatch(r"lab_[0-9a-f]{32}", str(val)) or str(val) == "lab_test_variant"):
+            sanitized[name] = str(val)  # Typed public executor evidence reference.
+        elif name == "content-type":
+            match = re.match(r"^[A-Za-z0-9!#$&^_.+-]+/[A-Za-z0-9!#$&^_.+-]+", str(val))
+            sanitized[name] = match.group(0).lower() if match else "[REDACTED]"
+        elif name == "content-length" and str(val).isdigit():
+            sanitized[name] = str(val)
+        else:
+            sanitized[name] = "[REDACTED]"
     return sanitized
+
+
+# Fixed public protocol constants used by the existing controlled validation contract.
+# No arbitrary value, account name, endpoint-dependent rule or token is allowlisted.
+PUBLIC_PROTOCOL_FIELDS = {
+    "error": {"authentication_required", "session_invalidated", "function_access_denied", "object_access_denied", "server_failure", "other"},
+    "purpose": {"read_only_training_profile", "protected_training_order"},
+    "display_name": {"Training User", "Training User A"},
+    "logout": {"completed"}, "function": {"training_toggle"},
+    "owner_alias": {"user_A", "user_B"}, "resource_id": {"order_A", "order_B"},
+}
 
 
 def sanitize_body_payload(body: Any) -> Any:
     """Preserve structured shape and names while redacting sensitive leaves."""
     if isinstance(body, dict):
         return {key: _redact_shape(val) if _sensitive_name(key) else
-                sanitize_body_payload(val) for key, val in body.items()}
+                (val if (isinstance(val, str) and val in PUBLIC_PROTOCOL_FIELDS.get(key, set())) or (type(val) is int and key in {"count","size","length","revision","status_code"} and 0 <= val <= 1048576) else sanitize_body_payload(val)) for key, val in body.items()}
     if isinstance(body, list):
         return [sanitize_body_payload(item) for item in body]
+    if isinstance(body, (str, int, float)) and not isinstance(body, bool):
+        return "[REDACTED]"
     return body
 
 
@@ -114,7 +138,10 @@ def sanitize_transaction_data(data: dict) -> dict:
         item = clean.get(side)
         if not isinstance(item, dict):
             continue
-        item["headers"] = sanitize_headers(item.get("headers"))
+        if "auth_metadata" in item:
+            prior = safe_auth_metadata(item.get("auth_metadata"), clean.get("session_id"))
+            item["auth_metadata"] = prior or observe_auth(item.get("headers"), clean.get("session_id"), response=side == "response")
+        item["headers"] = sanitize_headers(item.get("headers"), clean.get("session_id"))
         body = item.get("body")
         meta = item.setdefault("body_metadata", {})
         if meta.get("binary"):
@@ -227,7 +254,7 @@ def normalize_http_transaction(
     if internal_response:
         raw_resp = None
     # Process Request
-    req_headers = sanitize_headers(raw_req.get("headers"))
+    req_headers = sanitize_headers(raw_req.get("headers"), session_id)
     req_ct = req_headers.get("content-type")
     req_body, req_body_meta = process_body_content(raw_req.get("body"), req_ct)
 
@@ -246,7 +273,9 @@ def normalize_http_transaction(
         query = {k: v[0] if len(v) == 1 else v for k, v in qs.items()}
 
     path_query = parse_qs(path_parts.query, keep_blank_values=True)
-    query = sanitize_body_payload({**path_query, **(query or {})})
+    query = {**path_query, **(query or {})}
+    auth_metadata = observe_payload_credentials(observe_auth(raw_req.get("headers"),session_id), query, raw_req.get("body"), req_ct, session_id)
+    query = sanitize_body_payload(query)
 
     request_model = HttpRequestModel(
         timestamp=raw_req.get("timestamp") or raw_req.get("time") or "",
@@ -259,12 +288,13 @@ def normalize_http_transaction(
         headers=req_headers,
         body=req_body,
         body_metadata=req_body_meta,
+        auth_metadata=auth_metadata,
     )
 
     # Process Response
     response_model: HttpResponseModel | None = None
     if raw_resp:
-        resp_headers = sanitize_headers(raw_resp.get("headers"))
+        resp_headers = sanitize_headers(raw_resp.get("headers"), session_id)
         resp_ct = resp_headers.get("content-type")
         resp_body, resp_body_meta = process_body_content(raw_resp.get("body"), resp_ct)
 
@@ -274,6 +304,7 @@ def normalize_http_transaction(
             body=resp_body,
             timestamp=raw_resp.get("timestamp") or "",
             body_metadata=resp_body_meta,
+            auth_metadata=observe_auth(raw_resp.get("headers"), session_id, response=True),
         )
 
     return TrafficTransaction(

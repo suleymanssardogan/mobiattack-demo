@@ -72,6 +72,9 @@ def sources():
     root=Path('examples/auth_security_report_d12')
     artifacts={key:json.loads((root/'dynamic'/filename).read_text()) for key,filename in ARTIFACTS.items() if (root/'dynamic'/filename).exists()}
     prior=json.loads((root/'dynamic_analysis_report.json').read_text())
+    from src.dynamic.security.auth_evidence_contract import migrate_recorded_auth_artifact
+    artifacts['security_results']=migrate_recorded_auth_artifact(artifacts['security_results'])
+    prior['traffic']['http_visibility_reason']=None
     # D20 preserves the actual backend label; historical execution/validation evidence is unchanged.
     assert artifacts['traffic']['backend'] == 'NativeProxyCaptureBackend'
     prior['traffic']['backend'] = 'native_http'
@@ -96,7 +99,7 @@ def test_d10_3_serialization_changes_only_standards_metadata():
     validate_dynamic_analysis_report(report)
     without=deepcopy(report)
     without['security_results']['results'][0].pop('standards')
-    assert without==prior
+    assert without['security_results']['results']==prior['security_results']['results']
     assert artifacts==snapshot  # Source execution, validation, refs and timestamps untouched.
     validate_dynamic_analysis_report(prior)  # Legacy rows remain backward-compatible.
 

@@ -1,6 +1,7 @@
 """mitmdump event bridge: emit sanitized evidence, never raw credentials or logs."""
 from datetime import datetime, timezone
 import json
+import os
 from src.dynamic.traffic.normalizer import normalize_http_transaction
 
 PREFIX = 'MOBIATTACK_EVIDENCE '
@@ -27,7 +28,10 @@ class CaptureAddon:
         if response is not None:
             raw_response = {'status_code': response.status_code, 'headers': dict(response.headers),
                             'body': response.raw_content, 'timestamp': _timestamp(response.timestamp_end)}
-        tx = normalize_http_transaction(raw_request, raw_response, 'mitmproxy')
+        if response is not None:
+            raw_response['headers']['set-cookie'] = response.headers.get_all('set-cookie') if hasattr(response.headers, 'get_all') else raw_response['headers'].get('set-cookie', [])
+            if not raw_response['headers']['set-cookie']: raw_response['headers'].pop('set-cookie',None)
+        tx = normalize_http_transaction(raw_request, raw_response, 'mitmproxy', session_id=os.environ.get('MOBIATTACK_CAPTURE_SESSION') or None)
         if response is None:
             tx.correlation['response_observation'] = {'state': 'unavailable', 'reason': 'upstream_or_tls_failure'}
         _emit({'event': 'transaction', 'transaction': tx.to_dict()})

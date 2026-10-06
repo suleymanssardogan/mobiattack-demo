@@ -43,7 +43,8 @@ class DynamicTrafficService:
         adb_bin: str | None = None,
     ) -> None:
         self.adb_bin = find_adb_binary(adb_bin)
-        self.backend: TrafficCaptureBackend = backend or MitmproxyCaptureBackend()
+        from src.dynamic.traffic.backend_selection import select_capture_backend
+        self.backend: TrafficCaptureBackend = backend if backend is not None else select_capture_backend()
         self.storage: TrafficStorage = storage or TrafficStorage()
         self.active_capture: CaptureSession | None = None
         self.proxy_mgr: DeviceProxyManager | None = None
@@ -185,12 +186,38 @@ class DynamicTrafficService:
             ca_trust = self.backend.https.ca_trust
         else:
             https_vis, reason, ca_trust = 'unknown', 'no_https_transaction_available_to_verify', 'unknown'
+        compatibility = (self.active_capture.metadata.get('https_compatibility')
+                         if self.active_capture else None)
+        if compatibility and isinstance(self.backend, MitmproxyCaptureBackend) and not self.backend.https.backend_failed and is_backend_available:
+            from .https_compatibility import validate_compatibility_metadata
+            compatibility = validate_compatibility_metadata(compatibility, self.active_capture.session_id)
+            https_vis, reason = compatibility['visibility'], compatibility['reason_code']
         return {
+            'https_compatibility': compatibility,
             'capture_available': str(capture_available).lower(),
             'http_visibility': self.http_visibility, 'http_reason': self.http_reason,
             'https_visibility': https_vis, 'https_reason': reason, 'ca_trust': ca_trust,
             'ca_trust_reason': self.backend.https.ca_reason if isinstance(self.backend, MitmproxyCaptureBackend) else 'not_applicable',
         }
+
+    def record_https_compatibility(self, package_name, evidence_refs, evidence_index):
+        """Attach application-scoped compatibility; never modify device trust."""
+        from .https_compatibility import classify_https_compatibility
+        if not self.active_capture or not isinstance(self.backend, MitmproxyCaptureBackend):
+            raise ValueError('HTTPS compatibility requires a mitmproxy capture session')
+        target = self.active_capture.metadata.get('target_package')
+        if target and target != package_name:
+            raise ValueError('HTTPS compatibility target mismatch')
+        for ref in evidence_refs:
+            row = evidence_index.get(ref, {})
+            if row.get('observation') == 'real_https_transaction':
+                if not any(tx.transaction_id == ref and tx.request.scheme == 'https'
+                           and tx.response is not None for tx in self.captured_transactions):
+                    raise ValueError('Real HTTPS transaction evidence missing')
+        result = classify_https_compatibility(package_name, self.active_capture.session_id,
+                                             evidence_refs, evidence_index)
+        self.active_capture.metadata['https_compatibility'] = result.to_dict()
+        return result
 
     def refresh_ca_trust(self, device_serial: str) -> None:
         if isinstance(self.backend, MitmproxyCaptureBackend) and self.adb_bin:
@@ -230,6 +257,8 @@ class DynamicTrafficService:
             backend=type(self.backend).__name__,
         )
         self.active_capture = capture
+        if session_obj:
+            capture.metadata['target_package'] = session_obj.package_name
         self.captured_transactions = []
         self.auth_privacy = False
         self.correlator = TrafficCorrelator(session=session_obj, in_scope_domains=in_scope_domains)
@@ -249,6 +278,7 @@ class DynamicTrafficService:
                 listen_host="0.0.0.0",
                 listen_port=proxy_port,
                 on_transaction_captured=self._on_transaction_captured,
+                session_id=session_id_str,
             )
 
             self.refresh_ca_trust(device_serial)
@@ -422,6 +452,7 @@ class DynamicTrafficService:
             http_visibility_reason=vis.get("http_reason", "unknown"),
             https_visibility=vis.get("https_visibility", "unavailable"),
             https_visibility_reason=vis.get("https_reason", "certificate_trust_unknown"),
+            https_compatibility=vis.get('https_compatibility'),
             ca_trust_state=vis.get('ca_trust', 'unknown'),
             ca_trust_reason=vis.get('ca_trust_reason', 'certificate_trust_unknown'),
             verified_https_transactions=self.backend.https.verified_transactions if isinstance(self.backend, MitmproxyCaptureBackend) else 0,

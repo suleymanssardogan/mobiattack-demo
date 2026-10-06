@@ -231,7 +231,7 @@ def test_atomic_write_and_validate(sources, tmp_path):
 
 def test_atomic_failure_preserves_existing(sources, tmp_path):
     path = tmp_path / "dynamic_analysis_report.json"; path.write_text("previous")
-    with patch("src.dynamic.report.models.os.replace", side_effect=OSError("synthetic")):
+    with patch("src.persistence.os.replace", side_effect=OSError("synthetic")):
         with pytest.raises(OSError):
             save_dynamic_analysis_report(tmp_path, report(sources))
     assert path.read_text() == "previous"

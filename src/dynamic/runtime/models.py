@@ -8,6 +8,8 @@ Defines structured, sanitized dataclasses for:
 
 from __future__ import annotations
 
+from src.persistence import write_json_atomic
+
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from enum import Enum
@@ -15,7 +17,6 @@ import json
 from pathlib import Path
 import re
 from typing import Any
-import uuid
 
 
 def utc_now_iso() -> str:
@@ -404,13 +405,7 @@ class RuntimeEvidenceArtifact:
 
     def save_atomic(self, file_path: str | Path) -> None:
         """Persists runtime evidence artifact atomically to disk."""
-        target = Path(file_path)
-        target.parent.mkdir(parents=True, exist_ok=True)
-        tmp_target = target.with_suffix(f".tmp.{uuid.uuid4().hex[:8]}")
-        content = json.dumps(self.to_dict(), indent=2, ensure_ascii=False)
-        with open(tmp_target, "w", encoding="utf-8") as f:
-            f.write(content)
-        tmp_target.replace(target)
+        write_json_atomic(file_path, self.to_dict())
 
     @classmethod
     def load_or_create(cls, file_path: str | Path, session_id: str) -> RuntimeEvidenceArtifact:
