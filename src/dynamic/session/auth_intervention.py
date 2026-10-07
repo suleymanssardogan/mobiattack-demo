@@ -15,9 +15,48 @@ MESSAGES['AUTH_RESUME_READY'] = 'User-assisted authentication completed; Dynamic
 
 
 def auth_wall(obs):
-    return (obs.is_target_package and any(n.password and n.editable and n.visible and n.enabled for n in obs.nodes)
-            and any(a.action_type == 'click' and re.search(r'\b(login|register|sign[ -]?in|sign[ -]?up)\b',
-                ' '.join((a.text, a.content_desc)), re.I) for a in obs.action_candidates))
+    # An informational disclosure or legal notice is never an authentication wall
+    if getattr(obs, "nodes", None):
+        has_disclosure = any(
+            re.search(r"\b(disclosure|notice|disclaimer|terms\s+of\s+service|privacy\s+policy|accessibility)\b",
+                      n.text or n.content_desc or "", re.I)
+            for n in obs.nodes if n.visible
+        )
+        has_password = any(n.password and n.editable and n.visible and n.enabled for n in obs.nodes)
+        if has_disclosure and not has_password:
+            return False
+    if not getattr(obs, "is_target_package", False):
+        return False
+    # Traditional single-step auth wall with password field and login button
+    has_pwd_wall = (
+        any(n.password and n.editable and n.visible and n.enabled for n in obs.nodes)
+        and any(a.action_type == 'click' and re.search(r'\b(log[ -]?in|register|sign[ -]?in|sign[ -]?up)\b',
+            ' '.join((a.text or '', a.content_desc or '')), re.I) for a in obs.action_candidates)
+    )
+    if has_pwd_wall:
+        return True
+    # Identifier-first login screen (e.g. Email address entry with Log in heading and Continue action)
+    has_editable = any(n.editable and n.visible and n.enabled for n in obs.nodes)
+    if has_editable:
+        screen_text = ' '.join((n.text or n.content_desc or '') for n in obs.nodes).lower()
+        has_auth_heading = bool(re.search(r'\b(log[ -]?in(\s+to)?|sign[ -]?in(\s+to)?)\b', screen_text))
+        has_credential_field = (
+            any(re.search(r'email|username|user[ -]?id|account|identifier|credential',
+                          ' '.join((n.text or '', n.content_desc or '', n.resource_id or '')), re.I)
+                for n in obs.nodes if n.editable)
+            or bool(re.search(r'\b(email(\s+address)?|username|user[ -]?id|credentials?)\b', screen_text))
+        )
+        has_progression = (
+            any(a.action_type == 'click' and re.search(r'\b(continue|next|log[ -]?in|sign[ -]?in|proceed)\b',
+                ' '.join((a.text or '', a.content_desc or '', a.resource_id or '')), re.I)
+                for a in obs.action_candidates)
+            or any(re.search(r'\b(continue|next|log[ -]?in|sign[ -]?in|proceed)\b',
+                ' '.join((n.text or '', n.content_desc or '', n.resource_id or '')), re.I)
+                for n in obs.nodes)
+        )
+        if has_auth_heading and has_credential_field and has_progression:
+            return True
+    return False
 
 
 def safe_observation(obs):

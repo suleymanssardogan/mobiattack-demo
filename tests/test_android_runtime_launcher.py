@@ -263,7 +263,33 @@ class TestAndroidRuntimeLauncherUnit(unittest.TestCase):
         call_args = mock_run.call_args[0][0]
         self.assertEqual(
             call_args,
-            ["/bin/adb", "-s", "emulator-5554", "shell", "am", "start", "-n", "com.example/com.example.MainActivity"],
+            [
+                "/bin/adb",
+                "-s",
+                "emulator-5554",
+                "shell",
+                "am",
+                "start",
+                "-a",
+                "android.intent.action.MAIN",
+                "-c",
+                "android.intent.category.LAUNCHER",
+                "-n",
+                "com.example/com.example.MainActivity",
+            ],
+        )
+
+    @patch("subprocess.run")
+    def test_16b_non_launcher_activity_arguments(self, mock_run):
+        mock_run.return_value = subprocess.CompletedProcess(
+            args=[], returncode=0, stdout="Starting: Intent { cmp=com.example/.SecondaryActivity }\n", stderr=""
+        )
+        res = launch_activity("/bin/adb", "emulator-5554", "com.example/com.example.SecondaryActivity", is_launcher=False)
+        self.assertTrue(res["success"])
+        call_args = mock_run.call_args[0][0]
+        self.assertEqual(
+            call_args,
+            ["/bin/adb", "-s", "emulator-5554", "shell", "am", "start", "-n", "com.example/com.example.SecondaryActivity"],
         )
 
     @patch("subprocess.run")

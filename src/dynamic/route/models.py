@@ -216,6 +216,10 @@ class RouteNode:
             input_count=obs.input_count,
         )
 
+        from src.dynamic.exploration.models import classify_screen_context
+        ctx = classify_screen_context(obs)
+        node.metadata["screen_context"] = ctx
+
         for candidate in obs.action_candidates:
             action = DiscoveredAction.from_action_candidate(
                 candidate=candidate,
@@ -223,6 +227,7 @@ class RouteNode:
                 source_screen_identity=obs.screen_identity,
                 timestamp=ts,
             )
+            setattr(action, "_screen_context", ctx)
             node.actions[action.action_id] = action
 
         return node
@@ -238,6 +243,12 @@ class RouteNode:
         self.last_seen_at = ts
         self.clickable_count = obs.clickable_count
         self.input_count = obs.input_count
+
+        from src.dynamic.exploration.models import classify_screen_context
+        ctx = classify_screen_context(obs)
+        self.metadata["screen_context"] = ctx
+        for action in self.actions.values():
+            setattr(action, "_screen_context", ctx)
 
         # Merge action candidates: update existing timestamp, add newly discovered, keep historical
         for candidate in obs.action_candidates:

@@ -251,9 +251,25 @@ def _security_facts(root, app, package, path):
                 for node in config.iter():
                     value = _bool(node.get('cleartextTrafficPermitted'))
                     if value is not None and node.tag in {'base-config', 'domain-config'}:
-                        policy['cleartext_permissions'].append({'value': value,
-                            'source': 'res/xml/' + resource.name, 'component': node.tag,
-                            'domains': sorted((d.text or '').strip() for d in node.findall('domain'))})
+                        domain_entries = []
+                        for d in node.findall('domain'):
+                            d_text = (d.text or '').strip()
+                            if d_text:
+                                d_inc = _bool(d.get('includeSubdomains')) is True
+                                domain_entries.append({
+                                    'domain': d_text,
+                                    'include_subdomains': d_inc,
+                                })
+                        domain_entries.sort(key=lambda x: x['domain'])
+                        domains = [e['domain'] for e in domain_entries]
+                        policy['cleartext_permissions'].append({
+                            'value': value,
+                            'source': 'res/xml/' + resource.name,
+                            'component': node.tag,
+                            'domains': domains,
+                            'domain_entries': domain_entries,
+                            'include_subdomains': any(e['include_subdomains'] for e in domain_entries) if domain_entries else False,
+                        })
             except (OSError, ET.ParseError, ValueError):
                 pass
     for node in app:

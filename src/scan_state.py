@@ -38,6 +38,7 @@ CANONICAL_STATUSES: tuple[str, ...] = (
     "failed",
     "interrupted",
     "not_available",
+    "not_run",
 )
 
 CANONICAL_ARTIFACTS: tuple[str, ...] = (
@@ -445,6 +446,131 @@ def sync_dynamic_report_artifact(state: dict[str, Any], run_dir: str | Path, *, 
     return available
 
 
+def sync_agent_stage_and_artifacts(state: dict[str, Any], run_dir: str | Path) -> bool:
+    """Reconciles Agent Analysis stage status and artifacts based on evidence.
+
+    Distinct canonical states supported:
+    - completed: Agent planning completed, valid result/trace produced, zero executions allowed.
+    - partial: Agent ran but evidence was insufficient, policy blocked execution,
+               or model failed after stage start.
+    - not_available: Agent stage could not start (provider or runtime environment unavailable).
+    - not_run: Agent intentionally skipped because no grounded EndpointContext or prerequisite evidence existed.
+    """
+    dest_path = Path(run_dir)
+    agent_artifact_candidates = (
+        "agent_report.json",
+        "agent_trace.json",
+        "agent/validation_trace.json",
+        "agent/matrix_planning.json",
+        "agent/agent_trace.json",
+    )
+    found_artifact: Path | None = None
+    relative_path: str | None = None
+    for rel in agent_artifact_candidates:
+        candidate = dest_path / rel
+        if candidate.is_file():
+            found_artifact = candidate
+            relative_path = rel
+            break
+
+    stage = state["stages"]["agent_analysis"]
+    if found_artifact is not None:
+        state["artifacts"]["agent_report"] = {
+            "available": True,
+            "relative_path": relative_path,
+        }
+        trace_data: dict[str, Any] = {}
+        try:
+            with open(found_artifact, "r", encoding="utf-8") as af:
+                trace_data = json.load(af)
+        except Exception:
+            pass
+
+        st = str(trace_data.get("status") or "").lower()
+        reason_codes = [str(r).upper() for r in trace_data.get("reason_codes", ())]
+        policy_data = trace_data.get("policy") or {}
+        policy_status = str(policy_data.get("status") or "").lower() if isinstance(policy_data, dict) else ""
+        needs_evidence_cnt = policy_data.get("needs_evidence_count", 0) if isinstance(policy_data, dict) else 0
+
+        has_policy_block = (
+            any("POLICY" in r or "DISALLOWED" in r or "NEEDS_EVIDENCE" in r for r in reason_codes)
+            or needs_evidence_cnt > 0
+            or policy_status == "needs_evidence"
+        )
+        has_provider_error = any("TIMEOUT" in r or "MODEL_ERROR" in r or "UNAVAILABLE" in r for r in reason_codes)
+
+        if st in ("completed", "no_relevant_tests") and not has_policy_block and not has_provider_error:
+            stage["status"] = "completed"
+            stage["message"] = (
+                "Planning completed; no relevant security tests were applicable."
+                if (st == "no_relevant_tests" or not trace_data.get("executions"))
+                else "Planning and security validation completed."
+            )
+            stage["completed_at"] = stage.get("completed_at") or _utc_now_iso()
+        elif has_policy_block or st in ("partial", "needs_evidence", "evaluated") or (st in ("completed", "no_relevant_tests") and has_policy_block):
+            stage["status"] = "partial"
+            stage["message"] = "Planning completed, but runtime evidence was insufficient for validation."
+            stage["completed_at"] = stage.get("completed_at") or _utc_now_iso()
+        elif has_provider_error or st in ("stopped", "model_error"):
+            analyst_data = trace_data.get("analyst") or {}
+            analyst_status = analyst_data.get("status") if isinstance(analyst_data, dict) else None
+            if analyst_status == "completed" or trace_data.get("planner") is not None:
+                stage["status"] = "partial"
+                stage["message"] = "Agent analysis partially completed; provider error encountered."
+            else:
+                stage["status"] = "not_available"
+                stage["message"] = "Agent stage could not start; model provider is unavailable."
+            stage["completed_at"] = None
+        else:
+            stage["status"] = "partial"
+            stage["message"] = "Planning completed with partial coverage."
+            stage["completed_at"] = stage.get("completed_at") or _utc_now_iso()
+        return True
+
+    state["artifacts"]["agent_report"] = {
+        "available": False,
+        "relative_path": None,
+    }
+    stage["completed_at"] = None
+
+    dynamic_status = state.get("stages", {}).get("dynamic_analysis", {}).get("status")
+    if dynamic_status == "running":
+        return False
+
+    ep_file = dest_path / "dynamic" / "endpoint_contexts.json"
+    if not ep_file.is_file():
+        ep_file = dest_path / "endpoint_contexts.json"
+
+    ep_count = 0
+    ep_file_exists = ep_file.is_file()
+    if ep_file_exists:
+        try:
+            with open(ep_file, "r", encoding="utf-8") as ef:
+                ep_data = json.load(ef)
+                endpoints = ep_data.get("endpoints") or ep_data.get("endpoint_contexts") or []
+                if isinstance(endpoints, list):
+                    ep_count = len(endpoints)
+                else:
+                    ep_count = ep_data.get("summary", {}).get("endpoint_context_count", 0)
+        except Exception:
+            ep_count = 0
+
+    if ep_file_exists:
+        stage["status"] = "not_run"
+        if ep_count == 0:
+            stage["message"] = "No grounded endpoint context was available for Agent analysis."
+        else:
+            stage["message"] = "Agent analysis was skipped."
+    elif dynamic_status in ("not_available", "failed", "interrupted"):
+        stage["status"] = "not_available"
+        stage["message"] = "Agent runtime is unavailable in this scan."
+    else:
+        stage["status"] = "not_run"
+        stage["message"] = "No grounded endpoint context was available for Agent analysis."
+
+    return False
+
+
 class ScanStateCheckpointer:
     """Coordinates product-level scan state checkpoints with pipeline execution."""
 
@@ -706,6 +832,7 @@ class ScanStateCheckpointer:
             if self.last_save_error is not None:
                 return
         sync_dynamic_report_artifact(st, self.run_dir)
+        sync_agent_stage_and_artifacts(st, self.run_dir)
         static_report_path = self.run_dir / "static_analysis_report.json"
 
         if static_report_path.is_file():
@@ -852,6 +979,7 @@ def recover_scan_state(
                 state["stages"]["static_analysis"]["status"] = "not_available"
                 state["stages"]["static_analysis"]["message"] = "Static report unavailable during recovery."
             sync_dynamic_report_artifact(state, dest_dir)
+            sync_agent_stage_and_artifacts(state, dest_dir)
             if not state["stages"]["report_generation"].get("started_at"):
                 state["stages"]["report_generation"]["started_at"] = now
             update_stage_status(
@@ -937,10 +1065,7 @@ def recover_scan_state(
     # Recover dynamic availability from canonical integrity, never from execution status alone.
     before_dynamic = json.dumps({"artifacts": state["artifacts"], "stages": state["stages"]}, sort_keys=True)
     sync_dynamic_report_artifact(state, dest_dir)
-    state["artifacts"]["agent_report"]["available"] = False
-    state["artifacts"]["agent_report"]["relative_path"] = None
-    state["stages"]["agent_analysis"]["status"] = "not_available"
-    state["stages"]["agent_analysis"]["message"] = "Not available in this scan"
+    sync_agent_stage_and_artifacts(state, dest_dir)
     if before_dynamic != json.dumps({"artifacts": state["artifacts"], "stages": state["stages"]}, sort_keys=True):
         needs_save = True
 

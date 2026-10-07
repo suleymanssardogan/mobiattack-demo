@@ -556,7 +556,8 @@
     }
 
     .badge-skipped,
-    .badge-not_available {
+    .badge-not_available,
+    .badge-not_run {
       background: #f1f5f9;
       color: #475569;
       border: 1px solid #cbd5e1;
@@ -1373,7 +1374,8 @@
     }
 
     .stage-card.stage-skipped,
-    .stage-card.stage-not_available {
+    .stage-card.stage-not_available,
+    .stage-card.stage-not_run {
       background: #f8fafc;
       border-left-color: #94a3b8;
     }
@@ -2490,7 +2492,8 @@
         "warning": "Partial",
         "failed": "Failed",
         "not_available": "Not Available",
-        "skipped": "Not Available"
+        "skipped": "Not Available",
+        "not_run": "Not Run"
       };
       const displayLabel = labelMap[normalizedState] || (state ? state.charAt(0).toUpperCase() + state.slice(1) : "Pending");
       const cssState = (normalizedState === "success") ? "completed" :
@@ -2606,9 +2609,76 @@
         product.dynamic_analysis.message = "Full dynamic analysis scheduled for subsequent milestone";
       }
 
-      // 4. Agent Analysis (Critical Integrity Rule: Never fake progress)
-      product.agent_analysis.state = "not_available";
-      product.agent_analysis.message = "Not available in this scan";
+      // 4. Agent Analysis (Support distinct states: Completed, Partial, Not Available, Not Run)
+      const canonicalState = statusData.scan_state;
+      const canonicalAgent = (canonicalState && canonicalState.stages && canonicalState.stages.agent_analysis) ||
+                             backendStages.agent_analysis;
+      const agentResult = (statusData.result && (statusData.result.agent || statusData.result.agent_trace || statusData.result.agent_validation)) ||
+                          statusData.agent;
+
+      let agentState = "not_available";
+      let agentMessage = "Agent runtime is unavailable in this scan.";
+      if (canonicalAgent && canonicalAgent.status) {
+        agentState = canonicalAgent.status;
+        agentMessage = canonicalAgent.message || "";
+      } else if (agentResult) {
+        agentState = agentResult.status || agentResult.agent_state || "completed";
+        agentMessage = agentResult.message || "";
+      }
+
+      const rawAgentState = (agentState || "").toLowerCase();
+      let normalizedAgentState = "not_available";
+      if (rawAgentState === "completed" || rawAgentState === "success" || rawAgentState === "available" || rawAgentState === "no_relevant_tests") {
+        normalizedAgentState = "completed";
+      } else if (rawAgentState === "partial" || rawAgentState === "needs_evidence" || rawAgentState === "blocked" || rawAgentState === "policy_denied") {
+        normalizedAgentState = "partial";
+      } else if (rawAgentState === "not_run" || rawAgentState === "skipped") {
+        normalizedAgentState = "not_run";
+      } else if (rawAgentState === "running") {
+        normalizedAgentState = "running";
+      } else if (rawAgentState === "pending") {
+        normalizedAgentState = "pending";
+      } else {
+        normalizedAgentState = "not_available";
+      }
+
+      const rawAgentMsg = String(agentMessage || "");
+      let userFacingAgentReason = "";
+      if (rawAgentMsg.includes("no relevant security tests") || rawAgentMsg.includes("no_relevant_tests") || rawAgentMsg.includes("NO_RELEVANT_TESTS")) {
+        userFacingAgentReason = "Planning completed; no relevant security tests were applicable.";
+      } else if (rawAgentMsg.includes("insufficient") || rawAgentMsg.includes("needs_evidence") || rawAgentMsg.includes("POLICY_NEEDS_EVIDENCE") || rawAgentMsg.includes("MISSING_REQUIRED_CONTEXT")) {
+        userFacingAgentReason = "Planning completed, but runtime evidence was insufficient for validation.";
+      } else if (rawAgentMsg.includes("policy") || rawAgentMsg.includes("POLICY_DISALLOWED") || rawAgentMsg.includes("blocked")) {
+        userFacingAgentReason = "Planning completed; proposed actions were blocked by safety policy.";
+      } else if (rawAgentMsg.includes("skipped") || rawAgentMsg.includes("no grounded") || rawAgentMsg.includes("NO_GROUNDED_CONTEXT") || rawAgentMsg.includes("ENDPOINT_CONTEXTS_UNAVAILABLE")) {
+        userFacingAgentReason = "No grounded endpoint context was available for Agent analysis.";
+      } else if (rawAgentMsg.includes("provider") || rawAgentMsg.includes("ANALYST") || rawAgentMsg.includes("PLANNER") || rawAgentMsg.includes("MODEL_ERROR") || rawAgentMsg.includes("TIMEOUT")) {
+        if (normalizedAgentState === "partial") {
+          userFacingAgentReason = "Agent analysis partially completed; provider error encountered.";
+        } else {
+          userFacingAgentReason = "Agent stage could not start; model provider is unavailable.";
+        }
+      } else if (rawAgentMsg && !rawAgentMsg.includes("_") && !rawAgentMsg.includes("Not available in this scan")) {
+        userFacingAgentReason = rawAgentMsg;
+      } else {
+        if (normalizedAgentState === "completed") {
+          userFacingAgentReason = "Planning completed; no relevant security tests were applicable.";
+        } else if (normalizedAgentState === "partial") {
+          userFacingAgentReason = "Planning completed, but runtime evidence was insufficient for validation.";
+        } else if (normalizedAgentState === "not_run") {
+          userFacingAgentReason = "No grounded endpoint context was available for Agent analysis.";
+        } else if (normalizedAgentState === "running") {
+          userFacingAgentReason = "Agent planning in progress...";
+        } else if (normalizedAgentState === "pending") {
+          userFacingAgentReason = "Waiting for dynamic endpoint contexts...";
+        } else {
+          userFacingAgentReason = "Agent runtime is unavailable in this scan.";
+        }
+      }
+
+      product.agent_analysis.state = normalizedAgentState;
+      product.agent_analysis.message = userFacingAgentReason;
+      product.agent_analysis.data = (canonicalAgent && canonicalAgent.data) || agentResult || null;
 
       // 5. Report Generation (Critical Integrity Rule: 3-report architecture not full, never fake completed)
       const staticCompleted = product.static_analysis.state === "completed";
@@ -2622,7 +2692,6 @@
       }
 
       // Canonical product state is authoritative after report persistence/integrity validation.
-      const canonicalState = statusData.scan_state;
       const canonicalDynamic = canonicalState && canonicalState.stages && canonicalState.stages.dynamic_analysis;
       const dynamicArtifact = canonicalState && canonicalState.artifacts && canonicalState.artifacts.dynamic_analysis_report;
       const hasDynamicReport = dynamicArtifact && dynamicArtifact.available === true &&
@@ -4534,12 +4603,13 @@
         const productStages = deriveProductStages(stages, status);
         for (const [stage, pInfo] of Object.entries(productStages)) {
           setBadge(stage, pInfo.state);
-          const stageMessage = stage === 'agent_analysis' ? 'Not available in this scan' : ({
+          const defaultMsg = {
             running: 'Analysis in progress.', success: 'Stage completed.', completed: 'Stage completed.',
             failed: 'Stage could not complete. See coverage limitations.', warning: 'Partial coverage. See report limitations.',
             partial: 'Partial coverage. See report limitations.', unavailable: 'Unavailable in this scan.',
-            not_available: 'Not available in this scan', waiting_for_installation: 'Waiting for automatic installation.'
-          }[pInfo.state] || 'Pending');
+            not_available: 'Not available in this scan', not_run: 'Stage was not run.', waiting_for_installation: 'Waiting for automatic installation.'
+          }[pInfo.state] || 'Pending';
+          const stageMessage = pInfo.message || defaultMsg;
           setMessage(stage, stageMessage);
         }
 
@@ -4562,6 +4632,26 @@
             `;
           } else {
             acqDetails.innerHTML = "";
+          }
+        }
+
+        const agentDetails = document.getElementById("details-agent_analysis");
+        if (agentDetails) {
+          const aData = productStages.agent_analysis && productStages.agent_analysis.data;
+          if (aData && typeof aData === 'object') {
+            let aHtml = "";
+            if (aData.goal && aData.goal.target_endpoint) {
+              aHtml += `<div class="kv-row"><span class="kv-key">Endpoint:</span><span class="kv-val"><code>${escapeHtml(aData.goal.target_endpoint)}</code></span></div>`;
+            }
+            if (aData.goal && aData.goal.intent) {
+              aHtml += `<div class="kv-row"><span class="kv-key">Intent:</span><span class="kv-val">${escapeHtml(aData.goal.intent)}</span></div>`;
+            }
+            if (aData.executions && Array.isArray(aData.executions)) {
+              aHtml += `<div class="kv-row"><span class="kv-key">Executions:</span><span class="kv-val">${aData.executions.length}</span></div>`;
+            }
+            agentDetails.innerHTML = aHtml;
+          } else {
+            agentDetails.innerHTML = "";
           }
         }
 

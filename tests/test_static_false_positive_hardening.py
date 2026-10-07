@@ -107,7 +107,9 @@ def test_separate_config_scopes_preserved_duplicates_suppressed():
     second = {**first, 'component': 'domain-config[2]'}
     source = {'manifest': {'application': {'network_security_config': '@xml/network'},
         'network_security_policy': {'status': 'resolved', 'cleartext_permissions': [first, second, first]}}}
-    rows = evaluate_vulnerabilities(source)['findings']
+    res = evaluate_vulnerabilities(source)
+    assert not res['findings']
+    rows = res['candidates']
     assert len(rows) == 2
     assert {r['component'] for r in rows} == {first['component'], second['component']}
 

@@ -61,7 +61,7 @@ def select_next_action(node: RouteNode) -> DiscoveredAction | None:
     """Selects the next unattempted, safe click action sorted deterministically by action_id."""
     candidates = [
         act for act in node.actions.values()
-        if is_safe_clickable_action(act)
+        if is_safe_clickable_action(act, context=node)
     ]
     if not candidates:
         return None

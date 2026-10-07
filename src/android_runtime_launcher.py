@@ -252,9 +252,13 @@ def launch_activity(
     serial: str,
     component: str,
     timeout_seconds: float = DEFAULT_COMMAND_TIMEOUT_SECONDS,
+    is_launcher: bool = True,
 ) -> dict:
-    """Starts the launcher activity using 'am start -n <component>'."""
-    cmd = [adb_bin, "-s", serial, "shell", "am", "start", "-n", component]
+    """Starts the activity using canonical launcher flags or generic activity flags."""
+    cmd = [adb_bin, "-s", serial, "shell", "am", "start"]
+    if is_launcher:
+        cmd.extend(["-a", "android.intent.action.MAIN", "-c", "android.intent.category.LAUNCHER"])
+    cmd.extend(["-n", component])
     try:
         res = subprocess.run(
             cmd,
@@ -274,7 +278,18 @@ def launch_activity(
     # Detect explicit am start errors (e.g. Error: Activity class ... does not exist)
     if res.returncode != 0 or "Error:" in combined:
         err_msg = combined[:300] if combined else f"returncode {res.returncode}"
-        raise AndroidRuntimeError(f"Failed to start activity '{component}': {err_msg}", evidence={'source': 'activity_manager',
+        reason = "APP_LAUNCH_FAILED"
+        if "intent does not match" in combined.lower() or "access blocked" in combined.lower():
+            reason = "INTENT_FILTER_MISMATCH"
+        else:
+            try:
+                log_cmd = [adb_bin, "-s", serial, "shell", "logcat", "-d", "-t", "30"]
+                log_res = subprocess.run(log_cmd, capture_output=True, text=True, timeout=3.0)
+                if "intent does not match component's intent filter" in (log_res.stdout or "").lower() or "access blocked" in (log_res.stdout or "").lower():
+                    reason = "INTENT_FILTER_MISMATCH"
+            except Exception:
+                pass
+        raise AndroidRuntimeError(f"Failed to start activity '{component}': {err_msg}", reason_code=reason, evidence={'source': 'activity_manager',
             'returncode': res.returncode, 'launch_succeeded': False})
 
     return {"success": True, "component": component}

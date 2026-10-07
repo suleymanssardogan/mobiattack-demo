@@ -72,10 +72,15 @@ def test_nsc_overrides_manifest_flag_without_guessing(tmp_path):
     folder=tmp_path/'res/xml';folder.mkdir(parents=True)
     (folder/'net.xml').write_text('<network-security-config><base-config cleartextTrafficPermitted="false"/></network-security-config>')
     assert not evaluate_vulnerabilities({'manifest':parse_manifest(path)})['findings']
-    (folder/'net.xml').write_text('<network-security-config><domain-config cleartextTrafficPermitted="true"><domain>training.local</domain></domain-config></network-security-config>')
+    (folder/'net.xml').write_text('<network-security-config><base-config cleartextTrafficPermitted="true"/></network-security-config>')
     row=evaluate_vulnerabilities({'manifest':parse_manifest(path)})['findings'][0]
     assert row['reason_code']=='NETWORK_CONFIG_CLEARTEXT_ALLOWED'
     assert row['source']=='res/xml/net.xml'
+    (folder/'net.xml').write_text('<network-security-config><domain-config cleartextTrafficPermitted="true"><domain>training.local</domain></domain-config></network-security-config>')
+    scoped_res=evaluate_vulnerabilities({'manifest':parse_manifest(path)})
+    assert not scoped_res['findings']
+    assert scoped_res['candidates'][0]['reason_code']=='NETWORK_CONFIG_REQUIRES_REVIEW'
+    assert scoped_res['candidates'][0]['source']=='res/xml/net.xml'
 
 
 def test_complete_report_sentences():

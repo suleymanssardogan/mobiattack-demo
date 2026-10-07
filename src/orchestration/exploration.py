@@ -232,6 +232,7 @@ def _wire_dynamic_exploration(
                 runtime_evidence_file=runtime_evidence_file,
                 traffic_service=traffic_service if traffic_started else None,
                 traffic_evidence_file=traffic_evidence_file if traffic_started else None,
+                auth_wait_seconds=5.0,
             )
         finally:
             if traffic_started:
